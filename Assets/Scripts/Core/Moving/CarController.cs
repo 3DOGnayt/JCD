@@ -6,15 +6,48 @@ namespace Core.Moving
 {
     public class CarController : MonoBehaviour
     {
+        [Header("CAR SETUP")]
+        [Space]
+        [Range(0, 900)]
+        public float MaxSpeed;
+        [Range(0, 20)]
+        public float MaxBackSpeed;
+        [Range(0, 100)]
+        public float AccelerationMultiplier;
+        [Range(0, 90)]
+        public float MaxSteeringAngle;
+        [Range(0, 900)]
+        public float SteeringSpeed;
+        [Range(0, 900)]
+        public float BrakeForce;
+        [Range(0, 100)]
+        public float DecelerationMultiplier;
+        [Range(0, 100)]
+        public float DriftMultiplier;
+        
+        public float MaxMotorTorque;
+        [Space]
+        [Header("CAR RESOURCES")]
+        [Space]
+        public Rigidbody CarRigidbody;
+        [Space]
+        [Header("WHEELS")]
+        [Space]
         public List<AxleInfo> axleInfo;
-        public float maxMotorTorque;
-        public float maxSteeringAngle;
+        public CarParameters _carParameters;
+        public WheelParameters _wheelParameters;
+        public WheelSubParameters _wheelSubParameters;
 
         private void FixedUpdate()
         {
-            var motor = maxMotorTorque * Input.GetAxis("Vertical");
-            var steering = maxSteeringAngle * Input.GetAxis("Horizontal");
-            
+            ApplySpeed_Test();
+        }
+
+        private void ApplySpeed_Test()
+        {
+            var motor = MaxMotorTorque * Input.GetAxisRaw("Vertical");
+            var steering = MaxSteeringAngle * Input.GetAxisRaw("Horizontal");
+
             foreach (var info in axleInfo)
             {
                 if (info.Steering)
@@ -22,13 +55,13 @@ namespace Core.Moving
                     info.LeftWheel.steerAngle = steering;
                     info.RightWheel.steerAngle = steering;
                 }
-                
-                if (info.Motor) 
+
+                if (info.Motor)
                 {
                     info.LeftWheel.motorTorque = motor;
                     info.RightWheel.motorTorque = motor;
                 }
-                
+
                 ApplyLocalPositionToVisuals(info.LeftWheel, info.LeftVisual);
                 ApplyLocalPositionToVisuals(info.RightWheel, info.RightVisual);
             }
