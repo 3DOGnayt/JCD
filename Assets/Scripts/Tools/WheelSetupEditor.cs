@@ -1,19 +1,19 @@
 using System.Collections.Generic;
-using Core.Data;
 using Core.Moving;
+using Data;
 using UnityEditor;
 using UnityEngine;
 
 namespace Tools
 {
-    [CustomEditor(typeof(CarController))]
+    [CustomEditor(typeof(CarView))]
     public class WheelSetupEditor : Editor
     {
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
 
-            var carSetup = (CarController)target;
+            var carSetup = (CarView)target;
 
             if (GUILayout.Button("Auto Fill Wheels"))
             {
@@ -21,7 +21,7 @@ namespace Tools
             }
         }
 
-        private void AutoFill(CarController carSetup)
+        private void AutoFill(CarView carSetup)
         {
             var axles = new List<WheelInfo>();
 

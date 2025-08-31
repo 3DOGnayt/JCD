@@ -1,6 +1,6 @@
 using System;
 
-namespace Core.Data
+namespace Data
 {
     [Serializable]
     public class ForwardAndSidewaysParameters

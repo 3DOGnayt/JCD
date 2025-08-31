@@ -1,4 +1,4 @@
-using Core.Configs.Impl;
+using Configs.Impl;
 using UnityEditor;
 using UnityEngine;
 
@@ -52,23 +52,23 @@ namespace Tools
                 preset.WheelParameters.Center = wc.center;
 
                 var spring = wc.suspensionSpring;
-                preset.WheelSubParameters.Spring = spring.spring;
-                preset.WheelSubParameters.Damper = spring.damper;
-                preset.WheelSubParameters.TargetPosition = spring.targetPosition;
+                preset.WheelParameters.SuspensionSpring.Spring = spring.spring;
+                preset.WheelParameters.SuspensionSpring.Damper = spring.damper;
+                preset.WheelParameters.SuspensionSpring.TargetPosition = spring.targetPosition;
 
                 var fFriction = wc.forwardFriction;
-                preset.WheelSubParameters.ForwardFriction.ExtremumSlip = fFriction.extremumSlip;
-                preset.WheelSubParameters.ForwardFriction.ExtremumValue = fFriction.extremumValue;
-                preset.WheelSubParameters.ForwardFriction.AsymptoteSlip = fFriction.asymptoteSlip;
-                preset.WheelSubParameters.ForwardFriction.AsymptoteValue = fFriction.asymptoteValue;
-                preset.WheelSubParameters.ForwardFriction.Stiffness = fFriction.stiffness;
+                preset.WheelParameters.ForwardFriction.ExtremumSlip = fFriction.extremumSlip;
+                preset.WheelParameters.ForwardFriction.ExtremumValue = fFriction.extremumValue;
+                preset.WheelParameters.ForwardFriction.AsymptoteSlip = fFriction.asymptoteSlip;
+                preset.WheelParameters.ForwardFriction.AsymptoteValue = fFriction.asymptoteValue;
+                preset.WheelParameters.ForwardFriction.Stiffness = fFriction.stiffness;
 
                 var sFriction = wc.sidewaysFriction;
-                preset.WheelSubParameters.SidewaysFriction.ExtremumSlip = sFriction.extremumSlip;
-                preset.WheelSubParameters.SidewaysFriction.ExtremumValue = sFriction.extremumValue;
-                preset.WheelSubParameters.SidewaysFriction.AsymptoteSlip = sFriction.asymptoteSlip;
-                preset.WheelSubParameters.SidewaysFriction.AsymptoteValue = sFriction.asymptoteValue;
-                preset.WheelSubParameters.SidewaysFriction.Stiffness = sFriction.stiffness;
+                preset.WheelParameters.SidewaysFriction.ExtremumSlip = sFriction.extremumSlip;
+                preset.WheelParameters.SidewaysFriction.ExtremumValue = sFriction.extremumValue;
+                preset.WheelParameters.SidewaysFriction.AsymptoteSlip = sFriction.asymptoteSlip;
+                preset.WheelParameters.SidewaysFriction.AsymptoteValue = sFriction.asymptoteValue;
+                preset.WheelParameters.SidewaysFriction.Stiffness = sFriction.stiffness;
             }
 
             EditorUtility.SetDirty(preset);
@@ -87,8 +87,7 @@ namespace Tools
             var wheels = car.GetComponentsInChildren<WheelCollider>();
             foreach (var wc in wheels)
             {
-                preset.WheelParameters.SetWheelParameters(wc);
-                preset.WheelSubParameters.SetParameters(wc);
+                preset.WheelParameters.SetAllParameters(wc);
             }
 
             Debug.Log("✅ Parameters from ScriptableObject applied to car");

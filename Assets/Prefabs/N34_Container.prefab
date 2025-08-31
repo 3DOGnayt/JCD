@@ -423,7 +423,7 @@ Rigidbody:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_ImplicitCom: 0
+  m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -485,13 +485,13 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
-    m_Stiffness: 1
+    m_Stiffness: 0.4
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 1
+    m_Stiffness: 0.4
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 256
@@ -792,13 +792,13 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
-    m_Stiffness: 1
+    m_Stiffness: 0.4
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 1
+    m_Stiffness: 0.4
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 256
@@ -853,17 +853,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8f1e60ea898497186db1faec5a25625, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxSpeed: 120
-  MaxBackSpeed: 20
-  AccelerationMultiplier: 1
-  MaxSteeringAngle: 50
-  SteeringSpeed: 1
-  BrakeForce: 1
-  DecelerationMultiplier: 1
-  DriftMultiplier: 1
-  MaxMotorTorque: 1200
-  CarRigidbody: {fileID: 5529095363816132808}
-  CarPreset: {fileID: 11400000, guid: 5c594316e21a99541926ca2e21cac6b9, type: 2}
+  _carSetup:
+    MaxSpeed: 0
+    MaxBackSpeed: 0
+    AccelerationMultiplier: 0
+    MaxSteeringAngle: 50
+    SteeringSpeed: 0
+    BrakeForce: 0
+    DecelerationMultiplier: 0
+    DriftMultiplier: 0
+    MaxMotorTorque: 1200
+  _carPreset: {fileID: 11400000, guid: 5c594316e21a99541926ca2e21cac6b9, type: 2}
   _wheelInfos:
   - LeftWheel: {fileID: 8217919515254978958}
     RightWheel: {fileID: 2629409141995426167}

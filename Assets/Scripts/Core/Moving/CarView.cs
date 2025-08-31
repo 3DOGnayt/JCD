@@ -1,38 +1,15 @@
 using System.Collections.Generic;
-using Core.Configs.Impl;
-using Core.Data;
+using Configs.Impl;
+using Data;
 using UnityEngine;
 
 namespace Core.Moving
 {
-    public class CarController : MonoBehaviour
+    public class CarView : MonoBehaviour
     {
-        [Header("CAR SETUP")]
+        [SerializeField] private CarPreset _carPreset;
         [Space]
-        [Range(0, 900)]
-        public float MaxSpeed;
-        [Range(0, 20)]
-        public float MaxBackSpeed;
-        [Range(0, 100)]
-        public float AccelerationMultiplier;
-        [Range(0, 90)]
-        public float MaxSteeringAngle;
-        [Range(0, 900)]
-        public float SteeringSpeed;
-        [Range(0, 900)]
-        public float BrakeForce;
-        [Range(0, 100)]
-        public float DecelerationMultiplier;
-        [Range(0, 100)]
-        public float DriftMultiplier;
-        
-        public float MaxMotorTorque;
-        [Space]
-        [Header("CAR PRESET")]
-        [Space]
-        public Rigidbody CarRigidbody;
-        [Space]
-        public CarPreset CarPreset;
+        [SerializeField] private CarSetup _carSetup;
         [Space]
         public List<WheelInfo> _wheelInfos;
 
@@ -43,8 +20,8 @@ namespace Core.Moving
 
         private void ApplySpeed_Test()
         {
-            var motor = MaxMotorTorque * Input.GetAxisRaw("Vertical");
-            var steering = MaxSteeringAngle * Input.GetAxisRaw("Horizontal");
+            var motor = _carSetup.MaxMotorTorque * Input.GetAxisRaw("Vertical");
+            var steering = _carSetup.MaxSteeringAngle * Input.GetAxisRaw("Horizontal");
 
             foreach (var info in _wheelInfos)
             {

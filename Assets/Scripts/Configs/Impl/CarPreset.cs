@@ -1,7 +1,7 @@
-using Core.Data;
+using Data;
 using UnityEngine;
 
-namespace Core.Configs.Impl
+namespace Configs.Impl
 {
     [CreateAssetMenu(menuName = "Car/CarPreset", fileName = "CarPreset")]
     public class CarPreset : ScriptableObject, ICarPreset
@@ -14,11 +14,9 @@ namespace Core.Configs.Impl
         [Header("WHEELS")]
         [Space]
         [SerializeField] private WheelParameters _wheelParameters;
-        [SerializeField] private WheelSubParameters _wheelSubParameters;
 
         public GameObject Car => _car;
         public CarParameters CarParameters => _carParameters;
         public WheelParameters WheelParameters => _wheelParameters;
-        public WheelSubParameters WheelSubParameters => _wheelSubParameters;
     }
 }

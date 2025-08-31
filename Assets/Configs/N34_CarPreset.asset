@@ -24,10 +24,10 @@ MonoBehaviour:
     SuspensionDistance: 0.5
     ForceAppPointDistance: 0.5
     Center: {x: 0, y: 0, z: 0}
-  _wheelSubParameters:
-    Spring: 35000
-    Damper: 4500
-    TargetPosition: 0.5
+    SuspensionSpring:
+      Spring: 35000
+      Damper: 4500
+      TargetPosition: 0.5
     ForwardFriction:
       ExtremumSlip: 0.4
       ExtremumValue: 1

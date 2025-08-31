@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Core.Data
+namespace Data
 {
     [Serializable]
     public class CarParameters
