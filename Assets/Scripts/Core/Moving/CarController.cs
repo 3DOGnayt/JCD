@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Core.Configs.Impl;
 using Core.Data;
 using UnityEngine;
 
@@ -27,16 +28,13 @@ namespace Core.Moving
         
         public float MaxMotorTorque;
         [Space]
-        [Header("CAR RESOURCES")]
+        [Header("CAR PRESET")]
         [Space]
         public Rigidbody CarRigidbody;
         [Space]
-        [Header("WHEELS")]
+        public CarPreset CarPreset;
         [Space]
-        public List<AxleInfo> axleInfo;
-        public CarParameters _carParameters;
-        public WheelParameters _wheelParameters;
-        public WheelSubParameters _wheelSubParameters;
+        public List<WheelInfo> _wheelInfos;
 
         private void FixedUpdate()
         {
@@ -48,7 +46,7 @@ namespace Core.Moving
             var motor = MaxMotorTorque * Input.GetAxisRaw("Vertical");
             var steering = MaxSteeringAngle * Input.GetAxisRaw("Horizontal");
 
-            foreach (var info in axleInfo)
+            foreach (var info in _wheelInfos)
             {
                 if (info.Steering)
                 {

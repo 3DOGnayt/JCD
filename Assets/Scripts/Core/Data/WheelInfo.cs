@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Core.Data
 {
     [Serializable]
-    public class AxleInfo
+    public class WheelInfo
     {
         public WheelCollider LeftWheel;
         public WheelCollider RightWheel;

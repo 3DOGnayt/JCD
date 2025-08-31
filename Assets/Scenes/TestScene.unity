@@ -1052,7 +1052,7 @@ MonoBehaviour:
   DriftMultiplier: 1
   MaxMotorTorque: 1200
   CarRigidbody: {fileID: 3566940386283921964}
-  axleInfo:
+  _wheelInfos:
   - LeftWheel: {fileID: 1142260994}
     RightWheel: {fileID: 550464025}
     LeftVisual: {fileID: 93845072}
@@ -1065,33 +1065,7 @@ MonoBehaviour:
     RightVisual: {fileID: 1369567663}
     Motor: 0
     Steering: 0
-  _carParameters:
-    Mass: 0
-    AutomaticCenterOfMass: 0
-    CenterOfMass: {x: 0, y: 0, z: 0}
-  _wheelParameters:
-    Mass: 0
-    Radius: 0
-    DampingRate: 0
-    SuspensionDistance: 0
-    ForceAppPointDistance: 0
-    Center: {x: 0, y: 0, z: 0}
-  _wheelSubParameters:
-    Spring: 0
-    Damper: 0
-    TargetPosition: 0
-    ForwardFriction:
-      ExtremumSlip: 0
-      ExtremumValue: 0
-      AsymptoteSlip: 0
-      AsymptoteValue: 0
-      Stiffness: 0
-    SidewaysFriction:
-      ExtremumSlip: 0
-      ExtremumValue: 0
-      AsymptoteSlip: 0
-      AsymptoteValue: 0
-      Stiffness: 0
+  CarPreset: {fileID: 11400000, guid: 5c594316e21a99541926ca2e21cac6b9, type: 2}
 --- !u!4 &374034053
 Transform:
   m_ObjectHideFlags: 0

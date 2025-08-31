@@ -23,12 +23,12 @@ namespace Tools
 
         private void AutoFill(CarController carSetup)
         {
-            var axles = new List<AxleInfo>();
+            var axles = new List<WheelInfo>();
 
             var allChildren = carSetup.transform.GetComponentsInChildren<Transform>();
 
-            var front = new AxleInfo();
-            var back = new AxleInfo();
+            var front = new WheelInfo();
+            var back = new WheelInfo();
 
             foreach (var child in allChildren)
             {
@@ -48,7 +48,7 @@ namespace Tools
             axles.Add(front);
             axles.Add(back);
 
-            carSetup.axleInfo = axles;
+            carSetup._wheelInfos = axles;
             EditorUtility.SetDirty(carSetup);
         }
     }
