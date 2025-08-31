@@ -17,13 +17,14 @@ MonoBehaviour:
     Mass: 1500
     AutomaticCenterOfMass: 1
     CenterOfMass: {x: 0, y: 0, z: 0}
-  _wheelParameters:
-    Mass: 20
-    Radius: 0.35
-    DampingRate: 5
-    SuspensionDistance: 0.5
-    ForceAppPointDistance: 0.5
-    Center: {x: 0, y: 0, z: 0}
+  _frontWheelParameters:
+    MainWheelParameters:
+      Mass: 20
+      Radius: 0.35
+      DampingRate: 5
+      SuspensionDistance: 0.5
+      ForceAppPointDistance: 0.5
+      Center: {x: 0, y: 0, z: 0}
     SuspensionSpring:
       Spring: 35000
       Damper: 4500
@@ -40,3 +41,27 @@ MonoBehaviour:
       AsymptoteSlip: 0.5
       AsymptoteValue: 0.75
       Stiffness: 1
+  _backWheelParameters:
+    MainWheelParameters:
+      Mass: 20
+      Radius: 0.35
+      DampingRate: 5
+      SuspensionDistance: 0.5
+      ForceAppPointDistance: 0.5
+      Center: {x: 0, y: 0, z: 0}
+    SuspensionSpring:
+      Spring: 35000
+      Damper: 4500
+      TargetPosition: 0.5
+    ForwardFriction:
+      ExtremumSlip: 0.4
+      ExtremumValue: 1
+      AsymptoteSlip: 0.8
+      AsymptoteValue: 0.5
+      Stiffness: 0.6
+    SidewaysFriction:
+      ExtremumSlip: 0.2
+      ExtremumValue: 1
+      AsymptoteSlip: 0.5
+      AsymptoteValue: 0.75
+      Stiffness: 0.4

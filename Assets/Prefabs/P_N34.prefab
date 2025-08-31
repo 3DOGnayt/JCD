@@ -379,7 +379,7 @@ GameObject:
   - component: {fileID: 8943298916049027122}
   - component: {fileID: 5529095363816132808}
   m_Layer: 0
-  m_Name: N34
+  m_Name: Car
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -485,7 +485,7 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
-    m_Stiffness: 0.4
+    m_Stiffness: 0.6
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 1
@@ -792,7 +792,7 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
-    m_Stiffness: 0.4
+    m_Stiffness: 0.6
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 1
@@ -819,7 +819,7 @@ GameObject:
   - component: {fileID: 567414845432947618}
   - component: {fileID: 5283033300812890801}
   m_Layer: 0
-  m_Name: N34_Container
+  m_Name: P_N34
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -853,6 +853,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8f1e60ea898497186db1faec5a25625, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _carPreset: {fileID: 11400000, guid: 5c594316e21a99541926ca2e21cac6b9, type: 2}
   _carSetup:
     MaxSpeed: 0
     MaxBackSpeed: 0
@@ -863,7 +864,6 @@ MonoBehaviour:
     DecelerationMultiplier: 0
     DriftMultiplier: 0
     MaxMotorTorque: 1200
-  _carPreset: {fileID: 11400000, guid: 5c594316e21a99541926ca2e21cac6b9, type: 2}
   _wheelInfos:
   - LeftWheel: {fileID: 8217919515254978958}
     RightWheel: {fileID: 2629409141995426167}

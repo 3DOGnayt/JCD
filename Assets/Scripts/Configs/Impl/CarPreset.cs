@@ -13,10 +13,13 @@ namespace Configs.Impl
         [Space]
         [Header("WHEELS")]
         [Space]
-        [SerializeField] private WheelParameters _wheelParameters;
+        [SerializeField] private WheelParameters _frontWheelParameters;
+        [Space]
+        [SerializeField] private WheelParameters _backWheelParameters;
 
         public GameObject Car => _car;
         public CarParameters CarParameters => _carParameters;
-        public WheelParameters WheelParameters => _wheelParameters;
+        public WheelParameters FrontWheelParameters => _frontWheelParameters;
+        public WheelParameters BackWheelParameters => _backWheelParameters;
     }
 }

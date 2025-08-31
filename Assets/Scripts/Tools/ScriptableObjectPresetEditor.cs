@@ -21,10 +21,10 @@ namespace Tools
 
             GUILayout.Space(10);
 
-            if (GUILayout.Button("Setup parameters from Car to SO"))
+            if (GUILayout.Button("Setup parameters FROM Car TO SO"))
                 SaveFromCar(preset);
 
-            if (GUILayout.Button("Setup parameters from SO to Car")) 
+            if (GUILayout.Button("Setup parameters FROM SO TO Car")) 
                 ApplyToCar(preset);
         }
 
@@ -40,35 +40,13 @@ namespace Tools
             }
 
             var wheels = car.GetComponentsInChildren<WheelCollider>();
-            if (wheels.Length > 0)
+            if (wheels.Length >= 4)
             {
-                var wc = wheels[0];
+                preset.FrontWheelParameters.SaveFromWheel(wheels[0]);
+                preset.FrontWheelParameters.SaveFromWheel(wheels[1]);
 
-                preset.WheelParameters.Mass = wc.mass;
-                preset.WheelParameters.Radius = wc.radius;
-                preset.WheelParameters.DampingRate = wc.wheelDampingRate;
-                preset.WheelParameters.SuspensionDistance = wc.suspensionDistance;
-                preset.WheelParameters.ForceAppPointDistance = wc.forceAppPointDistance;
-                preset.WheelParameters.Center = wc.center;
-
-                var spring = wc.suspensionSpring;
-                preset.WheelParameters.SuspensionSpring.Spring = spring.spring;
-                preset.WheelParameters.SuspensionSpring.Damper = spring.damper;
-                preset.WheelParameters.SuspensionSpring.TargetPosition = spring.targetPosition;
-
-                var fFriction = wc.forwardFriction;
-                preset.WheelParameters.ForwardFriction.ExtremumSlip = fFriction.extremumSlip;
-                preset.WheelParameters.ForwardFriction.ExtremumValue = fFriction.extremumValue;
-                preset.WheelParameters.ForwardFriction.AsymptoteSlip = fFriction.asymptoteSlip;
-                preset.WheelParameters.ForwardFriction.AsymptoteValue = fFriction.asymptoteValue;
-                preset.WheelParameters.ForwardFriction.Stiffness = fFriction.stiffness;
-
-                var sFriction = wc.sidewaysFriction;
-                preset.WheelParameters.SidewaysFriction.ExtremumSlip = sFriction.extremumSlip;
-                preset.WheelParameters.SidewaysFriction.ExtremumValue = sFriction.extremumValue;
-                preset.WheelParameters.SidewaysFriction.AsymptoteSlip = sFriction.asymptoteSlip;
-                preset.WheelParameters.SidewaysFriction.AsymptoteValue = sFriction.asymptoteValue;
-                preset.WheelParameters.SidewaysFriction.Stiffness = sFriction.stiffness;
+                preset.BackWheelParameters.SaveFromWheel(wheels[wheels.Length - 2]);
+                preset.BackWheelParameters.SaveFromWheel(wheels[wheels.Length - 1]);
             }
 
             EditorUtility.SetDirty(preset);
@@ -78,16 +56,18 @@ namespace Tools
         private void ApplyToCar(CarPreset preset)
         {
             var car = preset.Car;
-            var rigidbody = car.GetComponentInChildren<Rigidbody>();
-            if (rigidbody != null)
-            {
-                preset.CarParameters.SetCarParameters(rigidbody);
-            }
+            var rb = car.GetComponentInChildren<Rigidbody>();
+            if (rb != null)
+                preset.CarParameters.SetCarParameters(rb);
 
             var wheels = car.GetComponentsInChildren<WheelCollider>();
-            foreach (var wc in wheels)
+            if (wheels.Length >= 4)
             {
-                preset.WheelParameters.SetAllParameters(wc);
+                preset.FrontWheelParameters.SetAllParameters(wheels[0]);
+                preset.FrontWheelParameters.SetAllParameters(wheels[1]);
+
+                preset.BackWheelParameters.SetAllParameters(wheels[wheels.Length - 2]);
+                preset.BackWheelParameters.SetAllParameters(wheels[wheels.Length - 1]);
             }
 
             Debug.Log("✅ Parameters from ScriptableObject applied to car");
