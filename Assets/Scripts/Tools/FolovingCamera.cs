@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Test
+namespace Tools
 {
     public class FolovingCamera : MonoBehaviour
     {
