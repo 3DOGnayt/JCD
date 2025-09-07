@@ -9,6 +9,13 @@
       },
       "hash": "1921fb03fe903a64f9244106f3152c41404c2fc5"
     },
+    "com.scellecs.morpeh": {
+      "version": "https://github.com/scellecs/morpeh.git?path=Scellecs.Morpeh",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "7bcaf7845e667e9aec397ad97911ba2c5a28a296"
+    },
     "com.unity.addressables": {
       "version": "1.22.3",
       "depth": 0,
