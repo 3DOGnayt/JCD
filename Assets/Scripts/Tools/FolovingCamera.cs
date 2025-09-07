@@ -1,4 +1,6 @@
+using Configs.Impl;
 using UnityEngine;
+using Zenject;
 
 namespace Tools
 {
@@ -7,7 +9,8 @@ namespace Tools
         [SerializeField] private Camera _camera;
         
         [Header("Target")]
-        public Transform target;
+        //public Transform target;
+        [Inject] public CarPreset target;
         public float distance = 5f;
         public float minDistance = 2f;
         public float maxDistance = 12f;
@@ -36,7 +39,7 @@ namespace Tools
         
         void Start()
         {
-            var targetPosition = target ? target.position : Vector3.zero;
+            var targetPosition = target ? target.Car.transform.position : Vector3.zero;
             var direction = transform.position - targetPosition;
             _currentDistance = distance = direction.magnitude;
             
@@ -67,12 +70,12 @@ namespace Tools
             _currentDistance = Mathf.Lerp(_currentDistance, distance, 1f - Mathf.Exp(-zoomDamp * Time.deltaTime));
 
             var rot = Quaternion.Euler(_pitch, _yaw, 0f);
-            var pos = target.position - (rot * Vector3.forward * _currentDistance);
+            var pos = target.Car.transform.position - (rot * Vector3.forward * _currentDistance);
 
             transform.rotation = Quaternion.Slerp(transform.rotation, rot, 1f - Mathf.Exp(-rotateDamp * Time.deltaTime));
             transform.position = pos;
 
-            transform.LookAt(target, Vector3.up);
+            transform.LookAt(target.Car.transform, Vector3.up);
         }
     }
 }
