@@ -15,7 +15,7 @@ MonoBehaviour:
   _car: {fileID: 9039642172116725141, guid: 8032a9469da0495489fd955acec86caf, type: 3}
   _carParameters:
     Mass: 1500
-    AutomaticCenterOfMass: 1
+    AutomaticCenterOfMass: 0
     CenterOfMass: {x: 0, y: 0, z: 0}
   _frontWheelParameters:
     MainWheelParameters:
@@ -34,13 +34,13 @@ MonoBehaviour:
       ExtremumValue: 1
       AsymptoteSlip: 0.8
       AsymptoteValue: 0.5
-      Stiffness: 1
+      Stiffness: 8
     SidewaysFriction:
       ExtremumSlip: 0.2
       ExtremumValue: 1
       AsymptoteSlip: 0.5
       AsymptoteValue: 0.75
-      Stiffness: 1
+      Stiffness: 3
   _backWheelParameters:
     MainWheelParameters:
       Mass: 20
@@ -58,10 +58,10 @@ MonoBehaviour:
       ExtremumValue: 1
       AsymptoteSlip: 0.8
       AsymptoteValue: 0.5
-      Stiffness: 0.6
+      Stiffness: 3
     SidewaysFriction:
       ExtremumSlip: 0.2
       ExtremumValue: 1
       AsymptoteSlip: 0.5
       AsymptoteValue: 0.75
-      Stiffness: 0.4
+      Stiffness: 2
