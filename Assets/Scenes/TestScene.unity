@@ -1380,9 +1380,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers: []
   _monoInstallers:
-  - {fileID: 691329075}
   - {fileID: 1766582010}
   - {fileID: 1383738168}
+  - {fileID: 691329075}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -4020,6 +4020,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5066739076216016252, guid: 2e1f6bac4878a9245a3fcdaa3fc5835a,
+        type: 3}
+      propertyPath: target
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5066739076216016252, guid: 2e1f6bac4878a9245a3fcdaa3fc5835a,
         type: 3}

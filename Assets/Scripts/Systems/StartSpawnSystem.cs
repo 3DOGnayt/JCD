@@ -10,6 +10,7 @@ namespace Systems
     {
         [Inject] public World World { get; set;}
         [Inject] private CarPreset _carPreset;
+        [Inject] private DiContainer _container;
         
         private Transform _root;
         private Transform _playerGroup;
@@ -20,7 +21,7 @@ namespace Systems
             SetSpawnRoot();
 
             SpawnLevel();
-            SpawnPlayer();
+            //SpawnPlayer();
         }
 
         private void SetSpawnRoot()
@@ -36,13 +37,12 @@ namespace Systems
         private void SpawnPlayer()
         {
             var player = _carPreset.Car;
-            
             if (player == null)
                 return;
 
-            var instance = Object.Instantiate(player, Vector3.zero, Quaternion.identity);
-            var entity = World.CreateEntity();
+            var instance = _container.InstantiatePrefab(player, Vector3.zero, Quaternion.identity, null);
 
+            var entity = World.CreateEntity();
             AddCommonComponents(entity, instance.transform, player);
             entity.SetComponent(new PlayerTagComponent());
         }

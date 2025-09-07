@@ -1,5 +1,7 @@
 using Core;
 using Scellecs.Morpeh;
+using Services;
+using Services.Impl;
 using Systems;
 using UnityEngine;
 using Zenject;
@@ -13,6 +15,7 @@ namespace Installers
         public override void InstallBindings()
         {
             Main();
+            Services();
             Systems();
         }
 
@@ -26,6 +29,11 @@ namespace Installers
         {
             Container.Bind<ISystem>().To<MoveSystem>().AsSingle();
             Container.Bind<ISystem>().To<StartSpawnSystem>().AsSingle();
+        }
+        
+        private void Services()
+        {
+            Container.BindInterfacesAndSelfTo<InputService>().AsSingle();
         }
     }
 }
