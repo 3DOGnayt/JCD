@@ -6,11 +6,10 @@ namespace Tools
 {
     public class FolovingCamera : MonoBehaviour
     {
-        [SerializeField] private Camera _camera;
+        [Inject] private Camera _camera;
+        [Inject] private CarPreset target;
         
         [Header("Target")]
-        //public Transform target;
-        [Inject] public CarPreset target;
         public float distance = 5f;
         public float minDistance = 2f;
         public float maxDistance = 12f;
@@ -31,11 +30,6 @@ namespace Tools
         private float _yaw;
         private float _pitch;
         private float _currentDistance;
-
-        private void Awake()
-        {
-            _camera = Camera.main;
-        }
         
         void Start()
         {

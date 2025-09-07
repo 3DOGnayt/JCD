@@ -1,3 +1,4 @@
+using Components;
 using Configs.Impl;
 using Scellecs.Morpeh;
 using UnityEngine;
@@ -43,7 +44,7 @@ namespace Systems
             var entity = World.CreateEntity();
 
             AddCommonComponents(entity, instance.transform, player);
-            //entity.SetComponent(new PlayerTagComponent());
+            entity.SetComponent(new PlayerTagComponent());
         }
 
         private void AddCommonComponents(Entity entity, Transform instanceTransform, GameObject player)
