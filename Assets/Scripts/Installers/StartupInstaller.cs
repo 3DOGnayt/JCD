@@ -1,6 +1,5 @@
 using Core;
 using Scellecs.Morpeh;
-using Services;
 using Services.Impl;
 using Systems;
 using UnityEngine;
@@ -28,7 +27,7 @@ namespace Installers
         private void Systems()
         {
             Container.Bind<ISystem>().To<MoveSystem>().AsSingle();
-            Container.Bind<ISystem>().To<StartSpawnSystem>().AsSingle();
+            Container.Bind<ISystem>().To<PlayerSpawnSystem>().AsSingle();
         }
         
         private void Services()
