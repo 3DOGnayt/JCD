@@ -41,6 +41,7 @@ namespace Systems
             
             entity.SetComponent(new SpeedComponent { Value = 100});
             entity.SetComponent(new BackSpeedComponent { Value = 40});
+            entity.SetComponent(new MotorTorqueComponent { Value = 4000});
             entity.SetComponent(new AccelerationMultiplierComponent { Value = 4});
             entity.SetComponent(new DecelerationMultiplierComponent { Value = 2});
             entity.SetComponent(new SteeringAngleComponent { Value = 40});

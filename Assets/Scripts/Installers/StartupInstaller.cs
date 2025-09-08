@@ -26,7 +26,6 @@ namespace Installers
         
         private void Systems()
         {
-            Container.Bind<ISystem>().To<MoveSystem>().AsSingle();
             Container.Bind<ISystem>().To<PlayerSpawnSystem>().AsSingle();
         }
         

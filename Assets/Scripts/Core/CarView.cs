@@ -26,7 +26,9 @@ namespace Core
         //TODO: replace on system
         private void FixedUpdate()
         {
-            _inputService.ApplySpeed_Test(_carSetup, _wheelInfos);
+            // нужно получать инфу с _carPreset а не _wheelInfos ??
+            // _wheelInfos нужен для визуального дебвг / этот параметер меняется относительно компонентов и меняет компоненты если нужно
+            _inputService.ApplySpeed_Test(_carSetup, _wheelInfos); 
         }
     }
 }

@@ -4,6 +4,7 @@ namespace Components
 {
     public struct SpeedComponent : IComponent { public float Value; }
     public struct BackSpeedComponent : IComponent { public float Value; }
+    public struct MotorTorqueComponent : IComponent { public float Value; }
     public struct AccelerationMultiplierComponent : IComponent { public float Value; }
     public struct DecelerationMultiplierComponent : IComponent { public float Value; }
     public struct SteeringAngleComponent : IComponent { public float Value; }

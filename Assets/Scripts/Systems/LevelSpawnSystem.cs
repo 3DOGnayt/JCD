@@ -20,7 +20,7 @@ namespace Systems
 
         private void SpawnLevel()
         {
-            
+            //заготовка под уровни
         }
 
         public void OnUpdate(float deltaTime) { }
