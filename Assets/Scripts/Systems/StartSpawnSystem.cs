@@ -21,12 +21,16 @@ namespace Systems
             SetSpawnRoot();
 
             SpawnLevel();
-            //SpawnPlayer();
+            SpawnPlayer();
         }
 
         private void SetSpawnRoot()
         {
-            
+            _root = new GameObject("Root").transform;
+            _playerGroup = new GameObject("Player").transform;
+            _playerGroup.SetParent(_root);
+            _levelGroup = new GameObject("Level").transform;
+            _levelGroup.SetParent(_root);
         }
 
         private void SpawnLevel()
@@ -40,7 +44,7 @@ namespace Systems
             if (player == null)
                 return;
 
-            var instance = _container.InstantiatePrefab(player, Vector3.zero, Quaternion.identity, null);
+            var instance = _container.InstantiatePrefab(player, Vector3.zero, Quaternion.identity, _playerGroup);
 
             var entity = World.CreateEntity();
             AddCommonComponents(entity, instance.transform, player);
