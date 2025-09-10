@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Data;
 using UnityEngine;
 
@@ -16,10 +17,13 @@ namespace Configs.Impl
         [SerializeField] private WheelParameters _frontWheelParameters;
         [Space]
         [SerializeField] private WheelParameters _backWheelParameters;
+        [Space]
+        [SerializeField] private List<WheelInfo> _wheelInfos;
 
         public GameObject Car => _car;
         public CarParameters CarParameters => _carParameters;
         public WheelParameters FrontWheelParameters => _frontWheelParameters;
         public WheelParameters BackWheelParameters => _backWheelParameters;
+        public List<WheelInfo> WheelInfos => _wheelInfos;
     }
 }

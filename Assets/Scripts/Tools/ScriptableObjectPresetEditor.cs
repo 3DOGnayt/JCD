@@ -1,4 +1,5 @@
 using Configs.Impl;
+using Data;
 using UnityEditor;
 using UnityEngine;
 
@@ -44,13 +45,46 @@ namespace Tools
             {
                 preset.FrontWheelParameters.SaveFromWheel(wheels[0]);
                 preset.FrontWheelParameters.SaveFromWheel(wheels[1]);
-
                 preset.BackWheelParameters.SaveFromWheel(wheels[wheels.Length - 2]);
                 preset.BackWheelParameters.SaveFromWheel(wheels[wheels.Length - 1]);
             }
 
+            preset.WheelInfos.Clear();
+
+            var wheelsModelsRoot = car.transform.Find("WheelsModels");
+            var wheelsCollidersRoot = car.transform.Find("WheelsColliders");
+
+            if (wheelsModelsRoot != null && wheelsCollidersRoot != null)
+            {
+                var frontInfo = new WheelInfo
+                {
+                    LeftWheel  = wheelsCollidersRoot.Find("FL_Collider")?.GetComponent<WheelCollider>(),
+                    RightWheel = wheelsCollidersRoot.Find("FR_Collider")?.GetComponent<WheelCollider>(),
+                    LeftVisual  = wheelsModelsRoot.Find("Wheel_FL_Model"),
+                    RightVisual = wheelsModelsRoot.Find("Wheel_FR_Model"),
+                    Motor = true,
+                    Steering = true
+                };
+                preset.WheelInfos.Add(frontInfo);
+
+                var backInfo = new WheelInfo
+                {
+                    LeftWheel  = wheelsCollidersRoot.Find("BL_Collider")?.GetComponent<WheelCollider>(),
+                    RightWheel = wheelsCollidersRoot.Find("BR_Collider")?.GetComponent<WheelCollider>(),
+                    LeftVisual  = wheelsModelsRoot.Find("Wheel_BL_Model"),
+                    RightVisual = wheelsModelsRoot.Find("Wheel_BR_Model"),
+                    Motor = false,
+                    Steering = false
+                };
+                preset.WheelInfos.Add(backInfo);
+            }
+            else
+            {
+                Debug.LogWarning($"⚠️ У {car.name} нет WheelsModels или WheelsColliders → WheelInfos не заполнен.");
+            }
+
             EditorUtility.SetDirty(preset);
-            Debug.Log("✅ Parameters saved in ScriptableObject");
+            Debug.Log("✅ WheelInfos сохранены: передние + задние колёса");
         }
 
         private void ApplyToCar(CarPreset preset)

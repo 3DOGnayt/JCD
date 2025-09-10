@@ -3,6 +3,17 @@ using UnityEngine;
 
 namespace Components
 {
+    public struct WheelInfoComponent : IComponent
+    {
+        public WheelCollider LeftWheel;
+        public WheelCollider RightWheel;
+        public Transform LeftVisual;
+        public Transform RightVisual;
+        public bool Motor;
+        public bool Steering;
+    }
+    
+    
     // CarParameters
     public struct CarMassComponent : IComponent { public float Value; }
     public struct AutomaticCenterOfMassComponent : IComponent { public bool Value; }

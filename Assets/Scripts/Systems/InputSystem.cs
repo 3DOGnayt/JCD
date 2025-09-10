@@ -1,5 +1,6 @@
 using Components;
 using Scellecs.Morpeh;
+using Services;
 using UnityEngine;
 using Zenject;
 
@@ -8,22 +9,39 @@ namespace Systems
     public sealed class InputSystem : ISystem 
     {
         [Inject] public World World { get; set;}
+        
+        private IInputService _inputService;
+        
+        private Filter _cars;
+        private Stash<MotorTorqueComponent> _motorTorqueStash;
+        private Stash<SteeringAngleComponent> _steeringAngleStash;
 
-        private Filter _filter;
-        private Stash<SpeedComponent> _speedStash;
-    
+        [Inject]
+        public void Construct(IInputService inputService)
+        {
+            _inputService = inputService;
+        }
+        
         public void OnAwake()
         {
-            _filter = World.Filter.With<SpeedComponent>().Build();
-            _speedStash = World.GetStash<SpeedComponent>();
+            _cars = World.Filter
+                .With<MotorTorqueComponent>()
+                .With<SteeringAngleComponent>()
+                .Build();
+            
+            _motorTorqueStash = World.GetStash<MotorTorqueComponent>();
+            _steeringAngleStash = World.GetStash<SteeringAngleComponent>();
         }
 
         public void OnUpdate(float deltaTime) 
         {
-            foreach (var entity in _filter)
+            foreach (var car in _cars)
             {
-                ref var speed = ref _speedStash.Get(entity);
-                Debug.Log($"Car {entity.Id} speed: {speed.Value}");
+                
+                //_inputService.ApplySpeed_Test(_carSetup, _wheelInfos); 
+                
+                
+                Debug.Log($"AAA: ");
             }
         }
 

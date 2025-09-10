@@ -65,3 +65,24 @@ MonoBehaviour:
       AsymptoteSlip: 0.5
       AsymptoteValue: 0.75
       Stiffness: 2
+  _wheelInfos:
+  - LeftWheel: {fileID: 8217919515254978958, guid: 8032a9469da0495489fd955acec86caf,
+      type: 3}
+    RightWheel: {fileID: 2629409141995426167, guid: 8032a9469da0495489fd955acec86caf,
+      type: 3}
+    LeftVisual: {fileID: 2308931475733137931, guid: 8032a9469da0495489fd955acec86caf,
+      type: 3}
+    RightVisual: {fileID: 594035964119943200, guid: 8032a9469da0495489fd955acec86caf,
+      type: 3}
+    Motor: 1
+    Steering: 1
+  - LeftWheel: {fileID: 2008216944493213516, guid: 8032a9469da0495489fd955acec86caf,
+      type: 3}
+    RightWheel: {fileID: 9068770974772093301, guid: 8032a9469da0495489fd955acec86caf,
+      type: 3}
+    LeftVisual: {fileID: 6591691273948743484, guid: 8032a9469da0495489fd955acec86caf,
+      type: 3}
+    RightVisual: {fileID: 3654036701396778119, guid: 8032a9469da0495489fd955acec86caf,
+      type: 3}
+    Motor: 0
+    Steering: 0
