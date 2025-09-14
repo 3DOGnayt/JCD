@@ -1,25 +1,33 @@
+using System.Collections.Generic;
+using Data;
 using Scellecs.Morpeh;
 using UnityEngine;
 
 namespace Components
 {
-    public struct WheelInfoComponent : IComponent
-    {
-        public WheelCollider LeftWheel;
-        public WheelCollider RightWheel;
-        public Transform LeftVisual;
-        public Transform RightVisual;
-        public bool Motor;
-        public bool Steering;
-    }
-    
-    
     // CarParameters
+
     public struct CarMassComponent : IComponent { public float Value; }
     public struct AutomaticCenterOfMassComponent : IComponent { public bool Value; }
     public struct CenterOfMassComponent : IComponent { public Vector3 Value; }
-    
+
     // MainWheelParameters
+
+    public struct WheelInfoComponent : IComponent
+    {
+        public List<WheelInfo> WheelInfo;
+        public WheelInfo FrontWheels => WheelInfo[0];
+        public WheelInfo BackWheels => WheelInfo[1];
+        
+        //TODO: remove
+        //public WheelCollider LeftWheel;
+        //public WheelCollider RightWheel;
+        //public Transform LeftVisual;
+        //public Transform RightVisual;
+        //public bool Motor;
+        //public bool Steering;
+    }
+
     //Front
     public struct FrontWheelMassComponent : IComponent { public float Value; }
     public struct FrontWheelRadiusComponent : IComponent { public float Value; }

@@ -39,6 +39,8 @@ namespace Systems
         {
             entity.SetComponent(new PlayerTagComponent());
             
+            //var carParameters = _carPreset.CarParameters;
+            
             entity.SetComponent(new SpeedComponent { Value = 100});
             entity.SetComponent(new BackSpeedComponent { Value = 40});
             entity.SetComponent(new MotorTorqueComponent { Value = 4000});
@@ -79,6 +81,25 @@ namespace Systems
 
         private void AddFrontWheelComponents(Entity entity)
         {
+            var wheelInfos = _carPreset.WheelInfos;
+
+            entity.SetComponent(new WheelInfoComponent { WheelInfo = wheelInfos });
+            
+            //todo: remove
+            /*foreach (var wheelInfo in wheelInfos)
+            {
+                entity.SetComponent(new WheelInfoComponent
+                {
+                    WheelInfo = wheelInfo,
+                    //LeftWheel = wheelInfo.LeftWheel,
+                    //RightWheel = wheelInfo.RightWheel,
+                    //LeftVisual = wheelInfo.LeftVisual,
+                    //RightVisual = wheelInfo.RightVisual,
+                    //Motor = wheelInfo.Motor,
+                    //Steering = wheelInfo.Steering
+                });
+            }*/
+            
             var frontMainWheelParameters = _carPreset.FrontWheelParameters.MainWheelParameters;
             var frontSuspensionSpring = _carPreset.FrontWheelParameters.SuspensionSpring;
             var frontForwardFriction = _carPreset.FrontWheelParameters.ForwardFriction;

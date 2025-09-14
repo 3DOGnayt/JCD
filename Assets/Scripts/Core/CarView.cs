@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using Configs.Impl;
 using Data;
-using Services;
 using UnityEngine;
-using Zenject;
 
 namespace Core
 {
@@ -13,22 +11,10 @@ namespace Core
         [Space]
         [SerializeField] private CarSetup _carSetup;
         [Space]
-        public List<WheelInfo> _wheelInfos;
+        [SerializeField] private List<WheelInfo> _wheelInfos;
 
-        private IInputService _inputService;
-
-        [Inject]
-        public void Construct(IInputService inputService)
-        {
-            _inputService = inputService;
-        }
-
-        //TODO: replace on system
-        private void FixedUpdate()
-        {
-            // нужно получать инфу с _carPreset а не _wheelInfos ??
-            // _wheelInfos нужен для визуального дебвг / этот параметер меняется относительно компонентов и меняет компоненты если нужно
-            _inputService.ApplySpeed_Test(_carSetup, _wheelInfos); 
-        }
+        public CarPreset CarPreset => _carPreset;
+        public CarSetup CarSetup => _carSetup;
+        public List<WheelInfo> CarWheelInfos { get => _wheelInfos; set => _wheelInfos = value; }
     }
 }

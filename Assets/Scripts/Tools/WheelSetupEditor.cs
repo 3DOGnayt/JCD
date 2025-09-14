@@ -48,7 +48,7 @@ namespace Tools
             axles.Add(front);
             axles.Add(back);
 
-            carSetup._wheelInfos = axles;
+            carSetup.CarWheelInfos = axles;
             EditorUtility.SetDirty(carSetup);
         }
     }

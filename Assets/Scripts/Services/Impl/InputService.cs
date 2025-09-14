@@ -6,10 +6,10 @@ namespace Services.Impl
 {
     public class InputService : IInputService
     {
-        public void ApplySpeed_Test(CarSetup carSetup, List<WheelInfo> wheelInfos)
+        public void ApplySpeed_PreFin(float maxMotorTorque, float maxSteeringAngle, List<WheelInfo> wheelInfos)
         {
-            var motor = carSetup.MaxMotorTorque * Input.GetAxisRaw("Vertical");
-            var steering = carSetup.MaxSteeringAngle * Input.GetAxisRaw("Horizontal");
+            var motor = maxMotorTorque * Input.GetAxisRaw("Vertical");
+            var steering = maxSteeringAngle * Input.GetAxisRaw("Horizontal");
 
             foreach (var info in wheelInfos)
             {

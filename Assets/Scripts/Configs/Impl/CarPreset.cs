@@ -8,6 +8,8 @@ namespace Configs.Impl
     public class CarPreset : ScriptableObject, ICarPreset
     {
         [SerializeField] private GameObject _car;
+        [Header("GAME CAR PARAMETERS")]
+        [SerializeField] private CarSetup _carSetup;
         [Header("CAR PARAMETERS")]
         [Space]
         [SerializeField] private CarParameters _carParameters;
@@ -21,6 +23,7 @@ namespace Configs.Impl
         [SerializeField] private List<WheelInfo> _wheelInfos;
 
         public GameObject Car => _car;
+        public CarSetup CarSetup => _carSetup;
         public CarParameters CarParameters => _carParameters;
         public WheelParameters FrontWheelParameters => _frontWheelParameters;
         public WheelParameters BackWheelParameters => _backWheelParameters;
