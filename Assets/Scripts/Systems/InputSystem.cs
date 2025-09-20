@@ -58,9 +58,9 @@ namespace Systems
                 ref var motorTorque = ref carSetupAspect.MotorTorque;
                 ref var steeringAngle = ref carSetupAspect.SteeringAngle;
                 
-                _inputService.ApplySpeed_PreFin(motorTorque.Value, steeringAngle.Value, wheelInfo.WheelInfo);
+                _inputService.ApplyMove(motorTorque.Value, steeringAngle.Value, wheelInfo.WheelInfo);
                 
-                Debug.Log($"AAA: info system: {motorTorque.Value}/ {steeringAngle.Value}/ {wheelInfo.FrontWheels.Motor}/ {wheelInfo.FrontWheels.Steering}");
+                Debug.Log($"AAA: info system: {motorTorque.Value}/ {steeringAngle.Value}/ {wheelInfo.FrontWheels.Motor}/ {wheelInfo.BackWheels.Steering}");
             }
         }
 

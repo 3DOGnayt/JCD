@@ -6,7 +6,7 @@ namespace Services.Impl
 {
     public class InputService : IInputService
     {
-        public void ApplySpeed_PreFin(float maxMotorTorque, float maxSteeringAngle, List<WheelInfo> wheelInfos)
+        public void ApplyMove(float maxMotorTorque, float maxSteeringAngle, List<WheelInfo> wheelInfos)
         {
             var motor = maxMotorTorque * Input.GetAxisRaw("Vertical");
             var steering = maxSteeringAngle * Input.GetAxisRaw("Horizontal");

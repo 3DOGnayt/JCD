@@ -1,4 +1,5 @@
 using Configs.Impl;
+using Core;
 using Data;
 using UnityEditor;
 using UnityEngine;
@@ -32,12 +33,28 @@ namespace Tools
         private void SaveFromCar(CarPreset preset)
         {
             var car = preset.Car;
+
             var rb = car.GetComponentInChildren<Rigidbody>();
             if (rb != null)
             {
                 preset.CarParameters.Mass = rb.mass;
                 preset.CarParameters.AutomaticCenterOfMass = rb.automaticCenterOfMass;
                 preset.CarParameters.CenterOfMass = rb.centerOfMass;
+            }
+
+            var carView = car.GetComponent<CarView>();
+            if (carView != null && carView.CarSetup != null)
+            {
+                var setup = carView.CarSetup;
+                preset.CarSetup.MaxSpeed = setup.MaxSpeed;
+                preset.CarSetup.MaxBackSpeed = setup.MaxBackSpeed;
+                preset.CarSetup.AccelerationMultiplier = setup.AccelerationMultiplier;
+                preset.CarSetup.DecelerationMultiplier = setup.DecelerationMultiplier;
+                preset.CarSetup.MaxSteeringAngle = setup.MaxSteeringAngle;
+                preset.CarSetup.SteeringSpeed = setup.SteeringSpeed;
+                preset.CarSetup.BrakeForce = setup.BrakeForce;
+                preset.CarSetup.DriftMultiplier = setup.DriftMultiplier;
+                preset.CarSetup.MaxMotorTorque = setup.MaxMotorTorque;
             }
 
             var wheels = car.GetComponentsInChildren<WheelCollider>();
@@ -50,7 +67,7 @@ namespace Tools
             }
 
             preset.WheelInfos.Clear();
-
+            
             var wheelsModelsRoot = car.transform.Find("WheelsModels");
             var wheelsCollidersRoot = car.transform.Find("WheelsColliders");
 
@@ -84,27 +101,42 @@ namespace Tools
             }
 
             EditorUtility.SetDirty(preset);
-            Debug.Log("✅ WheelInfos сохранены: передние + задние колёса");
+            Debug.Log("✅ CarSetup + CarParameters + WheelInfos сохранены в SO");
         }
 
         private void ApplyToCar(CarPreset preset)
         {
             var car = preset.Car;
+
             var rb = car.GetComponentInChildren<Rigidbody>();
             if (rb != null)
                 preset.CarParameters.SetCarParameters(rb);
+            
+            var carView = car.GetComponent<CarView>();
+            if (carView != null && carView.CarSetup != null)
+            {
+                var setup = carView.CarSetup;
+                setup.MaxSpeed = preset.CarSetup.MaxSpeed;
+                setup.MaxBackSpeed = preset.CarSetup.MaxBackSpeed;
+                setup.AccelerationMultiplier = preset.CarSetup.AccelerationMultiplier;
+                setup.DecelerationMultiplier = preset.CarSetup.DecelerationMultiplier;
+                setup.MaxSteeringAngle = preset.CarSetup.MaxSteeringAngle;
+                setup.SteeringSpeed = preset.CarSetup.SteeringSpeed;
+                setup.BrakeForce = preset.CarSetup.BrakeForce;
+                setup.DriftMultiplier = preset.CarSetup.DriftMultiplier;
+                setup.MaxMotorTorque = preset.CarSetup.MaxMotorTorque;
+            }
 
             var wheels = car.GetComponentsInChildren<WheelCollider>();
             if (wheels.Length >= 4)
             {
                 preset.FrontWheelParameters.SetAllParameters(wheels[0]);
                 preset.FrontWheelParameters.SetAllParameters(wheels[1]);
-
                 preset.BackWheelParameters.SetAllParameters(wheels[wheels.Length - 2]);
                 preset.BackWheelParameters.SetAllParameters(wheels[wheels.Length - 1]);
             }
-
-            Debug.Log("✅ Parameters from ScriptableObject applied to car");
+            
+            Debug.Log("✅ CarSetup + CarParameters применены из SO на CarView/Car");
         }
     }
 }

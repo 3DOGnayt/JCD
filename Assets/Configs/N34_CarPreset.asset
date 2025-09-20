@@ -13,6 +13,16 @@ MonoBehaviour:
   m_Name: N34_CarPreset
   m_EditorClassIdentifier: 
   _car: {fileID: 9039642172116725141, guid: 8032a9469da0495489fd955acec86caf, type: 3}
+  _carSetup:
+    MaxSpeed: 0
+    MaxBackSpeed: 0
+    AccelerationMultiplier: 0
+    DecelerationMultiplier: 0
+    MaxSteeringAngle: 50
+    SteeringSpeed: 0
+    BrakeForce: 0
+    DriftMultiplier: 0
+    MaxMotorTorque: 4000
   _carParameters:
     Mass: 1500
     AutomaticCenterOfMass: 0

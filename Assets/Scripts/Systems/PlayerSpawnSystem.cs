@@ -1,5 +1,6 @@
 using Components;
 using Configs.Impl;
+using Core;
 using Scellecs.Morpeh;
 using UnityEngine;
 using Zenject;
@@ -28,34 +29,35 @@ namespace Systems
             if (player == null)
                 return;
 
-            var instance = _container.InstantiatePrefab(player, Vector3.zero, Quaternion.identity, _playerGroup);
+            var instance = _container.InstantiatePrefabForComponent<ICarView>(player, Vector3.zero, Quaternion.identity, _playerGroup);
 
             var entity = World.CreateEntity();
-            AddGameComponents(entity);
-            AddInternalComponents(entity, instance.transform);
+            AddGameComponents(entity, instance);
+            AddInternalComponents(entity, instance);
         }
 
-        private void AddGameComponents(Entity entity)
+        private void AddGameComponents(Entity entity, ICarView carView)
         {
             entity.SetComponent(new PlayerTagComponent());
             
-            //var carParameters = _carPreset.CarParameters;
+            var carSetup = carView.CarPreset.CarSetup;
             
-            entity.SetComponent(new SpeedComponent { Value = 100});
-            entity.SetComponent(new BackSpeedComponent { Value = 40});
-            entity.SetComponent(new MotorTorqueComponent { Value = 4000});
-            entity.SetComponent(new AccelerationMultiplierComponent { Value = 4});
-            entity.SetComponent(new DecelerationMultiplierComponent { Value = 2});
-            entity.SetComponent(new SteeringAngleComponent { Value = 40});
-            entity.SetComponent(new SteeringSpeedComponent { Value = 1});
-            entity.SetComponent(new BrakeForceComponent { Value = 1});
-            entity.SetComponent(new DriftMultiplierComponent { Value = 1});
+            entity.SetComponent(new SpeedComponent { Value = carSetup.MaxSpeed });
+            entity.SetComponent(new BackSpeedComponent { Value = carSetup.MaxBackSpeed });
+            entity.SetComponent(new MotorTorqueComponent { Value = carSetup.MaxMotorTorque });
+            entity.SetComponent(new AccelerationMultiplierComponent { Value = carSetup.AccelerationMultiplier });
+            entity.SetComponent(new DecelerationMultiplierComponent { Value = carSetup.DecelerationMultiplier });
+            entity.SetComponent(new SteeringAngleComponent { Value = carSetup.MaxSteeringAngle });
+            entity.SetComponent(new SteeringSpeedComponent { Value = carSetup.SteeringSpeed });
+            entity.SetComponent(new BrakeForceComponent { Value = carSetup.BrakeForce });
+            entity.SetComponent(new DriftMultiplierComponent { Value = carSetup.DriftMultiplier });
         }
 
-        private void AddInternalComponents(Entity entity, Transform car)
+        private void AddInternalComponents(Entity entity, ICarView carView)
         {
-            AddCommonComponents(entity, car);
+            AddCommonComponents(entity, carView.CarTransform);
             AddMainCarComponents(entity);
+            AddWheelInfoComponents(entity, carView);
             AddFrontWheelComponents(entity);
             AddBackWheelComponents(entity);
         }
@@ -79,27 +81,15 @@ namespace Systems
             entity.SetComponent(new CenterOfMassComponent { Value = carParameters.CenterOfMass });
         }
 
+        private void AddWheelInfoComponents(Entity entity, ICarView instance)
+        {
+            var wheelInfos = instance.CarWheelInfos;
+            
+            entity.SetComponent(new WheelInfoComponent { WheelInfo = wheelInfos });
+        }
+
         private void AddFrontWheelComponents(Entity entity)
         {
-            var wheelInfos = _carPreset.WheelInfos;
-
-            entity.SetComponent(new WheelInfoComponent { WheelInfo = wheelInfos });
-            
-            //todo: remove
-            /*foreach (var wheelInfo in wheelInfos)
-            {
-                entity.SetComponent(new WheelInfoComponent
-                {
-                    WheelInfo = wheelInfo,
-                    //LeftWheel = wheelInfo.LeftWheel,
-                    //RightWheel = wheelInfo.RightWheel,
-                    //LeftVisual = wheelInfo.LeftVisual,
-                    //RightVisual = wheelInfo.RightVisual,
-                    //Motor = wheelInfo.Motor,
-                    //Steering = wheelInfo.Steering
-                });
-            }*/
-            
             var frontMainWheelParameters = _carPreset.FrontWheelParameters.MainWheelParameters;
             var frontSuspensionSpring = _carPreset.FrontWheelParameters.SuspensionSpring;
             var frontForwardFriction = _carPreset.FrontWheelParameters.ForwardFriction;
