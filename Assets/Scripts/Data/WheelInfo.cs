@@ -1,5 +1,5 @@
 using System;
-using Configs.Impl;
+using Core;
 using UnityEngine;
 
 namespace Data
@@ -14,11 +14,11 @@ namespace Data
         public bool Motor;
         public bool Steering;
         
-        public void SetAllParameters(CarPreset carPreset)
+        public void SetAllParameters(CarView carView)
         {
-            for (var index = 0; index < carPreset.WheelInfos.Count; index++)
+            for (var index = 0; index < carView.CarWheelInfos.Count; index++)
             {
-                var wheelInfo = carPreset.WheelInfos[index];
+                var wheelInfo = carView.CarWheelInfos[index];
                 wheelInfo.LeftWheel = LeftWheel;
                 wheelInfo.RightWheel = RightWheel;  
                 wheelInfo.LeftVisual = LeftVisual;
@@ -28,24 +28,24 @@ namespace Data
             }
         }
 
-        public void SetFrontWheelParameters(CarPreset carPreset)
+        public void SetFrontWheelParameters(CarView carView)
         {
-            carPreset.WheelInfos[0].LeftWheel = LeftWheel;
-            carPreset.WheelInfos[0].RightWheel = RightWheel;
-            carPreset.WheelInfos[0].LeftVisual = LeftVisual;
-            carPreset.WheelInfos[0].RightVisual = RightVisual;
-            carPreset.WheelInfos[0].Motor = Motor;
-            carPreset.WheelInfos[0].Steering = Steering;
+            carView.CarWheelInfos[0].LeftWheel = LeftWheel;
+            carView.CarWheelInfos[0].RightWheel = RightWheel;
+            carView.CarWheelInfos[0].LeftVisual = LeftVisual;
+            carView.CarWheelInfos[0].RightVisual = RightVisual;
+            carView.CarWheelInfos[0].Motor = Motor;
+            carView.CarWheelInfos[0].Steering = Steering;
         }
         
-        public void SetBackWheelParameters(CarPreset carPreset)
+        public void SetBackWheelParameters(CarView carView)
         {
-            carPreset.WheelInfos[1].LeftWheel = LeftWheel;
-            carPreset.WheelInfos[1].RightWheel = RightWheel;
-            carPreset.WheelInfos[1].LeftVisual = LeftVisual;
-            carPreset.WheelInfos[1].RightVisual = RightVisual;
-            carPreset.WheelInfos[1].Motor = Motor;
-            carPreset.WheelInfos[1].Steering = Steering;
+            carView.CarWheelInfos[1].LeftWheel = LeftWheel;
+            carView.CarWheelInfos[1].RightWheel = RightWheel;
+            carView.CarWheelInfos[1].LeftVisual = LeftVisual;
+            carView.CarWheelInfos[1].RightVisual = RightVisual;
+            carView.CarWheelInfos[1].Motor = Motor;
+            carView.CarWheelInfos[1].Steering = Steering;
         }
     }
 }

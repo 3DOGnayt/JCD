@@ -60,7 +60,11 @@ namespace Systems
                 
                 _inputService.ApplyMove(motorTorque.Value, steeringAngle.Value, wheelInfo.WheelInfo);
                 
-                Debug.Log($"AAA: info system: {motorTorque.Value}/ {steeringAngle.Value}/ {wheelInfo.FrontWheels.Motor}/ {wheelInfo.BackWheels.Steering}");
+                Debug.Log($"AAA: info system:" +
+                          $" {motorTorque.Value}/" +
+                          $" {steeringAngle.Value}/" +
+                          $" {wheelInfo.FrontWheels.Motor}/" +
+                          $" {wheelInfo.BackWheels.Steering}");
             }
         }
 
