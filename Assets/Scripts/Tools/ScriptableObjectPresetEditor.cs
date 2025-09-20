@@ -1,6 +1,5 @@
 using Configs.Impl;
 using Core;
-using Data;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,23 +16,22 @@ namespace Tools
 
             if (preset.Car == null)
             {
-                EditorGUILayout.HelpBox("Set gameObject from prefab to Car!", MessageType.Warning);
+                EditorGUILayout.HelpBox("Set GameObject (car prefab) into Car field!", MessageType.Warning);
                 return;
             }
 
             GUILayout.Space(10);
 
-            if (GUILayout.Button("Setup parameters FROM Car TO SO"))
+            if (GUILayout.Button("Save parameters FROM Car → TO SO"))
                 SaveFromCar(preset);
 
-            if (GUILayout.Button("Setup parameters FROM SO TO Car")) 
+            if (GUILayout.Button("Apply parameters FROM SO → TO Car")) 
                 ApplyToCar(preset);
         }
 
         private void SaveFromCar(CarPreset preset)
         {
             var car = preset.Car;
-
             var rb = car.GetComponentInChildren<Rigidbody>();
             if (rb != null)
             {
@@ -66,52 +64,20 @@ namespace Tools
                 preset.BackWheelParameters.SaveFromWheel(wheels[wheels.Length - 1]);
             }
 
-            preset.WheelInfos.Clear();
-            
-            var wheelsModelsRoot = car.transform.Find("WheelsModels");
-            var wheelsCollidersRoot = car.transform.Find("WheelsColliders");
-
-            if (wheelsModelsRoot != null && wheelsCollidersRoot != null)
-            {
-                var frontInfo = new WheelInfo
-                {
-                    LeftWheel  = wheelsCollidersRoot.Find("FL_Collider")?.GetComponent<WheelCollider>(),
-                    RightWheel = wheelsCollidersRoot.Find("FR_Collider")?.GetComponent<WheelCollider>(),
-                    LeftVisual  = wheelsModelsRoot.Find("Wheel_FL_Model"),
-                    RightVisual = wheelsModelsRoot.Find("Wheel_FR_Model"),
-                    Motor = true,
-                    Steering = true
-                };
-                preset.WheelInfos.Add(frontInfo);
-
-                var backInfo = new WheelInfo
-                {
-                    LeftWheel  = wheelsCollidersRoot.Find("BL_Collider")?.GetComponent<WheelCollider>(),
-                    RightWheel = wheelsCollidersRoot.Find("BR_Collider")?.GetComponent<WheelCollider>(),
-                    LeftVisual  = wheelsModelsRoot.Find("Wheel_BL_Model"),
-                    RightVisual = wheelsModelsRoot.Find("Wheel_BR_Model"),
-                    Motor = false,
-                    Steering = false
-                };
-                preset.WheelInfos.Add(backInfo);
-            }
-            else
-            {
-                Debug.LogWarning($"⚠️ У {car.name} нет WheelsModels или WheelsColliders → WheelInfos не заполнен.");
-            }
-
             EditorUtility.SetDirty(preset);
-            Debug.Log("✅ CarSetup + CarParameters + WheelInfos сохранены в SO");
+            EditorUtility.SetDirty(car);
+            PrefabUtility.RecordPrefabInstancePropertyModifications(car);
+
+            Debug.Log($"✅ {car.name}: данные сохранены в CarPreset");
         }
 
         private void ApplyToCar(CarPreset preset)
         {
             var car = preset.Car;
-
             var rb = car.GetComponentInChildren<Rigidbody>();
             if (rb != null)
                 preset.CarParameters.SetCarParameters(rb);
-            
+
             var carView = car.GetComponent<CarView>();
             if (carView != null && carView.CarSetup != null)
             {
@@ -135,8 +101,11 @@ namespace Tools
                 preset.BackWheelParameters.SetAllParameters(wheels[wheels.Length - 2]);
                 preset.BackWheelParameters.SetAllParameters(wheels[wheels.Length - 1]);
             }
-            
-            Debug.Log("✅ CarSetup + CarParameters применены из SO на CarView/Car");
+
+            EditorUtility.SetDirty(car);
+            PrefabUtility.RecordPrefabInstancePropertyModifications(car);
+
+            Debug.Log($"✅ {car.name}: данные из CarPreset применены на Car");
         }
     }
 }
