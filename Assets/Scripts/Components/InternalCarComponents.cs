@@ -18,14 +18,6 @@ namespace Components
         public List<WheelInfo> WheelInfo;
         public WheelInfo FrontWheels => WheelInfo[0];
         public WheelInfo BackWheels => WheelInfo[1];
-        
-        //TODO: remove
-        //public WheelCollider LeftWheel;
-        //public WheelCollider RightWheel;
-        //public Transform LeftVisual;
-        //public Transform RightVisual;
-        //public bool Motor;
-        //public bool Steering;
     }
 
     //Front

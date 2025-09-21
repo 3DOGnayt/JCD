@@ -1,3 +1,4 @@
+using Cinemachine;
 using Tools;
 using UnityEngine;
 using Zenject;
@@ -6,13 +7,13 @@ namespace Installers
 {
     public class CameraInstaller : MonoInstaller
     {
-        [SerializeField] private Camera _camera;
-        [SerializeField] private FolovingCamera _folovingCamera;
+        [SerializeField] private FollowingCamera _followingCamera;
+        [SerializeField] private CinemachineFreeLook _freeLookCamera;
         
         public override void InstallBindings()
         {
-            Container.Bind<Camera>().FromInstance(_camera).AsSingle();
-            Container.Bind<FolovingCamera>().FromInstance(_folovingCamera).AsSingle();
+            Container.Bind<FollowingCamera>().FromInstance(_followingCamera).AsSingle();
+            Container.Bind<CinemachineFreeLook>().FromInstance(_freeLookCamera).AsSingle();
         }
     }
 }

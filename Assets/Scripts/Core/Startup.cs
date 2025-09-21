@@ -24,7 +24,7 @@ namespace Core
 
         public void Update()
         {
-            _world.Update(Time.deltaTime);
+            _world?.Update(Time.deltaTime);
         }
     }
 }

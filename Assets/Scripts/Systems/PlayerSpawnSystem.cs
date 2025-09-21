@@ -2,6 +2,7 @@ using Components;
 using Configs.Impl;
 using Core;
 using Scellecs.Morpeh;
+using Signals;
 using UnityEngine;
 using Zenject;
 
@@ -12,6 +13,7 @@ namespace Systems
         [Inject] public World World { get; set;}
         [Inject] private CarPreset _carPreset;
         [Inject] private DiContainer _container;
+        [Inject] private SignalBus _signalBus;
         
         private Transform _playerGroup;
         
@@ -34,6 +36,8 @@ namespace Systems
             var entity = World.CreateEntity();
             AddGameComponents(entity, instance);
             AddInternalComponents(entity, instance);
+            
+            _signalBus.Fire(new PlayerSpawnedSignal { CarView = instance });
         }
 
         private void AddGameComponents(Entity entity, ICarView carView)

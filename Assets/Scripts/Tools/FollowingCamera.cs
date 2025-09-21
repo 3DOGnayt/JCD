@@ -1,15 +1,12 @@
-using Configs.Impl;
+using Signals;
 using UnityEngine;
 using Zenject;
 
 namespace Tools
 {
-    public class FolovingCamera : MonoBehaviour
+    public class FollowingCamera : MonoBehaviour
     {
-        //[Inject] private CarPreset target;
-        public GameObject target;
-        
-        [Header("Target")]
+        [Header("Target")] 
         public float distance = 5f;
         public float minDistance = 2f;
         public float maxDistance = 12f;
@@ -27,16 +24,25 @@ namespace Tools
         public float rotateDamp = 12f;
         public float zoomDamp = 12f;
 
+        public GameObject _target;
         private float _yaw;
         private float _pitch;
         private float _currentDistance;
-        
-        void Start()
+
+        [Inject]
+        public void Construct(SignalBus signalBus)
         {
-            var targetPosition = target ? target.transform.position : Vector3.zero;
+            signalBus.Subscribe<PlayerSpawnedSignal>(OnPlayerSpawned);
+        }
+
+        private void OnPlayerSpawned(PlayerSpawnedSignal signal)
+        {
+            _target = signal.CarView.CarTransform.gameObject;
+
+            var targetPosition = _target.transform.position;
             var direction = transform.position - targetPosition;
             _currentDistance = distance = direction.magnitude;
-            
+
             var angles = transform.eulerAngles;
             _yaw = angles.y;
             _pitch = angles.x;
@@ -44,7 +50,7 @@ namespace Tools
 
         private void Update()
         {
-            if (!target)
+            if (_target == null)
                 return;
 
             if (Input.GetMouseButton(1))
@@ -64,12 +70,13 @@ namespace Tools
             _currentDistance = Mathf.Lerp(_currentDistance, distance, 1f - Mathf.Exp(-zoomDamp * Time.deltaTime));
 
             var rot = Quaternion.Euler(_pitch, _yaw, 0f);
-            var pos = target.transform.position - (rot * Vector3.forward * _currentDistance);
+            var pos = _target.transform.position - (rot * Vector3.forward * _currentDistance);
 
-            transform.rotation = Quaternion.Slerp(transform.rotation, rot, 1f - Mathf.Exp(-rotateDamp * Time.deltaTime));
+            transform.rotation =
+                Quaternion.Slerp(transform.rotation, rot, 1f - Mathf.Exp(-rotateDamp * Time.deltaTime));
             transform.position = pos;
 
-            transform.LookAt(target.transform, Vector3.up);
+            transform.LookAt(_target.transform, Vector3.up);
         }
     }
 }
