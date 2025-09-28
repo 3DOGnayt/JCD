@@ -15,7 +15,6 @@ namespace Installers
         private void DeclareSignals()
         {
             Container.DeclareSignal<PlayerSpawnedSignal>();
-            Container.DeclareSignal<FollowingCameraSpawnedSignal>();
         }
     }
 }

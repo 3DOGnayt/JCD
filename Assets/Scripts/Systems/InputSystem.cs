@@ -1,7 +1,6 @@
 using Components;
 using Scellecs.Morpeh;
 using Services;
-using UnityEngine;
 using Zenject;
 
 namespace Systems
@@ -59,12 +58,6 @@ namespace Systems
                 ref var steeringAngle = ref carSetupAspect.SteeringAngle;
                 
                 _inputService.ApplyMove(motorTorque.Value, steeringAngle.Value, wheelInfo.WheelInfo);
-                
-                Debug.Log($"AAA: info system:" +
-                          $" {motorTorque.Value}/" +
-                          $" {steeringAngle.Value}/" +
-                          $" {wheelInfo.FrontWheels.Motor}/" +
-                          $" {wheelInfo.BackWheels.Steering}");
             }
         }
 

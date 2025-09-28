@@ -1,5 +1,5 @@
+using Cinemachine;
 using Scellecs.Morpeh;
-using Signals;
 using Tools;
 using UnityEngine;
 using Zenject;
@@ -10,8 +10,8 @@ namespace Systems
     {
         [Inject] public World World { get; set; }
         [Inject] private FollowingCamera _cameraPrefab;
+        [Inject] private CinemachineFreeLook _cinemachineFreeLookPrefab;
         [Inject] private DiContainer _container;
-        [Inject] private SignalBus _signalBus;
 
         private Transform _cameraGroup;
 
@@ -27,20 +27,27 @@ namespace Systems
         {
             if (_cameraPrefab == null)
                 return;
+            
+            if (_cinemachineFreeLookPrefab == null)
+                return;
 
             var cameraTransform = _cameraPrefab.transform;
-            var instance = _container.InstantiatePrefabForComponent<FollowingCamera>(
-                _cameraPrefab.gameObject, cameraTransform.position, cameraTransform.rotation, _cameraGroup);
-
-            _signalBus.Fire(new FollowingCameraSpawnedSignal { FollowingCamera = instance });
+            _container.InstantiatePrefabForComponent<FollowingCamera>(
+                _cameraPrefab.gameObject,
+                cameraTransform.position,
+                cameraTransform.rotation,
+                _cameraGroup);
+            
+            var cinemachineTransform = _cinemachineFreeLookPrefab.transform;
+            _container.InstantiatePrefabForComponent<CinemachineFreeLook>(
+                _cinemachineFreeLookPrefab.gameObject,
+                cinemachineTransform.position,
+                cinemachineTransform.rotation,
+                _cameraGroup);
         }
 
-        public void OnUpdate(float deltaTime)
-        {
-        }
+        public void OnUpdate(float deltaTime) { }
 
-        public void Dispose()
-        {
-        }
+        public void Dispose() { }
     }
 }

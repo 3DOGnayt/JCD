@@ -16,7 +16,7 @@ namespace Installers
 
         private void Main()
         {
-            Container.Bind<World>().FromMethod(_ => World.Default).AsSingle();
+            Container.Bind<World>().FromMethod(_ => World.Create()).AsSingle();
             Container.Bind<Startup>().FromInstance(startup).AsSingle();
         }
     }
