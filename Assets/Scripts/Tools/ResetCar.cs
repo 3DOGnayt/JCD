@@ -1,5 +1,7 @@
+using Signals;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace Tools
 {
@@ -9,6 +11,17 @@ namespace Tools
 
         public GameObject _car;
         public float ForceToUpCar;
+
+        [Inject]
+        public void Construct(SignalBus signalBus)
+        {
+            signalBus.Subscribe<PlayerSpawnedSignal>(OnPlayerSpawned);
+        }
+
+        private void OnPlayerSpawned(PlayerSpawnedSignal signal)
+        {
+            _car = signal.CarView.CarTransform.gameObject;
+        }
 
         private void Awake()
         {
