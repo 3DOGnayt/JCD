@@ -24,9 +24,9 @@ namespace Systems
 
         private void SpawnUI()
         {
-            
             if (_canvasPrefab == null)
                 return;
+            
             if (_eventSystemPrefab == null)
                 return;
 
