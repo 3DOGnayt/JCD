@@ -23,7 +23,6 @@ namespace Core
     {
         Transform CarTransform { get; }
         CarPreset CarPreset { get; }
-        //CarSetup CarSetup { get; } // do not remove 
         List<WheelInfo> CarWheelInfos { get; }
     }
 }

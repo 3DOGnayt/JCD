@@ -2,7 +2,7 @@ using Signals;
 using UnityEngine;
 using Zenject;
 
-namespace Tools
+namespace UI
 {
     public class FollowingCamera : MonoBehaviour
     {

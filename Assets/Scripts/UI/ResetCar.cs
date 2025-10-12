@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace Tools
+namespace UI
 {
     public class ResetCar : MonoBehaviour
     {
