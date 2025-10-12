@@ -53,6 +53,22 @@ namespace Tools
         public float width = 10f;
         public float height = 10f;
 
+        // --- Новый функционал для треугольников ---
+        [System.Serializable]
+        public class TriangleRing
+        {
+            public int elements = 8;
+            public float offset = 0f;       // от 0 (центр) до 1 (внешний контур)
+            public float angleOffset = 0f;  // поворот треугольника
+        }
+
+        public int triangleRingsCount = 1;
+        public List<TriangleRing> triangleRings = new List<TriangleRing>();
+
+        private bool showTriangleRingsList = true;
+        private Vector2 triangleScroll;
+
+
         [MenuItem("Tools/Object Arranger Pro")]
         public static void ShowWindow()
         {
@@ -79,8 +95,7 @@ namespace Tools
                     DrawSquareUI();
                     break;
                 case ShapeType.Triangle:
-                    width = EditorGUILayout.FloatField("Base Width", width);
-                    height = EditorGUILayout.FloatField("Height", height);
+                    DrawTriangleUI();
                     break;
                 case ShapeType.Line:
                     spacing = EditorGUILayout.FloatField("Spacing", spacing);
@@ -181,6 +196,68 @@ namespace Tools
                 }
             }
         }
+        
+        void DrawTriangleUI()
+        {
+            width = EditorGUILayout.FloatField("Base Width", width);
+            height = EditorGUILayout.FloatField("Height", height);
+
+            if (!fillInside) return;
+
+            triangleRingsCount = EditorGUILayout.IntField("Triangle Rings Count", Mathf.Max(1, triangleRingsCount));
+
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Generate Triangle Rings"))
+                GenerateTriangleRings();
+            if (GUILayout.Button("Auto Distribute"))
+                AutoDistributeTriangleRings();
+            EditorGUILayout.EndHorizontal();
+
+            if (triangleRings != null && triangleRings.Count > 0)
+            {
+                showTriangleRingsList = EditorGUILayout.Foldout(showTriangleRingsList, $"Triangle Rings ({triangleRings.Count})", true);
+                if (showTriangleRingsList)
+                {
+                    triangleScroll = EditorGUILayout.BeginScrollView(triangleScroll, GUILayout.MaxHeight(250));
+                    for (int i = 0; i < triangleRings.Count; i++)
+                    {
+                        EditorGUILayout.BeginVertical("box");
+                        EditorGUILayout.LabelField($"Ring {i + 1}", EditorStyles.boldLabel);
+                        triangleRings[i].elements = EditorGUILayout.IntField("Elements", Mathf.Max(1, triangleRings[i].elements));
+                        triangleRings[i].offset = EditorGUILayout.Slider("Offset", triangleRings[i].offset, 0f, 1f);
+                        triangleRings[i].angleOffset = EditorGUILayout.Slider("Angle Offset", triangleRings[i].angleOffset, 0f, 360f);
+                        EditorGUILayout.EndVertical();
+                    }
+                    EditorGUILayout.EndScrollView();
+                }
+            }
+        }
+        
+        void GenerateTriangleRings()
+        {
+            triangleRings = new List<TriangleRing>();
+            for (int i = 0; i < triangleRingsCount; i++)
+            {
+                triangleRings.Add(new TriangleRing
+                {
+                    elements = 6,
+                    offset = (i + 1f) / triangleRingsCount, // по умолчанию равномерно от центра к внешнему
+                    angleOffset = 0f
+                });
+            }
+            AutoDistributeTriangleRings();
+        }
+
+        void AutoDistributeTriangleRings()
+        {
+            if (triangleRings == null || triangleRings.Count == 0 || objects.Count == 0) return;
+            int total = objects.Count;
+            int baseCount = total / triangleRings.Count;
+            int rem = total % triangleRings.Count;
+            for (int i = 0; i < triangleRings.Count; i++)
+                triangleRings[i].elements = baseCount + (i < rem ? 1 : 0);
+        }
+
 
         // ----------------------------------------------------------
         // Circle helpers
@@ -398,24 +475,160 @@ namespace Tools
 
         void ArrangeTriangle()
         {
-            var count = objects.Count;
-            var rowsCalc = Mathf.CeilToInt(Mathf.Sqrt(count * 2f));
-            var index = 0;
-            for (var row = 0; row < rowsCalc && index < count; row++)
+            int count = objects.Count;
+            if (count == 0) return;
+
+            // вершины внешнего треугольника (A - верхняя, B - лев., C - прав.)
+            Vector3 A_out = center + new Vector3(0, 0, height / 2f);
+            Vector3 B_out = center + new Vector3(-width / 2f, 0, -height / 2f);
+            Vector3 C_out = center + new Vector3(width / 2f, 0, -height / 2f);
+
+            // если нет заполнения — контур: первые три на вершины, потом по рёбрам (как уже устроили)
+            if (!fillInside)
             {
-                var itemsInRow = row + 1;
-                var rowWidth = width * ((float)(row + 1) / rowsCalc);
-                for (var i = 0; i < itemsInRow && index < count; i++)
+                if (count <= 3)
                 {
-                    var t = (itemsInRow == 1) ? 0.5f : (float)i / (itemsInRow - 1);
-                    var x = Mathf.Lerp(-rowWidth / 2f, rowWidth / 2f, t);
-                    var z = -((float)row / rowsCalc) * height;
-                    Undo.RecordObject(objects[index].transform, "Arrange Triangle");
-                    objects[index].transform.position = center + new Vector3(x, 0, z);
-                    index++;
+                    if (count > 0)
+                    {
+                        Undo.RecordObject(objects[0].transform, "Arrange Triangle A");
+                        objects[0].transform.position = A_out;
+                    }
+
+                    if (count > 1)
+                    {
+                        Undo.RecordObject(objects[1].transform, "Arrange Triangle B");
+                        objects[1].transform.position = B_out;
+                    }
+
+                    if (count > 2)
+                    {
+                        Undo.RecordObject(objects[2].transform, "Arrange Triangle C");
+                        objects[2].transform.position = C_out;
+                    }
+
+                    return;
+                }
+
+                // верши ны A,B,C
+                Undo.RecordObjects(objects.ToArray(), "Arrange Triangle Contour");
+                objects[0].transform.position = A_out;
+                objects[1].transform.position = B_out;
+                objects[2].transform.position = C_out;
+
+                int remaining = count - 3;
+                int perSide = remaining / 3;
+                int extra = remaining % 3;
+                int idx = 3;
+
+                // локальная функция вставки между двумя вершинами
+                void PlaceBetween(Vector3 start, Vector3 end, int countOnSide)
+                {
+                    for (int i = 0; i < countOnSide && idx < objects.Count; i++)
+                    {
+                        float t = (i + 1f) / (countOnSide + 1f);
+                        Vector3 pos = Vector3.Lerp(start, end, t);
+                        Undo.RecordObject(objects[idx].transform, "Arrange Triangle Edge");
+                        objects[idx].transform.position = pos;
+                        idx++;
+                    }
+                }
+
+                PlaceBetween(A_out, B_out, perSide + (extra > 0 ? 1 : 0));
+                PlaceBetween(B_out, C_out, perSide + (extra > 1 ? 1 : 0));
+                PlaceBetween(C_out, A_out, perSide);
+                return;
+            }
+
+            // --------- fillInside == true: кольца треугольников ----------
+            if (triangleRings == null || triangleRings.Count == 0)
+            {
+                // если колец нет — просто сделать одно внешнее
+                triangleRings = new List<TriangleRing>
+                    { new TriangleRing { elements = count, offset = 1f, angleOffset = 0f } };
+            }
+
+            // считаем центроид (центр масс) внешнего треугольника
+            Vector3 centroid = (A_out + B_out + C_out) / 3f;
+
+            int objIndex = 0;
+
+            for (int ringIdx = 0; ringIdx < triangleRings.Count && objIndex < count; ringIdx++)
+            {
+                var ring = triangleRings[ringIdx];
+                int elems = Mathf.Max(1, ring.elements);
+
+                // вычисляем вершины текущего кольца вдоль векторов от центроида к внешним вершинам
+                // offset ожидается в 0..1 (0 центр, 1 внешний контур)
+                float f = Mathf.Clamp01(ring.offset);
+
+                Vector3 A = centroid + (A_out - centroid) * f;
+                Vector3 B = centroid + (B_out - centroid) * f;
+                Vector3 C = centroid + (C_out - centroid) * f;
+
+                // применяем поворот кольца вокруг центроида, если задан
+                if (Mathf.Abs(ring.angleOffset) > 0.0001f)
+                {
+                    Quaternion rot = Quaternion.Euler(0, ring.angleOffset, 0);
+                    A = centroid + rot * (A - centroid);
+                    B = centroid + rot * (B - centroid);
+                    C = centroid + rot * (C - centroid);
+                }
+
+                // Сначала ставим вершины (A,B,C) если есть места
+                int placed = 0;
+                for (int v = 0; v < 3 && objIndex < count && placed < elems; v++)
+                {
+                    Vector3 pos = (v == 0) ? A : (v == 1) ? B : C;
+                    Undo.RecordObject(objects[objIndex].transform, "Arrange Triangle Ring Vertex");
+                    objects[objIndex].transform.position = pos;
+                    objIndex++;
+                    placed++;
+                }
+
+                // оставшиеся элементы для этого кольца — распределяем по сторонам A-B, B-C, C-A
+                int remainingThisRing = elems - placed;
+                if (remainingThisRing > 0)
+                {
+                    int perSide = remainingThisRing / 3;
+                    int extra = remainingThisRing % 3;
+
+                    void PlaceBetweenRing(Vector3 s, Vector3 e, int cnt)
+                    {
+                        for (int i = 0; i < cnt && objIndex < objects.Count; i++)
+                        {
+                            float t = (i + 1f) / (cnt + 1f);
+                            Vector3 pos = Vector3.Lerp(s, e, t);
+                            Undo.RecordObject(objects[objIndex].transform, "Arrange Triangle Ring Edge");
+                            objects[objIndex].transform.position = pos;
+                            objIndex++;
+                        }
+                    }
+
+                    PlaceBetweenRing(A, B, perSide + (extra > 0 ? 1 : 0));
+                    PlaceBetweenRing(B, C, perSide + (extra > 1 ? 1 : 0));
+                    PlaceBetweenRing(C, A, perSide);
+                }
+
+                // следующий ring
+            }
+
+            // Если остались объекты (больше числа заданных элементов в кольцах), положим их на внешний контур в порядке A-B-C...
+            if (objIndex < count)
+            {
+                // используем внешний контур (offset = 1)
+                Vector3[] cornersOuter = new[] { A_out, B_out, C_out };
+                int idxExtra = 0;
+                while (objIndex < count)
+                {
+                    Vector3 corner = cornersOuter[idxExtra % 3];
+                    Undo.RecordObject(objects[objIndex].transform, "Arrange Triangle Extra");
+                    objects[objIndex].transform.position = corner;
+                    objIndex++;
+                    idxExtra++;
                 }
             }
         }
+
 
         void ArrangeLine()
         {
