@@ -20,6 +20,7 @@ namespace Systems
             _carSetupAspect = World.GetAspectFactory<CarSetupAspect>();
         }
 
+        //TODO: need update
         public void OnUpdate(float deltaTime)
         {
             foreach (var car in _cars)
@@ -30,19 +31,19 @@ namespace Systems
 
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
+                    motorTorque.Value += 500;
                     speed.Value += 50;
                 }
                 else if (Input.GetKeyDown(KeyCode.C))
                 {
+                    motorTorque.Value -= 500;
                     speed.Value -= 20;
                 }
                 
-                Debug.Log($"AAA: speed = {speed.Value}");
-                
-                _signalBus.Fire(new ComponentChangeSignal<SpeedComponent> 
+                _signalBus.Fire(new ComponentChangeSignal<CarSetupAspect> 
                 { 
                     Entity = car, 
-                    Component = speed 
+                    Component = carSetupAspect
                 });
             }
         }

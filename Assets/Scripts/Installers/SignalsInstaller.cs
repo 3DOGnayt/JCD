@@ -16,7 +16,7 @@ namespace Installers
         private void DeclareSignals()
         {
             Container.DeclareSignal<PlayerSpawnedSignal>();
-            Container.DeclareSignal<ComponentChangeSignal<SpeedComponent>>();
+            Container.DeclareSignal<ComponentChangeSignal<CarSetupAspect>>();
         }
     }
 }

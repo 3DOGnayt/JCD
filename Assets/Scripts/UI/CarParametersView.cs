@@ -22,19 +22,28 @@ namespace UI
         
         private void OnEnable()
         {
-            _signalBus.Subscribe<ComponentChangeSignal<SpeedComponent>>(OnSpeedChanged);
+            _signalBus.Subscribe<ComponentChangeSignal<CarSetupAspect>>(OnCarSetupAspectChanged);
         }
 
         private void OnDisable()
         {
-            _signalBus.Unsubscribe<ComponentChangeSignal<SpeedComponent>>(OnSpeedChanged);
+            _signalBus.Unsubscribe<ComponentChangeSignal<CarSetupAspect>>(OnCarSetupAspectChanged);
         }
 
         private void Awake()
         {
-            _parametersText.text = "Km/h\n" + "CurrentGear\n" + "GearCount\n" + "\n" + "Max Back Speed\n" +
-                                   "Acceleration\n" + "Deceleration\n" + "Max Steering Angle\n" + "Steering Speed\n"
-                                   + "Brake Force\n" + "Drift Multiplier\n" + "Max Motor Torque";
+            _parametersText.text = "Km/h\n" + 
+                                   "CurrentGear\n" + 
+                                   "GearCount\n" + 
+                                   "\n" + 
+                                   "Back Speed\n" +
+                                   "Acceleration\n" + 
+                                   "Deceleration\n" + 
+                                   "Current Steering Angle\n" +
+                                   "Steering Speed\n" + 
+                                   "Brake Force\n" + 
+                                   "Drift Multiplier\n" + 
+                                   "Current Motor Torque";
         }
 
         private void OnPlayerSpawned(PlayerSpawnedSignal signal)
@@ -53,19 +62,34 @@ namespace UI
             var driftMultiplier = carSetup.DriftMultiplier;
             var currentMotorTorque = carSetup.CurrentMotorTorque;
             
-            _parametersValue.text = $"{speed} :\n" + $"{currentGear} :\n" +$"{gearCount} :\n" + "\n" +
-                                    $"{backSpeed} :\n" + $"{acceleration} :\n" + $"{deceleration} :\n"
-                                    + $"{currentSteeringAngle} :\n" + $"{steeringSpeed} :\n" + $"{brakeForce} :\n" 
-                                    + $"{driftMultiplier} :\n" + $"{currentMotorTorque} :";
+            _parametersValue.text = $"{speed} :\n" +
+                                    $"{currentGear} :\n" + 
+                                    $"{gearCount} :\n" + 
+                                    "\n" +
+                                    $"{backSpeed} :\n" + 
+                                    $"{acceleration} :\n" + 
+                                    $"{deceleration} :\n" +
+                                    $"{currentSteeringAngle} :\n" + 
+                                    $"{steeringSpeed} :\n" + 
+                                    $"{brakeForce} :\n" +
+                                    $"{driftMultiplier} :\n" + 
+                                    $"{currentMotorTorque} :";
         }
 
-        //TODO: нужно придумать как обновлять данные, или сделать аспект со всеми компонентами, или разбить все данные
-        private void OnSpeedChanged(ComponentChangeSignal<SpeedComponent> signal)
+        private void OnCarSetupAspectChanged(ComponentChangeSignal<CarSetupAspect> signal)
         {
-            _parametersValue.text = $"{signal.Component.Value:0} :\n" /*+ $"{currentGear} :\n" +$"{gearCount} :\n"
-                                    + "\n" + $"{backSpeed} :\n" + $"{acceleration} :\n" + $"{deceleration} :\n"
-                                    + $"{currentSteeringAngle} :\n" + $"{steeringSpeed} :\n" + $"{brakeForce} :\n" 
-                                    + $"{driftMultiplier} :\n" + $"{currentMotorTorque} :"*/;;
+            _parametersValue.text = $"{signal.Component.Speed.Value:0} :\n" +
+                                    $"{signal.Component.CurrentGear.Value} :\n" + 
+                                    $"{signal.Component.GearCount.Value} :\n" + 
+                                    "\n" +
+                                    $"{signal.Component.BackSpeed.Value} :\n" +
+                                    $"{signal.Component.AccelerationMultiplier.Value} :\n" +
+                                    $"{signal.Component.DecelerationMultiplier.Value} :\n" +
+                                    $"{signal.Component.SteeringAngle.Value} :\n" + 
+                                    $"{signal.Component.SteeringSpeed.Value} :\n" + 
+                                    $"{signal.Component.BrakeForce.Value} :\n" + 
+                                    $"{signal.Component.DriftMultiplier.Value} :\n" +
+                                    $"{signal.Component.MotorTorque.Value} :";
         }
     }
 }
