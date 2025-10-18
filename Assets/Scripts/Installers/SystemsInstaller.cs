@@ -17,6 +17,7 @@ namespace Installers
             Container.Bind<ISystem>().To<CanvasSpawnSystem>().AsSingle();
             Container.Bind<ISystem>().To<PlayerSpawnSystem>().AsSingle();
             Container.Bind<ISystem>().To<InputSystem>().AsSingle();
+            Container.Bind<ISystem>().To<SpeedSystem>().AsSingle();
         }
     }
 }

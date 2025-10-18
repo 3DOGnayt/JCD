@@ -42,8 +42,6 @@ namespace Systems
 
         private void AddGameComponents(Entity entity, ICarView carView)
         {
-            entity.SetComponent(new PlayerTagComponent());
-            
             var carSetup = carView.CarPreset.CarSetup;
             
             entity.SetComponent(new SpeedComponent { Value = carSetup.MaxSpeed });

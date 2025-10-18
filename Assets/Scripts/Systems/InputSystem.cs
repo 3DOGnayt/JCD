@@ -13,10 +13,6 @@ namespace Systems
         
         private Filter _cars;
         private AspectFactory<CarSetupAspect> _carSetupAspect;
-        
-        private Stash<MotorTorqueComponent> _motorTorqueStash;
-        private Stash<SteeringAngleComponent> _steeringAngleStash;
-        
         private Stash<WheelInfoComponent> _wheelInfoStash;
 
         [Inject]
@@ -32,25 +28,12 @@ namespace Systems
             
             _cars = World.Filter.With<WheelInfoComponent>().Build();
             _wheelInfoStash = World.GetStash<WheelInfoComponent>();
-            
-            // works thanks aspect, mb
-            //_cars = World.Filter
-            //    .With<MotorTorqueComponent>()
-            //    .With<SteeringAngleComponent>()
-            //    .With<WheelInfoComponent>()
-            //    .Build();
-            //
-            //_motorTorqueStash = World.GetStash<MotorTorqueComponent>();
-            //_steeringAngleStash = World.GetStash<SteeringAngleComponent>();
         }
 
         public void OnUpdate(float deltaTime) 
         {
             foreach (var car in _cars)
             {
-                //ref var motorTorque = ref _motorTorqueStash.Get(car);
-                //ref var steeringAngle = ref _steeringAngleStash.Get(car);
-                
                 ref var wheelInfo = ref _wheelInfoStash.Get(car);
                 
                 var carSetupAspect = _carSetupAspect.Get(car);
