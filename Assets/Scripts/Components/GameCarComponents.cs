@@ -3,6 +3,9 @@ using Scellecs.Morpeh;
 namespace Components
 {
     public struct SpeedComponent : IComponent { public float Value; }
+    public struct CurrentGearComponent : IComponent { public int Value; }
+    public struct GearCountComponent : IComponent { public int Value; }
+    
     public struct BackSpeedComponent : IComponent { public float Value; }
     public struct MotorTorqueComponent : IComponent { public float Value; }
     public struct AccelerationMultiplierComponent : IComponent { public float Value; }

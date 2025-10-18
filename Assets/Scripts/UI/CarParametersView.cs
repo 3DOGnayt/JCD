@@ -1,4 +1,3 @@
-using System;
 using Components;
 using Signals;
 using TMPro;
@@ -9,11 +8,8 @@ namespace UI
 {
     public class CarParametersView : MonoBehaviour
     {
-        [SerializeField] private TMP_Text _speedText;
-        [SerializeField] private TMP_Text _speedValue;
-        [Space]
-        [SerializeField] private TMP_Text _subParametersText;
-        [SerializeField] private TMP_Text _subParametersValue;
+        [SerializeField] private TMP_Text _parametersText;
+        [SerializeField] private TMP_Text _parametersValue;
 
         private SignalBus _signalBus;
 
@@ -36,36 +32,40 @@ namespace UI
 
         private void Awake()
         {
-            _speedText.text = "Km/h";
-            _subParametersText.text = "Max Back Speed\n" + "Acceleration\n" + "Deceleration\n"
-                                      + "Max Steering Angle\n" + "Steering Speed\n" + "Brake Force\n" 
-                                      + "Drift Multiplier\n" + "Max Motor Torque";
+            _parametersText.text = "Km/h\n" + "CurrentGear\n" + "GearCount\n" + "\n" + "Max Back Speed\n" +
+                                   "Acceleration\n" + "Deceleration\n" + "Max Steering Angle\n" + "Steering Speed\n"
+                                   + "Brake Force\n" + "Drift Multiplier\n" + "Max Motor Torque";
         }
 
         private void OnPlayerSpawned(PlayerSpawnedSignal signal)
         {
             var carSetup = signal.CarView.CarPreset.CarSetup;
-            var speed = carSetup.MaxSpeed;
+            var speed = carSetup.CurrentSpeed;
+            var currentGear = carSetup.CurrentGear;
+            var gearCount = carSetup.GearCount;
             
-            _speedValue.text = $"{speed} :";
-            
-            var maxBackSpeed = carSetup.MaxBackSpeed;
+            var backSpeed = carSetup.CurrentBackSpeed;
             var acceleration = carSetup.AccelerationMultiplier;
             var deceleration = carSetup.DecelerationMultiplier;
-            var maxSteeringAngle = carSetup.MaxSteeringAngle;
+            var currentSteeringAngle = carSetup.CurrentSteeringAngle;
             var steeringSpeed = carSetup.SteeringSpeed;
             var brakeForce = carSetup.BrakeForce;
             var driftMultiplier = carSetup.DriftMultiplier;
-            var maxMotorTorque = carSetup.MaxMotorTorque;
+            var currentMotorTorque = carSetup.CurrentMotorTorque;
             
-            _subParametersValue.text = $"{maxBackSpeed} :\n" + $"{acceleration} :\n" + $"{deceleration} :\n"
-                                       + $"{maxSteeringAngle} :\n" + $"{steeringSpeed} :\n" + $"{brakeForce} :\n" 
-                                       + $"{driftMultiplier} :\n" + $"{maxMotorTorque} :";
+            _parametersValue.text = $"{speed} :\n" + $"{currentGear} :\n" +$"{gearCount} :\n" + "\n" +
+                                    $"{backSpeed} :\n" + $"{acceleration} :\n" + $"{deceleration} :\n"
+                                    + $"{currentSteeringAngle} :\n" + $"{steeringSpeed} :\n" + $"{brakeForce} :\n" 
+                                    + $"{driftMultiplier} :\n" + $"{currentMotorTorque} :";
         }
 
+        //TODO: нужно придумать как обновлять данные, или сделать аспект со всеми компонентами, или разбить все данные
         private void OnSpeedChanged(ComponentChangeSignal<SpeedComponent> signal)
         {
-            _speedValue.text = $"{signal.Component.Value:0} :";
+            _parametersValue.text = $"{signal.Component.Value:0} :\n" /*+ $"{currentGear} :\n" +$"{gearCount} :\n"
+                                    + "\n" + $"{backSpeed} :\n" + $"{acceleration} :\n" + $"{deceleration} :\n"
+                                    + $"{currentSteeringAngle} :\n" + $"{steeringSpeed} :\n" + $"{brakeForce} :\n" 
+                                    + $"{driftMultiplier} :\n" + $"{currentMotorTorque} :"*/;;
         }
     }
 }

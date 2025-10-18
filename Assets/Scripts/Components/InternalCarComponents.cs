@@ -6,13 +6,11 @@ using UnityEngine;
 namespace Components
 {
     // CarParameters
-
     public struct CarMassComponent : IComponent { public float Value; }
     public struct AutomaticCenterOfMassComponent : IComponent { public bool Value; }
     public struct CenterOfMassComponent : IComponent { public Vector3 Value; }
 
     // MainWheelParameters
-
     public struct WheelInfoComponent : IComponent
     {
         public List<WheelInfo> WheelInfo;

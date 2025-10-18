@@ -7,6 +7,8 @@ namespace Components
         public Entity Entity { get; set; }
         
         private Stash<SpeedComponent> speed;
+        private Stash<CurrentGearComponent> currentGear;
+        private Stash<GearCountComponent> gearCount;
         private Stash<BackSpeedComponent> backSpeed;
         private Stash<MotorTorqueComponent> motorTorque;
         private Stash<AccelerationMultiplierComponent> accelerationMultiplier;
@@ -17,6 +19,8 @@ namespace Components
         private Stash<DriftMultiplierComponent> driftMultiplier;
     
         public ref SpeedComponent Speed => ref speed.Get(Entity);
+        public ref CurrentGearComponent CurrentGear => ref currentGear.Get(Entity);
+        public ref GearCountComponent GearCount => ref gearCount.Get(Entity);
         public ref BackSpeedComponent BackSpeed => ref backSpeed.Get(Entity);
         public ref MotorTorqueComponent MotorTorque => ref motorTorque.Get(Entity);
         public ref AccelerationMultiplierComponent AccelerationMultiplier => ref accelerationMultiplier.Get(Entity);
@@ -29,6 +33,8 @@ namespace Components
         public void OnGetAspectFactory(World world)
         {
             speed = world.GetStash<SpeedComponent>();
+            currentGear = world.GetStash<CurrentGearComponent>();
+            gearCount = world.GetStash<GearCountComponent>();
             backSpeed = world.GetStash<BackSpeedComponent>();
             motorTorque = world.GetStash<MotorTorqueComponent>();
             accelerationMultiplier = world.GetStash<AccelerationMultiplierComponent>();
@@ -41,6 +47,8 @@ namespace Components
         
         public FilterBuilder Extend(FilterBuilder rootFilter) => rootFilter
             .With<SpeedComponent>()
+            .With<CurrentGearComponent>()
+            .With<GearCountComponent>()
             .With<BackSpeedComponent>()
             .With<MotorTorqueComponent>()
             .With<AccelerationMultiplierComponent>()

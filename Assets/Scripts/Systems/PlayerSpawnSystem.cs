@@ -44,12 +44,14 @@ namespace Systems
         {
             var carSetup = carView.CarPreset.CarSetup;
             
-            entity.SetComponent(new SpeedComponent { Value = carSetup.MaxSpeed });
-            entity.SetComponent(new BackSpeedComponent { Value = carSetup.MaxBackSpeed });
-            entity.SetComponent(new MotorTorqueComponent { Value = carSetup.MaxMotorTorque });
+            entity.SetComponent(new SpeedComponent { Value = carSetup.CurrentSpeed });
+            entity.SetComponent(new CurrentGearComponent { Value = carSetup.CurrentGear });
+            entity.SetComponent(new GearCountComponent { Value = carSetup.GearCount });
+            entity.SetComponent(new BackSpeedComponent { Value = carSetup.CurrentBackSpeed });
+            entity.SetComponent(new MotorTorqueComponent { Value = carSetup.CurrentMotorTorque });
             entity.SetComponent(new AccelerationMultiplierComponent { Value = carSetup.AccelerationMultiplier });
             entity.SetComponent(new DecelerationMultiplierComponent { Value = carSetup.DecelerationMultiplier });
-            entity.SetComponent(new SteeringAngleComponent { Value = carSetup.MaxSteeringAngle });
+            entity.SetComponent(new SteeringAngleComponent { Value = carSetup.CurrentSteeringAngle });
             entity.SetComponent(new SteeringSpeedComponent { Value = carSetup.SteeringSpeed });
             entity.SetComponent(new BrakeForceComponent { Value = carSetup.BrakeForce });
             entity.SetComponent(new DriftMultiplierComponent { Value = carSetup.DriftMultiplier });
