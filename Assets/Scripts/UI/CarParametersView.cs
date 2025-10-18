@@ -1,3 +1,5 @@
+using System;
+using Components;
 using Signals;
 using TMPro;
 using UnityEngine;
@@ -13,10 +15,31 @@ namespace UI
         [SerializeField] private TMP_Text _subParametersText;
         [SerializeField] private TMP_Text _subParametersValue;
 
+        private SignalBus _signalBus;
+
         [Inject]
         public void Construct(SignalBus signalBus)
         {
+            _signalBus = signalBus;
             signalBus.Subscribe<PlayerSpawnedSignal>(OnPlayerSpawned);
+        }
+        
+        private void OnEnable()
+        {
+            _signalBus.Subscribe<ComponentChangeSignal<SpeedComponent>>(OnSpeedChanged);
+        }
+
+        private void OnDisable()
+        {
+            _signalBus.Unsubscribe<ComponentChangeSignal<SpeedComponent>>(OnSpeedChanged);
+        }
+
+        private void Awake()
+        {
+            _speedText.text = "Km/h";
+            _subParametersText.text = "Max Back Speed\n" + "Acceleration\n" + "Deceleration\n"
+                                      + "Max Steering Angle\n" + "Steering Speed\n" + "Brake Force\n" 
+                                      + "Drift Multiplier\n" + "Max Motor Torque";
         }
 
         private void OnPlayerSpawned(PlayerSpawnedSignal signal)
@@ -39,13 +62,10 @@ namespace UI
                                        + $"{maxSteeringAngle} :\n" + $"{steeringSpeed} :\n" + $"{brakeForce} :\n" 
                                        + $"{driftMultiplier} :\n" + $"{maxMotorTorque} :";
         }
-        
-        private void Awake()
+
+        private void OnSpeedChanged(ComponentChangeSignal<SpeedComponent> signal)
         {
-            _speedText.text = "Km/h";
-            _subParametersText.text = "Max Back Speed\n" + "Acceleration\n" + "Deceleration\n"
-                                      + "Max Steering Angle\n" + "Steering Speed\n" + "Brake Force\n" 
-                                      + "Drift Multiplier\n" + "Max Motor Torque";
+            _speedValue.text = $"{signal.Component.Value:0} :";
         }
     }
 }

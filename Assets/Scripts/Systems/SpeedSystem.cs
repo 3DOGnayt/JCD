@@ -1,5 +1,6 @@
 using Components;
 using Scellecs.Morpeh;
+using Signals;
 using UnityEngine;
 using Zenject;
 
@@ -8,6 +9,7 @@ namespace Systems
     public class SpeedSystem : ISystem
     {
         [Inject] public World World { get; set;}
+        [Inject] private SignalBus _signalBus;
         
         private Filter _cars;
         private AspectFactory<CarSetupAspect> _carSetupAspect;
@@ -36,8 +38,13 @@ namespace Systems
                 }
                 
                 Debug.Log($"AAA: speed = {speed.Value}");
+                
+                _signalBus.Fire(new ComponentChangeSignal<SpeedComponent> 
+                { 
+                    Entity = car, 
+                    Component = speed 
+                });
             }
-            
         }
 
         public void Dispose() { }
