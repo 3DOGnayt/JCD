@@ -39,11 +39,11 @@ namespace UI
                                    "Back Speed\n" +
                                    "Acceleration\n" + 
                                    "Deceleration\n" + 
-                                   "Current Steering Angle\n" +
+                                   "C. Steering Angle\n" +
                                    "Steering Speed\n" + 
                                    "Brake Force\n" + 
                                    "Drift Multiplier\n" + 
-                                   "Current Motor Torque";
+                                   "C. Motor Torque";
         }
 
         private void OnPlayerSpawned(PlayerSpawnedSignal signal)

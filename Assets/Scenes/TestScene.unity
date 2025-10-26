@@ -2020,6 +2020,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
+      propertyPath: _carMovementParameters
+      value: 
+      objectReference: {fileID: 11400000, guid: f8480b7e0f4acd04e81c153a8015aa14,
+        type: 2}
     - target: {fileID: 7824705624787612259, guid: f75ea5e5a3aab134184c4fbe7349d11d,
         type: 3}
       propertyPath: _canvas

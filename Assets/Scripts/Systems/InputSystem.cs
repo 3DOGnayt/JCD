@@ -1,46 +1,46 @@
 using Components;
 using Scellecs.Morpeh;
-using Services;
+using UnityEngine;
 using Zenject;
 
 namespace Systems
 {
-    public sealed class InputSystem : ISystem 
+    public sealed class InputSystem : ISystem
     {
         [Inject] public World World { get; set;}
         
-        private IInputService _inputService;
-        
         private Filter _cars;
-        private AspectFactory<CarSetupAspect> _carSetupAspect;
         private Stash<WheelInfoComponent> _wheelInfoStash;
-
-        [Inject]
-        public void Construct(IInputService inputService)
-        {
-            _inputService = inputService;
-        }
+        
+        private Stash<VerticalInputComponent> _verticalStash;
+        private Stash<HorizontalInputComponent> _horizontalStash;
         
         public void OnAwake()
         {
             _cars = World.Filter.Extend<CarSetupAspect>().Build();
-            _carSetupAspect = World.GetAspectFactory<CarSetupAspect>();
             
-            _cars = World.Filter.With<WheelInfoComponent>().Build();
-            _wheelInfoStash = World.GetStash<WheelInfoComponent>();
+            _cars = World.Filter
+                .With<WheelInfoComponent>()
+                .With<VerticalInputComponent>()
+                .With<HorizontalInputComponent>()
+                .Build();
+            
+            _verticalStash = World.GetStash<VerticalInputComponent>();
+            _horizontalStash = World.GetStash<HorizontalInputComponent>();
         }
 
         public void OnUpdate(float deltaTime) 
         {
             foreach (var car in _cars)
             {
-                ref var wheelInfo = ref _wheelInfoStash.Get(car);
+                ref var vertical = ref _verticalStash.Get(car);
+                ref var horizontal = ref _horizontalStash.Get(car);
                 
-                var carSetupAspect = _carSetupAspect.Get(car);
-                ref var motorTorque = ref carSetupAspect.MotorTorque;
-                ref var steeringAngle = ref carSetupAspect.SteeringAngle;
-                
-                _inputService.ApplyMove(motorTorque.Value, steeringAngle.Value, wheelInfo.WheelInfo);
+                var vert = Input.GetAxisRaw("Vertical");
+                var hor = Input.GetAxisRaw("Horizontal");
+
+                vertical.Value = Mathf.Abs(vert) < 0.01f ? 0 : Mathf.Sign(vert);
+                horizontal.Value = Mathf.Abs(hor) < 0.01f ? 0 : Mathf.Sign(hor);
             }
         }
 

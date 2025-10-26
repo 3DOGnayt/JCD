@@ -4,7 +4,7 @@ namespace Signals
 {
     public class ComponentChangeSignal<T>
     {
-        public Entity Entity;
+        public Entity Entity; // TODO: mb don't need
         public T Component;
     }
 }

@@ -8,23 +8,31 @@ namespace Core
     {
         [Inject] public World _world;
         [Inject] private ISystem[] _systems;
+        [Inject] private IFixedSystem[] _fixedSystems;
 
         private void Start()
         {
             var systemsGroup = _world.CreateSystemsGroup();
+            var fixedSystemsGroup = _world.CreateSystemsGroup();
 
-            for (var index = 0; index < _systems.Length; index++)
-            {
-                var system = _systems[index];
+            foreach (var system in _systems) 
                 systemsGroup.AddSystem(system);
-            }
+
+            foreach (var fixedSystem in _fixedSystems) 
+                fixedSystemsGroup.AddSystem(fixedSystem);
 
             _world.AddSystemsGroup(order: 0, systemsGroup);
+            _world.AddSystemsGroup(order: 1, fixedSystemsGroup);
         }
 
         public void Update()
         {
             _world?.Update(Time.deltaTime);
+        }
+
+        public void FixedUpdate()
+        {
+            _world?.FixedUpdate(Time.fixedDeltaTime);
         }
     }
 }

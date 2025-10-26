@@ -16,8 +16,10 @@ namespace Installers
             Container.Bind<ISystem>().To<CameraSpawnSystem>().AsSingle();
             Container.Bind<ISystem>().To<CanvasSpawnSystem>().AsSingle();
             Container.Bind<ISystem>().To<PlayerSpawnSystem>().AsSingle();
+            
             Container.Bind<ISystem>().To<InputSystem>().AsSingle();
-            Container.Bind<ISystem>().To<SpeedSystem>().AsSingle();
+            Container.Bind<IFixedSystem>().To<VerticalInputSystem>().AsSingle();
+            Container.Bind<IFixedSystem>().To<HorizontalInputSystem>().AsSingle();
         }
     }
 }

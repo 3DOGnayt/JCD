@@ -6,25 +6,41 @@ namespace Services.Impl
 {
     public class InputService : IInputService
     {
-        public void ApplyMove(float maxMotorTorque, float maxSteeringAngle, List<WheelInfo> wheelInfos)
+        public void ApplyHorizontalMove(float targetAngle, float steeringSpeed, List<WheelInfo> wheelInfos)
         {
-            var motor = maxMotorTorque * Input.GetAxisRaw("Vertical");
-            var steering = maxSteeringAngle * Input.GetAxisRaw("Horizontal");
-
             foreach (var info in wheelInfos)
             {
-                if (info.Steering)
-                {
-                    info.LeftWheel.steerAngle = steering;
-                    info.RightWheel.steerAngle = steering;
-                }
+                if (!info.Steering)
+                    continue;
 
-                if (info.Motor)
-                {
-                    info.LeftWheel.motorTorque = motor;
-                    info.RightWheel.motorTorque = motor;
-                }
+                var left = Mathf.MoveTowards(
+                    info.LeftWheel.steerAngle,
+                    targetAngle,
+                    steeringSpeed * Time.fixedDeltaTime);
 
+                var right = Mathf.MoveTowards(
+                    info.RightWheel.steerAngle,
+                    targetAngle,
+                    steeringSpeed * Time.fixedDeltaTime);
+                
+                info.LeftWheel.steerAngle = left;
+                info.RightWheel.steerAngle = right;
+
+                ApplyLocalPositionToVisuals(info.LeftWheel, info.LeftVisual);
+                ApplyLocalPositionToVisuals(info.RightWheel, info.RightVisual);
+            }
+        }
+
+        public void ApplyVerticalMove(float currentMotorTorque, float same, List<WheelInfo> wheelInfos)
+        {
+            foreach (var info in wheelInfos)
+            {
+                if (!info.Motor) 
+                    continue;
+                
+                info.LeftWheel.motorTorque = currentMotorTorque;
+                info.RightWheel.motorTorque = currentMotorTorque;
+                
                 ApplyLocalPositionToVisuals(info.LeftWheel, info.LeftVisual);
                 ApplyLocalPositionToVisuals(info.RightWheel, info.RightVisual);
             }

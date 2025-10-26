@@ -68,12 +68,19 @@ namespace Systems
 
         private void AddCommonComponents(Entity entity, Transform car)
         {
-            entity.SetComponent(new PlayerTagComponent());
+            //TODO: need change
+            var playerTag = World.GetStash<PlayerTagComponent>();
+            playerTag.Set(entity, new PlayerTagComponent());
+            
+            //entity.SetComponent(new PlayerTagComponent());
 
             entity.SetComponent(new TransformComponent { Value = car });
             entity.SetComponent(new PositionComponent { Value = car.position });
             entity.SetComponent(new RotationComponent { Value = car.rotation });
             entity.SetComponent(new ScaleComponent { Value = 1 });
+            
+            entity.SetComponent(new VerticalInputComponent {Value = 0 });
+            entity.SetComponent(new HorizontalInputComponent {Value = 0 });
         }
 
         private void AddMainCarComponents(Entity entity)
