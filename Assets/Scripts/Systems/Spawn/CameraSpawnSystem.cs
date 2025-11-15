@@ -4,7 +4,7 @@ using UI;
 using UnityEngine;
 using Zenject;
 
-namespace Systems
+namespace Systems.Spawn
 {
     public sealed class CameraSpawnSystem : ISystem
     {

@@ -3,7 +3,7 @@ using Scellecs.Morpeh;
 using UnityEngine;
 using Zenject;
 
-namespace Systems
+namespace Systems.Car
 {
     public sealed class InputSystem : ISystem
     {

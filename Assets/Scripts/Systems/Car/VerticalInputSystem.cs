@@ -6,7 +6,7 @@ using Signals;
 using UnityEngine;
 using Zenject;
 
-namespace Systems
+namespace Systems.Car
 {
     public class VerticalInputSystem : IFixedSystem
     {
@@ -28,6 +28,7 @@ namespace Systems
         private float _maxRpm;
         private float _idleRpm;
         private float _rpmToSpeedRatio;
+        private float _targetRpm;
         
         [Inject]
         public void Construct(IInputService inputService)
@@ -64,20 +65,30 @@ namespace Systems
                 ref var speed = ref carSetupAspect.Speed;
 
                 if (vertical.Value > 0)
-                    motorTorque.Value += _accelerationRate * vertical.Value * deltaTime;
+                {
+                    _targetRpm += _accelerationRate * vertical.Value * deltaTime * (1500f / carMass.Value);
+                }
                 else if (vertical.Value < 0)
-                    motorTorque.Value -= _decelerationRate * Mathf.Abs(vertical.Value) * deltaTime;
+                {
+                    if (speed.Value > 1f)
+                        _targetRpm -= 800 * Mathf.Abs(vertical.Value) * deltaTime;
+                    else 
+                        _targetRpm -= _accelerationRate * Mathf.Abs(vertical.Value) * deltaTime;
+                }
                 else
-                    motorTorque.Value = Mathf.MoveTowards(motorTorque.Value, _idleRpm, _decelerationRate * deltaTime);
+                {
+                    _targetRpm = Mathf.MoveTowards(motorTorque.Value, _idleRpm, _decelerationRate * deltaTime);
+                }
 
-                motorTorque.Value = Mathf.Clamp(motorTorque.Value, 0f, _maxRpm);
-                speed.Value = Mathf.Max(0, (motorTorque.Value - _idleRpm) * _rpmToSpeedRatio);
-                
+                motorTorque.Value = Mathf.Clamp(_targetRpm, -_maxRpm * 0.5f, _maxRpm);
+
+                speed.Value = (motorTorque.Value - _idleRpm) * _rpmToSpeedRatio;
+
                 _inputService.ApplyVerticalMove(motorTorque.Value, vertical.Value, wheelInfo.WheelInfo);
-                
-                _signalBus.Fire(new ComponentChangeSignal<CarSetupAspect> 
-                { 
-                    Entity = car, 
+
+                _signalBus.Fire(new ComponentChangeSignal<CarSetupAspect>
+                {
+                    Entity = car,
                     Component = carSetupAspect
                 });
             }

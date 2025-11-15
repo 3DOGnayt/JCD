@@ -6,7 +6,7 @@ using Signals;
 using UnityEngine;
 using Zenject;
 
-namespace Systems
+namespace Systems.Car
 {
     public class HorizontalInputSystem : IFixedSystem
     {
@@ -72,7 +72,8 @@ namespace Systems
                 var adjustedAngle = steeringAngle.Value * speedFactor * massFactor;
                 var targetAngle = adjustedAngle * horizontal.Value;
                 
-                var dynamicSteeringSpeed = steeringSpeed.Value * Mathf.Lerp(_steeringSpeedMultiplierMax, _steeringSpeedMultiplierMin, speed.Value / _maxCarSpeed);
+                var dynamicSteeringSpeed = steeringSpeed.Value * Mathf.Lerp(
+                    _steeringSpeedMultiplierMax, _steeringSpeedMultiplierMin, speed.Value / _maxCarSpeed);
 
                 _inputService.ApplyHorizontalMove(targetAngle, dynamicSteeringSpeed, wheelInfo.WheelInfo);
                 

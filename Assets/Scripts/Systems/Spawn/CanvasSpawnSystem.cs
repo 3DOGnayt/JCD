@@ -3,12 +3,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using Zenject;
 
-namespace Systems
+namespace Systems.Spawn
 {
     public sealed class CanvasSpawnSystem : ISystem
     {
         [Inject] public World World { get; set; }
-        [Inject] public Canvas _canvasPrefab;
+        [Inject] public UnityEngine.Canvas _canvasPrefab;
         [Inject] public EventSystem _eventSystemPrefab;
         [Inject] private DiContainer _container;
 
@@ -31,7 +31,7 @@ namespace Systems
                 return;
 
             var gameCanvasTransform = _canvasPrefab.transform;
-            _container.InstantiatePrefabForComponent<Canvas>(
+            _container.InstantiatePrefabForComponent<UnityEngine.Canvas>(
                 _canvasPrefab.gameObject,
                 gameCanvasTransform.position,
                 gameCanvasTransform.rotation,

@@ -31,15 +31,17 @@ namespace Services.Impl
             }
         }
 
-        public void ApplyVerticalMove(float currentMotorTorque, float same, List<WheelInfo> wheelInfos)
+        public void ApplyVerticalMove(float currentMotorTorque, float input, List<WheelInfo> wheelInfos)
         {
+            var torque = currentMotorTorque * Mathf.Sign(input);
+            
             foreach (var info in wheelInfos)
             {
                 if (!info.Motor) 
                     continue;
                 
-                info.LeftWheel.motorTorque = currentMotorTorque;
-                info.RightWheel.motorTorque = currentMotorTorque;
+                info.LeftWheel.motorTorque = torque;
+                info.RightWheel.motorTorque = torque;
                 
                 ApplyLocalPositionToVisuals(info.LeftWheel, info.LeftVisual);
                 ApplyLocalPositionToVisuals(info.RightWheel, info.RightVisual);

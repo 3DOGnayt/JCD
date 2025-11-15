@@ -79,17 +79,17 @@ namespace UI
         private void OnCarSetupAspectChanged(ComponentChangeSignal<CarSetupAspect> signal)
         {
             _parametersValue.text = $"{signal.Component.Speed.Value:0} :\n" +
-                                    $"{signal.Component.CurrentGear.Value} :\n" + 
-                                    $"{signal.Component.GearCount.Value} :\n" + 
+                                    $"{signal.Component.CurrentGear.Value:0} :\n" + 
+                                    $"{signal.Component.GearCount.Value:0} :\n" + 
                                     "\n" +
-                                    $"{signal.Component.BackSpeed.Value} :\n" +
-                                    $"{signal.Component.AccelerationMultiplier.Value} :\n" +
-                                    $"{signal.Component.DecelerationMultiplier.Value} :\n" +
-                                    $"{signal.Component.SteeringAngle.Value} :\n" + 
-                                    $"{signal.Component.SteeringSpeed.Value} :\n" + 
-                                    $"{signal.Component.BrakeForce.Value} :\n" + 
-                                    $"{signal.Component.DriftMultiplier.Value} :\n" +
-                                    $"{signal.Component.MotorTorque.Value} :";
+                                    $"{signal.Component.BackSpeed.Value:0} :\n" +
+                                    $"{signal.Component.AccelerationMultiplier.Value:0} :\n" +
+                                    $"{signal.Component.DecelerationMultiplier.Value:0} :\n" +
+                                    $"{signal.Component.SteeringAngle.Value:0} :\n" + 
+                                    $"{signal.Component.SteeringSpeed.Value:0} :\n" + 
+                                    $"{signal.Component.BrakeForce.Value:0} :\n" + 
+                                    $"{signal.Component.DriftMultiplier.Value:0} :\n" +
+                                    $"{signal.Component.MotorTorque.Value:0} :";
         }
     }
 }

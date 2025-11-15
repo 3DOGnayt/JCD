@@ -6,7 +6,7 @@ using Signals;
 using UnityEngine;
 using Zenject;
 
-namespace Systems
+namespace Systems.Spawn
 {
     public sealed class PlayerSpawnSystem : ISystem 
     {

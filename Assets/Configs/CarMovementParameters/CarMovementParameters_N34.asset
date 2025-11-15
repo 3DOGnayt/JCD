@@ -17,8 +17,8 @@ MonoBehaviour:
   _carMass: 1500
   _steeringSpeedMultiplierMax: 1
   _steeringSpeedMultiplierMin: 0.6
-  _accelerationRate: 1000
-  _decelerationRate: 1500
+  _accelerationRate: 1600
+  _decelerationRate: 2100
   _maxCarSpeed: 140
   _maxRpm: 7000
   _idleRpm: 0
