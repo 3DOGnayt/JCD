@@ -20,11 +20,11 @@ namespace Installers
             Container.Bind<ISystem>().To<PlayerSpawnSystem>().AsSingle();
             
             Container.Bind<ISystem>().To<InputSystem>().AsSingle();
-            //Container.Bind<IFixedSystem>().To<VerticalInputSystem>().AsSingle();
+            //Container.Bind<IFixedSystem>().To<VerticalInputSystem>().AsSingle(); // mb later
+            //Container.Bind<IFixedSystem>().To<SpeedSystem>().AsSingle(); // mb later
             Container.Bind<IFixedSystem>().To<HorizontalInputSystem>().AsSingle();
+            Container.Bind<IFixedSystem>().To<PhysicsSpeedSystem>().AsSingle();
             Container.Bind<IFixedSystem>().To<RPMSystem>().AsSingle();
-            Container.Bind<IFixedSystem>().To<SpeedSystem>().AsSingle();
-            //Container.Bind<IFixedSystem>().To<PhysicsSpeedSystem>().AsSingle();
             Container.Bind<IFixedSystem>().To<GearShiftSystem>().AsSingle();
             Container.Bind<IFixedSystem>().To<WheelDriveSystem>().AsSingle();
         }

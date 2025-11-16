@@ -17,8 +17,8 @@ namespace Systems.Car
 
         public void OnAwake()
         {
-            _filter     = World.Filter.With<RigidbodyComponent>().With<SpeedComponent>().Build();
-            _rbStash    = World.GetStash<RigidbodyComponent>();
+            _filter = World.Filter.With<RigidbodyComponent>().With<SpeedComponent>().Build();
+            _rbStash = World.GetStash<RigidbodyComponent>();
             _speedStash = World.GetStash<SpeedComponent>();
         }
 

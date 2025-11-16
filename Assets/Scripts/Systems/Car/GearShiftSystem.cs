@@ -25,6 +25,10 @@ namespace Systems.Car
         private const float StopKmh = 0.5f;
         private const float DownshiftMarginKmh = 2f;
 
+        // ★ новые пороги для апшифта по скорости
+        private const float UpshiftSpeedRatio = 0.95f;
+        private const float UpshiftThrottleMin = 0.30f;
+
         public void OnAwake()
         {
             _filter = World.Filter
@@ -47,7 +51,7 @@ namespace Systems.Car
                 var gear = (int)s.EGear;
                 var limit = Mathf.Max(0f, s.SpeedLimit);
                 _kmhAtRedline[gear] = limit;
-                
+
                 if (gear >= 1 && gear > _maxForwardGear)
                     _maxForwardGear = gear;
             }
@@ -65,6 +69,7 @@ namespace Systems.Car
                 ref var sp = ref _speedStash.Get(ent);
                 ref var vert = ref _verticalStash.Get(ent);
 
+                // === Neutral (0)
                 if (gb.Value == 0)
                 {
                     if (vert.Value > ThrottleThresh)
@@ -85,6 +90,7 @@ namespace Systems.Car
                     continue;
                 }
 
+                // === Reverse (-1)
                 if (gb.Value < 0)
                 {
                     if (sp.Value <= StopKmh && Mathf.Abs(vert.Value) <= ThrottleThresh)
@@ -103,6 +109,7 @@ namespace Systems.Car
                     continue;
                 }
 
+                // === Forward gears (1..N)
                 var current = gb.Value;
 
                 if (sp.Value <= StopKmh && Mathf.Abs(vert.Value) <= ThrottleThresh)
@@ -119,13 +126,22 @@ namespace Systems.Car
                     continue;
                 }
 
-                if (eng.Value >= redline - 1f && current < _maxForwardGear)
+                // ★ апшифт: по redline ИЛИ по скорости при нажатом газе
+                if (current < _maxForwardGear)
                 {
-                    gb.Value = current + 1;
-                    eng.Value = RpmFromSpeed(sp.Value, gb.Value, redline, idle);
-                    continue;
+                    var limCurr = GetLimit(current);
+                    bool gas = vert.Value >= UpshiftThrottleMin;
+
+                    if (eng.Value >= redline - 1f
+                        || (gas && limCurr > 0f && sp.Value >= limCurr * UpshiftSpeedRatio))
+                    {
+                        gb.Value = current + 1;
+                        eng.Value = RpmFromSpeed(sp.Value, gb.Value, redline, idle);
+                        continue;
+                    }
                 }
 
+                // дауншифт по скорости с запасом вниз
                 if (current > 1)
                 {
                     var lowerLim = GetLimit(current - 1);
@@ -151,6 +167,8 @@ namespace Systems.Car
             return _kmhAtRedline.TryGetValue(gear, out var lim) ? lim : 0f;
         }
 
-        public void Dispose() { }
+        public void Dispose()
+        {
+        }
     }
 }
