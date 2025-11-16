@@ -19,7 +19,8 @@ MonoBehaviour:
   _steeringSpeedMultiplierMin: 0.6
   _accelerationRate: 1600
   _decelerationRate: 2100
-  _maxCarSpeed: 140
-  _maxRpm: 7000
+  _maxCarSpeed: 400
+  _maxRpm: 8000
   _idleRpm: 0
   _rpmToSpeedRatio: 0.02
+  _speedPreset: {fileID: 11400000, guid: 37fa8eed213b1ec479a9cb2bb95cf628, type: 2}

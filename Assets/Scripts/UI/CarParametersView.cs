@@ -33,8 +33,7 @@ namespace UI
         private void Awake()
         {
             _parametersText.text = "Km/h\n" + 
-                                   "CurrentGear\n" + 
-                                   "GearCount\n" + 
+                                   "Gearbox\n" + 
                                    "\n" + 
                                    "Back Speed\n" +
                                    "Acceleration\n" + 
@@ -43,15 +42,14 @@ namespace UI
                                    "Steering Speed\n" + 
                                    "Brake Force\n" + 
                                    "Drift Multiplier\n" + 
-                                   "C. Motor Torque";
+                                   "C. Engine Rpm";
         }
 
         private void OnPlayerSpawned(PlayerSpawnedSignal signal)
         {
             var carSetup = signal.CarView.CarPreset.CarSetup;
             var speed = carSetup.CurrentSpeed;
-            var currentGear = carSetup.CurrentGear;
-            var gearCount = carSetup.GearCount;
+            var gearbox = carSetup.Gearbox;
             
             var backSpeed = carSetup.CurrentBackSpeed;
             var acceleration = carSetup.AccelerationMultiplier;
@@ -60,11 +58,10 @@ namespace UI
             var steeringSpeed = carSetup.SteeringSpeed;
             var brakeForce = carSetup.BrakeForce;
             var driftMultiplier = carSetup.DriftMultiplier;
-            var currentMotorTorque = carSetup.CurrentMotorTorque;
+            var currentEngineRpm = carSetup.CurrentEngineRpm;
             
             _parametersValue.text = $"{speed} :\n" +
-                                    $"{currentGear} :\n" + 
-                                    $"{gearCount} :\n" + 
+                                    $"{gearbox} :\n" + 
                                     "\n" +
                                     $"{backSpeed} :\n" + 
                                     $"{acceleration} :\n" + 
@@ -73,14 +70,13 @@ namespace UI
                                     $"{steeringSpeed} :\n" + 
                                     $"{brakeForce} :\n" +
                                     $"{driftMultiplier} :\n" + 
-                                    $"{currentMotorTorque} :";
+                                    $"{currentEngineRpm} :";
         }
 
         private void OnCarSetupAspectChanged(ComponentChangeSignal<CarSetupAspect> signal)
         {
             _parametersValue.text = $"{signal.Component.Speed.Value:0} :\n" +
-                                    $"{signal.Component.CurrentGear.Value:0} :\n" + 
-                                    $"{signal.Component.GearCount.Value:0} :\n" + 
+                                    $"{signal.Component.Gearbox.Value:0} :\n" + 
                                     "\n" +
                                     $"{signal.Component.BackSpeed.Value:0} :\n" +
                                     $"{signal.Component.AccelerationMultiplier.Value:0} :\n" +
@@ -89,7 +85,7 @@ namespace UI
                                     $"{signal.Component.SteeringSpeed.Value:0} :\n" + 
                                     $"{signal.Component.BrakeForce.Value:0} :\n" + 
                                     $"{signal.Component.DriftMultiplier.Value:0} :\n" +
-                                    $"{signal.Component.MotorTorque.Value:0} :";
+                                    $"{signal.Component.EngineRpm.Value:0} :";
         }
     }
 }

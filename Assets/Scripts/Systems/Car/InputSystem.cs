@@ -36,11 +36,11 @@ namespace Systems.Car
                 ref var vertical = ref _verticalStash.Get(car);
                 ref var horizontal = ref _horizontalStash.Get(car);
                 
-                var vert = Input.GetAxisRaw("Vertical");
-                var hor = Input.GetAxisRaw("Horizontal");
+                var vert = Input.GetAxis("Vertical");
+                var hor = Input.GetAxis("Horizontal");
 
-                vertical.Value = Mathf.Abs(vert) < 0.01f ? 0 : Mathf.Sign(vert);
-                horizontal.Value = Mathf.Abs(hor) < 0.01f ? 0 : Mathf.Sign(hor);
+                vertical.Value = Mathf.Abs(vert) < 0.01f ? 0 : vert;
+                horizontal.Value = Mathf.Abs(hor) < 0.01f ? 0 : hor;
             }
         }
 

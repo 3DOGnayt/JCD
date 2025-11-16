@@ -45,28 +45,28 @@ namespace Systems.Spawn
             var carSetup = carView.CarPreset.CarSetup;
             
             entity.SetComponent(new SpeedComponent { Value = carSetup.CurrentSpeed });
-            entity.SetComponent(new CurrentGearComponent { Value = carSetup.CurrentGear });
-            entity.SetComponent(new GearCountComponent { Value = carSetup.GearCount });
+            entity.SetComponent(new GearboxComponent { Value = carSetup.Gearbox });
             entity.SetComponent(new BackSpeedComponent { Value = carSetup.CurrentBackSpeed });
-            entity.SetComponent(new MotorTorqueComponent { Value = carSetup.CurrentMotorTorque });
+            entity.SetComponent(new EngineRpmComponent { Value = carSetup.CurrentEngineRpm });
             entity.SetComponent(new AccelerationMultiplierComponent { Value = carSetup.AccelerationMultiplier });
             entity.SetComponent(new DecelerationMultiplierComponent { Value = carSetup.DecelerationMultiplier });
             entity.SetComponent(new SteeringAngleComponent { Value = carSetup.CurrentSteeringAngle });
             entity.SetComponent(new SteeringSpeedComponent { Value = carSetup.SteeringSpeed });
             entity.SetComponent(new BrakeForceComponent { Value = carSetup.BrakeForce });
+            entity.SetComponent(new HandbrakeInputComponent { Value = carSetup.HandbrakeInput });
             entity.SetComponent(new DriftMultiplierComponent { Value = carSetup.DriftMultiplier });
         }
 
         private void AddInternalComponents(Entity entity, ICarView carView)
         {
-            AddCommonComponents(entity, carView.CarTransform);
+            AddCommonComponents(entity, carView);
             AddMainCarComponents(entity);
             AddWheelInfoComponents(entity, carView);
             AddFrontWheelComponents(entity);
             AddBackWheelComponents(entity);
         }
 
-        private void AddCommonComponents(Entity entity, Transform car)
+        private void AddCommonComponents(Entity entity, ICarView carView)
         {
             //TODO: need change
             var playerTag = World.GetStash<PlayerTagComponent>();
@@ -74,10 +74,11 @@ namespace Systems.Spawn
             
             //entity.SetComponent(new PlayerTagComponent());
 
-            entity.SetComponent(new TransformComponent { Value = car });
-            entity.SetComponent(new PositionComponent { Value = car.position });
-            entity.SetComponent(new RotationComponent { Value = car.rotation });
+            entity.SetComponent(new TransformComponent { Value = carView.CarTransform });
+            entity.SetComponent(new PositionComponent { Value = carView.CarTransform.position });
+            entity.SetComponent(new RotationComponent { Value = carView.CarTransform.rotation });
             entity.SetComponent(new ScaleComponent { Value = 1 });
+            entity.SetComponent(new RigidbodyComponent { Value = carView.CarRigidbody });
             
             entity.SetComponent(new VerticalInputComponent {Value = 0 });
             entity.SetComponent(new HorizontalInputComponent {Value = 0 });

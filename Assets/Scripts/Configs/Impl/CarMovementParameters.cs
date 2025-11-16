@@ -21,6 +21,8 @@ namespace Configs.Impl
         [SerializeField] private float _maxRpm;
         [SerializeField] private float _idleRpm;
         [SerializeField] private float _rpmToSpeedRatio;
+        [Space] 
+        [SerializeField] private SpeedsPreset _speedPreset;
 
         public float SpeedMultiplierMax => _speedMultiplierMax;
         public float SpeedMultiplierMin => _speedMultiplierMin;
@@ -34,5 +36,7 @@ namespace Configs.Impl
         public float MaxRpm => _maxRpm;
         public float IdleRpm => _idleRpm;
         public float RpmToSpeedRatio => _rpmToSpeedRatio;
+
+        public SpeedsPreset SpeedPreset => _speedPreset;
     }
 }

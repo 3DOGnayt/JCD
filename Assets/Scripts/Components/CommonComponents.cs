@@ -8,6 +8,8 @@ namespace Components
     public struct PositionComponent : IComponent { public Vector3 Value; }
     public struct RotationComponent : IComponent { public Quaternion Value; }
     public struct ScaleComponent : IComponent { public float Value; }
+    public struct RigidbodyComponent : IComponent { public Rigidbody Value; }
+
     
     //Tags
     public struct PlayerTagComponent : IComponent { }

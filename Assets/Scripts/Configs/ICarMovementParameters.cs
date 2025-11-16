@@ -1,3 +1,5 @@
+using Configs.Impl;
+
 namespace Configs
 {
     public interface ICarMovementParameters
@@ -14,5 +16,7 @@ namespace Configs
         float MaxRpm { get; }
         float IdleRpm { get; }
         float RpmToSpeedRatio { get; }
+        
+        SpeedsPreset SpeedPreset { get; }
     }
 }

@@ -45,8 +45,7 @@ namespace Tools
             {
                 var setup = carView.CarSetup;
                 preset.CarSetup.CurrentSpeed = setup.CurrentSpeed;
-                preset.CarSetup.CurrentGear = setup.CurrentGear;
-                preset.CarSetup.GearCount = setup.GearCount;
+                preset.CarSetup.Gearbox = setup.Gearbox;
                 preset.CarSetup.CurrentBackSpeed = setup.CurrentBackSpeed;
                 preset.CarSetup.AccelerationMultiplier = setup.AccelerationMultiplier;
                 preset.CarSetup.DecelerationMultiplier = setup.DecelerationMultiplier;
@@ -54,7 +53,7 @@ namespace Tools
                 preset.CarSetup.SteeringSpeed = setup.SteeringSpeed;
                 preset.CarSetup.BrakeForce = setup.BrakeForce;
                 preset.CarSetup.DriftMultiplier = setup.DriftMultiplier;
-                preset.CarSetup.CurrentMotorTorque = setup.CurrentMotorTorque;
+                preset.CarSetup.CurrentEngineRpm = setup.CurrentEngineRpm;
             }
 
             var wheels = car.GetComponentsInChildren<WheelCollider>();
@@ -85,8 +84,7 @@ namespace Tools
             {
                 var setup = carView.CarSetup;
                 setup.CurrentSpeed = preset.CarSetup.CurrentSpeed;
-                setup.CurrentGear = preset.CarSetup.CurrentGear;
-                setup.GearCount = preset.CarSetup.GearCount;
+                setup.Gearbox = preset.CarSetup.Gearbox;
                 setup.CurrentBackSpeed = preset.CarSetup.CurrentBackSpeed;
                 setup.AccelerationMultiplier = preset.CarSetup.AccelerationMultiplier;
                 setup.DecelerationMultiplier = preset.CarSetup.DecelerationMultiplier;
@@ -94,7 +92,7 @@ namespace Tools
                 setup.SteeringSpeed = preset.CarSetup.SteeringSpeed;
                 setup.BrakeForce = preset.CarSetup.BrakeForce;
                 setup.DriftMultiplier = preset.CarSetup.DriftMultiplier;
-                setup.CurrentMotorTorque = preset.CarSetup.CurrentMotorTorque;
+                setup.CurrentEngineRpm = preset.CarSetup.CurrentEngineRpm;
             }
 
             var wheels = car.GetComponentsInChildren<WheelCollider>();
