@@ -12,9 +12,20 @@ namespace Configs.Impl
         [SerializeField] private float _carMass;
         [SerializeField] private float _steeringSpeedMultiplierMax;
         [SerializeField] private float _steeringSpeedMultiplierMin;
+
         [Space]
         [Header("VerticalParameters")]
-        [Space]
+        [Space] 
+        // В CarMovementParameters
+        [SerializeField] private float _maxMotorTorque     = 1500f;
+        [SerializeField] private float _engineBrakeTorque  = 300f;
+        [SerializeField] private float _handbrakeTorque    = 2500f;
+
+        public float MaxMotorTorque    => _maxMotorTorque;
+        public float EngineBrakeTorque => _engineBrakeTorque;
+        public float HandbrakeTorque   => _handbrakeTorque;
+
+        [SerializeField] private float _neutralMaxRpm;
         [SerializeField] private float _accelerationRate;
         [SerializeField] private float _decelerationRate;
         [SerializeField] private float _maxCarSpeed;
@@ -38,5 +49,7 @@ namespace Configs.Impl
         public float RpmToSpeedRatio => _rpmToSpeedRatio;
 
         public SpeedsPreset SpeedPreset => _speedPreset;
+
+        public float NeutralMaxRpm => _neutralMaxRpm;
     }
 }

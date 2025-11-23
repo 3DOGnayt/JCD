@@ -33,7 +33,8 @@ namespace Services.Impl
 
         public void ApplyVerticalMove(float currentMotorTorque, float input, List<WheelInfo> wheelInfos)
         {
-            var torque = currentMotorTorque * Mathf.Sign(input);
+            var torque = currentMotorTorque * input;
+            //var torque = currentMotorTorque * Mathf.Sign(input);
             
             foreach (var info in wheelInfos)
             {

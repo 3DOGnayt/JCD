@@ -11,6 +11,10 @@ namespace Configs
         float SteeringSpeedMultiplierMax { get; }
         float SteeringSpeedMultiplierMin { get; }
 
+        float MaxMotorTorque { get; }
+        float EngineBrakeTorque { get; }
+        float HandbrakeTorque { get; }
+        float NeutralMaxRpm { get; }
         float AccelerationRate { get; }
         float DecelerationRate { get; }
         float MaxRpm { get; }

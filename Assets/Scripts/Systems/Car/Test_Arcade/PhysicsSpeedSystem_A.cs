@@ -1,34 +1,65 @@
 using Components;
 using Scellecs.Morpeh;
+using UnityEngine;
+using Zenject;
 
 namespace Systems.Car.Test_Arcade
 {
-    public class PhysicsSpeedSystem_A : IFixedSystem 
+    public sealed class PhysicsSpeedSystem_A : IFixedSystem
     {
-        public World World { get; set; }
-        private Filter _carFilter;
-        private Stash<RigidbodyComponent> _rigidbodyStash;
-        private Stash<SpeedComponent> _speedStash;
+        [Inject] public World World { get; set; }
 
-        public void OnAwake() 
+        private Filter _cars;
+        private AspectFactory<CarSetupAspect> _carAspectFactory;
+        private Stash<RigidbodyComponent> _rigidbodyStash;
+        private Stash<TransformComponent> _transformStash;
+
+        public void OnAwake()
         {
-            _carFilter = World.Filter.With<RigidbodyComponent>()
-                .With<SpeedComponent>().Build();
-            
-            _rigidbodyStash = World.GetStash<RigidbodyComponent>();
-            _speedStash = World.GetStash<SpeedComponent>();
+            _cars = World.Filter
+                .Extend<CarSetupAspect>()          // Speed + BackSpeed и прочее
+                .With<RigidbodyComponent>()
+                .With<TransformComponent>()
+                .Build();
+
+            _carAspectFactory = World.GetAspectFactory<CarSetupAspect>();
+            _rigidbodyStash   = World.GetStash<RigidbodyComponent>();
+            _transformStash   = World.GetStash<TransformComponent>();
         }
-        
+
         public void OnUpdate(float deltaTime)
         {
-            foreach (var e in _carFilter)
+            foreach (var car in _cars)
             {
-                // ref var rb = ref _rigidbodyStash.Get(e);
-                // ref var sp = ref _speedStash.Get(e);
-                // sp.Value = rb.Value.velocity.magnitude * 3.6f;
+                var aspect = _carAspectFactory.Get(car);
+                ref var speed     = ref aspect.Speed;
+                ref var backSpeed = ref aspect.BackSpeed;
+
+                var rbComp  = _rigidbodyStash.Get(car);
+                var trComp  = _transformStash.Get(car);
+
+                if (rbComp.Value == null || trComp.Value == null)
+                    continue;
+
+                var vel     = rbComp.Value.velocity;
+                var forward = trComp.Value.forward;
+
+                var forwardSpeedMps = Vector3.Dot(vel, forward);      // со знаком
+                var speedKmh        = Mathf.Abs(forwardSpeedMps) * 3.6f;
+
+                if (forwardSpeedMps >= 0f)
+                {
+                    speed.Value     = speedKmh;
+                    backSpeed.Value = 0f;
+                }
+                else
+                {
+                    speed.Value     = 0f;
+                    backSpeed.Value = speedKmh;
+                }
             }
         }
-        
-        public void Dispose() {}
+
+        public void Dispose() { }
     }
 }
