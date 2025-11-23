@@ -1,5 +1,8 @@
+using System.Collections.Generic;
 using Components;
+using Configs.Helpers;
 using Configs.Impl;
+using Data;
 using Scellecs.Morpeh;
 using UnityEngine;
 using Zenject;
@@ -9,12 +12,21 @@ namespace Systems.Car.Test_Arcade
     public sealed class RPMSystem_A : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarMovementParameters _carMovementParameters;
+        [Inject] private CarMovementParameters _params;
 
         private Filter _cars;
         private Stash<EngineRpmComponent> _rpmStash;
         private Stash<VerticalInputComponent> _vertStash;
         private Stash<GearboxComponent> _gearStash;
+
+        private struct GearRates
+        {
+            public float Grow;
+            public float DecNoGas;
+            public float DecBrake;
+        }
+
+        private Dictionary<int, GearRates> _rates;
 
         public void OnAwake()
         {
@@ -27,13 +39,53 @@ namespace Systems.Car.Test_Arcade
             _rpmStash  = World.GetStash<EngineRpmComponent>();
             _vertStash = World.GetStash<VerticalInputComponent>();
             _gearStash = World.GetStash<GearboxComponent>();
+
+            BuildRates();
+        }
+
+        private void BuildRates()
+        {
+            _rates = new Dictionary<int, GearRates>();
+
+            var preset = _params.SpeedPreset;
+            if (preset == null || preset.CarSpeedSettings == null)
+                return;
+
+            foreach (var s in preset.CarSpeedSettings)
+            {
+                var gearInt = (int)s.EGear;
+                _rates[gearInt] = new GearRates
+                {
+                    Grow     = s.SpeedAcceleration,
+                    DecNoGas = s.SpeedDecelerationNoGas,
+                    DecBrake = s.SpeedDecelerationBrake
+                };
+            }
+
+            // Фоллбэки
+            if (!_rates.ContainsKey((int)EGear.Neutral) && _rates.ContainsKey((int)EGear.FirstGear))
+                _rates[(int)EGear.Neutral] = _rates[(int)EGear.FirstGear];
+
+            if (!_rates.ContainsKey((int)EGear.Reverse) && _rates.ContainsKey((int)EGear.FirstGear))
+                _rates[(int)EGear.Reverse] = _rates[(int)EGear.FirstGear];
+        }
+
+        private GearRates GetRates(int gear)
+        {
+            if (_rates != null && _rates.TryGetValue(gear, out var r))
+                return r;
+
+            // если нет данных — используем 1-ю передачу или дефолт
+            if (_rates != null && _rates.TryGetValue((int)EGear.FirstGear, out var first))
+                return first;
+
+            return new GearRates { Grow = _params.AccelerationRate, DecNoGas = _params.DecelerationRate, DecBrake = _params.DecelerationRate * 1.2f };
         }
 
         public void OnUpdate(float deltaTime)
         {
-            var idleRpm       = _carMovementParameters.IdleRpm;
-            var maxRpm        = _carMovementParameters.MaxRpm;
-            var neutralMaxRpm = _carMovementParameters.NeutralMaxRpm;
+            var idle = _params.IdleRpm;
+            var max  = _params.MaxRpm;
 
             foreach (var car in _cars)
             {
@@ -41,32 +93,39 @@ namespace Systems.Car.Test_Arcade
                 var     gear  = _gearStash.Get(car).Value;
                 var     input = _vertStash.Get(car).Value;
 
-                // Стартовое значение
-                if (rpm.Value <= 1f)
-                    rpm.Value = idleRpm;
+                if (rpm.Value < idle)
+                    rpm.Value = idle;
 
-                var throttle = Mathf.Clamp01(Mathf.Abs(input)); // газ вперёд/назад одинаково для оборотов
-                float targetRpm;
+                var rates     = GetRates(gear);
+                var absInput  = Mathf.Abs(input);
+                var hasInput = absInput > 0.01f;
 
-                if (gear == 0)
+                // Тормоз (жмём назад, когда едем вперёд, или наоборот)
+                var isBrakeCommand = gear != 0 &&
+                                     ((gear > 0 && input < -0.01f) ||
+                                      (gear < 0 && input > 0.01f));
+
+                
+                
+                float delta;
+
+                if (isBrakeCommand)
                 {
-                    // Нейтраль: от холостых до neutralMaxRpm
-                    targetRpm = Mathf.Lerp(idleRpm, neutralMaxRpm, throttle);
+                    delta = -rates.DecBrake * deltaTime;
+                }
+                else if (hasInput)
+                {
+                    // рост пропорционален силе нажатия
+                    delta = rates.Grow * absInput * deltaTime;
                 }
                 else
                 {
-                    // В передаче: от холостых до красной зоны
-                    targetRpm = Mathf.Lerp(idleRpm, maxRpm, throttle);
+                    delta = -rates.DecNoGas * deltaTime;
                 }
 
-                // Выбираем скорость изменения
-                var isThrottle = throttle > 0.01f;
-                var rate = isThrottle
-                    ? _carMovementParameters.AccelerationRate
-                    : _carMovementParameters.DecelerationRate;
 
-                rpm.Value = Mathf.MoveTowards(rpm.Value, targetRpm, rate * deltaTime);
-                rpm.Value = Mathf.Clamp(rpm.Value, idleRpm, maxRpm);
+                rpm.Value += delta;
+                rpm.Value = Mathf.Clamp(rpm.Value, idle, max);
             }
         }
 

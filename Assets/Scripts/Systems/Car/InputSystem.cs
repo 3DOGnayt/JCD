@@ -14,6 +14,7 @@ namespace Systems.Car
         
         private Stash<VerticalInputComponent> _verticalStash;
         private Stash<HorizontalInputComponent> _horizontalStash;
+        private Stash<HandbrakeInputComponent> _handbrakeStash;
         
         public void OnAwake()
         {
@@ -27,6 +28,7 @@ namespace Systems.Car
             
             _verticalStash = World.GetStash<VerticalInputComponent>();
             _horizontalStash = World.GetStash<HorizontalInputComponent>();
+            _handbrakeStash = World.GetStash<HandbrakeInputComponent>();
         }
 
         public void OnUpdate(float deltaTime) 
@@ -41,6 +43,9 @@ namespace Systems.Car
 
                 vertical.Value = Mathf.Abs(vert) < 0.01f ? 0 : vert;
                 horizontal.Value = Mathf.Abs(hor) < 0.01f ? 0 : hor;
+                
+                var handbrake = Input.GetKey(KeyCode.Space);
+                _handbrakeStash.Get(car).Value = handbrake;
             }
         }
 
