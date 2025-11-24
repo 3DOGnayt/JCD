@@ -19,26 +19,24 @@ namespace Systems.Car.Test_Arcade
         private Stash<SpeedComponent> _speedStash;
         private Stash<BackSpeedComponent> _backSpeedStash;
         private Stash<VerticalInputComponent> _vertStash;
-        private Stash<EngineRpmComponent> _rpmStash;
 
         private struct GearData
         {
-            public float SpeedLimit;
-
-            public GearData(float limit)
-            {
-                SpeedLimit = limit;
-            }
+            public float SpeedLimitKmh;
+            public GearData(float speedLimitKmh) => SpeedLimitKmh = speedLimitKmh;
         }
 
-        private Dictionary<int, GearData> _gearData;
-        private int _reverseGear = (int)EGear.Reverse;
-        private int _minForwardGear = (int)EGear.FirstGear;
-        private int _maxForwardGear = (int)EGear.FirstGear;
+        private Dictionary<int, GearData> _gearData;   // int (EGear) -> данные
+        private List<int> _forwardGears;              // отсортированный список передних передач
 
-        private const float StopThresholdKmh   = 0.5f;
-        private const float UpshiftFactor      = 0.95f; // апшифт ближе к лимиту
-        private const float DownshiftFactor    = 0.7f;  // дауншифт ниже лимита предыдущей передачи
+        private int _reverseGear = (int)EGear.Reverse;
+        private int _neutralGear = (int)EGear.Neutral;
+
+        private int _minForwardGear;
+        private int _maxForwardGear;
+
+        private const float StopThresholdKmh = 1.0f;   // считаем, что почти стоим
+        private const float InputDeadZone    = 0.1f;
 
         public void OnAwake()
         {
@@ -47,144 +45,167 @@ namespace Systems.Car.Test_Arcade
                 .With<SpeedComponent>()
                 .With<BackSpeedComponent>()
                 .With<VerticalInputComponent>()
-                .With<EngineRpmComponent>()
                 .Build();
 
             _gearStash      = World.GetStash<GearboxComponent>();
             _speedStash     = World.GetStash<SpeedComponent>();
             _backSpeedStash = World.GetStash<BackSpeedComponent>();
             _vertStash      = World.GetStash<VerticalInputComponent>();
-            _rpmStash       = World.GetStash<EngineRpmComponent>();
 
-            BuildGearData();
+            BuildGearDataFromPreset();
         }
 
-        private void BuildGearData()
+        private void BuildGearDataFromPreset()
         {
-            _gearData = new Dictionary<int, GearData>();
+            _gearData     = new Dictionary<int, GearData>();
+            _forwardGears = new List<int>();
 
             var preset = _params.SpeedPreset;
             if (preset == null || preset.CarSpeedSettings == null)
                 return;
 
-            foreach (var s in preset.CarSpeedSettings)
+            foreach (var setting in preset.CarSpeedSettings)
             {
-                var gearInt = (int)s.EGear;
-                _gearData[gearInt] = new GearData(s.SpeedLimit);
+                var gearInt = (int)setting.EGear;
+                _gearData[gearInt] = new GearData(setting.SpeedLimit);
 
                 if (gearInt > 0)
-                {
-                    if (gearInt < _minForwardGear) _minForwardGear = gearInt;
-                    if (gearInt > _maxForwardGear) _maxForwardGear = gearInt;
-                }
+                    _forwardGears.Add(gearInt);
                 else if (gearInt < 0)
-                {
                     _reverseGear = gearInt;
-                }
+                else
+                    _neutralGear = gearInt;
             }
+
+            if (_forwardGears.Count == 0)
+            {
+                // На всякий случай, чтобы не словить делёжку на ноль
+                _forwardGears.Add(1);
+            }
+
+            _forwardGears.Sort();
+            _minForwardGear = _forwardGears[0];
+            _maxForwardGear = _forwardGears[_forwardGears.Count - 1];
+        }
+
+        private float GetLimitKmh(int gear)
+        {
+            if (_gearData != null && _gearData.TryGetValue(gear, out var data))
+                return data.SpeedLimitKmh;
+
+            return _params.MaxCarSpeed; // запасной вариант
+        }
+
+        /// <summary>
+        /// Выбираем переднюю передачу только по скорости:
+        /// <= limit(1) -> 1-я
+        /// <= limit(2) -> 2-я
+        /// ...
+        /// выше всех лимитов -> последняя передача
+        /// </summary>
+        private int GetForwardGearForSpeed(float speedKmh)
+        {
+            var result = _minForwardGear;
+
+            foreach (var g in _forwardGears)
+            {
+                var limit = GetLimitKmh(g);
+                result = g;
+
+                if (speedKmh <= limit)
+                    break;
+            }
+
+            return Mathf.Clamp(result, _minForwardGear, _maxForwardGear);
         }
 
         public void OnUpdate(float deltaTime)
         {
             foreach (var car in _cars)
             {
-                ref var gear = ref _gearStash.Get(car);
-                ref var rpm  = ref _rpmStash.Get(car);
+                ref var gearComp = ref _gearStash.Get(car);
+                var     speedF   = _speedStash.Get(car).Value;
+                var     speedB   = _backSpeedStash.Get(car).Value;
+                var     input    = _vertStash.Get(car).Value;
 
-                var speed = _speedStash.Get(car).Value;
-                var back  = _backSpeedStash.Get(car).Value;
-                var input = _vertStash.Get(car).Value;
+                float speedKmh      = Mathf.Max(speedF, speedB);
+                bool  movingForward = speedF >= speedB;
+                float absInput      = Mathf.Abs(input);
 
-                var absInput = Mathf.Abs(input);
-                var kmh      = Mathf.Max(speed, back);
-                var stopped  = kmh < StopThresholdKmh;
-                var wantFwd  = input > 0.1f;
-                var wantBack = input < -0.1f;
-
-                // 1. Стоим почти на месте — выбор передачи по направлению
-                if (stopped)
+                // -------------------------------
+                // 1. Почти стоим
+                // -------------------------------
+                if (speedKmh < StopThresholdKmh)
                 {
-                    if (absInput < 0.1f)
+                    if (absInput < InputDeadZone)
                     {
-                        gear.Value = (int)EGear.Neutral;
+                        // Стоим и газ не жмём -> нейтраль
+                        gearComp.Value = _neutralGear;
                     }
-                    else if (wantFwd)
+                    else if (input > InputDeadZone)
                     {
-                        gear.Value = _minForwardGear;
+                        // Старт вперёд -> первая передача
+                        gearComp.Value = _minForwardGear;
                     }
-                    else if (wantBack)
+                    else if (input < -InputDeadZone)
                     {
-                        gear.Value = _reverseGear;
+                        // Старт назад -> задняя
+                        gearComp.Value = _reverseGear;
                     }
 
-                    rpm.Value = _params.IdleRpm;
                     continue;
                 }
 
-                // 2. Едем вперёд (по модулю скорость вперёд больше)
-                if (speed >= back)
+                // -------------------------------
+                // 2. Движемся вперёд
+                // -------------------------------
+                if (movingForward)
                 {
-                    if (gear.Value <= 0)
-                        gear.Value = _minForwardGear;
+                    // Текущую "правильную" переднюю передачу определяем по скорости
+                    int targetForwardGear = GetForwardGearForSpeed(speedKmh);
 
-                    // Апшифт вперёд
-                    if (gear.Value >= _minForwardGear && gear.Value < _maxForwardGear)
+                    if (input > InputDeadZone)
                     {
-                        float limitThis = GetLimitKmh(gear.Value);
-
-                        if (limitThis > 1f && kmh > limitThis * UpshiftFactor && wantFwd)
+                        // Жмём газ вперёд -> всегда вперёд, независимо от того,
+                        // что было до этого (если вдруг были в R).
+                        gearComp.Value = targetForwardGear;
+                    }
+                    else if (input < -InputDeadZone)
+                    {
+                        // Жмём назад, когда едем вперёд:
+                        // - ТОРМОЗИМ (WheelDriveSystem_A уже делает тормоз)
+                        // - передачи "спускаются" по скорости (3 -> 2 -> 1)
+                        // - НО НЕ ПЕРЕКИДЫВАЕМСЯ В R, пока не почти остановимся.
+                        if (gearComp.Value > _minForwardGear)
                         {
-                            int oldGear = gear.Value;
-                            gear.Value = Mathf.Min(gear.Value + 1, _maxForwardGear);
-                            RemapRpmOnShift(ref rpm, kmh, oldGear, gear.Value);
-                            continue;
+                            gearComp.Value = targetForwardGear;
+                        }
+                        else
+                        {
+                            // Уже на первой передаче: ждём, пока почти остановимся.
+                            // Переключение в R произойдёт в блоке "почти стоим" выше.
+                            gearComp.Value = _minForwardGear;
                         }
                     }
-
-                    // Дауншифт при замедлении без газа
-                    if (gear.Value > _minForwardGear)
+                    else
                     {
-                        float limitPrev = GetLimitKmh(gear.Value - 1);
-                        if (limitPrev > 1f && kmh < limitPrev * DownshiftFactor && !wantFwd)
-                        {
-                            int oldGear = gear.Value;
-                            gear.Value = Mathf.Max(gear.Value - 1, _minForwardGear);
-                            RemapRpmOnShift(ref rpm, kmh, oldGear, gear.Value);
-                        }
+                        // Газ отпущен, просто катимся вперёд:
+                        // передачи всё равно следуем за скоростью.
+                        gearComp.Value = targetForwardGear;
                     }
+
+                    continue;
                 }
-                // 3. Едем назад
-                else
-                {
-                    if (gear.Value >= 0)
-                        gear.Value = _reverseGear;
-                    // одной задней передачи достаточно
-                }
+
+                // -------------------------------
+                // 3. Движемся назад
+                // -------------------------------
+                // Пока реально катимся назад, держим заднюю передачу.
+                // Переключение вперёд произойдёт только,
+                // когда почти остановимся (speedKmh < StopThresholdKmh)
+                // и зажмём газ вперёд (см. блок 1).
+                gearComp.Value = _reverseGear;
             }
-        }
-
-        private float GetLimitKmh(int gear)
-        {
-            if (_gearData != null && _gearData.TryGetValue(gear, out var data))
-                return data.SpeedLimit;
-
-            return _params.MaxCarSpeed; // запасной вариант
-        }
-
-        private void RemapRpmOnShift(ref EngineRpmComponent rpm, float kmh, int oldGear, int newGear)
-        {
-            var idle = _params.IdleRpm;
-            var max  = _params.MaxRpm;
-
-            float oldLimit = Mathf.Max(1f, GetLimitKmh(oldGear));
-            float t        = Mathf.Clamp01(kmh / oldLimit);
-            float fromSpeed = Mathf.Lerp(idle, max, t);
-
-            // При апшифте делаем небольшой провал
-            if (newGear > oldGear)
-                fromSpeed *= 0.85f;
-
-            rpm.Value = Mathf.Clamp(fromSpeed, idle, max);
         }
 
         public void Dispose() { }
