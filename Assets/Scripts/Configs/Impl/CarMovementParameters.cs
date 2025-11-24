@@ -12,28 +12,34 @@ namespace Configs.Impl
         [SerializeField] private float _carMass;
         [SerializeField] private float _steeringSpeedMultiplierMax;
         [SerializeField] private float _steeringSpeedMultiplierMin;
-
         [Space]
         [Header("VerticalParameters")]
-        [Space] 
-        // В CarMovementParameters
-        [SerializeField] private float _maxMotorTorque     = 1500f;
-        [SerializeField] private float _engineBrakeTorque  = 300f;
-        [SerializeField] private float _handbrakeTorque    = 2500f;
-
-        public float MaxMotorTorque    => _maxMotorTorque;
-        public float EngineBrakeTorque => _engineBrakeTorque;
-        public float HandbrakeTorque   => _handbrakeTorque;
-
+        [Space]
+        [SerializeField] private float _maxMotorTorque;
+        [SerializeField] private float _engineForwardTorque;
+        [SerializeField] private float _engineBackTorque;
+        [SerializeField] private float _handbrakeTorque;
+        [Space]
         [SerializeField] private float _neutralMaxRpm;
         [SerializeField] private float _accelerationRate;
         [SerializeField] private float _decelerationRate;
+        [Space]
         [SerializeField] private float _maxCarSpeed;
         [SerializeField] private float _maxRpm;
         [SerializeField] private float _idleRpm;
         [SerializeField] private float _rpmToSpeedRatio;
-        [Space] 
+        [Space]
         [SerializeField] private SpeedsPreset _speedPreset;
+        [Space] 
+        [Header("Arcade Assist")] 
+        [Space]
+        [SerializeField] private bool _useArcadeAssist = true;
+        [SerializeField] private float _arcadeAssistMinSpeedKmh = 40f; // ниже этой скорости ассист не работает
+        [SerializeField] private float _arcadeAssistLerpSpeed = 4f; // насколько быстро подтягиваем скорость
+
+        public bool UseArcadeAssist => _useArcadeAssist;
+        public float ArcadeAssistMinSpeedKmh => _arcadeAssistMinSpeedKmh;
+        public float ArcadeAssistLerpSpeed => _arcadeAssistLerpSpeed;
 
         public float SpeedMultiplierMax => _speedMultiplierMax;
         public float SpeedMultiplierMin => _speedMultiplierMin;
@@ -41,6 +47,11 @@ namespace Configs.Impl
         public float CarMass => _carMass;
         public float SteeringSpeedMultiplierMax => _steeringSpeedMultiplierMax;
         public float SteeringSpeedMultiplierMin => _steeringSpeedMultiplierMin;
+
+        public float MaxMotorTorque => _maxMotorTorque;
+        public float EngineForwardTorque => _engineForwardTorque;
+        public float EngineBackTorque => _engineBackTorque;
+        public float HandbrakeTorque => _handbrakeTorque;
 
         public float AccelerationRate => _accelerationRate;
         public float DecelerationRate => _decelerationRate;

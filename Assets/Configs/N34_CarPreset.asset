@@ -19,8 +19,8 @@ MonoBehaviour:
     CurrentBackSpeed: 0
     AccelerationMultiplier: 0
     DecelerationMultiplier: 0
-    CurrentSteeringAngle: 50
-    SteeringSpeed: 500
+    CurrentSteeringAngle: 35
+    SteeringSpeed: 100
     BrakeForce: 0
     HandbrakeInput: 0
     DriftMultiplier: 0
@@ -52,7 +52,7 @@ MonoBehaviour:
       ExtremumValue: 1
       AsymptoteSlip: 0.5
       AsymptoteValue: 0.75
-      Stiffness: 3
+      Stiffness: 4
   _backWheelParameters:
     MainWheelParameters:
       Mass: 20
@@ -76,4 +76,4 @@ MonoBehaviour:
       ExtremumValue: 1
       AsymptoteSlip: 0.5
       AsymptoteValue: 0.75
-      Stiffness: 2
+      Stiffness: 3

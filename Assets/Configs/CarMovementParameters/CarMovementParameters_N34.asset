@@ -16,15 +16,19 @@ MonoBehaviour:
   _speedMultiplierMin: 0.3
   _carMass: 1500
   _steeringSpeedMultiplierMax: 1
-  _steeringSpeedMultiplierMin: 0.6
-  _maxMotorTorque: 1500
-  _engineBrakeTorque: 300
+  _steeringSpeedMultiplierMin: 0.1
+  _maxMotorTorque: 5000
+  _engineForwardTorque: 2500
+  _engineBackTorque: 5000
   _handbrakeTorque: 2500
-  _neutralMaxRpm: 5000
-  _accelerationRate: 4000
+  _neutralMaxRpm: 1200
+  _accelerationRate: 2500
   _decelerationRate: 5000
-  _maxCarSpeed: 400
+  _maxCarSpeed: 200
   _maxRpm: 8000
   _idleRpm: 800
   _rpmToSpeedRatio: 0.02
   _speedPreset: {fileID: 11400000, guid: 37fa8eed213b1ec479a9cb2bb95cf628, type: 2}
+  _useArcadeAssist: 1
+  _arcadeAssistMinSpeedKmh: 40
+  _arcadeAssistLerpSpeed: 1

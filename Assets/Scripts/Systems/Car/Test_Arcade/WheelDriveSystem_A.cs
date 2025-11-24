@@ -1,4 +1,5 @@
 using Components;
+using Configs.Impl;
 using Scellecs.Morpeh;
 using Services;
 using UnityEngine;
@@ -10,137 +11,91 @@ namespace Systems.Car.Test_Arcade
     {
         [Inject] public World World { get; set; }
         [Inject] private IInputService _inputService;
+        [Inject] private CarMovementParameters _carMovementParameters;
 
         private Filter _cars;
         private Stash<WheelInfoComponent> _wheelInfoStash;
-        private Stash<GearboxComponent> _gearStash;
         private Stash<VerticalInputComponent> _vertStash;
-        private Stash<BrakeForceComponent> _brakeForceStash;
         private Stash<HandbrakeInputComponent> _handbrakeStash;
 
-        // Можно потом вынести в CarMovementParameters
-        private const float MaxMotorTorque   = 1800f; // базовая тяга на ведущие колёса
-        private const float BrakeStrength    = 500.0f;  // усиление обычного тормоза
-        private const float HandbrakeTorque  = 3500f; // сила ручника на задние колёса
+        private const float InputDeadZone = 0.05f;
 
         public void OnAwake()
         {
             _cars = World.Filter
                 .With<WheelInfoComponent>()
-                .With<GearboxComponent>()
                 .With<VerticalInputComponent>()
-                .With<BrakeForceComponent>()
                 .Build();
 
-            _wheelInfoStash   = World.GetStash<WheelInfoComponent>();
-            _gearStash        = World.GetStash<GearboxComponent>();
-            _vertStash        = World.GetStash<VerticalInputComponent>();
-            _brakeForceStash  = World.GetStash<BrakeForceComponent>();
-            _handbrakeStash   = World.GetStash<HandbrakeInputComponent>(); // опциональный
+            _wheelInfoStash = World.GetStash<WheelInfoComponent>();
+            _vertStash = World.GetStash<VerticalInputComponent>();
+            _handbrakeStash = World.GetStash<HandbrakeInputComponent>();
         }
 
         public void OnUpdate(float deltaTime)
         {
             foreach (var car in _cars)
             {
-                var wheelInfo = _wheelInfoStash.Get(car);
-                var gear      = _gearStash.Get(car).Value;
-                var vertical  = _vertStash.Get(car).Value;
-                var brakeBase = _brakeForceStash.Get(car).Value;
+                var wheelInfoComp = _wheelInfoStash.Get(car);
+                var vertical = _vertStash.Get(car).Value;
 
-                // если компонента ручника нет — считаем, что он отпущен
-                bool handbrake = _handbrakeStash.Has(car) && _handbrakeStash.Get(car).Value;
+                // если компоненты нет — считаем, что ручник не зажат
+                var handbrake = _handbrakeStash.Has(car) && _handbrakeStash.Get(car).Value;
 
-                float driveInput = 0f; // 0..1
-                float brakeInput = 0f; // 0..1
+                var input = Mathf.Clamp(vertical, -1f, 1f);
 
-                // --- определяем, газим или тормозим ---
+                // ---------- 1. Моторная тяга ----------
+                float maxTorque;
+                float driveInput;
 
-                if (gear > 0)
+                if (Mathf.Abs(input) < InputDeadZone || handbrake)
                 {
-                    if (vertical > 0f)
-                    {
-                        // едем вперёд
-                        driveInput = Mathf.Clamp01(vertical);
-                    }
-                    else if (vertical < 0f)
-                    {
-                        // жмём "назад" при передней передаче -> ЭТО ТОРМОЗ
-                        brakeInput = Mathf.Clamp01(-vertical);
-                    }
+                    // нет газа или ручник зажат → тяги нет
+                    maxTorque = 0f;
+                    driveInput = 0f;
                 }
-                else if (gear < 0)
+                else if (input > 0f)
                 {
-                    if (vertical < 0f)
-                    {
-                        // едем назад
-                        driveInput = Mathf.Clamp01(-vertical);
-                    }
-                    else if (vertical > 0f)
-                    {
-                        // жмём "вперёд" при задней передаче -> тормоз
-                        brakeInput = Mathf.Clamp01(vertical);
-                    }
+                    // вперёд
+                    maxTorque = _carMovementParameters.EngineForwardTorque;
+                    driveInput = input; // [-1..1] — см. замечание к InputService ниже
                 }
-                else // Neutral
+                else
                 {
-                    // на нейтрали "назад" можно использовать как тормоз
-                    if (vertical < 0f)
-                        brakeInput = Mathf.Clamp01(-vertical);
+                    // назад
+                    maxTorque = _carMovementParameters.EngineBackTorque;
+                    driveInput = input; // отрицательный
                 }
 
-                // --- моторная тяга только по передаче и газу ---
+                _inputService.ApplyVerticalMove(maxTorque, driveInput, wheelInfoComp.WheelInfo);
 
-                float signedDriveInput = 0f;
-                if (gear > 0)
-                    signedDriveInput = driveInput;     // вперёд
-                else if (gear < 0)
-                    signedDriveInput = -driveInput;    // назад
+                // ---------- 2. Ручник: тормоз только на задние (не рулевые) колёса ----------
+                var hbTorque = handbrake ? _carMovementParameters.HandbrakeTorque : 0f;
 
-                // если ручник зажат или мы явно тормозим -> мотор должен замолчать
-                if (brakeInput > 0f || handbrake)
-                    signedDriveInput = 0f;
-
-                // тяга только на ведущие колёса — это уже заложено в InputService (info.Motor)
-                _inputService.ApplyVerticalMove(MaxMotorTorque, signedDriveInput, wheelInfo.WheelInfo);
-
-                // --- обычный тормоз: сильный brakeTorque на все колёса ---
-
-                float brakeTorque = 0f;
-
-                if (brakeInput > 0f)
+                foreach (var info in wheelInfoComp.WheelInfo)
                 {
-                    // усиливаем ощущение торможения
-                    brakeTorque = brakeBase * brakeInput * BrakeStrength;
-                }
-
-                // --- ручник: дополнительный тормоз только на задние (не рулевые) колёса ---
-
-                foreach (var info in wheelInfo.WheelInfo)
-                {
-                    // обычный тормоз на все колёса
+                    // считаем, что задняя ось — это те, у кого Steering == false
                     if (info.LeftWheel != null)
-                        info.LeftWheel.brakeTorque = brakeTorque;
+                    {
+                        if (handbrake && !info.Steering)
+                            info.LeftWheel.brakeTorque = hbTorque;
+                        else
+                            info.LeftWheel.brakeTorque = 0f;
+                    }
 
                     if (info.RightWheel != null)
-                        info.RightWheel.brakeTorque = brakeTorque;
-
-                    if (!handbrake)
-                        continue;
-
-                    // ручник: добавляем сильный тормоз только на НЕ рулевые колёса (обычно задняя ось)
-                    if (!info.Steering)
                     {
-                        if (info.LeftWheel != null)
-                            info.LeftWheel.brakeTorque += HandbrakeTorque;
-
-                        if (info.RightWheel != null)
-                            info.RightWheel.brakeTorque += HandbrakeTorque;
+                        if (handbrake && !info.Steering)
+                            info.RightWheel.brakeTorque = hbTorque;
+                        else
+                            info.RightWheel.brakeTorque = 0f;
                     }
                 }
             }
         }
 
-        public void Dispose() { }
+        public void Dispose()
+        {
+        }
     }
 }
