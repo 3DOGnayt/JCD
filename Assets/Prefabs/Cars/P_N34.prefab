@@ -198,6 +198,7 @@ GameObject:
   - component: {fileID: 2504389434416288938}
   - component: {fileID: 370869266696577120}
   - component: {fileID: 422902022644132646}
+  - component: {fileID: 260653697049818753}
   m_Layer: 0
   m_Name: Car-4
   m_TagString: Untagged
@@ -297,6 +298,27 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5618649808104234090, guid: c48cc038dca18174ea58e5a9cbd45032, type: 3}
+--- !u!65 &260653697049818753
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2172260945586323893}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 2.102151, y: 1.2117717, z: 4.9655094}
+  m_Center: {x: 0.010149598, y: 0.2633244, z: 0.12615395}
 --- !u!1 &2194812460295248746
 GameObject:
   m_ObjectHideFlags: 0
@@ -757,6 +779,8 @@ GameObject:
   - component: {fileID: 567414845432947618}
   - component: {fileID: 3165186140599483120}
   - component: {fileID: 5283033300812890801}
+  - component: {fileID: 1550213845451149244}
+  - component: {fileID: 1704317199373089031}
   m_Layer: 0
   m_Name: P_N34
   m_TagString: Untagged
@@ -848,6 +872,42 @@ MonoBehaviour:
     RightVisual: {fileID: 3654036701396778119}
     Motor: 0
     Steering: 0
+--- !u!114 &1550213845451149244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9039642172116725141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91b257535695485baf765dd82e782552, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRigidbody: {fileID: 3165186140599483120}
+  arrowLength: 3
+  arrowsHeightOffset: 2
+  forwardColor: {r: 1, g: 0, b: 0.037613392, a: 1}
+  velocityColor: {r: 0, g: 0.40936995, b: 1, a: 1}
+--- !u!114 &1704317199373089031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9039642172116725141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f78a27aa0b04e4d8d5bf5deeb213072, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wheels:
+  - {fileID: 8217919515254978958}
+  - {fileID: 2629409141995426167}
+  - {fileID: 2008216944493213516}
+  - {fileID: 9068770974772093301}
+  heightOffset: 0.5
+  textColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &9062278896347685609
 GameObject:
   m_ObjectHideFlags: 0
