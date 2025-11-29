@@ -821,16 +821,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _carPreset: {fileID: 11400000, guid: ebec29c619f1cba4f90bf5ff5a996e21, type: 2}
+  _carRigidbody: {fileID: 0}
   _carSetup:
-    MaxSpeed: 0
-    MaxBackSpeed: 0
+    CurrentSpeed: 0
+    Gearbox: 0
+    CurrentBackSpeed: 0
     AccelerationMultiplier: 0
     DecelerationMultiplier: 0
-    MaxSteeringAngle: 50
+    CurrentSteeringAngle: 0
     SteeringSpeed: 0
     BrakeForce: 0
+    HandbrakeInput: 0
     DriftMultiplier: 0
-    MaxMotorTorque: 4000
+    CurrentEngineRpm: 0
   _wheelInfos:
   - LeftWheel: {fileID: 8217919515254978958}
     RightWheel: {fileID: 2629409141995426167}
@@ -842,7 +845,7 @@ MonoBehaviour:
     RightWheel: {fileID: 9068770974772093301}
     LeftVisual: {fileID: 6591691273948743484}
     RightVisual: {fileID: 3654036701396778119}
-    Motor: 0
+    Motor: 1
     Steering: 0
 --- !u!1 &9062278896347685609
 GameObject:
