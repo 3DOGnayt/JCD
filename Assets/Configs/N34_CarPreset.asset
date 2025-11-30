@@ -13,6 +13,18 @@ MonoBehaviour:
   m_Name: N34_CarPreset
   m_EditorClassIdentifier: 
   _car: {fileID: 9039642172116725141, guid: 8032a9469da0495489fd955acec86caf, type: 3}
+  _carSetup:
+    CurrentSpeed: 0
+    Gearbox: 0
+    CurrentBackSpeed: 0
+    AccelerationMultiplier: 0
+    DecelerationMultiplier: 0
+    CurrentSteeringAngle: 35
+    SteeringSpeed: 100
+    BrakeForce: 0
+    HandbrakeInput: 0
+    DriftMultiplier: 0
+    CurrentEngineRpm: 0
   _carParameters:
     Mass: 1500
     AutomaticCenterOfMass: 0
@@ -34,13 +46,13 @@ MonoBehaviour:
       ExtremumValue: 1
       AsymptoteSlip: 0.8
       AsymptoteValue: 0.5
-      Stiffness: 8
+      Stiffness: 6
     SidewaysFriction:
       ExtremumSlip: 0.2
       ExtremumValue: 1
       AsymptoteSlip: 0.5
       AsymptoteValue: 0.75
-      Stiffness: 3
+      Stiffness: 4
   _backWheelParameters:
     MainWheelParameters:
       Mass: 20
@@ -64,4 +76,4 @@ MonoBehaviour:
       ExtremumValue: 1
       AsymptoteSlip: 0.5
       AsymptoteValue: 0.75
-      Stiffness: 2
+      Stiffness: 3

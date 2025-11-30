@@ -1,4 +1,5 @@
 using Configs.Impl;
+using Core;
 using UnityEditor;
 using UnityEngine;
 
@@ -15,16 +16,16 @@ namespace Tools
 
             if (preset.Car == null)
             {
-                EditorGUILayout.HelpBox("Set gameObject from prefab to Car!", MessageType.Warning);
+                EditorGUILayout.HelpBox("Set GameObject (car prefab) into Car field!", MessageType.Warning);
                 return;
             }
 
             GUILayout.Space(10);
 
-            if (GUILayout.Button("Setup parameters FROM Car TO SO"))
+            if (GUILayout.Button("Save parameters FROM Car → TO SO"))
                 SaveFromCar(preset);
 
-            if (GUILayout.Button("Setup parameters FROM SO TO Car")) 
+            if (GUILayout.Button("Apply parameters FROM SO → TO Car")) 
                 ApplyToCar(preset);
         }
 
@@ -39,18 +40,36 @@ namespace Tools
                 preset.CarParameters.CenterOfMass = rb.centerOfMass;
             }
 
+            var carView = car.GetComponent<CarView>();
+            if (carView != null && carView.CarSetup != null)
+            {
+                var setup = carView.CarSetup;
+                preset.CarSetup.CurrentSpeed = setup.CurrentSpeed;
+                preset.CarSetup.Gearbox = setup.Gearbox;
+                preset.CarSetup.CurrentBackSpeed = setup.CurrentBackSpeed;
+                preset.CarSetup.AccelerationMultiplier = setup.AccelerationMultiplier;
+                preset.CarSetup.DecelerationMultiplier = setup.DecelerationMultiplier;
+                preset.CarSetup.CurrentSteeringAngle = setup.CurrentSteeringAngle;
+                preset.CarSetup.SteeringSpeed = setup.SteeringSpeed;
+                preset.CarSetup.BrakeForce = setup.BrakeForce;
+                preset.CarSetup.DriftMultiplier = setup.DriftMultiplier;
+                preset.CarSetup.CurrentEngineRpm = setup.CurrentEngineRpm;
+            }
+
             var wheels = car.GetComponentsInChildren<WheelCollider>();
             if (wheels.Length >= 4)
             {
                 preset.FrontWheelParameters.SaveFromWheel(wheels[0]);
                 preset.FrontWheelParameters.SaveFromWheel(wheels[1]);
-
                 preset.BackWheelParameters.SaveFromWheel(wheels[wheels.Length - 2]);
                 preset.BackWheelParameters.SaveFromWheel(wheels[wheels.Length - 1]);
             }
 
             EditorUtility.SetDirty(preset);
-            Debug.Log("✅ Parameters saved in ScriptableObject");
+            EditorUtility.SetDirty(car);
+            PrefabUtility.RecordPrefabInstancePropertyModifications(car);
+
+            Debug.Log($"✅ {car.name}: данные сохранены в CarPreset");
         }
 
         private void ApplyToCar(CarPreset preset)
@@ -60,17 +79,35 @@ namespace Tools
             if (rb != null)
                 preset.CarParameters.SetCarParameters(rb);
 
+            var carView = car.GetComponent<CarView>();
+            if (carView != null && carView.CarSetup != null)
+            {
+                var setup = carView.CarSetup;
+                setup.CurrentSpeed = preset.CarSetup.CurrentSpeed;
+                setup.Gearbox = preset.CarSetup.Gearbox;
+                setup.CurrentBackSpeed = preset.CarSetup.CurrentBackSpeed;
+                setup.AccelerationMultiplier = preset.CarSetup.AccelerationMultiplier;
+                setup.DecelerationMultiplier = preset.CarSetup.DecelerationMultiplier;
+                setup.CurrentSteeringAngle = preset.CarSetup.CurrentSteeringAngle;
+                setup.SteeringSpeed = preset.CarSetup.SteeringSpeed;
+                setup.BrakeForce = preset.CarSetup.BrakeForce;
+                setup.DriftMultiplier = preset.CarSetup.DriftMultiplier;
+                setup.CurrentEngineRpm = preset.CarSetup.CurrentEngineRpm;
+            }
+
             var wheels = car.GetComponentsInChildren<WheelCollider>();
             if (wheels.Length >= 4)
             {
                 preset.FrontWheelParameters.SetAllParameters(wheels[0]);
                 preset.FrontWheelParameters.SetAllParameters(wheels[1]);
-
                 preset.BackWheelParameters.SetAllParameters(wheels[wheels.Length - 2]);
                 preset.BackWheelParameters.SetAllParameters(wheels[wheels.Length - 1]);
             }
 
-            Debug.Log("✅ Parameters from ScriptableObject applied to car");
+            EditorUtility.SetDirty(car);
+            PrefabUtility.RecordPrefabInstancePropertyModifications(car);
+
+            Debug.Log($"✅ {car.name}: данные из CarPreset применены на Car");
         }
     }
 }

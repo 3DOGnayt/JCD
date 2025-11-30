@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Core.Moving;
+using Core;
 using Data;
 using UnityEditor;
 using UnityEngine;
@@ -48,7 +48,7 @@ namespace Tools
             axles.Add(front);
             axles.Add(back);
 
-            carSetup._wheelInfos = axles;
+            carSetup.CarWheelInfos = axles;
             EditorUtility.SetDirty(carSetup);
         }
     }
