@@ -16,22 +16,27 @@ namespace Systems.Car.Test_Arcade
         private Stash<RigidbodyComponent> _rigidbodyStash;
         private Stash<TransformComponent> _transformStash;
         private Stash<VerticalInputComponent> _vertStash;
+        private Stash<HandbrakeInputComponent> _handbrakeStash;
 
-        private float _assist;
+        private float _assistForwardSpeedMps;
+
+        private const float SleepSpeedThresholdMps = 0.05f;
+        private const float SleepAngularSpeedThreshold = 0.05f;
 
         public void OnAwake()
         {
             _cars = World.Filter
-                .Extend<CarSetupAspect>()          // Speed + BackSpeed и прочее
+                .Extend<CarSetupAspect>()
                 .With<RigidbodyComponent>()
                 .With<TransformComponent>()
-                .With<VerticalInputComponent>()    // чтобы знать, жмём ли газ
+                .With<VerticalInputComponent>()
                 .Build();
 
             _carAspectFactory = World.GetAspectFactory<CarSetupAspect>();
-            _rigidbodyStash   = World.GetStash<RigidbodyComponent>();
-            _transformStash   = World.GetStash<TransformComponent>();
-            _vertStash        = World.GetStash<VerticalInputComponent>();
+            _rigidbodyStash = World.GetStash<RigidbodyComponent>();
+            _transformStash = World.GetStash<TransformComponent>();
+            _vertStash = World.GetStash<VerticalInputComponent>();
+            _handbrakeStash = World.GetStash<HandbrakeInputComponent>();
         }
 
         public void OnUpdate(float deltaTime)
@@ -39,100 +44,117 @@ namespace Systems.Car.Test_Arcade
             foreach (var car in _cars)
             {
                 var aspect = _carAspectFactory.Get(car);
-                ref var speed     = ref aspect.Speed;
+                ref var speed = ref aspect.Speed;
                 ref var backSpeed = ref aspect.BackSpeed;
 
-                var rbComp  = _rigidbodyStash.Get(car);
-                var trComp  = _transformStash.Get(car);
-                var vert       = _vertStash.Get(car);
+                var rbComp = _rigidbodyStash.Get(car);
+                var trComp = _transformStash.Get(car);
+                var vert = _vertStash.Get(car);
+                var hb = _handbrakeStash.Get(car);
 
                 if (rbComp.Value == null || trComp.Value == null)
                     continue;
 
-                var rb      = rbComp.Value;
+                var rb = rbComp.Value;
                 var forward = trComp.Value.forward;
+                var input = vert.Value;
+                var handbrake = hb.Value;
 
-                // текущий вектор скорости
                 var velocity = rb.velocity;
 
-                // 🔧 Аркадный ассист — отдельно вынесенный метод
-                velocity = ApplyArcadeAssist(velocity, vert.Value, deltaTime);
+                velocity = ApplyArcadeAssist(velocity, input, forward, deltaTime);
 
-                // записали обратно в Rigidbody
                 rb.velocity = velocity;
 
-                // === считаем скорости УЖЕ после ассиста ===
+                ApplySleepIfStopped(rb, input, handbrake);
+
+                velocity = rb.velocity;
 
                 var forwardSpeedMps = Vector3.Dot(velocity, forward);
-                var forwardKmh      = Mathf.Abs(forwardSpeedMps) * 3.6f;
+                var forwardKmh = Mathf.Abs(forwardSpeedMps) * 3.6f;
 
                 if (forwardSpeedMps >= 0f)
                 {
-                    speed.Value     = forwardKmh;
+                    speed.Value = forwardKmh;
                     backSpeed.Value = 0f;
                 }
                 else
                 {
-                    speed.Value     = 0f;
-                    backSpeed.Value = forwardKmh; // или Mathf.Abs(forwardKmh), если хочешь только модуль
+                    speed.Value = 0f;
+                    backSpeed.Value = forwardKmh;
                 }
-
-                // если хочешь, можешь отдельно хранить общий модуль:
-                // var speedKmhTotal = velocity.magnitude * 3.6f;
             }
         }
 
-        /// <summary>
-        /// Немного "поддерживает" скорость, когда жмём газ вперёд,
-        /// чтобы поворот не съедал её слишком резко.
-        /// Работает только при достаточной скорости.
-        /// </summary>
         private Vector3 ApplyArcadeAssist(
             Vector3 velocity,
             float verticalInput,
+            Vector3 forward,
             float deltaTime)
         {
-            // ассист выключен — просто обновляем lastSpeed
             if (!_params.UseArcadeAssist)
             {
-                _assist = velocity.magnitude;
+                _assistForwardSpeedMps = Vector3.Dot(velocity, forward);
                 return velocity;
             }
 
-            float speedMps = velocity.magnitude;
+            var forwardSpeed = Vector3.Dot(velocity, forward);
+            var absForward = Mathf.Abs(forwardSpeed);
+            var minSpeedMps = _params.ArcadeAssistMinSpeedKmh / 3.6f;
 
-            // скорость слишком маленькая или газа нет — ассист не нужен
-            float minSpeedMps = _params.ArcadeAssistMinSpeedKmh / 3.6f;
+            var wantForward = verticalInput > 0.01f;
+            var movingForward = forwardSpeed > 0.01f;
 
-            if (speedMps < minSpeedMps || verticalInput <= 0.01f)
+            if (!wantForward || !movingForward || absForward < minSpeedMps)
             {
-                _assist = speedMps;
+                _assistForwardSpeedMps = forwardSpeed;
                 return velocity;
             }
 
-            // инициализация lastSpeed при первом ходе
-            if (_assist <= 0.01f)
-                _assist = speedMps;
+            if (Mathf.Abs(_assistForwardSpeedMps) <= 0.01f)
+                _assistForwardSpeedMps = forwardSpeed;
 
-            // если начали терять скорость — чуть подтягиваем назад к прошлой
-            if (speedMps < _assist)
+            if (forwardSpeed < _assistForwardSpeedMps)
             {
-                // превращаем ArcadeAssistLerpSpeed в коэффициент для Lerp за секунду
-                float t = 1f - Mathf.Exp(-_params.ArcadeAssistLerpSpeed * deltaTime);
-                float targetSpeed = Mathf.Lerp(speedMps, _assist, t);
+                var t = 1f - Mathf.Exp(-_params.ArcadeAssistLerpSpeed * deltaTime);
+                var targetForward = Mathf.Lerp(forwardSpeed, _assistForwardSpeedMps, t);
 
-                if (velocity.sqrMagnitude > 0.0001f)
-                    velocity = velocity.normalized * targetSpeed;
+                var forwardComponent = forward * forwardSpeed;
+                var otherComponent = velocity - forwardComponent;
 
-                speedMps = targetSpeed;
+                var newForwardComponent = forward * targetForward;
+                velocity = newForwardComponent + otherComponent;
+
+                forwardSpeed = targetForward;
             }
             else
             {
-                // если набрали больше — сдвигаем "эталон" вверх
-                _assist = speedMps;
+                _assistForwardSpeedMps = forwardSpeed;
             }
 
             return velocity;
+        }
+        
+        private void ApplySleepIfStopped(Rigidbody rb, float verticalInput, bool handbrake)
+        {
+            if (Mathf.Abs(verticalInput) > 0.01f && !handbrake)
+                return;
+
+            var v = rb.velocity;
+            var av = rb.angularVelocity;
+
+            if (v.sqrMagnitude < SleepSpeedThresholdMps * SleepSpeedThresholdMps &&
+                av.sqrMagnitude < SleepAngularSpeedThreshold * SleepAngularSpeedThreshold)
+            {
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+                rb.Sleep();
+            }
+            else
+            {
+                if (rb.IsSleeping() && Mathf.Abs(verticalInput) > 0.01f && !handbrake)
+                    rb.WakeUp();
+            }
         }
 
         public void Dispose() { }

@@ -20,7 +20,7 @@ MonoBehaviour:
   _maxMotorTorque: 5000
   _engineForwardTorque: 2500
   _engineBackTorque: 5000
-  _handbrakeTorque: 2500
+  _handbrakeTorque: 0.1
   _neutralMaxRpm: 1200
   _accelerationRate: 2500
   _decelerationRate: 5000
