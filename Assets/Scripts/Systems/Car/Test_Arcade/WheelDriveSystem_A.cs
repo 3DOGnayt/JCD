@@ -77,7 +77,7 @@ namespace Systems.Car.Test_Arcade
                     // считаем, что задняя ось — это те, у кого Steering == false
                     if (info.LeftWheel != null)
                     {
-                        if (handbrake && !info.Steering)
+                        if (handbrake && info.Motor)
                             info.LeftWheel.brakeTorque = hbTorque;
                         else
                             info.LeftWheel.brakeTorque = 0f;
@@ -85,7 +85,7 @@ namespace Systems.Car.Test_Arcade
 
                     if (info.RightWheel != null)
                     {
-                        if (handbrake && !info.Steering)
+                        if (handbrake && info.Motor)
                             info.RightWheel.brakeTorque = hbTorque;
                         else
                             info.RightWheel.brakeTorque = 0f;

@@ -44,16 +44,15 @@ namespace Tools
             if (carView != null && carView.CarSetup != null)
             {
                 var setup = carView.CarSetup;
-                preset.CarSetup.CurrentSpeed = setup.CurrentSpeed;
-                preset.CarSetup.Gearbox = setup.Gearbox;
-                preset.CarSetup.CurrentBackSpeed = setup.CurrentBackSpeed;
-                preset.CarSetup.AccelerationMultiplier = setup.AccelerationMultiplier;
-                preset.CarSetup.DecelerationMultiplier = setup.DecelerationMultiplier;
-                preset.CarSetup.CurrentSteeringAngle = setup.CurrentSteeringAngle;
+                preset.CarSetup.SpeedMax = setup.SpeedMax;
+                preset.CarSetup.GearCount = setup.GearCount;
+                preset.CarSetup.BackSpeedMax = setup.BackSpeedMax;
+                preset.CarSetup.SteeringAngleMax = setup.SteeringAngleMax;
                 preset.CarSetup.SteeringSpeed = setup.SteeringSpeed;
-                preset.CarSetup.BrakeForce = setup.BrakeForce;
+                preset.CarSetup.BrakeInput = setup.BrakeInput;
+                preset.CarSetup.HandbrakeInput = setup.HandbrakeInput;
                 preset.CarSetup.DriftMultiplier = setup.DriftMultiplier;
-                preset.CarSetup.CurrentEngineRpm = setup.CurrentEngineRpm;
+                preset.CarSetup.EngineRpmMax = setup.EngineRpmMax;
             }
 
             var wheels = car.GetComponentsInChildren<WheelCollider>();
@@ -83,16 +82,15 @@ namespace Tools
             if (carView != null && carView.CarSetup != null)
             {
                 var setup = carView.CarSetup;
-                setup.CurrentSpeed = preset.CarSetup.CurrentSpeed;
-                setup.Gearbox = preset.CarSetup.Gearbox;
-                setup.CurrentBackSpeed = preset.CarSetup.CurrentBackSpeed;
-                setup.AccelerationMultiplier = preset.CarSetup.AccelerationMultiplier;
-                setup.DecelerationMultiplier = preset.CarSetup.DecelerationMultiplier;
-                setup.CurrentSteeringAngle = preset.CarSetup.CurrentSteeringAngle;
+                setup.SpeedMax = preset.CarSetup.SpeedMax;
+                setup.GearCount = preset.CarSetup.GearCount;
+                setup.BackSpeedMax = preset.CarSetup.BackSpeedMax;
+                setup.SteeringAngleMax = preset.CarSetup.SteeringAngleMax;
                 setup.SteeringSpeed = preset.CarSetup.SteeringSpeed;
-                setup.BrakeForce = preset.CarSetup.BrakeForce;
+                setup.BrakeInput = preset.CarSetup.BrakeInput;
+                setup.HandbrakeInput = preset.CarSetup.HandbrakeInput;
                 setup.DriftMultiplier = preset.CarSetup.DriftMultiplier;
-                setup.CurrentEngineRpm = preset.CarSetup.CurrentEngineRpm;
+                setup.EngineRpmMax = preset.CarSetup.EngineRpmMax;
             }
 
             var wheels = car.GetComponentsInChildren<WheelCollider>();

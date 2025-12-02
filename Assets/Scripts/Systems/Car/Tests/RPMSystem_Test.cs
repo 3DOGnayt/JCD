@@ -14,7 +14,7 @@ namespace Systems.Car
         private Filter _filter;
         private Stash<EngineRpmComponent> _rpmStash;
         private Stash<VerticalInputComponent> _vertStash;
-        private Stash<GearboxComponent> _gearStash;
+        private Stash<GearComponent> _gearStash;
 
         // Временные константы из 1-й передачи
         private const float GrowGas = 2400f;     // об/с (газ)
@@ -26,12 +26,12 @@ namespace Systems.Car
             _filter = World.Filter
                 .With<EngineRpmComponent>()
                 .With<VerticalInputComponent>()
-                .With<GearboxComponent>()
+                .With<GearComponent>()
                 .Build();
 
             _rpmStash  = World.GetStash<EngineRpmComponent>();
             _vertStash = World.GetStash<VerticalInputComponent>();
-            _gearStash = World.GetStash<GearboxComponent>();
+            _gearStash = World.GetStash<GearComponent>();
         }
 
         public void OnUpdate(float dt)

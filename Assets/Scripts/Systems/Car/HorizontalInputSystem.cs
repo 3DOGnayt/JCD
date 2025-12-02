@@ -26,7 +26,7 @@ namespace Systems.Car
         private float _steeringSpeedMultiplierMax;
         private float _steeringSpeedMultiplierMin;
         private float _maxCarSpeed;
-        private float _carMass; // rename
+        private float _carMassStandard; 
         private float _speedMultiplierMax;
         private float _speedMultiplierMin;
 
@@ -47,8 +47,9 @@ namespace Systems.Car
 
             _speedMultiplierMax = _carMovementParameters.SpeedMultiplierMax;
             _speedMultiplierMin = _carMovementParameters.SpeedMultiplierMin;
+            _carMassStandard = _carMovementParameters.CarMass;
+            
             _maxCarSpeed = _carMovementParameters.MaxCarSpeed;
-            _carMass = _carMovementParameters.CarMass;
             _steeringSpeedMultiplierMax = _carMovementParameters.SteeringSpeedMultiplierMax;
             _steeringSpeedMultiplierMin = _carMovementParameters.SteeringSpeedMultiplierMin;
         }
@@ -67,7 +68,7 @@ namespace Systems.Car
                 ref var speed = ref carSetupAspect.Speed;
                 
                 var speedFactor = Mathf.Lerp(_speedMultiplierMax, _speedMultiplierMin, speed.Value / _maxCarSpeed);
-                var massFactor = Mathf.Clamp01(_carMass / carMass.Value);
+                var massFactor = Mathf.Clamp01(_carMassStandard / carMass.Value);
 
                 var adjustedAngle = steeringAngle.Value * speedFactor * massFactor;
                 var targetAngle = adjustedAngle * horizontal.Value;
@@ -77,11 +78,7 @@ namespace Systems.Car
 
                 _inputService.ApplyHorizontalMove(targetAngle, dynamicSteeringSpeed, wheelInfo.WheelInfo);
                 
-                _signalBus.Fire(new ComponentChangeSignal<CarSetupAspect> 
-                { 
-                    Entity = car, 
-                    Component = carSetupAspect
-                });
+                _signalBus.Fire(new ComponentChangeSignal<CarSetupAspect> { Component = carSetupAspect });
             }
         }
 

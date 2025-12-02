@@ -17,7 +17,7 @@ namespace Systems.Car.Test_Arcade
         private Filter _cars;
         private Stash<EngineRpmComponent> _rpmStash;
         private Stash<VerticalInputComponent> _vertStash;
-        private Stash<GearboxComponent> _gearStash;
+        private Stash<GearComponent> _gearStash;
 
         private struct GearRates
         {
@@ -33,12 +33,12 @@ namespace Systems.Car.Test_Arcade
             _cars = World.Filter
                 .With<EngineRpmComponent>()
                 .With<VerticalInputComponent>()
-                .With<GearboxComponent>()
+                .With<GearComponent>()
                 .Build();
 
             _rpmStash  = World.GetStash<EngineRpmComponent>();
             _vertStash = World.GetStash<VerticalInputComponent>();
-            _gearStash = World.GetStash<GearboxComponent>();
+            _gearStash = World.GetStash<GearComponent>();
 
             BuildRates();
         }

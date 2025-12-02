@@ -44,16 +44,14 @@ namespace Systems.Spawn
         {
             var carSetup = carView.CarPreset.CarSetup;
             
-            entity.SetComponent(new SpeedComponent { Value = carSetup.CurrentSpeed });
-            entity.SetComponent(new GearboxComponent { Value = carSetup.Gearbox });
-            entity.SetComponent(new BackSpeedComponent { Value = carSetup.CurrentBackSpeed });
-            entity.SetComponent(new EngineRpmComponent { Value = carSetup.CurrentEngineRpm });
-            entity.SetComponent(new AccelerationMultiplierComponent { Value = carSetup.AccelerationMultiplier });
-            entity.SetComponent(new DecelerationMultiplierComponent { Value = carSetup.DecelerationMultiplier });
-            entity.SetComponent(new SteeringAngleComponent { Value = carSetup.CurrentSteeringAngle });
+            entity.SetComponent(new SpeedComponent { Value = 0 });
+            entity.SetComponent(new GearComponent { Value = 0 });
+            entity.SetComponent(new BackSpeedComponent { Value = 0 });
+            entity.SetComponent(new EngineRpmComponent { Value = 0 });
+            entity.SetComponent(new SteeringAngleComponent { Value = carSetup.SteeringAngleMax });
             entity.SetComponent(new SteeringSpeedComponent { Value = carSetup.SteeringSpeed });
-            entity.SetComponent(new BrakeForceComponent { Value = carSetup.BrakeForce });
-            entity.SetComponent(new HandbrakeInputComponent { Value = carSetup.HandbrakeInput });
+            entity.SetComponent(new BrakeInputComponent { Value = false });
+            entity.SetComponent(new HandbrakeInputComponent { Value = false });
             entity.SetComponent(new DriftMultiplierComponent { Value = carSetup.DriftMultiplier });
         }
 

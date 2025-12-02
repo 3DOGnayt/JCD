@@ -76,12 +76,12 @@ namespace Systems.Car.Test_Arcade
                 if (forwardSpeedMps >= 0f)
                 {
                     speed.Value = forwardKmh;
-                    backSpeed.Value = 0f;
+                    backSpeed.Value = 0f; // for debug and inside settings
                 }
                 else
                 {
                     speed.Value = 0f;
-                    backSpeed.Value = forwardKmh;
+                    backSpeed.Value = forwardKmh; // for debug and inside settings
                 }
             }
         }
@@ -124,8 +124,6 @@ namespace Systems.Car.Test_Arcade
 
                 var newForwardComponent = forward * targetForward;
                 velocity = newForwardComponent + otherComponent;
-
-                forwardSpeed = targetForward;
             }
             else
             {
@@ -143,8 +141,10 @@ namespace Systems.Car.Test_Arcade
             var v = rb.velocity;
             var av = rb.angularVelocity;
 
-            if (v.sqrMagnitude < SleepSpeedThresholdMps * SleepSpeedThresholdMps &&
-                av.sqrMagnitude < SleepAngularSpeedThreshold * SleepAngularSpeedThreshold)
+            var sleepSpeedThresholdMps = SleepSpeedThresholdMps * SleepSpeedThresholdMps;
+            var sleepAngularSpeedThreshold = SleepAngularSpeedThreshold * SleepAngularSpeedThreshold;
+            
+            if (v.sqrMagnitude < sleepSpeedThresholdMps && av.sqrMagnitude < sleepAngularSpeedThreshold)
             {
                 rb.velocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;

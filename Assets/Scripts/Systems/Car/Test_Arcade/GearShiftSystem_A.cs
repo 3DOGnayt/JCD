@@ -15,7 +15,7 @@ namespace Systems.Car.Test_Arcade
         [Inject] private CarMovementParameters _params;
 
         private Filter _cars;
-        private Stash<GearboxComponent> _gearStash;
+        private Stash<GearComponent> _gearStash;
         private Stash<SpeedComponent> _speedStash;
         private Stash<BackSpeedComponent> _backSpeedStash;
         private Stash<VerticalInputComponent> _vertStash;
@@ -41,13 +41,13 @@ namespace Systems.Car.Test_Arcade
         public void OnAwake()
         {
             _cars = World.Filter
-                .With<GearboxComponent>()
+                .With<GearComponent>()
                 .With<SpeedComponent>()
                 .With<BackSpeedComponent>()
                 .With<VerticalInputComponent>()
                 .Build();
 
-            _gearStash      = World.GetStash<GearboxComponent>();
+            _gearStash      = World.GetStash<GearComponent>();
             _speedStash     = World.GetStash<SpeedComponent>();
             _backSpeedStash = World.GetStash<BackSpeedComponent>();
             _vertStash      = World.GetStash<VerticalInputComponent>();

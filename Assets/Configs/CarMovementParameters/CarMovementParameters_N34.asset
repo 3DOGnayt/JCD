@@ -30,5 +30,5 @@ MonoBehaviour:
   _rpmToSpeedRatio: 0.02
   _speedPreset: {fileID: 11400000, guid: 37fa8eed213b1ec479a9cb2bb95cf628, type: 2}
   _useArcadeAssist: 1
-  _arcadeAssistMinSpeedKmh: 40
-  _arcadeAssistLerpSpeed: 1
+  _arcadeAssistMinSpeedKmh: 0
+  _arcadeAssistLerpSpeed: 0.5

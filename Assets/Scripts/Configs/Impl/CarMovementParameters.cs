@@ -34,9 +34,8 @@ namespace Configs.Impl
         [Header("Arcade Assist")] 
         [Space]
         [SerializeField] private bool _useArcadeAssist = true;
-        [SerializeField] private float _arcadeAssistMinSpeedKmh = 40f; // ниже этой скорости ассист не работает
-        [SerializeField] private float _arcadeAssistLerpSpeed = 4f; // насколько быстро подтягиваем скорость
-
+        [SerializeField] private float _arcadeAssistMinSpeedKmh = 40f;
+        [SerializeField] private float _arcadeAssistLerpSpeed = 4f;
         public bool UseArcadeAssist => _useArcadeAssist;
         public float ArcadeAssistMinSpeedKmh => _arcadeAssistMinSpeedKmh;
         public float ArcadeAssistLerpSpeed => _arcadeAssistLerpSpeed;
