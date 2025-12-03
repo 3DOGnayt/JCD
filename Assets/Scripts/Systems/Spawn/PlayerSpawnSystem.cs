@@ -11,7 +11,7 @@ namespace Systems.Spawn
     public sealed class PlayerSpawnSystem : ISystem 
     {
         [Inject] public World World { get; set;}
-        [Inject] private CarPreset _carPreset;
+        [Inject] private CarPreset _carPreset; // переделать на выбор игрока
         [Inject] private DiContainer _container;
         [Inject] private SignalBus _signalBus;
         
@@ -45,23 +45,28 @@ namespace Systems.Spawn
             var carSetup = carView.CarPreset.CarSetup;
             
             entity.SetComponent(new SpeedComponent { Value = 0 });
-            entity.SetComponent(new GearComponent { Value = 0 });
             entity.SetComponent(new BackSpeedComponent { Value = 0 });
+            entity.SetComponent(new GearComponent { Value = 0 });
             entity.SetComponent(new EngineRpmComponent { Value = 0 });
             entity.SetComponent(new SteeringAngleComponent { Value = carSetup.SteeringAngleMax });
             entity.SetComponent(new SteeringSpeedComponent { Value = carSetup.SteeringSpeed });
             entity.SetComponent(new BrakeInputComponent { Value = false });
             entity.SetComponent(new HandbrakeInputComponent { Value = false });
             entity.SetComponent(new DriftMultiplierComponent { Value = carSetup.DriftMultiplier });
+            
+            entity.SetComponent(new SpeedMaxComponent { Value = carSetup.SpeedMax });
+            entity.SetComponent(new BackSpeedMaxComponent { Value = carSetup.BackSpeedMax });
+            entity.SetComponent(new GearCountComponent { Value = carSetup.GearCount });
+            entity.SetComponent(new EngineRpmMaxComponent { Value = carSetup.EngineRpmMax });
         }
 
         private void AddInternalComponents(Entity entity, ICarView carView)
         {
             AddCommonComponents(entity, carView);
-            AddMainCarComponents(entity);
+            AddMainCarComponents(entity, carView);
             AddWheelInfoComponents(entity, carView);
-            AddFrontWheelComponents(entity);
-            AddBackWheelComponents(entity);
+            AddFrontWheelComponents(entity, carView);
+            AddBackWheelComponents(entity, carView);
         }
 
         private void AddCommonComponents(Entity entity, ICarView carView)
@@ -72,6 +77,8 @@ namespace Systems.Spawn
             
             //entity.SetComponent(new PlayerTagComponent());
 
+            //entity.SetComponent(new CarViewComponent { Value = carView });
+            
             entity.SetComponent(new TransformComponent { Value = carView.CarTransform });
             entity.SetComponent(new PositionComponent { Value = carView.CarTransform.position });
             entity.SetComponent(new RotationComponent { Value = carView.CarTransform.rotation });
@@ -82,9 +89,9 @@ namespace Systems.Spawn
             entity.SetComponent(new HorizontalInputComponent {Value = 0 });
         }
 
-        private void AddMainCarComponents(Entity entity)
+        private void AddMainCarComponents(Entity entity, ICarView carView)
         {
-            var carParameters = _carPreset.CarParameters;
+            var carParameters = carView.CarPreset.CarParameters;
 
             entity.SetComponent(new CarMassComponent { Value = carParameters.Mass });
             entity.SetComponent(new AutomaticCenterOfMassComponent { Value = carParameters.AutomaticCenterOfMass });
@@ -98,12 +105,12 @@ namespace Systems.Spawn
             entity.SetComponent(new WheelInfoComponent { WheelInfo = wheelInfos });
         }
 
-        private void AddFrontWheelComponents(Entity entity)
+        private void AddFrontWheelComponents(Entity entity, ICarView carView)
         {
-            var frontMainWheelParameters = _carPreset.FrontWheelParameters.MainWheelParameters;
-            var frontSuspensionSpring = _carPreset.FrontWheelParameters.SuspensionSpring;
-            var frontForwardFriction = _carPreset.FrontWheelParameters.ForwardFriction;
-            var frontSidewaysFriction = _carPreset.FrontWheelParameters.SidewaysFriction;
+            var frontMainWheelParameters = carView.CarPreset.FrontWheelParameters.MainWheelParameters;
+            var frontSuspensionSpring = carView.CarPreset.FrontWheelParameters.SuspensionSpring;
+            var frontForwardFriction = carView.CarPreset.FrontWheelParameters.ForwardFriction;
+            var frontSidewaysFriction = carView.CarPreset.FrontWheelParameters.SidewaysFriction;
 
             entity.SetComponent(new FrontWheelMassComponent { Value = frontMainWheelParameters.Mass });
             entity.SetComponent(new FrontWheelRadiusComponent { Value = frontMainWheelParameters.Radius });
@@ -129,12 +136,12 @@ namespace Systems.Spawn
             entity.SetComponent(new FrontStiffnessSidewaysComponent { Value = frontSidewaysFriction.Stiffness });
         }
 
-        private void AddBackWheelComponents(Entity entity)
+        private void AddBackWheelComponents(Entity entity, ICarView carView)
         {
-            var backMainWheelParameters = _carPreset.BackWheelParameters.MainWheelParameters;
-            var backSuspensionSpring = _carPreset.BackWheelParameters.SuspensionSpring;
-            var backForwardFriction = _carPreset.BackWheelParameters.ForwardFriction;
-            var backSidewaysFriction = _carPreset.BackWheelParameters.SidewaysFriction;
+            var backMainWheelParameters = carView.CarPreset.BackWheelParameters.MainWheelParameters;
+            var backSuspensionSpring = carView.CarPreset.BackWheelParameters.SuspensionSpring;
+            var backForwardFriction = carView.CarPreset.BackWheelParameters.ForwardFriction;
+            var backSidewaysFriction = carView.CarPreset.BackWheelParameters.SidewaysFriction;
 
             entity.SetComponent(new BackWheelMassComponent { Value = backMainWheelParameters.Mass });
             entity.SetComponent(new BackWheelRadiusComponent { Value = backMainWheelParameters.Radius });

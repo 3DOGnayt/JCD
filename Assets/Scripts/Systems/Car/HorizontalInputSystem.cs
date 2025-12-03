@@ -22,10 +22,12 @@ namespace Systems.Car
         private Stash<WheelInfoComponent> _wheelInfoStash;
         private Stash<HorizontalInputComponent> _horizontalStash;
         private Stash<CarMassComponent> _carMassStash;
+        private Stash<SteeringSpeedComponent> _steeringSpeedStash;
+        private Stash<SteeringAngleComponent> _steeringAngleStash;
+        private Stash<SpeedMaxComponent> _speedMaxStash;
 
         private float _steeringSpeedMultiplierMax;
         private float _steeringSpeedMultiplierMin;
-        private float _maxCarSpeed;
         private float _carMassStandard; 
         private float _speedMultiplierMax;
         private float _speedMultiplierMin;
@@ -44,12 +46,14 @@ namespace Systems.Car
             _wheelInfoStash = World.GetStash<WheelInfoComponent>();
             _horizontalStash = World.GetStash<HorizontalInputComponent>();
             _carMassStash = World.GetStash<CarMassComponent>();
+            _steeringSpeedStash = World.GetStash<SteeringSpeedComponent>();
+            _steeringAngleStash = World.GetStash<SteeringAngleComponent>();
+            _speedMaxStash = World.GetStash<SpeedMaxComponent>();
 
             _speedMultiplierMax = _carMovementParameters.SpeedMultiplierMax;
             _speedMultiplierMin = _carMovementParameters.SpeedMultiplierMin;
             _carMassStandard = _carMovementParameters.CarMass;
             
-            _maxCarSpeed = _carMovementParameters.MaxCarSpeed;
             _steeringSpeedMultiplierMax = _carMovementParameters.SteeringSpeedMultiplierMax;
             _steeringSpeedMultiplierMin = _carMovementParameters.SteeringSpeedMultiplierMin;
         }
@@ -58,23 +62,24 @@ namespace Systems.Car
         {
             foreach (var car in _cars)
             {
+                var carSetupAspect = _carSetupAspect.Get(car);
+                ref var speed = ref carSetupAspect.Speed;
+                
                 var horizontal = _horizontalStash.Get(car);
                 var wheelInfo = _wheelInfoStash.Get(car);
                 var carMass = _carMassStash.Get(car);
-                
-                var carSetupAspect = _carSetupAspect.Get(car);
-                ref var steeringAngle = ref carSetupAspect.SteeringAngle;
-                ref var steeringSpeed = ref carSetupAspect.SteeringSpeed;
-                ref var speed = ref carSetupAspect.Speed;
-                
-                var speedFactor = Mathf.Lerp(_speedMultiplierMax, _speedMultiplierMin, speed.Value / _maxCarSpeed);
+                var steeringSpeed = _steeringSpeedStash.Get(car);
+                var steeringAngle = _steeringAngleStash.Get(car);
+                var speedMax = _speedMaxStash.Get(car);
+
+                var speedFactor = Mathf.Lerp(_speedMultiplierMax, _speedMultiplierMin, speed.Value / speedMax.Value);
                 var massFactor = Mathf.Clamp01(_carMassStandard / carMass.Value);
 
                 var adjustedAngle = steeringAngle.Value * speedFactor * massFactor;
                 var targetAngle = adjustedAngle * horizontal.Value;
                 
                 var dynamicSteeringSpeed = steeringSpeed.Value * Mathf.Lerp(
-                    _steeringSpeedMultiplierMax, _steeringSpeedMultiplierMin, speed.Value / _maxCarSpeed);
+                    _steeringSpeedMultiplierMax, _steeringSpeedMultiplierMin, speed.Value / speedMax.Value);
 
                 _inputService.ApplyHorizontalMove(targetAngle, dynamicSteeringSpeed, wheelInfo.WheelInfo);
                 

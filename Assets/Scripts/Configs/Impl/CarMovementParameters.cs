@@ -7,11 +7,11 @@ namespace Configs.Impl
     {
         [Header("HorizontalParameters")]
         [Space]
-        [SerializeField] private float _speedMultiplierMax;
-        [SerializeField] private float _speedMultiplierMin;
-        [SerializeField] private float _carMass;
-        [SerializeField] private float _steeringSpeedMultiplierMax;
-        [SerializeField] private float _steeringSpeedMultiplierMin;
+        [SerializeField] private float _speedMultiplierMax = 1;
+        [SerializeField] private float _speedMultiplierMin = 0.3f;
+        [SerializeField] private float _carMassStandart = 1500;
+        [SerializeField] private float _steeringSpeedMultiplierMax = 1;
+        [SerializeField] private float _steeringSpeedMultiplierMin = 0.1f;
         [Space]
         [Header("VerticalParameters")]
         [Space]
@@ -43,7 +43,7 @@ namespace Configs.Impl
         public float SpeedMultiplierMax => _speedMultiplierMax;
         public float SpeedMultiplierMin => _speedMultiplierMin;
         public float MaxCarSpeed => _maxCarSpeed;
-        public float CarMass => _carMass;
+        public float CarMass => _carMassStandart;
         public float SteeringSpeedMultiplierMax => _steeringSpeedMultiplierMax;
         public float SteeringSpeedMultiplierMin => _steeringSpeedMultiplierMin;
 

@@ -14,17 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _car: {fileID: 9039642172116725141, guid: b7c0b1388cca16d489435512d00fe83c, type: 3}
   _carSetup:
-    CurrentSpeed: 0
-    Gearbox: 0
-    CurrentBackSpeed: 0
-    AccelerationMultiplier: 0
-    DecelerationMultiplier: 0
-    CurrentSteeringAngle: 35
+    SpeedMax: 250
+    BackSpeedMax: 80
+    GearCount: 6
+    EngineRpmMax: 9000
+    SteeringAngleMax: 35
     SteeringSpeed: 100
-    BrakeForce: 0
+    BrakeInput: 0
     HandbrakeInput: 0
     DriftMultiplier: 0
-    CurrentEngineRpm: 0
   _carParameters:
     Mass: 1500
     AutomaticCenterOfMass: 0
@@ -34,12 +32,12 @@ MonoBehaviour:
       Mass: 20
       Radius: 0.38
       DampingRate: 5
-      SuspensionDistance: 0.5
-      ForceAppPointDistance: 0.5
+      SuspensionDistance: 0.3
+      ForceAppPointDistance: 0.3
       Center: {x: 0, y: 0, z: 0}
     SuspensionSpring:
-      Spring: 35000
-      Damper: 4500
+      Spring: 50000
+      Damper: 9000
       TargetPosition: 0.5
     ForwardFriction:
       ExtremumSlip: 0.4
@@ -58,12 +56,12 @@ MonoBehaviour:
       Mass: 20
       Radius: 0.38
       DampingRate: 5
-      SuspensionDistance: 0.5
-      ForceAppPointDistance: 0.5
+      SuspensionDistance: 0.3
+      ForceAppPointDistance: 0.3
       Center: {x: 0, y: 0, z: 0}
     SuspensionSpring:
-      Spring: 35000
-      Damper: 4500
+      Spring: 50000
+      Damper: 9000
       TargetPosition: 0.5
     ForwardFriction:
       ExtremumSlip: 0.4
@@ -76,4 +74,4 @@ MonoBehaviour:
       ExtremumValue: 1
       AsymptoteSlip: 0.5
       AsymptoteValue: 0.75
-      Stiffness: 3
+      Stiffness: 5
