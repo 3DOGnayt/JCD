@@ -35,9 +35,9 @@ namespace Tools
             var rb = car.GetComponentInChildren<Rigidbody>();
             if (rb != null)
             {
-                preset.CarParameters.Mass = rb.mass;
-                preset.CarParameters.AutomaticCenterOfMass = rb.automaticCenterOfMass;
-                preset.CarParameters.CenterOfMass = rb.centerOfMass;
+                preset.CarMassParameters.Mass = rb.mass;
+                preset.CarMassParameters.AutomaticCenterOfMass = rb.automaticCenterOfMass;
+                preset.CarMassParameters.CenterOfMass = rb.centerOfMass;
             }
 
             var carView = car.GetComponent<CarView>();
@@ -76,7 +76,7 @@ namespace Tools
             var car = preset.Car;
             var rb = car.GetComponentInChildren<Rigidbody>();
             if (rb != null)
-                preset.CarParameters.SetCarParameters(rb);
+                preset.CarMassParameters.SetCarParameters(rb);
 
             var carView = car.GetComponent<CarView>();
             if (carView != null && carView.CarSetup != null)

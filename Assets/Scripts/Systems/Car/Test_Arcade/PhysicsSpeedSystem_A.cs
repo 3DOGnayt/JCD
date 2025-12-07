@@ -9,7 +9,7 @@ namespace Systems.Car.Test_Arcade
     public sealed class PhysicsSpeedSystem_A : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarMovementParameters _params;
+        [Inject] private CarParameters _carParameters;
 
         private Filter _cars;
         private AspectFactory<CarSetupAspect> _carAspectFactory;
@@ -92,7 +92,7 @@ namespace Systems.Car.Test_Arcade
             Vector3 forward,
             float deltaTime)
         {
-            if (!_params.UseArcadeAssist)
+            if (!_carParameters.MovementParameters.UseArcadeAssist)
             {
                 _assistForwardSpeedMps = Vector3.Dot(velocity, forward);
                 return velocity;
@@ -100,7 +100,7 @@ namespace Systems.Car.Test_Arcade
 
             var forwardSpeed = Vector3.Dot(velocity, forward);
             var absForward = Mathf.Abs(forwardSpeed);
-            var minSpeedMps = _params.ArcadeAssistMinSpeedKmh / 3.6f;
+            var minSpeedMps = _carParameters.MovementParameters.ArcadeAssistMinSpeedKmh / 3.6f;
 
             var wantForward = verticalInput > 0.01f;
             var movingForward = forwardSpeed > 0.01f;
@@ -116,7 +116,7 @@ namespace Systems.Car.Test_Arcade
 
             if (forwardSpeed < _assistForwardSpeedMps)
             {
-                var t = 1f - Mathf.Exp(-_params.ArcadeAssistLerpSpeed * deltaTime);
+                var t = 1f - Mathf.Exp(-_carParameters.MovementParameters.ArcadeAssistLerpSpeed * deltaTime);
                 var targetForward = Mathf.Lerp(forwardSpeed, _assistForwardSpeedMps, t);
 
                 var forwardComponent = forward * forwardSpeed;

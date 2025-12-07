@@ -12,7 +12,7 @@ namespace Systems.Car.Test_Arcade
     public sealed class GearShiftSystem_A : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarMovementParameters _params;
+        [Inject] private CarParameters _params;
 
         private Filter _cars;
         private Stash<GearComponent> _gearStash;
@@ -60,7 +60,7 @@ namespace Systems.Car.Test_Arcade
             _gearData     = new Dictionary<int, GearData>();
             _forwardGears = new List<int>();
 
-            var preset = _params.SpeedPreset;
+            /*var preset = _params.SpeedPreset;
             if (preset == null || preset.CarSpeedSettings == null)
                 return;
 
@@ -75,7 +75,7 @@ namespace Systems.Car.Test_Arcade
                     _reverseGear = gearInt;
                 else
                     _neutralGear = gearInt;
-            }
+            }*/
 
             if (_forwardGears.Count == 0)
             {
@@ -93,7 +93,7 @@ namespace Systems.Car.Test_Arcade
             if (_gearData != null && _gearData.TryGetValue(gear, out var data))
                 return data.SpeedLimitKmh;
 
-            return _params.MaxCarSpeed; // запасной вариант
+            return _params.MovementParameters.MaxCarSpeed; // запасной вариант
         }
 
         /// <summary>

@@ -10,7 +10,7 @@ namespace Systems.Car
     public class GearShiftSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarMovementParameters _carMovementParameters;
+        [Inject] private CarParameters _carParameters;
 
         private Filter _filter;
         private Stash<EngineRpmComponent> _engineRpmStash;
@@ -46,7 +46,7 @@ namespace Systems.Car
             _kmhAtRedline.Clear();
             _maxForwardGear = 1;
 
-            foreach (var s in _carMovementParameters.SpeedPreset.CarSpeedSettings)
+            /*foreach (var s in _carMovementParameters.SpeedPreset.CarSpeedSettings)
             {
                 var gear = (int)s.EGear;
                 var limit = Mathf.Max(0f, s.SpeedLimit);
@@ -54,13 +54,13 @@ namespace Systems.Car
 
                 if (gear >= 1 && gear > _maxForwardGear)
                     _maxForwardGear = gear;
-            }
+            }*/
         }
 
         public void OnUpdate(float dt)
         {
-            var redline = _carMovementParameters.MaxRpm;
-            var idle = _carMovementParameters.IdleRpm;
+            var redline = _carParameters.MovementParameters.MaxRpm;
+            var idle = _carParameters.MovementParameters.IdleRpm;
 
             foreach (var ent in _filter)
             {

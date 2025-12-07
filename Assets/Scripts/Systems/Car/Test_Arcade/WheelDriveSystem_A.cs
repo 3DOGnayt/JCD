@@ -11,7 +11,7 @@ namespace Systems.Car.Test_Arcade
     {
         [Inject] public World World { get; set; }
         [Inject] private IInputService _inputService;
-        [Inject] private CarMovementParameters _carMovementParameters;
+        [Inject] private CarParameters _carParameters;
 
         private Filter _cars;
         private Stash<WheelInfoComponent> _wheelInfoStash;
@@ -57,20 +57,20 @@ namespace Systems.Car.Test_Arcade
                 else if (input > 0f)
                 {
                     // вперёд
-                    maxTorque = _carMovementParameters.EngineForwardTorque;
+                    maxTorque = _carParameters.MovementParameters.EngineForwardTorque;
                     driveInput = input; // [-1..1] — см. замечание к InputService ниже
                 }
                 else
                 {
                     // назад
-                    maxTorque = _carMovementParameters.EngineBackTorque;
+                    maxTorque = _carParameters.MovementParameters.EngineBackTorque;
                     driveInput = input; // отрицательный
                 }
 
                 _inputService.ApplyVerticalMove(maxTorque, driveInput, wheelInfoComp.WheelInfo);
 
                 // ---------- 2. Ручник: тормоз только на задние (не рулевые) колёса ----------
-                var hbTorque = handbrake ? _carMovementParameters.HandbrakeTorque : 0f;
+                var hbTorque = handbrake ? _carParameters.MovementParameters.HandbrakeTorque : 0f;
 
                 foreach (var info in wheelInfoComp.WheelInfo)
                 {

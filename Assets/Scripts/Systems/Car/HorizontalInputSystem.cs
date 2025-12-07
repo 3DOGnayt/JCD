@@ -12,7 +12,7 @@ namespace Systems.Car
     {
         [Inject] public World World { get; set;}
         [Inject] private SignalBus _signalBus;
-        [Inject] private CarMovementParameters _carMovementParameters;
+        [Inject] private CarParameters _carParameters;
         
         private IInputService _inputService;
         
@@ -50,12 +50,12 @@ namespace Systems.Car
             _steeringAngleStash = World.GetStash<SteeringAngleComponent>();
             _speedMaxStash = World.GetStash<SpeedMaxComponent>();
 
-            _speedMultiplierMax = _carMovementParameters.SpeedMultiplierMax;
-            _speedMultiplierMin = _carMovementParameters.SpeedMultiplierMin;
-            _carMassStandard = _carMovementParameters.CarMass;
+            _speedMultiplierMax = _carParameters.MovementParameters.SpeedMultiplierMax;
+            _speedMultiplierMin = _carParameters.MovementParameters.SpeedMultiplierMin;
+            _carMassStandard = _carParameters.MovementParameters.CarMassStandard;
             
-            _steeringSpeedMultiplierMax = _carMovementParameters.SteeringSpeedMultiplierMax;
-            _steeringSpeedMultiplierMin = _carMovementParameters.SteeringSpeedMultiplierMin;
+            _steeringSpeedMultiplierMax = _carParameters.MovementParameters.SteeringSpeedMultiplierMax;
+            _steeringSpeedMultiplierMin = _carParameters.MovementParameters.SteeringSpeedMultiplierMin;
         }
 
         public void OnUpdate(float deltaTime)

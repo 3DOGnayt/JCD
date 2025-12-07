@@ -12,7 +12,7 @@ namespace Systems.Car.Test_Arcade
     public sealed class RPMSystem_A : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarMovementParameters _params;
+        [Inject] private CarParameters _params;
 
         private Filter _cars;
         private Stash<EngineRpmComponent> _rpmStash;
@@ -47,7 +47,7 @@ namespace Systems.Car.Test_Arcade
         {
             _rates = new Dictionary<int, GearRates>();
 
-            var preset = _params.SpeedPreset;
+            /*var preset = _params.SpeedPreset;
             if (preset == null || preset.CarSpeedSettings == null)
                 return;
 
@@ -60,7 +60,7 @@ namespace Systems.Car.Test_Arcade
                     DecNoGas = s.SpeedDecelerationNoGas,
                     DecBrake = s.SpeedDecelerationBrake
                 };
-            }
+            }*/
 
             // Фоллбэки
             if (!_rates.ContainsKey((int)EGear.Neutral) && _rates.ContainsKey((int)EGear.FirstGear))
@@ -79,13 +79,18 @@ namespace Systems.Car.Test_Arcade
             if (_rates != null && _rates.TryGetValue((int)EGear.FirstGear, out var first))
                 return first;
 
-            return new GearRates { Grow = _params.AccelerationRate, DecNoGas = _params.DecelerationRate, DecBrake = _params.DecelerationRate * 1.2f };
+            return new GearRates
+            {
+                Grow = _params.MovementParameters.AccelerationRate, 
+                DecNoGas = _params.MovementParameters.DecelerationRate,
+                DecBrake = _params.MovementParameters.DecelerationRate * 1.2f
+            };
         }
 
         public void OnUpdate(float deltaTime)
         {
-            var idle = _params.IdleRpm;
-            var max  = _params.MaxRpm;
+            var idle = _params.MovementParameters.IdleRpm;
+            var max  = _params.MovementParameters.MaxRpm;
 
             foreach (var car in _cars)
             {

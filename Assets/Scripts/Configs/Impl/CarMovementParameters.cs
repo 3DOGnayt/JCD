@@ -1,15 +1,16 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Configs.Impl
 {
-    [CreateAssetMenu(menuName = "Car/CarMovementParameters", fileName = "CarMovementParameters")]
+    [CreateAssetMenu(menuName = "Car/" + nameof(CarMovementParameters), fileName = nameof(CarMovementParameters))]
     public class CarMovementParameters : ScriptableObject, ICarMovementParameters
     {
         [Header("HorizontalParameters")]
         [Space]
         [SerializeField] private float _speedMultiplierMax = 1;
         [SerializeField] private float _speedMultiplierMin = 0.3f;
-        [SerializeField] private float _carMassStandart = 1500;
+        [SerializeField] private float _carMassStandard = 1500;
         [SerializeField] private float _steeringSpeedMultiplierMax = 1;
         [SerializeField] private float _steeringSpeedMultiplierMin = 0.1f;
         [Space]
@@ -29,13 +30,11 @@ namespace Configs.Impl
         [SerializeField] private float _idleRpm;
         [SerializeField] private float _rpmToSpeedRatio;
         [Space]
-        [SerializeField] private SpeedsPreset _speedPreset;
-        [Space] 
         [Header("Arcade Assist")] 
         [Space]
         [SerializeField] private bool _useArcadeAssist = true;
-        [SerializeField] private float _arcadeAssistMinSpeedKmh = 40f;
-        [SerializeField] private float _arcadeAssistLerpSpeed = 4f;
+        [SerializeField] private float _arcadeAssistMinSpeedKmh;
+        [SerializeField] private float _arcadeAssistLerpSpeed = 1f;
         public bool UseArcadeAssist => _useArcadeAssist;
         public float ArcadeAssistMinSpeedKmh => _arcadeAssistMinSpeedKmh;
         public float ArcadeAssistLerpSpeed => _arcadeAssistLerpSpeed;
@@ -43,7 +42,7 @@ namespace Configs.Impl
         public float SpeedMultiplierMax => _speedMultiplierMax;
         public float SpeedMultiplierMin => _speedMultiplierMin;
         public float MaxCarSpeed => _maxCarSpeed;
-        public float CarMass => _carMassStandart;
+        public float CarMassStandard => _carMassStandard;
         public float SteeringSpeedMultiplierMax => _steeringSpeedMultiplierMax;
         public float SteeringSpeedMultiplierMin => _steeringSpeedMultiplierMin;
 
@@ -57,9 +56,6 @@ namespace Configs.Impl
         public float MaxRpm => _maxRpm;
         public float IdleRpm => _idleRpm;
         public float RpmToSpeedRatio => _rpmToSpeedRatio;
-
-        public SpeedsPreset SpeedPreset => _speedPreset;
-
         public float NeutralMaxRpm => _neutralMaxRpm;
     }
 }

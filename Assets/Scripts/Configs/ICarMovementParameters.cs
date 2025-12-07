@@ -11,7 +11,7 @@ namespace Configs
         float SpeedMultiplierMax { get; }
         float SpeedMultiplierMin { get; }
         float MaxCarSpeed { get; }
-        float CarMass { get; }
+        float CarMassStandard { get; }
         float SteeringSpeedMultiplierMax { get; }
         float SteeringSpeedMultiplierMin { get; }
 
@@ -25,7 +25,5 @@ namespace Configs
         float MaxRpm { get; }
         float IdleRpm { get; }
         float RpmToSpeedRatio { get; }
-        
-        SpeedsPreset SpeedPreset { get; }
     }
 }

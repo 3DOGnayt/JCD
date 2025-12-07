@@ -91,7 +91,7 @@ namespace Systems.Spawn
 
         private void AddMainCarComponents(Entity entity, ICarView carView)
         {
-            var carParameters = carView.CarPreset.CarParameters;
+            var carParameters = carView.CarPreset.CarMassParameters;
 
             entity.SetComponent(new CarMassComponent { Value = carParameters.Mass });
             entity.SetComponent(new AutomaticCenterOfMassComponent { Value = carParameters.AutomaticCenterOfMass });

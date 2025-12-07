@@ -9,7 +9,7 @@ namespace Systems.Car.Test_Manual
     public class WheelDriveSystem_M : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarMovementParameters _carMovementParameters;
+        [Inject] private CarParameters _carParameters;
         [Inject] private IInputService _inputService;
 
         private Filter _filter;

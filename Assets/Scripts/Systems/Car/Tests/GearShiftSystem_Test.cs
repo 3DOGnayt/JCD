@@ -9,7 +9,7 @@ namespace Systems.Car
     public class GearShiftSystem_Test : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarMovementParameters _carMovementParameters;
+        [Inject] private CarParameters _carParameters;
 
         private Filter _filter;
         private Stash<EngineRpmComponent> _engineRpmStash;
@@ -41,8 +41,8 @@ namespace Systems.Car
 
         public void OnUpdate(float dt)
         {
-            float redline = _carMovementParameters.MaxRpm;
-            float idle    = _carMovementParameters.IdleRpm;
+            float redline = _carParameters.MovementParameters.MaxRpm;
+            float idle    = _carParameters.MovementParameters.IdleRpm;
 
             foreach (var ent in _filter)
             {

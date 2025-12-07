@@ -8,7 +8,7 @@ namespace Systems.Car.Test_Manual
     public sealed class RPMSystem_M : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarMovementParameters _carMovementParameters;
+        [Inject] private CarParameters _carParameters;
 
         private Filter _carFilter;
         private Stash<EngineRpmComponent> _rpmStash;

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Configs.Impl
 {
-    [CreateAssetMenu(menuName = "Car/CarPreset", fileName = "CarPreset")]
+    [CreateAssetMenu(menuName = "Car/" + nameof(CarPreset), fileName = nameof(CarPreset))]
     public class CarPreset : ScriptableObject, ICarPreset
     {
         [SerializeField] private GameObject _car;
@@ -11,7 +11,7 @@ namespace Configs.Impl
         [SerializeField] private CarSetup _carSetup;
         [Header("CAR PARAMETERS")]
         [Space]
-        [SerializeField] private CarParameters _carParameters;
+        [SerializeField] private CarMassParameters carMassParameters;
         [Space]
         [Header("WHEELS")]
         [Space]
@@ -21,7 +21,7 @@ namespace Configs.Impl
 
         public GameObject Car => _car;
         public CarSetup CarSetup => _carSetup;
-        public CarParameters CarParameters => _carParameters;
+        public CarMassParameters CarMassParameters => carMassParameters;
         public WheelParameters FrontWheelParameters => _frontWheelParameters;
         public WheelParameters BackWheelParameters => _backWheelParameters;
     }

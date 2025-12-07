@@ -10,7 +10,7 @@ namespace Systems.Car
     public class WheelDriveSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarMovementParameters _carMovementParameters;
+        [Inject] private CarParameters _carParameters;
 
         private Filter _filter;
         private Stash<WheelInfoComponent> _wheelStash;
@@ -46,18 +46,18 @@ namespace Systems.Car
             // Собираем лимиты из SO
             _kmhAtRedline.Clear();
             _g1Limit = 0f;
-            foreach (var s in _carMovementParameters.SpeedPreset.CarSpeedSettings)
+            /*foreach (var s in _carMovementParameters.SpeedPreset.CarSpeedSettings)
             {
                 int gear = (int)s.EGear;                      // -1..9
                 float lim = Mathf.Max(0f, s.SpeedLimit);   // модуль
                 _kmhAtRedline[gear] = lim;
                 if (gear == 1) _g1Limit = lim;
-            }
+            }*/
         }
 
         public void OnUpdate(float deltaTime)
         {
-            float redline = _carMovementParameters.MaxRpm;
+            float redline = _carParameters.MovementParameters.MaxRpm;
 
             foreach (var ent in _filter)
             {

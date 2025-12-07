@@ -9,26 +9,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dffae1ed90da453e8da47dd8a66b77c5, type: 3}
-  m_Name: CarMovementParameters_N34
+  m_Script: {fileID: 11500000, guid: f4fe4eb4722648b186c05f041ff9b466, type: 3}
+  m_Name: CarMovementParameters_SC39
   m_EditorClassIdentifier: 
   _speedMultiplierMax: 1
   _speedMultiplierMin: 0.3
-  _carMass: 1500
+  _carMassStandart: 1500
   _steeringSpeedMultiplierMax: 1
   _steeringSpeedMultiplierMin: 0.1
   _maxMotorTorque: 5000
   _engineForwardTorque: 2500
-  _engineBackTorque: 5000
-  _handbrakeTorque: 0.1
-  _neutralMaxRpm: 1200
-  _accelerationRate: 2500
-  _decelerationRate: 5000
-  _maxCarSpeed: 200
-  _maxRpm: 8000
-  _idleRpm: 800
-  _rpmToSpeedRatio: 0.02
-  _speedPreset: {fileID: 11400000, guid: 37fa8eed213b1ec479a9cb2bb95cf628, type: 2}
+  _engineBackTorque: 2500
+  _handbrakeTorque: 1
+  _neutralMaxRpm: 0
+  _accelerationRate: 0
+  _decelerationRate: 0
+  _maxCarSpeed: 0
+  _maxRpm: 0
+  _idleRpm: 0
+  _rpmToSpeedRatio: 0
   _useArcadeAssist: 1
   _arcadeAssistMinSpeedKmh: 0
-  _arcadeAssistLerpSpeed: 0.5
+  _arcadeAssistLerpSpeed: 1

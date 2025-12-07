@@ -11,7 +11,7 @@ namespace Systems.Car
     public class WheelDriveSystem_Test : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarMovementParameters _carMovementParameters;
+        [Inject] private CarParameters _carParameters;
         [Inject] private IInputService _inputService;
 
         private Filter _filter;
@@ -47,7 +47,7 @@ namespace Systems.Car
 
         public void OnUpdate(float dt)
         {
-            float redline = _carMovementParameters.MaxRpm; // напр. 8000
+            float redline = _carParameters.MovementParameters.MaxRpm; // напр. 8000
 
             foreach (var ent in _filter)
             {

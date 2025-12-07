@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Data
 {
     [Serializable]
-    public class CarParameters
+    public class CarMassParameters
     {
         public float Mass;
         public bool AutomaticCenterOfMass;
