@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Configs.Impl
 {
@@ -20,6 +19,7 @@ namespace Configs.Impl
         [SerializeField] private float _engineForwardTorque;
         [SerializeField] private float _engineBackTorque;
         [SerializeField] private float _handbrakeTorque;
+        [SerializeField] private float _brakeTorque;
         [Space]
         [SerializeField] private float _neutralMaxRpm;
         [SerializeField] private float _accelerationRate;
@@ -35,6 +35,7 @@ namespace Configs.Impl
         [SerializeField] private bool _useArcadeAssist = true;
         [SerializeField] private float _arcadeAssistMinSpeedKmh;
         [SerializeField] private float _arcadeAssistLerpSpeed = 1f;
+        
         public bool UseArcadeAssist => _useArcadeAssist;
         public float ArcadeAssistMinSpeedKmh => _arcadeAssistMinSpeedKmh;
         public float ArcadeAssistLerpSpeed => _arcadeAssistLerpSpeed;
@@ -49,12 +50,14 @@ namespace Configs.Impl
         public float MaxMotorTorque => _maxMotorTorque;
         public float EngineForwardTorque => _engineForwardTorque;
         public float EngineBackTorque => _engineBackTorque;
+        public float BrakeTorque => _brakeTorque;
         public float HandbrakeTorque => _handbrakeTorque;
 
         public float AccelerationRate => _accelerationRate;
         public float DecelerationRate => _decelerationRate;
         public float MaxRpm => _maxRpm;
         public float IdleRpm => _idleRpm;
+        
         public float RpmToSpeedRatio => _rpmToSpeedRatio;
         public float NeutralMaxRpm => _neutralMaxRpm;
     }

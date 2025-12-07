@@ -14,88 +14,116 @@ namespace Systems.Car.Test_Arcade
         [Inject] private CarParameters _carParameters;
 
         private Filter _cars;
+        private AspectFactory<CarSetupAspect> _carAspectFactory;
         private Stash<WheelInfoComponent> _wheelInfoStash;
         private Stash<VerticalInputComponent> _vertStash;
-        private Stash<HandbrakeInputComponent> _handbrakeStash;
 
         private const float InputDeadZone = 0.05f;
+        private const float StopThresholdKmh = 0.5f;
 
         public void OnAwake()
         {
             _cars = World.Filter
+                .Extend<CarSetupAspect>()
                 .With<WheelInfoComponent>()
                 .With<VerticalInputComponent>()
                 .Build();
 
+            _carAspectFactory = World.GetAspectFactory<CarSetupAspect>();
             _wheelInfoStash = World.GetStash<WheelInfoComponent>();
             _vertStash = World.GetStash<VerticalInputComponent>();
-            _handbrakeStash = World.GetStash<HandbrakeInputComponent>();
         }
 
         public void OnUpdate(float deltaTime)
         {
             foreach (var car in _cars)
             {
+                var aspect = _carAspectFactory.Get(car);
+                ref var speed = ref aspect.Speed.Value;
+                ref var backSpeed = ref aspect.BackSpeed.Value;
+                ref var brakeInput = ref aspect.BrakeInput.Value;
+                ref var handbrake = ref aspect.HandbrakeInput.Value;
+
                 var wheelInfoComp = _wheelInfoStash.Get(car);
-                var vertical = _vertStash.Get(car).Value;
+                var input = Mathf.Clamp(_vertStash.Get(car).Value, -1f, 1f);
+                var scalarKmh = Mathf.Max(speed, Mathf.Abs(backSpeed));
 
-                // если компоненты нет — считаем, что ручник не зажат
-                var handbrake = _handbrakeStash.Has(car) && _handbrakeStash.Get(car).Value;
+                var movingForward = speed >= backSpeed;
+                var almostStopped = scalarKmh < StopThresholdKmh;
 
-                var input = Mathf.Clamp(vertical, -1f, 1f);
+                var maxTorque = 0f;
+                var driveInput = 0f;
+                var brakeForce = 0f;
 
-                // ---------- 1. Моторная тяга ----------
-                float maxTorque;
-                float driveInput;
-
-                if (Mathf.Abs(input) < InputDeadZone || handbrake)
+                if (Mathf.Abs(input) < InputDeadZone)
                 {
-                    // нет газа или ручник зажат → тяги нет
                     maxTorque = 0f;
                     driveInput = 0f;
+                    brakeForce = 0f;
+                    brakeInput = false;
                 }
                 else if (input > 0f)
                 {
-                    // вперёд
-                    maxTorque = _carParameters.MovementParameters.EngineForwardTorque;
-                    driveInput = input; // [-1..1] — см. замечание к InputService ниже
+                    if (!movingForward && !almostStopped)
+                    {
+                        maxTorque = 0f;
+                        driveInput = 0f;
+                        brakeForce = input;
+                        brakeInput = true;
+                    }
+                    else
+                    {
+                        maxTorque = _carParameters.MovementParameters.EngineForwardTorque;
+                        driveInput = input;
+                        brakeForce = 0f;
+                        brakeInput = false;
+                    }
                 }
                 else
                 {
-                    // назад
-                    maxTorque = _carParameters.MovementParameters.EngineBackTorque;
-                    driveInput = input; // отрицательный
+                    if (movingForward && !almostStopped)
+                    {
+                        maxTorque = 0f;
+                        driveInput = 0f;
+                        brakeForce = -input;
+                        brakeInput = true;
+                    }
+                    else
+                    {
+                        maxTorque = _carParameters.MovementParameters.EngineBackTorque;
+                        driveInput = input;
+                        brakeForce = 0f;
+                        brakeInput = false;
+                    }
+                }
+
+                if (handbrake)
+                {
+                    maxTorque = 0f;
+                    driveInput = 0f;
                 }
 
                 _inputService.ApplyVerticalMove(maxTorque, driveInput, wheelInfoComp.WheelInfo);
 
-                // ---------- 2. Ручник: тормоз только на задние (не рулевые) колёса ----------
+                var pedalBrakeTorque = _carParameters.MovementParameters.BrakeTorque * brakeForce;
                 var hbTorque = handbrake ? _carParameters.MovementParameters.HandbrakeTorque : 0f;
 
                 foreach (var info in wheelInfoComp.WheelInfo)
                 {
-                    // считаем, что задняя ось — это те, у кого Steering == false
+                    var totalBrake = pedalBrakeTorque;
+
+                    if (handbrake && info.Motor)
+                        totalBrake += hbTorque;
+
                     if (info.LeftWheel != null)
-                    {
-                        if (handbrake && info.Motor)
-                            info.LeftWheel.brakeTorque = hbTorque;
-                        else
-                            info.LeftWheel.brakeTorque = 0f;
-                    }
+                        info.LeftWheel.brakeTorque = totalBrake;
 
                     if (info.RightWheel != null)
-                    {
-                        if (handbrake && info.Motor)
-                            info.RightWheel.brakeTorque = hbTorque;
-                        else
-                            info.RightWheel.brakeTorque = 0f;
-                    }
+                        info.RightWheel.brakeTorque = totalBrake;
                 }
             }
         }
-
-        public void Dispose()
-        {
-        }
+        
+        public void Dispose() { }
     }
 }

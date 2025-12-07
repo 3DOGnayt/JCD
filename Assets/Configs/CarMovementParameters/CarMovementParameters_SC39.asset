@@ -14,13 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speedMultiplierMax: 1
   _speedMultiplierMin: 0.3
-  _carMassStandart: 1500
+  _carMassStandard: 1500
   _steeringSpeedMultiplierMax: 1
   _steeringSpeedMultiplierMin: 0.1
   _maxMotorTorque: 5000
   _engineForwardTorque: 2500
-  _engineBackTorque: 2500
-  _handbrakeTorque: 1
+  _engineBackTorque: 5000
+  _handbrakeTorque: 800
+  _brakeTorque: 500
   _neutralMaxRpm: 0
   _accelerationRate: 0
   _decelerationRate: 0
@@ -30,4 +31,4 @@ MonoBehaviour:
   _rpmToSpeedRatio: 0
   _useArcadeAssist: 1
   _arcadeAssistMinSpeedKmh: 0
-  _arcadeAssistLerpSpeed: 1
+  _arcadeAssistLerpSpeed: 0.1

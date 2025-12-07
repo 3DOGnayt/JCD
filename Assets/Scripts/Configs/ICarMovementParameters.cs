@@ -1,5 +1,3 @@
-using Configs.Impl;
-
 namespace Configs
 {
     public interface ICarMovementParameters
