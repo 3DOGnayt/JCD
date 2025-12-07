@@ -15,3 +15,4 @@ MonoBehaviour:
   _carMovementParameters: {fileID: 11400000, guid: 21b95580c0b231948b12651de117f213,
     type: 2}
   _speedsPreset: {fileID: 11400000, guid: 37fa8eed213b1ec479a9cb2bb95cf628, type: 2}
+  _carSlipParameters: {fileID: 11400000, guid: ec6a75aa69dd0d64287a94d442a0a255, type: 2}

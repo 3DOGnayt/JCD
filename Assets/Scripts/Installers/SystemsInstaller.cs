@@ -47,6 +47,7 @@ namespace Installers
             //Container.Bind<IFixedSystem>().To<GearShiftSystem_A>().AsSingle();
             Container.Bind<IFixedSystem>().To<WheelDriveSystem_A>().AsSingle();
             Container.Bind<IFixedSystem>().To<PhysicsSpeedSystem_A>().AsSingle();
+            Container.Bind<IFixedSystem>().To<SlipSystem_A>().AsSingle();
         }
     }
 }

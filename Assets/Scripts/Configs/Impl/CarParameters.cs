@@ -7,8 +7,10 @@ namespace Configs.Impl
     {
         [SerializeField] private CarMovementParameters _carMovementParameters;
         [SerializeField] private SpeedsPreset _speedsPreset;
+        [SerializeField] private CarSlipParameters _carSlipParameters;
 
         public CarMovementParameters MovementParameters => _carMovementParameters;
         public SpeedsPreset SpeedsPreset => _speedsPreset;
+        public CarSlipParameters SlipParameters => _carSlipParameters;
     }
 }
