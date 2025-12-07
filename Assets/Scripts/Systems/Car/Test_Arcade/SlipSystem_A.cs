@@ -20,71 +20,93 @@ namespace Systems.Car.Test_Arcade
         public void OnAwake()
         {
             _cars = World.Filter
-                .Extend<CarSetupAspect>() // DriftMultiplier + HandbrakeInput
+                .Extend<CarSetupAspect>()
                 .With<WheelInfoComponent>()
                 .With<BackStiffnessSidewaysComponent>()
                 .Build();
 
-            _carAspectFactory          = World.GetAspectFactory<CarSetupAspect>();
-            _wheelInfoStash            = World.GetStash<WheelInfoComponent>();
+            _carAspectFactory = World.GetAspectFactory<CarSetupAspect>();
+            _wheelInfoStash = World.GetStash<WheelInfoComponent>();
             _backSidewaysStiffnessStash = World.GetStash<BackStiffnessSidewaysComponent>();
         }
 
         public void OnUpdate(float deltaTime)
         {
-            var slipParams = _carParameters.SlipParameters;
-            if (slipParams == null)
+            // TODO: вынести в поля и инициализировать в авэйке после настройки
+            // -
+            var slipParameters = _carParameters.SlipParameters;
+            if (slipParameters == null)
                 return;
 
-            float targetMultHandbrake = slipParams.HandbrakeSidewaysMultiplier;
-            float lerpSpeed           = slipParams.StiffnessLerpSpeed;
+            var targetHandbrakeMultiplier = slipParameters.HandbrakeSidewaysMultiplier;
+            var stiffnessEnterSpeed = slipParameters.StiffnessEnterSpeed;
+            var stiffnessReturnSpeed = slipParameters.StiffnessReturnSpeed;
+            // -
 
             foreach (var car in _cars)
             {
                 var aspect = _carAspectFactory.Get(car);
-                ref var driftMult    = ref aspect.DriftMultiplier;
-                ref var handbrakeInp = ref aspect.HandbrakeInput;
+                ref var driftValue = ref aspect.DriftMultiplier.Value;
+                ref var handbrakePressed = ref aspect.HandbrakeInput.Value;
 
-                var wheelInfoComp = _wheelInfoStash.Get(car);
-                var backBaseStiff  = _backSidewaysStiffnessStash.Get(car).Value;
+                var wheelInfoComponent = _wheelInfoStash.Get(car);
+                var backBaseSidewaysStiffness = _backSidewaysStiffnessStash.Get(car).Value;
 
-                bool handbrake = handbrakeInp.Value;
+                if (driftValue < 0f) driftValue = 0f;
+                if (driftValue > 1f) driftValue = 1f;
 
-                // 1) считаем целевой множитель стиффнеса
-                float target = handbrake ? targetMultHandbrake : 1f;
-
-                // 2) плавно двигаемся к нему
-                driftMult.Value = Mathf.MoveTowards(
-                    driftMult.Value,
-                    target,
-                    lerpSpeed * deltaTime);
-
-                float currentMult = driftMult.Value;
-
-                // 3) применяем к задним колёсам (не рулевым)
-                foreach (var info in wheelInfoComp.WheelInfo)
+                if (handbrakePressed)
                 {
-                    if (info == null)
-                        continue;
+                    driftValue = Mathf.MoveTowards(
+                        driftValue,
+                        1f,
+                        stiffnessEnterSpeed * deltaTime);
+                }
+                else
+                {
+                    driftValue = Mathf.MoveTowards(
+                        driftValue,
+                        0f,
+                        stiffnessReturnSpeed * deltaTime);
+                }
+                
+                var stiffnessMultiplier = Mathf.Lerp(
+                    1f,
+                    targetHandbrakeMultiplier,
+                    driftValue);
 
-                    bool isRear = !info.Steering;
+                ApplyBackWheelsSlip(
+                    wheelInfoComponent,
+                    backBaseSidewaysStiffness,
+                    stiffnessMultiplier);
+            }
+        }
 
-                    if (!isRear)
-                        continue;
+        private void ApplyBackWheelsSlip(
+            WheelInfoComponent wheelInfoComponent,
+            float backBaseSidewaysStiffness,
+            float stiffnessMultiplier)
+        {
+            foreach (var info in wheelInfoComponent.WheelInfo)
+            {
+                if (info == null)
+                    continue;
 
-                    if (info.LeftWheel != null)
-                    {
-                        var sf = info.LeftWheel.sidewaysFriction;
-                        sf.stiffness = backBaseStiff * currentMult;
-                        info.LeftWheel.sidewaysFriction = sf;
-                    }
+                if (info.Steering)
+                    continue;
 
-                    if (info.RightWheel != null)
-                    {
-                        var sf = info.RightWheel.sidewaysFriction;
-                        sf.stiffness = backBaseStiff * currentMult;
-                        info.RightWheel.sidewaysFriction = sf;
-                    }
+                if (info.LeftWheel != null)
+                {
+                    var sidewaysFriction = info.LeftWheel.sidewaysFriction;
+                    sidewaysFriction.stiffness = backBaseSidewaysStiffness * stiffnessMultiplier;
+                    info.LeftWheel.sidewaysFriction = sidewaysFriction;
+                }
+
+                if (info.RightWheel != null)
+                {
+                    var sidewaysFriction = info.RightWheel.sidewaysFriction;
+                    sidewaysFriction.stiffness = backBaseSidewaysStiffness * stiffnessMultiplier;
+                    info.RightWheel.sidewaysFriction = sidewaysFriction;
                 }
             }
         }

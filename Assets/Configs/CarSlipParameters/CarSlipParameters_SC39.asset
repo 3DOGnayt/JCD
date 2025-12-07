@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: CarSlipParameters_SC39
   m_EditorClassIdentifier: 
   _handbrakeSidewaysMultiplier: 0.4
-  _stiffnessLerpSpeed: 2
+  _stiffnessEnterSpeed: 5
+  _stiffnessReturnSpeed: 2

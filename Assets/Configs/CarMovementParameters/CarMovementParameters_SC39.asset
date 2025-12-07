@@ -31,4 +31,4 @@ MonoBehaviour:
   _rpmToSpeedRatio: 0
   _useArcadeAssist: 1
   _arcadeAssistMinSpeedKmh: 0
-  _arcadeAssistLerpSpeed: 0.1
+  _arcadeAssistLerpSpeed: 1
