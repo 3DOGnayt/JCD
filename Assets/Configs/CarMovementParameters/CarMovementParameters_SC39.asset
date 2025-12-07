@@ -18,7 +18,7 @@ MonoBehaviour:
   _steeringSpeedMultiplierMax: 1
   _steeringSpeedMultiplierMin: 0.1
   _maxMotorTorque: 5000
-  _engineForwardTorque: 2500
+  _engineForwardTorque: 3000
   _engineBackTorque: 5000
   _handbrakeTorque: 800
   _brakeTorque: 500
