@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _car: {fileID: 9039642172116725141, guid: b7c0b1388cca16d489435512d00fe83c, type: 3}
   _carSetup:
-    SpeedMax: 250
+    SpeedMax: 220
     BackSpeedMax: 80
     GearCount: 6
     EngineRpmMax: 9000

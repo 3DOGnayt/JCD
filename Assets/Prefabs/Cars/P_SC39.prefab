@@ -1291,7 +1291,7 @@ MonoBehaviour:
   _carPreset: {fileID: 11400000, guid: 314cb5b109249c24f9b0ab884476da62, type: 2}
   _carRigidbody: {fileID: 3165186140599483120}
   _carSetup:
-    SpeedMax: 250
+    SpeedMax: 220
     BackSpeedMax: 80
     GearCount: 6
     EngineRpmMax: 9000

@@ -9,9 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95aa6b2ad9cd4031b58c6e454a134124, type: 3}
-  m_Name: CarSlipParameters_SC39
+  m_Script: {fileID: 11500000, guid: 660fa950dcf9484b8cd0cf46fdbd39e5, type: 3}
+  m_Name: CarUISmoothing
   m_EditorClassIdentifier: 
-  _handbrakeSidewaysMultiplier: 0.6
-  _stiffnessEnterSpeed: 5
-  _stiffnessReturnSpeed: 2
+  _carSmoothingSettings:
+    SpeedSmoothing: 10
+    RpmSmoothing: 10
+    DriftSmoothing: 10
+    MaxSmoothing: 0.001

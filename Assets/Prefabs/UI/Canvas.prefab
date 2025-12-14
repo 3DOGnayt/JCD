@@ -364,6 +364,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parametersText: {fileID: 8902869672885274532}
   _parametersValue: {fileID: 7891278058083135078}
+  _speedSmoothing: 10
+  _rpmSmoothing: 10
+  _driftSmoothing: 10
+  _maxM: 0.01
 --- !u!1 &6878348546566864549
 GameObject:
   m_ObjectHideFlags: 0

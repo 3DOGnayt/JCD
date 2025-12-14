@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Components;
 using Configs.Helpers;
 using Configs.Impl;
-using Data;
 using Scellecs.Morpeh;
 using UnityEngine;
 using Zenject;
@@ -47,22 +46,6 @@ namespace Systems.Car.Test_Arcade
         {
             _rates = new Dictionary<int, GearRates>();
 
-            /*var preset = _params.SpeedPreset;
-            if (preset == null || preset.CarSpeedSettings == null)
-                return;
-
-            foreach (var s in preset.CarSpeedSettings)
-            {
-                var gearInt = (int)s.EGear;
-                _rates[gearInt] = new GearRates
-                {
-                    Grow     = s.SpeedAcceleration,
-                    DecNoGas = s.SpeedDecelerationNoGas,
-                    DecBrake = s.SpeedDecelerationBrake
-                };
-            }*/
-
-            // Фоллбэки
             if (!_rates.ContainsKey((int)EGear.Neutral) && _rates.ContainsKey((int)EGear.FirstGear))
                 _rates[(int)EGear.Neutral] = _rates[(int)EGear.FirstGear];
 
@@ -106,28 +89,15 @@ namespace Systems.Car.Test_Arcade
                 var hasInput = absInput > 0.01f;
 
                 // Тормоз (жмём назад, когда едем вперёд, или наоборот)
-                var isBrakeCommand = gear != 0 &&
-                                     ((gear > 0 && input < -0.01f) ||
-                                      (gear < 0 && input > 0.01f));
-
-                
-                
+                var isBrakeCommand = gear != 0 && ((gear > 0 && input < -0.01f) || (gear < 0 && input > 0.01f));
                 float delta;
 
                 if (isBrakeCommand)
-                {
                     delta = -rates.DecBrake * deltaTime;
-                }
                 else if (hasInput)
-                {
-                    // рост пропорционален силе нажатия
                     delta = rates.Grow * absInput * deltaTime;
-                }
                 else
-                {
                     delta = -rates.DecNoGas * deltaTime;
-                }
-
 
                 rpm.Value += delta;
                 rpm.Value = Mathf.Clamp(rpm.Value, idle, max);
