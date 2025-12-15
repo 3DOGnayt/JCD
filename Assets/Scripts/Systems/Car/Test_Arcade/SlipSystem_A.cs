@@ -17,6 +17,8 @@ namespace Systems.Car.Test_Arcade
         private Stash<WheelInfoComponent> _wheelInfoStash;
         private Stash<BackStiffnessSidewaysComponent> _backSidewaysStiffnessStash;
 
+        private const float MinDriftSpeedKmh = 20f;
+
         public void OnAwake()
         {
             _cars = World.Filter
@@ -32,8 +34,6 @@ namespace Systems.Car.Test_Arcade
 
         public void OnUpdate(float deltaTime)
         {
-            // TODO: вынести в поля и инициализировать в авэйке после настройки
-            // -
             var slipParameters = _carParameters.SlipParameters;
             if (slipParameters == null)
                 return;
@@ -41,44 +41,52 @@ namespace Systems.Car.Test_Arcade
             var targetHandbrakeMultiplier = slipParameters.HandbrakeSidewaysMultiplier;
             var stiffnessEnterSpeed = slipParameters.StiffnessEnterSpeed;
             var stiffnessReturnSpeed = slipParameters.StiffnessReturnSpeed;
-            // -
 
             foreach (var car in _cars)
             {
                 var aspect = _carAspectFactory.Get(car);
                 ref var driftValue = ref aspect.DriftMultiplier.Value;
                 ref var handbrakePressed = ref aspect.HandbrakeInput.Value;
+                ref var speedValue = ref aspect.Speed.Value;
+                ref var backSpeedValue = ref aspect.BackSpeed.Value;
 
                 var wheelInfoComponent = _wheelInfoStash.Get(car);
                 var backBaseSidewaysStiffness = _backSidewaysStiffnessStash.Get(car).Value;
 
-                if (driftValue < 0f) driftValue = 0f;
-                if (driftValue > 1f) driftValue = 1f;
+                var forwardSpeedKmh = Mathf.Max(0f, speedValue);
+                var backwardSpeedKmh = Mathf.Max(0f, Mathf.Abs(backSpeedValue));
+                var scalarSpeedKmh = Mathf.Max(forwardSpeedKmh, backwardSpeedKmh);
 
-                if (handbrakePressed)
+                if (driftValue < 0f)
+                    driftValue = 0f;
+                
+                if (driftValue > 1f)
+                    driftValue = 1f;
+
+                var canDriftNow = handbrakePressed && scalarSpeedKmh > MinDriftSpeedKmh;
+
+                if (canDriftNow)
                 {
-                    driftValue = Mathf.MoveTowards(
-                        driftValue,
-                        1f,
-                        stiffnessEnterSpeed * deltaTime);
+                    driftValue = Mathf.MoveTowards(driftValue, 1f, stiffnessEnterSpeed * deltaTime);
+
+                    var stiffnessMultiplier = Mathf.Lerp(1f, targetHandbrakeMultiplier, driftValue);
+
+                    ApplyBackWheelsSlip(wheelInfoComponent, backBaseSidewaysStiffness, stiffnessMultiplier);
                 }
                 else
                 {
-                    driftValue = Mathf.MoveTowards(
-                        driftValue,
-                        0f,
-                        stiffnessReturnSpeed * deltaTime);
-                }
-                
-                var stiffnessMultiplier = Mathf.Lerp(
-                    1f,
-                    targetHandbrakeMultiplier,
-                    driftValue);
+                    if (!handbrakePressed && driftValue > 0f)
+                    {
+                        driftValue = Mathf.MoveTowards(driftValue, 0f, stiffnessReturnSpeed * deltaTime);
 
-                ApplyBackWheelsSlip(
-                    wheelInfoComponent,
-                    backBaseSidewaysStiffness,
-                    stiffnessMultiplier);
+                        var stiffnessMultiplier = Mathf.Lerp(1f, targetHandbrakeMultiplier, driftValue);
+
+                        ApplyBackWheelsSlip(wheelInfoComponent, backBaseSidewaysStiffness, stiffnessMultiplier);
+
+                        if (driftValue <= 0f)
+                            driftValue = 0f;
+                    }
+                }
             }
         }
 
