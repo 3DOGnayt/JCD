@@ -15,20 +15,14 @@ namespace Configs.Impl
         [Space]
         [Header("VerticalParameters")]
         [Space]
-        [SerializeField] private float _maxMotorTorque;
-        [SerializeField] private float _engineForwardTorque;
-        [SerializeField] private float _engineBackTorque;
         [SerializeField] private float _handbrakeTorque;
         [SerializeField] private float _brakeTorque;
         [Space]
-        [SerializeField] private float _neutralMaxRpm;
         [SerializeField] private float _accelerationRate;
         [SerializeField] private float _decelerationRate;
         [Space]
-        [SerializeField] private float _maxCarSpeed;
         [SerializeField] private float _maxRpm;
         [SerializeField] private float _idleRpm;
-        [SerializeField] private float _rpmToSpeedRatio;
         [Space]
         [Header("Arcade Assist")] 
         [Space]
@@ -42,14 +36,10 @@ namespace Configs.Impl
 
         public float SpeedMultiplierMax => _speedMultiplierMax;
         public float SpeedMultiplierMin => _speedMultiplierMin;
-        public float MaxCarSpeed => _maxCarSpeed;
         public float CarMassStandard => _carMassStandard;
         public float SteeringSpeedMultiplierMax => _steeringSpeedMultiplierMax;
         public float SteeringSpeedMultiplierMin => _steeringSpeedMultiplierMin;
 
-        public float MaxMotorTorque => _maxMotorTorque;
-        public float EngineForwardTorque => _engineForwardTorque;
-        public float EngineBackTorque => _engineBackTorque;
         public float BrakeTorque => _brakeTorque;
         public float HandbrakeTorque => _handbrakeTorque;
 
@@ -57,8 +47,5 @@ namespace Configs.Impl
         public float DecelerationRate => _decelerationRate;
         public float MaxRpm => _maxRpm;
         public float IdleRpm => _idleRpm;
-        
-        public float RpmToSpeedRatio => _rpmToSpeedRatio;
-        public float NeutralMaxRpm => _neutralMaxRpm;
     }
 }
