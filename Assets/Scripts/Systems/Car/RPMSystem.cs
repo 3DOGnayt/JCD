@@ -10,12 +10,12 @@ namespace Systems.Car
     public sealed class RPMSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarMovementParameters _carMovementParameters;
+        [Inject] private CarParameters _carParameters;
 
         private Filter _filter;
         private Stash<EngineRpmComponent> _rpmStash;
         private Stash<VerticalInputComponent> _vertStash;
-        private Stash<GearboxComponent> _gearStash;
+        private Stash<GearComponent> _gearStash;
 
         struct Rates
         {
@@ -31,12 +31,12 @@ namespace Systems.Car
             _filter = World.Filter
                 .With<EngineRpmComponent>()
                 .With<VerticalInputComponent>()
-                .With<GearboxComponent>()
+                .With<GearComponent>()
                 .Build();
 
             _rpmStash = World.GetStash<EngineRpmComponent>();
             _vertStash = World.GetStash<VerticalInputComponent>();
-            _gearStash = World.GetStash<GearboxComponent>();
+            _gearStash = World.GetStash<GearComponent>();
 
             BuildRatesFromPreset();
         }
@@ -45,7 +45,7 @@ namespace Systems.Car
         {
             _rates.Clear();
 
-            foreach (var s in _carMovementParameters.SpeedPreset.CarSpeedSettings)
+            /*foreach (var s in _carMovementParameters.SpeedPreset.CarSpeedSettings)
             {
                 var gear = (int)s.EGear;
                 _rates[gear] = new Rates
@@ -55,6 +55,7 @@ namespace Systems.Car
                     DecBrake = s.SpeedDecelerationBrake
                 };
             }
+            */
 
             var g1 = _rates.TryGetValue(1, out var tmp1)
                 ? tmp1
@@ -87,8 +88,8 @@ namespace Systems.Car
 
         public void OnUpdate(float dt)
         {
-            var idle = _carMovementParameters.IdleRpm;
-            var redline = _carMovementParameters.MaxRpm;
+            var idle = _carParameters.MovementParameters.IdleRpm;
+            var redline = _carParameters.MovementParameters.MaxRpm;
 
             foreach (var ent in _filter)
             {

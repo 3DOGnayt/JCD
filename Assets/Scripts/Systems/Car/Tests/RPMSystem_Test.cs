@@ -9,12 +9,12 @@ namespace Systems.Car
     public sealed class RPMSystem_Test : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarMovementParameters _carMovementParameters;
+        [Inject] private CarParameters _carParameters;
 
         private Filter _filter;
         private Stash<EngineRpmComponent> _rpmStash;
         private Stash<VerticalInputComponent> _vertStash;
-        private Stash<GearboxComponent> _gearStash;
+        private Stash<GearComponent> _gearStash;
 
         // Временные константы из 1-й передачи
         private const float GrowGas = 2400f;     // об/с (газ)
@@ -26,18 +26,18 @@ namespace Systems.Car
             _filter = World.Filter
                 .With<EngineRpmComponent>()
                 .With<VerticalInputComponent>()
-                .With<GearboxComponent>()
+                .With<GearComponent>()
                 .Build();
 
             _rpmStash  = World.GetStash<EngineRpmComponent>();
             _vertStash = World.GetStash<VerticalInputComponent>();
-            _gearStash = World.GetStash<GearboxComponent>();
+            _gearStash = World.GetStash<GearComponent>();
         }
 
         public void OnUpdate(float dt)
         {
-            float idle    = _carMovementParameters.IdleRpm;
-            float redline = _carMovementParameters.MaxRpm;
+            float idle    = _carParameters.MovementParameters.IdleRpm;
+            float redline = _carParameters.MovementParameters.MaxRpm;
 
             foreach (var ent in _filter)
             {

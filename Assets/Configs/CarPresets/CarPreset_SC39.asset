@@ -10,48 +10,58 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1de9c742da1f41ee921f71ecb7e10122, type: 3}
-  m_Name: TestCar_CarPreset
+  m_Name: CarPreset_SC39
   m_EditorClassIdentifier: 
-  _car: {fileID: 218439364246442853, guid: 675f296c2d9409c4db2c433c2c10ae2a, type: 3}
-  _carParameters:
-    Mass: 900
-    AutomaticCenterOfMass: 1
+  _car: {fileID: 9039642172116725141, guid: b7c0b1388cca16d489435512d00fe83c, type: 3}
+  _carSetup:
+    SpeedMax: 220
+    BackSpeedMax: 80
+    GearCount: 6
+    EngineRpmMax: 9000
+    SteeringAngleMax: 35
+    SteeringSpeed: 100
+    BrakeInput: 0
+    HandbrakeInput: 0
+    DriftMultiplier: 0
+  carMassParameters:
+    Mass: 1500
+    AutomaticCenterOfMass: 0
     CenterOfMass: {x: 0, y: 0, z: 0}
   _frontWheelParameters:
     MainWheelParameters:
       Mass: 20
-      Radius: 0.5
-      DampingRate: 0.25
+      Radius: 0.38
+      DampingRate: 5
       SuspensionDistance: 0.3
-      ForceAppPointDistance: 0.2
+      ForceAppPointDistance: 0.3
       Center: {x: 0, y: 0, z: 0}
     SuspensionSpring:
-      Spring: 35000
-      Damper: 4500
+      Spring: 50000
+      Damper: 9000
       TargetPosition: 0.5
     ForwardFriction:
       ExtremumSlip: 0.4
       ExtremumValue: 1
       AsymptoteSlip: 0.8
       AsymptoteValue: 0.5
-      Stiffness: 5
+      Stiffness: 6
     SidewaysFriction:
       ExtremumSlip: 0.2
       ExtremumValue: 1
       AsymptoteSlip: 0.5
       AsymptoteValue: 0.75
-      Stiffness: 2
+      Stiffness: 4
   _backWheelParameters:
     MainWheelParameters:
       Mass: 20
-      Radius: 0.5
-      DampingRate: 0.25
+      Radius: 0.38
+      DampingRate: 5
       SuspensionDistance: 0.3
-      ForceAppPointDistance: 0.2
+      ForceAppPointDistance: 0.3
       Center: {x: 0, y: 0, z: 0}
     SuspensionSpring:
-      Spring: 35000
-      Damper: 4500
+      Spring: 50000
+      Damper: 9000
       TargetPosition: 0.5
     ForwardFriction:
       ExtremumSlip: 0.4
@@ -64,4 +74,4 @@ MonoBehaviour:
       ExtremumValue: 1
       AsymptoteSlip: 0.5
       AsymptoteValue: 0.75
-      Stiffness: 2
+      Stiffness: 5

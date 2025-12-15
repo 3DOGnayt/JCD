@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Configs.Impl
 {
-    [CreateAssetMenu(menuName = "Car/SpeedsPreset", fileName = "SpeedsPreset")]
+    [CreateAssetMenu(menuName = "Car/" + nameof(SpeedsPreset), fileName = nameof(SpeedsPreset))]
     public class SpeedsPreset : ScriptableObject, ISpeedsPreset
     {
         [SerializeField] private List<CarSpeedSettings> _carSpeedSettings;

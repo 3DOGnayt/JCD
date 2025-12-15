@@ -9,11 +9,11 @@ namespace Systems.Car
     public class GearShiftSystem_Test : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarMovementParameters _carMovementParameters;
+        [Inject] private CarParameters _carParameters;
 
         private Filter _filter;
         private Stash<EngineRpmComponent> _engineRpmStash;
-        private Stash<GearboxComponent> _gearStash;
+        private Stash<GearComponent> _gearStash;
         private Stash<SpeedComponent> _speedStash;
         private Stash<VerticalInputComponent> _verticalStash;
 
@@ -28,21 +28,21 @@ namespace Systems.Car
         {
             _filter = World.Filter
                 .With<EngineRpmComponent>()
-                .With<GearboxComponent>()
+                .With<GearComponent>()
                 .With<SpeedComponent>()
                 .With<VerticalInputComponent>()
                 .Build();
 
             _engineRpmStash = World.GetStash<EngineRpmComponent>();
-            _gearStash      = World.GetStash<GearboxComponent>();
+            _gearStash      = World.GetStash<GearComponent>();
             _speedStash     = World.GetStash<SpeedComponent>();
             _verticalStash  = World.GetStash<VerticalInputComponent>();
         }
 
         public void OnUpdate(float dt)
         {
-            float redline = _carMovementParameters.MaxRpm;
-            float idle    = _carMovementParameters.IdleRpm;
+            float redline = _carParameters.MovementParameters.MaxRpm;
+            float idle    = _carParameters.MovementParameters.IdleRpm;
 
             foreach (var ent in _filter)
             {

@@ -12,7 +12,7 @@ namespace Systems.Car
     {
         [Inject] public World World { get; set;}
         [Inject] private SignalBus _signalBus;
-        [Inject] private CarMovementParameters _carMovementParameters;
+        [Inject] private CarParameters _carParameters;
         
         private IInputService _inputService;
         
@@ -22,11 +22,13 @@ namespace Systems.Car
         private Stash<WheelInfoComponent> _wheelInfoStash;
         private Stash<HorizontalInputComponent> _horizontalStash;
         private Stash<CarMassComponent> _carMassStash;
+        private Stash<SteeringSpeedComponent> _steeringSpeedStash;
+        private Stash<SteeringAngleComponent> _steeringAngleStash;
+        private Stash<SpeedMaxComponent> _speedMaxStash;
 
         private float _steeringSpeedMultiplierMax;
         private float _steeringSpeedMultiplierMin;
-        private float _maxCarSpeed;
-        private float _carMass; // rename
+        private float _carMassStandard; 
         private float _speedMultiplierMax;
         private float _speedMultiplierMin;
 
@@ -44,44 +46,44 @@ namespace Systems.Car
             _wheelInfoStash = World.GetStash<WheelInfoComponent>();
             _horizontalStash = World.GetStash<HorizontalInputComponent>();
             _carMassStash = World.GetStash<CarMassComponent>();
+            _steeringSpeedStash = World.GetStash<SteeringSpeedComponent>();
+            _steeringAngleStash = World.GetStash<SteeringAngleComponent>();
+            _speedMaxStash = World.GetStash<SpeedMaxComponent>();
 
-            _speedMultiplierMax = _carMovementParameters.SpeedMultiplierMax;
-            _speedMultiplierMin = _carMovementParameters.SpeedMultiplierMin;
-            _maxCarSpeed = _carMovementParameters.MaxCarSpeed;
-            _carMass = _carMovementParameters.CarMass;
-            _steeringSpeedMultiplierMax = _carMovementParameters.SteeringSpeedMultiplierMax;
-            _steeringSpeedMultiplierMin = _carMovementParameters.SteeringSpeedMultiplierMin;
+            _speedMultiplierMax = _carParameters.MovementParameters.SpeedMultiplierMax;
+            _speedMultiplierMin = _carParameters.MovementParameters.SpeedMultiplierMin;
+            _carMassStandard = _carParameters.MovementParameters.CarMassStandard;
+            
+            _steeringSpeedMultiplierMax = _carParameters.MovementParameters.SteeringSpeedMultiplierMax;
+            _steeringSpeedMultiplierMin = _carParameters.MovementParameters.SteeringSpeedMultiplierMin;
         }
 
         public void OnUpdate(float deltaTime)
         {
             foreach (var car in _cars)
             {
+                var carSetupAspect = _carSetupAspect.Get(car);
+                ref var speed = ref carSetupAspect.Speed;
+                
                 var horizontal = _horizontalStash.Get(car);
                 var wheelInfo = _wheelInfoStash.Get(car);
                 var carMass = _carMassStash.Get(car);
-                
-                var carSetupAspect = _carSetupAspect.Get(car);
-                ref var steeringAngle = ref carSetupAspect.SteeringAngle;
-                ref var steeringSpeed = ref carSetupAspect.SteeringSpeed;
-                ref var speed = ref carSetupAspect.Speed;
-                
-                var speedFactor = Mathf.Lerp(_speedMultiplierMax, _speedMultiplierMin, speed.Value / _maxCarSpeed);
-                var massFactor = Mathf.Clamp01(_carMass / carMass.Value);
+                var steeringSpeed = _steeringSpeedStash.Get(car);
+                var steeringAngle = _steeringAngleStash.Get(car);
+                var speedMax = _speedMaxStash.Get(car);
+
+                var speedFactor = Mathf.Lerp(_speedMultiplierMax, _speedMultiplierMin, speed.Value / speedMax.Value);
+                var massFactor = Mathf.Clamp01(_carMassStandard / carMass.Value);
 
                 var adjustedAngle = steeringAngle.Value * speedFactor * massFactor;
                 var targetAngle = adjustedAngle * horizontal.Value;
                 
                 var dynamicSteeringSpeed = steeringSpeed.Value * Mathf.Lerp(
-                    _steeringSpeedMultiplierMax, _steeringSpeedMultiplierMin, speed.Value / _maxCarSpeed);
+                    _steeringSpeedMultiplierMax, _steeringSpeedMultiplierMin, speed.Value / speedMax.Value);
 
                 _inputService.ApplyHorizontalMove(targetAngle, dynamicSteeringSpeed, wheelInfo.WheelInfo);
                 
-                _signalBus.Fire(new ComponentChangeSignal<CarSetupAspect> 
-                { 
-                    Entity = car, 
-                    Component = carSetupAspect
-                });
+                _signalBus.Fire(new ComponentChangeSignal<CarSetupAspect> { Component = carSetupAspect });
             }
         }
 

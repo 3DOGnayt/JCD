@@ -7,7 +7,7 @@ namespace Configs
     {
         GameObject Car { get; }
         CarSetup CarSetup { get; }
-        CarParameters CarParameters { get; }
+        CarMassParameters CarMassParameters { get; }
         WheelParameters FrontWheelParameters { get; }
         WheelParameters BackWheelParameters { get; }
     }

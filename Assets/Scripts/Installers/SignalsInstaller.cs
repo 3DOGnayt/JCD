@@ -17,6 +17,7 @@ namespace Installers
         {
             Container.DeclareSignal<PlayerSpawnedSignal>();
             Container.DeclareSignal<ComponentChangeSignal<CarSetupAspect>>();
+            Container.DeclareSignal<ComponentChangeSignal<SpeedMaxComponent>>();
         }
     }
 }

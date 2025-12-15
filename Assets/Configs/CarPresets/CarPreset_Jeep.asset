@@ -10,32 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1de9c742da1f41ee921f71ecb7e10122, type: 3}
-  m_Name: SC39_CarPreset
+  m_Name: CarPreset_Jeep
   m_EditorClassIdentifier: 
-  _car: {fileID: 9039642172116725141, guid: b7c0b1388cca16d489435512d00fe83c, type: 3}
+  _car: {fileID: 9039642172116725141, guid: e8558019a3204be4c8789b117da72e41, type: 3}
   _carSetup:
-    CurrentSpeed: 0
-    Gearbox: 0
-    CurrentBackSpeed: 0
-    AccelerationMultiplier: 0
-    DecelerationMultiplier: 0
-    CurrentSteeringAngle: 35
-    SteeringSpeed: 100
-    BrakeForce: 0
+    SpeedMax: 0
+    BackSpeedMax: 0
+    GearCount: 0
+    EngineRpmMax: 0
+    SteeringAngleMax: 0
+    SteeringSpeed: 0
+    BrakeInput: 0
     HandbrakeInput: 0
     DriftMultiplier: 0
-    CurrentEngineRpm: 0
   _carParameters:
-    Mass: 1500
+    Mass: 2500
     AutomaticCenterOfMass: 0
     CenterOfMass: {x: 0, y: 0, z: 0}
   _frontWheelParameters:
     MainWheelParameters:
       Mass: 20
-      Radius: 0.38
+      Radius: 0.41
       DampingRate: 5
       SuspensionDistance: 0.5
-      ForceAppPointDistance: 0.5
+      ForceAppPointDistance: 0.7
       Center: {x: 0, y: 0, z: 0}
     SuspensionSpring:
       Spring: 35000
@@ -46,20 +44,20 @@ MonoBehaviour:
       ExtremumValue: 1
       AsymptoteSlip: 0.8
       AsymptoteValue: 0.5
-      Stiffness: 6
+      Stiffness: 8
     SidewaysFriction:
       ExtremumSlip: 0.2
       ExtremumValue: 1
       AsymptoteSlip: 0.5
       AsymptoteValue: 0.75
-      Stiffness: 4
+      Stiffness: 3
   _backWheelParameters:
     MainWheelParameters:
       Mass: 20
-      Radius: 0.38
+      Radius: 0.41
       DampingRate: 5
       SuspensionDistance: 0.5
-      ForceAppPointDistance: 0.5
+      ForceAppPointDistance: 0.7
       Center: {x: 0, y: 0, z: 0}
     SuspensionSpring:
       Spring: 35000
@@ -76,4 +74,4 @@ MonoBehaviour:
       ExtremumValue: 1
       AsymptoteSlip: 0.5
       AsymptoteValue: 0.75
-      Stiffness: 3
+      Stiffness: 2

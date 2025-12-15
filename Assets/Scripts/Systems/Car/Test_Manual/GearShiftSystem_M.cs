@@ -8,11 +8,11 @@ namespace Systems.Car.Test_Manual
     public class GearShiftSystem_M : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarMovementParameters _carMovementParameters;
+        [Inject] private CarParameters _carParameters;
 
         private Filter _carFilter;
         private Stash<EngineRpmComponent> _engineRpmStash;
-        private Stash<GearboxComponent> _gearStash;
+        private Stash<GearComponent> _gearStash;
         private Stash<SpeedComponent> _speedStash;
         private Stash<VerticalInputComponent> _verticalStash;
 
@@ -20,13 +20,13 @@ namespace Systems.Car.Test_Manual
         {
             _carFilter = World.Filter
                 .With<EngineRpmComponent>()
-                .With<GearboxComponent>()
+                .With<GearComponent>()
                 .With<SpeedComponent>()
                 .With<VerticalInputComponent>()
                 .Build();
 
             _engineRpmStash = World.GetStash<EngineRpmComponent>();
-            _gearStash      = World.GetStash<GearboxComponent>();
+            _gearStash      = World.GetStash<GearComponent>();
             _speedStash     = World.GetStash<SpeedComponent>();
             _verticalStash  = World.GetStash<VerticalInputComponent>();
         }

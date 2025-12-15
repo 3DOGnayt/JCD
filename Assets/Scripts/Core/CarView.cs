@@ -14,9 +14,9 @@ namespace Core
         [Space]
         [SerializeField] private List<WheelInfo> _wheelInfos;
 
+        public CarPreset CarPreset => _carPreset;
         public Rigidbody CarRigidbody => _carRigidbody;
         public Transform CarTransform => transform;
-        public CarPreset CarPreset => _carPreset;
         public CarSetup CarSetup => _carSetup;
         public List<WheelInfo> CarWheelInfos { get => _wheelInfos; set => _wheelInfos = value; }
     }

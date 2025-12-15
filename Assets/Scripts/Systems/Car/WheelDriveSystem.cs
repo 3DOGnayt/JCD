@@ -10,11 +10,11 @@ namespace Systems.Car
     public class WheelDriveSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarMovementParameters _carMovementParameters;
+        [Inject] private CarParameters _carParameters;
 
         private Filter _filter;
         private Stash<WheelInfoComponent> _wheelStash;
-        private Stash<GearboxComponent> _gearStash;
+        private Stash<GearComponent> _gearStash;
         private Stash<EngineRpmComponent> _rpmStash;
         private Stash<VerticalInputComponent> _vertStash;
 
@@ -33,31 +33,31 @@ namespace Systems.Car
         {
             _filter = World.Filter
                 .With<WheelInfoComponent>()
-                .With<GearboxComponent>()
+                .With<GearComponent>()
                 .With<EngineRpmComponent>()
                 .With<VerticalInputComponent>()
                 .Build();
 
             _wheelStash = World.GetStash<WheelInfoComponent>();
-            _gearStash  = World.GetStash<GearboxComponent>();
+            _gearStash  = World.GetStash<GearComponent>();
             _rpmStash   = World.GetStash<EngineRpmComponent>();
             _vertStash  = World.GetStash<VerticalInputComponent>();
 
             // Собираем лимиты из SO
             _kmhAtRedline.Clear();
             _g1Limit = 0f;
-            foreach (var s in _carMovementParameters.SpeedPreset.CarSpeedSettings)
+            /*foreach (var s in _carMovementParameters.SpeedPreset.CarSpeedSettings)
             {
                 int gear = (int)s.EGear;                      // -1..9
                 float lim = Mathf.Max(0f, s.SpeedLimit);   // модуль
                 _kmhAtRedline[gear] = lim;
                 if (gear == 1) _g1Limit = lim;
-            }
+            }*/
         }
 
         public void OnUpdate(float deltaTime)
         {
-            float redline = _carMovementParameters.MaxRpm;
+            float redline = _carParameters.MovementParameters.MaxRpm;
 
             foreach (var ent in _filter)
             {

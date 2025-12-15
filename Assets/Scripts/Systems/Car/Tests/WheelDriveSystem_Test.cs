@@ -11,12 +11,12 @@ namespace Systems.Car
     public class WheelDriveSystem_Test : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarMovementParameters _carMovementParameters;
+        [Inject] private CarParameters _carParameters;
         [Inject] private IInputService _inputService;
 
         private Filter _filter;
         private Stash<WheelInfoComponent> _wheelStash;
-        private Stash<GearboxComponent> _gearStash;
+        private Stash<GearComponent> _gearStash;
         private Stash<EngineRpmComponent> _rpmStash;
         private Stash<VerticalInputComponent> _vertStash;
 
@@ -34,20 +34,20 @@ namespace Systems.Car
         {
             _filter = World.Filter
                 .With<WheelInfoComponent>()
-                .With<GearboxComponent>()
+                .With<GearComponent>()
                 .With<EngineRpmComponent>()
                 .With<VerticalInputComponent>()
                 .Build();
 
             _wheelStash = World.GetStash<WheelInfoComponent>();
-            _gearStash = World.GetStash<GearboxComponent>();
+            _gearStash = World.GetStash<GearComponent>();
             _rpmStash = World.GetStash<EngineRpmComponent>();
             _vertStash = World.GetStash<VerticalInputComponent>();
         }
 
         public void OnUpdate(float dt)
         {
-            float redline = _carMovementParameters.MaxRpm; // напр. 8000
+            float redline = _carParameters.MovementParameters.MaxRpm; // напр. 8000
 
             foreach (var ent in _filter)
             {
