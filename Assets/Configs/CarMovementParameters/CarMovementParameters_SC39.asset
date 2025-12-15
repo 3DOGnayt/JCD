@@ -17,18 +17,12 @@ MonoBehaviour:
   _carMassStandard: 1500
   _steeringSpeedMultiplierMax: 1
   _steeringSpeedMultiplierMin: 0.1
-  _maxMotorTorque: 5000
-  _engineForwardTorque: 3000
-  _engineBackTorque: 5000
   _handbrakeTorque: 800
   _brakeTorque: 500
-  _neutralMaxRpm: 0
-  _accelerationRate: 0
-  _decelerationRate: 0
-  _maxCarSpeed: 0
-  _maxRpm: 0
-  _idleRpm: 0
-  _rpmToSpeedRatio: 0
+  _accelerationRate: 2000
+  _decelerationRate: 3000
+  _maxRpm: 9000
+  _idleRpm: 1400
   _useArcadeAssist: 1
   _arcadeAssistMinSpeedKmh: 0
   _arcadeAssistLerpSpeed: 1

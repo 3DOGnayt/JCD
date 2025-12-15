@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Components;
-using Configs.Helpers;
 using Configs.Impl;
 using Scellecs.Morpeh;
 using UnityEngine;
@@ -14,96 +13,240 @@ namespace Systems.Car.Test_Arcade
         [Inject] private CarParameters _params;
 
         private Filter _cars;
-        private Stash<EngineRpmComponent> _rpmStash;
-        private Stash<VerticalInputComponent> _vertStash;
-        private Stash<GearComponent> _gearStash;
 
-        private struct GearRates
+        private Stash<EngineRpmComponent> _rpmStash;
+        private Stash<EngineRpmMaxComponent> _rpmMaxStash;
+        private Stash<SpeedComponent> _speedStash;
+        private Stash<BackSpeedComponent> _backSpeedStash;
+        private Stash<GearComponent> _gearStash;
+        private Stash<VerticalInputComponent> _verticalInputStash;
+
+        private struct ForwardRpmBand
         {
-            public float Grow;
-            public float DecNoGas;
-            public float DecBrake;
+            public int GearValue;
+            public float SpeedMinKmh;
+            public float SpeedMaxKmh;
         }
 
-        private Dictionary<int, GearRates> _rates;
+        private List<ForwardRpmBand> _forwardBands;
+        private Dictionary<int, int> _forwardBandIndexByGear;
+
+        private float _reverseMaxSpeedKmh;
+        private bool _hasReverseBand;
+
+        private const float UpshiftRpmDropFactor = 0.6f;
+        private const float NeutralInputDeadZone = 0.05f;
 
         public void OnAwake()
         {
             _cars = World.Filter
                 .With<EngineRpmComponent>()
-                .With<VerticalInputComponent>()
+                .With<EngineRpmMaxComponent>()
+                .With<SpeedComponent>()
+                .With<BackSpeedComponent>()
                 .With<GearComponent>()
+                .With<VerticalInputComponent>()
                 .Build();
 
-            _rpmStash  = World.GetStash<EngineRpmComponent>();
-            _vertStash = World.GetStash<VerticalInputComponent>();
+            _rpmStash = World.GetStash<EngineRpmComponent>();
+            _rpmMaxStash = World.GetStash<EngineRpmMaxComponent>();
+            _speedStash = World.GetStash<SpeedComponent>();
+            _backSpeedStash = World.GetStash<BackSpeedComponent>();
             _gearStash = World.GetStash<GearComponent>();
+            _verticalInputStash = World.GetStash<VerticalInputComponent>();
 
-            BuildRates();
+            BuildRpmBandsFromPreset();
         }
 
-        private void BuildRates()
+        private void BuildRpmBandsFromPreset()
         {
-            _rates = new Dictionary<int, GearRates>();
+            _forwardBands = null;
+            _forwardBandIndexByGear = null;
+            _reverseMaxSpeedKmh = 0f;
+            _hasReverseBand = false;
 
-            if (!_rates.ContainsKey((int)EGear.Neutral) && _rates.ContainsKey((int)EGear.FirstGear))
-                _rates[(int)EGear.Neutral] = _rates[(int)EGear.FirstGear];
-
-            if (!_rates.ContainsKey((int)EGear.Reverse) && _rates.ContainsKey((int)EGear.FirstGear))
-                _rates[(int)EGear.Reverse] = _rates[(int)EGear.FirstGear];
-        }
-
-        private GearRates GetRates(int gear)
-        {
-            if (_rates != null && _rates.TryGetValue(gear, out var r))
-                return r;
-
-            // если нет данных — используем 1-ю передачу или дефолт
-            if (_rates != null && _rates.TryGetValue((int)EGear.FirstGear, out var first))
-                return first;
-
-            return new GearRates
+            var speedsPreset = _params.SpeedsPreset;
+            if (speedsPreset == null)
             {
-                Grow = _params.MovementParameters.AccelerationRate, 
-                DecNoGas = _params.MovementParameters.DecelerationRate,
-                DecBrake = _params.MovementParameters.DecelerationRate * 1.2f
-            };
+                Debug.LogError("RPMSystem_A: SpeedsPreset is null in CarParameters.");
+                return;
+            }
+
+            var carSpeedSettings = speedsPreset.CarSpeedSettings;
+            if (carSpeedSettings == null || carSpeedSettings.Count == 0)
+            {
+                Debug.LogError("RPMSystem_A: CarSpeedSettings is null or empty in SpeedsPreset.");
+                return;
+            }
+
+            var forwardTemp = new List<(int gear, float limit)>();
+
+            foreach (var setting in carSpeedSettings)
+            {
+                var gearValue = (int)setting.EGear;
+
+                if (gearValue > 0)
+                {
+                    forwardTemp.Add((gearValue, setting.SpeedLimit));
+                }
+                else if (gearValue < 0)
+                {
+                    _reverseMaxSpeedKmh = Mathf.Max(_reverseMaxSpeedKmh, setting.SpeedLimit);
+                    _hasReverseBand = true;
+                }
+            }
+
+            if (forwardTemp.Count == 0)
+            {
+                Debug.LogError("RPMSystem_A: no forward gears in SpeedsPreset.");
+                return;
+            }
+
+            forwardTemp.Sort((a, b) => a.limit.CompareTo(b.limit));
+
+            _forwardBands = new List<ForwardRpmBand>(forwardTemp.Count);
+            _forwardBandIndexByGear = new Dictionary<int, int>();
+
+            for (var i = 0; i < forwardTemp.Count; i++)
+            {
+                var prevLimit = i == 0 ? 0f : forwardTemp[i - 1].limit;
+                var currLimit = forwardTemp[i].limit;
+
+                var band = new ForwardRpmBand
+                {
+                    GearValue = forwardTemp[i].gear,
+                    SpeedMinKmh = prevLimit,
+                    SpeedMaxKmh = currLimit
+                };
+
+                _forwardBands.Add(band);
+                _forwardBandIndexByGear[band.GearValue] = i;
+            }
         }
 
         public void OnUpdate(float deltaTime)
         {
-            var idle = _params.MovementParameters.IdleRpm;
-            var max  = _params.MovementParameters.MaxRpm;
+            if (_forwardBands == null || _forwardBands.Count == 0)
+                return;
+
+            var movement = _params.MovementParameters;
+            var idleRpm = movement.IdleRpm;
+            var accelRpmPerSec = movement.AccelerationRate;
+            var decelRpmPerSec = movement.DecelerationRate;
+            var neutralMaxRpm = movement.IdleRpm;
 
             foreach (var car in _cars)
             {
-                ref var rpm   = ref _rpmStash.Get(car);
-                var     gear  = _gearStash.Get(car).Value;
-                var     input = _vertStash.Get(car).Value;
+                ref var rpmComponent = ref _rpmStash.Get(car);
+                ref var rpmMaxComponent = ref _rpmMaxStash.Get(car);
+                ref var speedComponent = ref _speedStash.Get(car);
+                ref var backSpeedComponent = ref _backSpeedStash.Get(car);
+                ref var gearComponent = ref _gearStash.Get(car);
 
-                if (rpm.Value < idle)
-                    rpm.Value = idle;
+                var verticalInput = _verticalInputStash.Get(car).Value;
 
-                var rates     = GetRates(gear);
-                var absInput  = Mathf.Abs(input);
-                var hasInput = absInput > 0.01f;
+                var currentRpm = rpmComponent.Value;
 
-                // Тормоз (жмём назад, когда едем вперёд, или наоборот)
-                var isBrakeCommand = gear != 0 && ((gear > 0 && input < -0.01f) || (gear < 0 && input > 0.01f));
-                float delta;
+                var rpmMax = rpmMaxComponent.Value;
+                if (rpmMax <= 0f)
+                    rpmMax = movement.MaxRpm;
 
-                if (isBrakeCommand)
-                    delta = -rates.DecBrake * deltaTime;
-                else if (hasInput)
-                    delta = rates.Grow * absInput * deltaTime;
+                var gear = gearComponent.Value;
+
+                float targetRpm;
+
+                if (gear == 0)
+                {
+                    targetRpm = CalculateNeutralRpm(idleRpm, neutralMaxRpm, verticalInput);
+                }
+                else if (gear < 0)
+                {
+                    var reverseSpeedKmh = Mathf.Max(0f, backSpeedComponent.Value);
+                    targetRpm = CalculateReverseRpm(reverseSpeedKmh, idleRpm, rpmMax);
+                }
                 else
-                    delta = -rates.DecNoGas * deltaTime;
+                {
+                    var forwardSpeedKmh = Mathf.Max(0f, speedComponent.Value);
+                    targetRpm = CalculateForwardRpm(gear, forwardSpeedKmh, idleRpm, rpmMax);
+                }
 
-                rpm.Value += delta;
-                rpm.Value = Mathf.Clamp(rpm.Value, idle, max);
+                var changeSpeed = targetRpm > currentRpm
+                    ? accelRpmPerSec
+                    : decelRpmPerSec;
+
+                var maxStep = changeSpeed * deltaTime;
+
+                currentRpm = Mathf.MoveTowards(currentRpm, targetRpm, maxStep);
+
+                currentRpm = Mathf.Clamp(currentRpm, idleRpm, rpmMax);
+                rpmComponent.Value = currentRpm;
             }
         }
 
-        public void Dispose() { }
+        private float CalculateNeutralRpm(
+            float idleRpm,
+            float neutralMaxRpm,
+            float verticalInput)
+        {
+            var absInput = Mathf.Abs(verticalInput);
+
+            if (absInput < NeutralInputDeadZone)
+                return idleRpm;
+
+            var t = Mathf.Clamp01(absInput);
+            return Mathf.Lerp(idleRpm, neutralMaxRpm, t);
+        }
+
+        private float CalculateReverseRpm(
+            float reverseSpeedKmh,
+            float idleRpm,
+            float rpmMax)
+        {
+            if (!_hasReverseBand || _reverseMaxSpeedKmh <= 0f)
+                return idleRpm;
+
+            var t = Mathf.InverseLerp(0f, _reverseMaxSpeedKmh, reverseSpeedKmh);
+            return Mathf.Lerp(idleRpm, rpmMax, t);
+        }
+
+        private float CalculateForwardRpm(
+            int gear,
+            float forwardSpeedKmh,
+            float idleRpm,
+            float rpmMax)
+        {
+            var bandIndex = GetForwardBandIndex(gear);
+            if (bandIndex < 0)
+                bandIndex = 0;
+
+            var band = _forwardBands[bandIndex];
+
+            var v = Mathf.Clamp(forwardSpeedKmh, band.SpeedMinKmh, band.SpeedMaxKmh);
+
+            var t = band.SpeedMaxKmh > band.SpeedMinKmh
+                ? Mathf.InverseLerp(band.SpeedMinKmh, band.SpeedMaxKmh, v)
+                : 1f;
+
+            float gearMinRpm = bandIndex == 0
+                ? idleRpm
+                : rpmMax * UpshiftRpmDropFactor;
+
+            return Mathf.Lerp(gearMinRpm, rpmMax, t);
+        }
+
+        private int GetForwardBandIndex(int gearValue)
+        {
+            if (_forwardBandIndexByGear == null)
+                return -1;
+
+            if (_forwardBandIndexByGear.TryGetValue(gearValue, out var index))
+                return index;
+
+            return -1;
+        }
+
+        public void Dispose()
+        {
+        }
     }
 }
