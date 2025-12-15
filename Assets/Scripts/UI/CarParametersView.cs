@@ -18,6 +18,7 @@ namespace UI
 
         private float _uiSpeed;
         private float _uiBackSpeed;
+        private float _uiGear;
         private float _uiRpm;
         private float _uiDrift;
         private float _maxSpeed;
@@ -43,13 +44,13 @@ namespace UI
 
         private void Awake()
         {
-            _parametersText.text = "Km/h\n" + 
+            _parametersText.text = "Km/h\n" +
                                    "Back Speed\n" +
-                                   "Gearbox\n" + 
+                                   "Gearbox\n" +
                                    "Engine Rpm\n" +
-                                   "\n" + 
-                                   "BrakeInput\n" + 
-                                   "HandbrakeInput\n" + 
+                                   "\n" +
+                                   "BrakeInput\n" +
+                                   "HandbrakeInput\n" +
                                    "Drift Multiplier";
         }
 
@@ -64,6 +65,7 @@ namespace UI
 
             var targetSpeed = aspect.Speed.Value;
             var targetBackSpeed = aspect.BackSpeed.Value;
+            float targetGear = aspect.Gear.Value;
             var targetRpm = aspect.EngineRpm.Value;
             var targetDrift = aspect.DriftMultiplier.Value;
 
@@ -76,11 +78,12 @@ namespace UI
 
             _uiSpeed = Smooth(_uiSpeed, targetSpeed, speedSmoothing);
             _uiBackSpeed = Smooth(_uiBackSpeed, targetBackSpeed, speedSmoothing);
+            _uiGear = Smooth(_uiGear, targetGear, speedSmoothing);
             _uiRpm = Smooth(_uiRpm, targetRpm, smoothingSettings.RpmSmoothing);
             _uiDrift = Smooth(_uiDrift, targetDrift, smoothingSettings.DriftSmoothing);
 
             _parametersValue.text =
-                $"{_uiSpeed:0} :\n{_uiBackSpeed:0} :\n{aspect.Gear.Value:0} :\n{_uiRpm:0} :\n" +
+                $"{_uiSpeed:0} :\n{_uiBackSpeed:0} :\n{_uiGear:0} :\n{_uiRpm:0} :\n" +
                 $"\n{aspect.BrakeInput.Value} :\n{aspect.HandbrakeInput.Value} :\n{_uiDrift:0.00} :";
         }
 
@@ -92,7 +95,7 @@ namespace UI
             var time = 1f - Mathf.Exp(-smoothing * Time.deltaTime);
             return Mathf.Lerp(current, target, time);
         }
-        
+
         private float GetSpeedSmoothing(float speedKmh, CarSmoothingSettings settings)
         {
             var baseValue = settings.SpeedSmoothing;
