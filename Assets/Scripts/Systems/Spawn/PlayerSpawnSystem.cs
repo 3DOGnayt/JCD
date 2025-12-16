@@ -55,12 +55,15 @@ namespace Systems.Spawn
             entity.SetComponent(new DriftMultiplierComponent { Value = carSetup.DriftMultiplier });
 
             var maxSpeedComponent = new SpeedMaxComponent { Value = carSetup.SpeedMax };
+            var maxRpmComponent = new EngineRpmMaxComponent { Value = carSetup.EngineRpmMax };
+            
             entity.SetComponent(maxSpeedComponent);
             entity.SetComponent(new BackSpeedMaxComponent { Value = carSetup.BackSpeedMax });
             entity.SetComponent(new GearCountComponent { Value = carSetup.GearCount });
-            entity.SetComponent(new EngineRpmMaxComponent { Value = carSetup.EngineRpmMax });
+            entity.SetComponent(maxRpmComponent);
             
             _signalBus.Fire(new ComponentChangeSignal<SpeedMaxComponent> { Component = maxSpeedComponent });
+            _signalBus.Fire(new ComponentChangeSignal<EngineRpmMaxComponent> { Component = maxRpmComponent });
         }
 
         private void AddInternalComponents(Entity entity, ICarView carView)
