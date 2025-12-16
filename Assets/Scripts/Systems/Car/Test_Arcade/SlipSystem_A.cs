@@ -18,6 +18,7 @@ namespace Systems.Car.Test_Arcade
         private Stash<WheelInfoComponent> _wheelInfoStash;
         private Stash<BackStiffnessSidewaysComponent> _backSidewaysStiffnessStash;
         private Stash<FrontStiffnessSidewaysComponent> _frontSidewaysStiffnessStash;
+        private Stash<DriftComponent> _driftStash;
 
         private Dictionary<Entity, float> _frontDriftValues;
 
@@ -36,6 +37,7 @@ namespace Systems.Car.Test_Arcade
             _wheelInfoStash = World.GetStash<WheelInfoComponent>();
             _backSidewaysStiffnessStash = World.GetStash<BackStiffnessSidewaysComponent>();
             _frontSidewaysStiffnessStash = World.GetStash<FrontStiffnessSidewaysComponent>();
+            _driftStash = World.GetStash<DriftComponent>();
 
             _frontDriftValues = new Dictionary<Entity, float>();
         }
@@ -69,12 +71,15 @@ namespace Systems.Car.Test_Arcade
                 var wheelInfoComponent = _wheelInfoStash.Get(car);
                 var backBaseSidewaysStiffness = _backSidewaysStiffnessStash.Get(car).Value;
                 var frontBaseSidewaysStiffness = _frontSidewaysStiffnessStash.Get(car).Value;
+                ref var drift = ref _driftStash.Get(car).Value;
 
                 var forwardSpeedKmh = Mathf.Max(0f, speedValue);
                 var backwardSpeedKmh = Mathf.Max(0f, Mathf.Abs(backSpeedValue));
                 var scalarSpeedKmh = Mathf.Max(forwardSpeedKmh, backwardSpeedKmh);
 
                 var canDriftNow = handbrakePressed && scalarSpeedKmh > MinDriftSpeedKmh;
+
+                drift = canDriftNow;
 
                 bool applyBack;
                 backDrift = UpdateDriftValueForAxle(

@@ -48,6 +48,8 @@ namespace Installers
             Container.Bind<IFixedSystem>().To<GearShiftSystem_A>().AsSingle();
             Container.Bind<IFixedSystem>().To<RPMSystem_A>().AsSingle();
             Container.Bind<IFixedSystem>().To<SlipSystem_A>().AsSingle();
+            
+            Container.Bind<IFixedSystem>().To<EffectSystem_A>().AsSingle();
         }
     }
 }

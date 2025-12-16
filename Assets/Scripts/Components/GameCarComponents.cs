@@ -1,3 +1,4 @@
+using Core;
 using Scellecs.Morpeh;
 
 namespace Components
@@ -17,4 +18,7 @@ namespace Components
     public struct BackSpeedMaxComponent : IComponent { public float Value; }
     public struct GearCountComponent : IComponent { public int Value; }
     public struct EngineRpmMaxComponent : IComponent { public float Value; }
+    
+    public struct CarViewComponent : IComponent { public ICarView Value; }
+    public struct DriftComponent : IComponent { public bool Value; }
 }
