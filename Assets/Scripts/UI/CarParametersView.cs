@@ -4,6 +4,7 @@ using Configs.Impl;
 using Signals;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 namespace UI
@@ -12,6 +13,10 @@ namespace UI
     {
         [SerializeField] private TMP_Text _parametersText;
         [SerializeField] private TMP_Text _parametersValue;
+        
+        [SerializeField] private TMP_Text _speed;
+        [SerializeField] private TMP_Text _gear;
+        [SerializeField] private Image _rpm;
 
         private CarUISmoothing _carUISmoothing;
         private SignalBus _signalBus;
@@ -85,6 +90,17 @@ namespace UI
             _parametersValue.text =
                 $"{_uiSpeed:0} :\n{_uiBackSpeed:0} :\n{_uiGear:0} :\n{_uiRpm:0} :\n" +
                 $"\n{aspect.BrakeInput.Value} :\n{aspect.HandbrakeInput.Value} :\n{_uiDrift:0.00} :";
+
+            _speed.text = _uiSpeed > _uiBackSpeed ? $"{_uiSpeed:0}" : $"{_uiBackSpeed:0}";
+
+            _gear.text = _uiGear switch
+            {
+                < 0 => "R",
+                > 0 => $"{_uiGear:0}",
+                _ => _gear.text
+            };
+
+            _rpm.fillAmount = Mathf.Lerp(_rpm.fillAmount, _uiRpm/9000, Time.deltaTime);
         }
 
         private float Smooth(float current, float target, float smoothing)
