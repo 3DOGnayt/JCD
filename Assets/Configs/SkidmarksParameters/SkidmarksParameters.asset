@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: SkidmarksParameters
   m_EditorClassIdentifier: 
   _material: {fileID: 2100000, guid: 5c4fa5f647c3046469d1868c47f3130f, type: 2}
-  _maxMarks: 2048
+  _maxMarks: 255
   _markWidth: 0.35
   _groundOffset: 0.02
-  _minDistance: 0.25
+  _minDistance: 0.5
   _maxOpacity: 1
-  _skidFxSpeed: 0.5
-  _maxSkidIntensity: 20
-  _wheelSlipMultiplier: 10
-  _maxSpeedFade: 10
+  _fadeInSpeed: 8
+  _fadeOutSpeed: 6
+  _minVisibleAlpha: 0.3
+  _forwardOffsetMax: 1.5

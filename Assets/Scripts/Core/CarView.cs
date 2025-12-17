@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Core
 {
-    public class CarView : MonoBehaviour, ICarView, ITrailView
+    public class CarView : MonoBehaviour, ICarView, IEffectsView
     {
         [SerializeField] private CarPreset _carPreset;
         [SerializeField] private Rigidbody _carRigidbody;
@@ -22,7 +22,7 @@ namespace Core
         public Transform CarTransform => transform;
         public List<WheelInfo> CarWheelInfos { get => _wheelInfos; set => _wheelInfos = value; }
         
-        CarEffects ITrailView.CarEffects => _carEffects;
+        CarEffects IEffectsView.CarEffects => _carEffects;
     }
 
     public interface ICarView
@@ -34,7 +34,7 @@ namespace Core
         List<WheelInfo> CarWheelInfos { get; }
     }
 
-    public interface ITrailView
+    public interface IEffectsView
     {
         CarEffects CarEffects { get; }
     }

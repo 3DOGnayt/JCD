@@ -29,7 +29,7 @@ namespace Systems.Car.Test_Arcade
             foreach (var car in _cars)
             {
                 var carView = _carViewStash.Get(car).Value;
-                if (carView is not ITrailView trailView)
+                if (carView is not IEffectsView trailView)
                     continue;
 
                 ref var mark = ref _skidmarksStash.Get(car).Value;

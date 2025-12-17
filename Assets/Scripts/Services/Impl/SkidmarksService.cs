@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Data;
+using Services;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -13,7 +14,11 @@ public class SkidmarksService : ISkidmarksService
     private class WheelState
     {
         public int LastIndex = -1;
-        public float Alpha = 0f;
+        public float Alpha;
+        public bool WasSkidding;
+
+        public Vector3 LastGroundPos;
+        public bool HasLastGroundPos;
     }
 
     private readonly Dictionary<WheelCollider, WheelState> _wheelStates = new();
@@ -98,7 +103,8 @@ public class SkidmarksService : ISkidmarksService
 
         var state = GetWheelState(wheel);
 
-        if (!wheel.GetGroundHit(out var hit))
+        var grounded = wheel.GetGroundHit(out var hit);
+        if (!grounded)
         {
             skidNow = false;
         }
@@ -109,26 +115,41 @@ public class SkidmarksService : ISkidmarksService
 
         state.Alpha = Mathf.MoveTowards(state.Alpha, target, speed * dt);
 
+        if (grounded)
+        {
+            var offsetPos = GetSkidmarkPosition(hit.point, rb);
+            state.LastGroundPos = offsetPos;
+            state.HasLastGroundPos = true;
+        }
+
         if (!skidNow && state.Alpha <= 0.001f)
         {
             state.Alpha = 0f;
             state.LastIndex = -1;
+            state.WasSkidding = false;
             return;
         }
 
-        if (state.Alpha <= 0.001f)
+        if (state.Alpha <= 0.001f || !grounded)
+        {
+            state.WasSkidding = skidNow;
             return;
+        }
 
         var opacity = Mathf.Clamp01(Mathf.Max(state.Alpha, _parameters.MinVisibleAlpha));
 
-        var skidPoint = hit.point;
+        if (skidNow && !state.WasSkidding && state.HasLastGroundPos)
+            state.LastIndex = AddSkidMarkInternal(state.LastGroundPos, hit.normal, opacity, -1);
+
+        var skidPoint = GetSkidmarkPosition(hit.point, rb);
+
         var newIndex = AddSkidMarkInternal(skidPoint, hit.normal, opacity, state.LastIndex);
         state.LastIndex = newIndex;
+        state.WasSkidding = skidNow;
 
         if (_meshDirty)
             ApplyMesh();
     }
-
 
     private WheelState GetWheelState(WheelCollider wheel)
     {
@@ -139,6 +160,27 @@ public class SkidmarksService : ISkidmarksService
         }
 
         return state;
+    }
+
+    private Vector3 GetSkidmarkPosition(Vector3 hitPoint, Rigidbody rb)
+    {
+        var maxOffset = _parameters.ForwardOffsetMax;
+        if (maxOffset <= 0f || rb == null)
+            return hitPoint;
+
+        var velocity = rb.velocity;
+        velocity.y = 0f;
+
+        var speed = velocity.magnitude;
+        if (speed < 0.01f)
+            return hitPoint;
+
+        var time = Mathf.Clamp01(speed / _parameters.ReferenceSpeedMps);
+        var offsetDistance = Mathf.Lerp(0f, maxOffset, time);
+
+        var dir = velocity / speed;
+
+        return hitPoint + dir * offsetDistance;
     }
 
     private int AddSkidMarkInternal(Vector3 pos, Vector3 normal, float opacity, int lastIndex)
@@ -277,9 +319,4 @@ public class SkidmarksService : ISkidmarksService
 
         _meshFilter.sharedMesh = _mesh;
     }
-}
-
-public interface ISkidmarksService
-{
-    void UpdateWheel(Rigidbody rb, WheelCollider wheel, bool skidNow);
 }
