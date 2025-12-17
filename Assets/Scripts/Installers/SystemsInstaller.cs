@@ -51,6 +51,7 @@ namespace Installers
             
             //Container.Bind<IFixedSystem>().To<EffectSystem_A>().AsSingle();
             Container.Bind<IFixedSystem>().To<SkidmarksSystem_A>().AsSingle();
+            Container.Bind<IFixedSystem>().To<SmokeEffectSystem_A>().AsSingle();
         }
     }
 }
