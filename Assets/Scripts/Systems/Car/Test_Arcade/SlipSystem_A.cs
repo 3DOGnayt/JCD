@@ -24,10 +24,10 @@ namespace Systems.Car.Test_Arcade
 
         private Dictionary<Entity, float> _frontDriftValues;
 
-        private const float MinDriftSpeedKmh = 20f; // для реального дрифта/скольжения
-        private const float MinBrakeSkidSpeedKmh = 5f; // чтобы не рисовать следы на 1 км/ч
-        private const float SlipAngleThresholdDeg = 20f; // угол между forward и velocity
-        private const float DriftVisualThresh = 0.05f; // для back/front drift
+        private const float MinDriftSpeedKmh = 20f;
+        private const float MinBrakeSkidSpeedKmh = 5f;
+        private const float SlipAngleThresholdDeg = 20f;
+        private const float DriftVisualThresh = 0.05f;
 
         public void OnAwake()
         {
@@ -74,8 +74,9 @@ namespace Systems.Car.Test_Arcade
                 ref var handbrakePressed = ref aspect.HandbrakeInput.Value;
                 ref var speedValue = ref aspect.Speed.Value;
                 ref var backSpeedValue = ref aspect.BackSpeed.Value;
-                ref var brakeInput = ref aspect.BrakeInput.Value; // булка, ты её уже используешь в WheelDrive
+                ref var brakeInput = ref aspect.BrakeInput.Value;
                 ref var skidFlag = ref _skidmarksStash.Get(car).Value;
+                var currentGear = aspect.Gear.Value;
 
                 if (!_frontDriftValues.TryGetValue(car, out var frontDrift))
                     frontDrift = 0f;
@@ -94,17 +95,13 @@ namespace Systems.Car.Test_Arcade
 
                 var vel = rb.velocity;
                 var flatVel = new Vector3(vel.x, 0f, vel.z);
-                var flatFwd = new Vector3(tr.forward.x, 0f, tr.forward.z);
-
                 var speedTotalKmh = flatVel.magnitude * 3.6f;
 
                 var forwardSpeedKmh = Mathf.Max(0f, speedValue);
                 var backwardSpeedKmh = Mathf.Max(0f, Mathf.Abs(backSpeedValue));
                 var scalarSpeedKmh = Mathf.Max(forwardSpeedKmh, backwardSpeedKmh);
 
-                var canDriftNow =
-                    handbrakePressed &&
-                    scalarSpeedKmh > MinDriftSpeedKmh;
+                var canDriftNow = handbrakePressed && scalarSpeedKmh > MinDriftSpeedKmh;
 
                 bool applyBack;
                 backDrift = UpdateDriftValueForAxle(
@@ -121,7 +118,8 @@ namespace Systems.Car.Test_Arcade
                 if (applyBack)
                 {
                     var backMultiplier = Mathf.Lerp(1f, backMultiplierTarget, backDrift);
-                    ApplyAxleSlip(wheelInfoComponent, backBaseSidewaysStiffness, backMultiplier, applyToSteeringWheels: false);
+                    ApplyAxleSlip(wheelInfoComponent, backBaseSidewaysStiffness, backMultiplier,
+                        applyToSteeringWheels: false);
                 }
 
                 bool applyFront;
@@ -140,27 +138,34 @@ namespace Systems.Car.Test_Arcade
                 if (applyFront)
                 {
                     var frontMultiplier = Mathf.Lerp(1f, frontMultiplierTarget, frontDrift);
-                    ApplyAxleSlip(wheelInfoComponent, frontBaseSidewaysStiffness, frontMultiplier, applyToSteeringWheels: true);
+                    ApplyAxleSlip(wheelInfoComponent, frontBaseSidewaysStiffness, frontMultiplier,
+                        applyToSteeringWheels: true);
                 }
 
-                var hasVelocity = flatVel.sqrMagnitude > 0.01f && flatFwd.sqrMagnitude > 0.01f;
+
+                var flatFwd = new Vector3(tr.forward.x, 0f, tr.forward.z);
+
+                var hasVelocity = flatVel.sqrMagnitude > 0.01f;
+                var hasForward = flatFwd.sqrMagnitude > 0.01f;
+                var hasDriveDir = hasForward && currentGear != 0;
 
                 var slipAngle = 0f;
-                var forwardDot = 1f;
 
-                if (hasVelocity)
+                if (hasVelocity && hasDriveDir)
                 {
-                    var vN = flatVel.normalized;
-                    var fN = flatFwd.normalized;
+                    var velDir = flatVel.normalized;
+                    var driveDir = flatFwd.normalized;
 
-                    slipAngle = Vector3.Angle(fN, vN);
-                    forwardDot = Vector3.Dot(fN, vN); // < 0 — едем задом наперёд
+                    if (currentGear < 0)
+                        driveDir = -driveDir;
+
+                    slipAngle = Vector3.Angle(driveDir, velDir);
                 }
 
                 var skidFromBrake = speedTotalKmh > MinBrakeSkidSpeedKmh && (brakeInput || handbrakePressed);
 
-                var skidFromSlipAngle = hasVelocity && speedTotalKmh > MinDriftSpeedKmh 
-                                                    && (slipAngle > SlipAngleThresholdDeg || forwardDot < -0.1f);
+                var skidFromSlipAngle = hasVelocity && hasDriveDir &&
+                                        speedTotalKmh > MinDriftSpeedKmh && slipAngle > SlipAngleThresholdDeg;
 
                 var skidFromFriction = speedTotalKmh > MinDriftSpeedKmh * 0.5f
                                        && (backDrift > DriftVisualThresh || frontDrift > DriftVisualThresh);
