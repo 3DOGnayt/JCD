@@ -8,44 +8,45 @@ namespace Systems.Car.Test_Arcade
     public class EffectSystem_A : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        
+
         private Filter _cars;
         private Stash<CarViewComponent> _carViewStash;
-        private Stash<HandbrakeInputComponent> _handbrakeStash;
-        private Stash<DriftComponent> _driftStash;
-        
+        private Stash<SkidmarksComponent> _skidmarksStash;
+
         public void OnAwake()
         {
             _cars = World.Filter
                 .With<CarViewComponent>()
+                .With<SkidmarksComponent>()
                 .Build();
 
             _carViewStash = World.GetStash<CarViewComponent>();
-            _handbrakeStash = World.GetStash<HandbrakeInputComponent>();
-            _driftStash = World.GetStash<DriftComponent>();
+            _skidmarksStash = World.GetStash<SkidmarksComponent>();
         }
 
         public void OnUpdate(float deltaTime)
         {
             foreach (var car in _cars)
             {
-                ref var carView = ref _carViewStash.Get(car).Value;
-                ref var handbrake = ref _handbrakeStash.Get(car).Value;
-                ref var drift = ref _driftStash.Get(car).Value;
+                var carView = _carViewStash.Get(car).Value;
+                if (carView is not ITrailView trailView)
+                    continue;
 
-                var trailsView = carView as ITrailView;
-                
-                if (drift)
+                ref var mark = ref _skidmarksStash.Get(car).Value;
+
+                var traces = trailView.CarEffects.TracesWheels;
+                if (traces == null)
+                    continue;
+
+                var emitting = mark;
+
+                foreach (var trail in traces)
                 {
-                    foreach (var tracesWheel in trailsView.CarEffects.TracesWheels)
-                        tracesWheel.emitting = true;
+                    if (trail == null)
+                        continue;
+
+                    trail.emitting = emitting;
                 }
-                else
-                {
-                    foreach (var tracesWheel in trailsView.CarEffects.TracesWheels)
-                        tracesWheel.emitting = false;
-                }
-                
             }
         }
 

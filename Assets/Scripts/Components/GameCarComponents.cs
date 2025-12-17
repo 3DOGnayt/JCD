@@ -20,5 +20,5 @@ namespace Components
     public struct EngineRpmMaxComponent : IComponent { public float Value; }
     
     public struct CarViewComponent : IComponent { public ICarView Value; }
-    public struct DriftComponent : IComponent { public bool Value; }
+    public struct SkidmarksComponent : IComponent { public bool Value; }
 }

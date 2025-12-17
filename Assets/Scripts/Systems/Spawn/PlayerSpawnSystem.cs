@@ -45,7 +45,7 @@ namespace Systems.Spawn
             var carSetup = carView.CarPreset.CarSetup;
             
             entity.SetComponent(new CarViewComponent{ Value = carView });
-            entity.SetComponent(new DriftComponent{ Value = false });
+            entity.SetComponent(new SkidmarksComponent{ Value = false });
             
             entity.SetComponent(new SpeedComponent { Value = 0 });
             entity.SetComponent(new BackSpeedComponent { Value = 0 });
