@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using Components;
 using Core;
 using Scellecs.Morpeh;
+using UnityEngine;
 using Zenject;
 
 namespace Systems.Car.Test_Arcade
@@ -12,6 +14,8 @@ namespace Systems.Car.Test_Arcade
         private Filter _cars;
         private Stash<CarViewComponent> _carViewStash;
         private Stash<SkidmarksComponent> _skidmarksStash;
+
+        private readonly Dictionary<ParticleSystem, bool> _wasSkidding = new();
 
         public void OnAwake()
         {
@@ -29,13 +33,13 @@ namespace Systems.Car.Test_Arcade
             foreach (var car in _cars)
             {
                 ref var carViewComponent = ref _carViewStash.Get(car);
-                var skidNow = _skidmarksStash.Get(car).Value;
+                bool skidNow = _skidmarksStash.Get(car).Value;
 
-                var effectsView = carViewComponent.Value as IEffectsView;
-                if (effectsView == null)
+                var trailView = carViewComponent.Value as IEffectsView;
+                if (trailView == null)
                     continue;
 
-                var effects = effectsView.CarEffects;
+                var effects = trailView.CarEffects;
                 if (effects == null || effects.SmokeWheels == null)
                     continue;
 
@@ -44,9 +48,27 @@ namespace Systems.Car.Test_Arcade
                     if (smoke == null)
                         continue;
 
-                    smoke.SetActive(skidNow);
+                    UpdateSmoke(smoke, skidNow);
                 }
             }
+        }
+
+        private void UpdateSmoke(ParticleSystem ps, bool skidNow)
+        {
+            bool wasSkid = false;
+            _wasSkidding.TryGetValue(ps, out wasSkid);
+
+            if (skidNow && !wasSkid)
+            {
+                ps.Clear();
+                ps.Play();
+            }
+            else if (!skidNow && wasSkid)
+            {
+                ps.Stop(false, ParticleSystemStopBehavior.StopEmitting);
+            }
+
+            _wasSkidding[ps] = skidNow;
         }
 
         public void Dispose() { }
