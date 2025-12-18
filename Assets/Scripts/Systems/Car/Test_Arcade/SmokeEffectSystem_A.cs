@@ -33,7 +33,7 @@ namespace Systems.Car.Test_Arcade
             foreach (var car in _cars)
             {
                 ref var carViewComponent = ref _carViewStash.Get(car);
-                bool skidNow = _skidmarksStash.Get(car).Value;
+                var skidNow = _skidmarksStash.Get(car).Value;
 
                 var trailView = carViewComponent.Value as IEffectsView;
                 if (trailView == null)
@@ -55,7 +55,7 @@ namespace Systems.Car.Test_Arcade
 
         private void UpdateSmoke(ParticleSystem ps, bool skidNow)
         {
-            bool wasSkid = false;
+            var wasSkid = false;
             _wasSkidding.TryGetValue(ps, out wasSkid);
 
             if (skidNow && !wasSkid)

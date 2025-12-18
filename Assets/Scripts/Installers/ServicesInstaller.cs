@@ -7,7 +7,8 @@ namespace Installers
 {
     public class ServicesInstaller : MonoInstaller
     {
-        [SerializeField] private SkidmarksParameters _parameters;
+        [SerializeField] private SkidmarksParameters _skidmarksParameters;
+        [SerializeField] private SkidSmokeParameters _skidSmokeParameters;
         
         public override void InstallBindings()
         {
@@ -17,7 +18,8 @@ namespace Installers
         private void Services()
         {
             Container.BindInterfacesAndSelfTo<InputService>().AsSingle();
-            Container.BindInterfacesAndSelfTo<SkidmarksService>().AsSingle().WithArguments(_parameters);
+            Container.BindInterfacesAndSelfTo<SkidmarksService>().AsSingle().WithArguments(_skidmarksParameters);
+            Container.BindInterfacesAndSelfTo<SkidSmokeService>().AsSingle().WithArguments(_skidSmokeParameters);
         }
     }
 }

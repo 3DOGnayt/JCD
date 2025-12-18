@@ -8,7 +8,7 @@ namespace Data
     {
         [Header("CAR EFFECTS")]
         [Space] 
-        public TrailRenderer[] TracesWheels;
+        public TrailRenderer[] TracesWheels; // plan B for skidmarks
         [Space]
         public ParticleSystem[] SmokeWheels;
         [Space]

@@ -21,4 +21,5 @@ namespace Components
     
     public struct CarViewComponent : IComponent { public ICarView Value; }
     public struct SkidmarksComponent : IComponent { public bool Value; }
+    public struct SkidSmokeHandleComponent : IComponent { public int Value; }
 }
