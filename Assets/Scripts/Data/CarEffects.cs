@@ -10,7 +10,7 @@ namespace Data
         [Space] 
         public TrailRenderer[] TracesWheels;
         [Space]
-        public ParticleSystem[] SmokeWheels;
+        public GameObject[] SmokeWheels;
         [Space]
         public ParticleSystem[] DamageSparks;
     }

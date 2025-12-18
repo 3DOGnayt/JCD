@@ -44,8 +44,7 @@ namespace Systems.Car.Test_Arcade
                     if (smoke == null)
                         continue;
 
-                    var emission = smoke.emission;
-                    emission.enabled = skidNow;
+                    smoke.SetActive(skidNow);
                 }
             }
         }
