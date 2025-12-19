@@ -1,4 +1,5 @@
 using System;
+using Data.Helpers;
 using UnityEngine;
 
 namespace Data
@@ -12,6 +13,6 @@ namespace Data
         [Space]
         public ParticleSystem[] SmokeWheels;
         [Space]
-        public ParticleSystem[] DamageSparks;
+        public CarLights CarLights;
     }
 }

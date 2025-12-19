@@ -14,6 +14,7 @@ namespace Core
         [SerializeField] private CarSetup _carSetup;
         [Space]
         [SerializeField] private CarEffects _carEffects;
+        [Space]
         [SerializeField] private CarCollisionListener _carCollisionListener;
         [Space]
         [SerializeField] private List<WheelInfo> _wheelInfos;

@@ -1,6 +1,7 @@
 using Components;
 using Configs.Impl;
 using Core;
+using Data;
 using Scellecs.Morpeh;
 using Signals;
 using UnityEngine;
@@ -44,10 +45,6 @@ namespace Systems.Spawn
         {
             var carSetup = carView.CarPreset.CarSetup;
             
-            entity.SetComponent(new CarViewComponent{ Value = carView });
-            entity.SetComponent(new SkidmarksComponent{ Value = false });
-            entity.SetComponent(new SkidSmokeHandleComponent{ Value = -1 });
-            
             entity.SetComponent(new SpeedComponent { Value = 0 });
             entity.SetComponent(new BackSpeedComponent { Value = 0 });
             entity.SetComponent(new GearComponent { Value = 0 });
@@ -63,6 +60,11 @@ namespace Systems.Spawn
             entity.SetComponent(new BackSpeedMaxComponent { Value = carSetup.BackSpeedMax });
             entity.SetComponent(new GearCountComponent { Value = carSetup.GearCount });
             entity.SetComponent(new EngineRpmMaxComponent { Value = carSetup.EngineRpmMax });
+            
+            entity.SetComponent(new CarViewComponent{ Value = carView });
+            entity.SetComponent(new SkidmarksComponent{ Value = false });
+            entity.SetComponent(new SkidSmokeHandleComponent{ Value = -1 });
+            entity.SetComponent(new HeadlightsComponent { Value = HeadlightsMode.Off });
             
             _signalBus.Fire(new ComponentChangeSignal<SpeedMaxComponent> { Component = maxSpeedComponent });
         }

@@ -11,6 +11,7 @@ namespace Installers
         [SerializeField] private CarParameters _carParameters;
         [SerializeField] private CarUISmoothing _carUISmoothing;
         [SerializeField] private SkidSmokeParameters _carSkidSmokeParameters;
+        [SerializeField] private CarLightsParameters _carLightsParameters;
         
         public override void InstallBindings()
         {
@@ -18,6 +19,7 @@ namespace Installers
             Container.Bind<CarParameters>().FromInstance(_carParameters).AsSingle();
             Container.Bind<CarUISmoothing>().FromInstance(_carUISmoothing).AsSingle();
             Container.Bind<SkidSmokeParameters>().FromInstance(_carSkidSmokeParameters).AsSingle();
+            Container.Bind<CarLightsParameters>().FromInstance(_carLightsParameters).AsSingle();
         }
     }
 }

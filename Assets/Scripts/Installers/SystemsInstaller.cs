@@ -56,6 +56,7 @@ namespace Installers
             Container.Bind<IFixedSystem>().To<SkidSmokeSystem_A>().AsSingle();
             
             Container.Bind<IFixedSystem>().To<CrashEffectSystem_A>().AsSingle();
+            Container.Bind<IFixedSystem>().To<CarLightsSystem_A>().AsSingle();
         }
     }
 }
