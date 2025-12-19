@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96a97acf6d2242f1b73446c5631bab7d, type: 3}
+  m_Name: CrashEffectsParameters
+  m_EditorClassIdentifier: 
+  _sparkPrefab: {fileID: 4503612902121041701, guid: e1ecbf5cd973a7748b31be47b46ce9b0,
+    type: 3}
+  _poolSize: 10
+  _normalOffset: 0.05
+  _attachForwardOffset: 0
+  _minRelativeSpeed: 0.5

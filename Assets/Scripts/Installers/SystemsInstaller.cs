@@ -1,8 +1,6 @@
 using Scellecs.Morpeh;
-using Systems;
 using Systems.Car;
 using Systems.Car.Test_Arcade;
-using Systems.Car.Test_Manual;
 using Systems.Spawn;
 using Zenject;
 
@@ -48,6 +46,17 @@ namespace Installers
             Container.Bind<IFixedSystem>().To<GearShiftSystem_A>().AsSingle();
             Container.Bind<IFixedSystem>().To<RPMSystem_A>().AsSingle();
             Container.Bind<IFixedSystem>().To<SlipSystem_A>().AsSingle();
+            
+            // следы шин
+            //Container.Bind<IFixedSystem>().To<EffectSystem_A>().AsSingle(); // перенести в запасную реализацию
+            Container.Bind<IFixedSystem>().To<SkidmarksSystem_A>().AsSingle();
+            
+            // дым из под шин
+            //Container.Bind<IFixedSystem>().To<SmokeEffectSystem_A>().AsSingle(); // перенести в запасную реализацию
+            Container.Bind<IFixedSystem>().To<SkidSmokeSystem_A>().AsSingle();
+            
+            Container.Bind<IFixedSystem>().To<CrashEffectSystem_A>().AsSingle();
+            Container.Bind<IFixedSystem>().To<CarLightsSystem_A>().AsSingle();
         }
     }
 }

@@ -1,4 +1,4 @@
-using Configs.Helpers;
+using Data.Helpers;
 
 namespace Configs
 {

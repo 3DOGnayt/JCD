@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Configs.Helpers;
+using Data.Helpers;
 
 namespace Configs
 {

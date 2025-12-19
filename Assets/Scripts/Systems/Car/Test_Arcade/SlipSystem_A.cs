@@ -18,10 +18,16 @@ namespace Systems.Car.Test_Arcade
         private Stash<WheelInfoComponent> _wheelInfoStash;
         private Stash<BackStiffnessSidewaysComponent> _backSidewaysStiffnessStash;
         private Stash<FrontStiffnessSidewaysComponent> _frontSidewaysStiffnessStash;
+        private Stash<SkidmarksComponent> _skidmarksStash;
+        private Stash<RigidbodyComponent> _rbStash;
+        private Stash<TransformComponent> _transformStash;
 
         private Dictionary<Entity, float> _frontDriftValues;
 
         private const float MinDriftSpeedKmh = 20f;
+        private const float MinBrakeSkidSpeedKmh = 5f;
+        private const float SlipAngleThresholdDeg = 20f;
+        private const float DriftVisualThresh = 0.05f;
 
         public void OnAwake()
         {
@@ -30,12 +36,18 @@ namespace Systems.Car.Test_Arcade
                 .With<WheelInfoComponent>()
                 .With<BackStiffnessSidewaysComponent>()
                 .With<FrontStiffnessSidewaysComponent>()
+                .With<SkidmarksComponent>()
+                .With<RigidbodyComponent>()
+                .With<TransformComponent>()
                 .Build();
 
             _carAspectFactory = World.GetAspectFactory<CarSetupAspect>();
             _wheelInfoStash = World.GetStash<WheelInfoComponent>();
             _backSidewaysStiffnessStash = World.GetStash<BackStiffnessSidewaysComponent>();
             _frontSidewaysStiffnessStash = World.GetStash<FrontStiffnessSidewaysComponent>();
+            _skidmarksStash = World.GetStash<SkidmarksComponent>();
+            _rbStash = World.GetStash<RigidbodyComponent>();
+            _transformStash = World.GetStash<TransformComponent>();
 
             _frontDriftValues = new Dictionary<Entity, float>();
         }
@@ -62,6 +74,9 @@ namespace Systems.Car.Test_Arcade
                 ref var handbrakePressed = ref aspect.HandbrakeInput.Value;
                 ref var speedValue = ref aspect.Speed.Value;
                 ref var backSpeedValue = ref aspect.BackSpeed.Value;
+                ref var brakeInput = ref aspect.BrakeInput.Value;
+                ref var skidFlag = ref _skidmarksStash.Get(car).Value;
+                var currentGear = aspect.Gear.Value;
 
                 if (!_frontDriftValues.TryGetValue(car, out var frontDrift))
                     frontDrift = 0f;
@@ -69,6 +84,18 @@ namespace Systems.Car.Test_Arcade
                 var wheelInfoComponent = _wheelInfoStash.Get(car);
                 var backBaseSidewaysStiffness = _backSidewaysStiffnessStash.Get(car).Value;
                 var frontBaseSidewaysStiffness = _frontSidewaysStiffnessStash.Get(car).Value;
+
+                var rbComp = _rbStash.Get(car);
+                var trComp = _transformStash.Get(car);
+                var rb = rbComp.Value;
+                var tr = trComp.Value;
+
+                if (rb == null || tr == null)
+                    continue;
+
+                var vel = rb.velocity;
+                var flatVel = new Vector3(vel.x, 0f, vel.z);
+                var speedTotalKmh = flatVel.magnitude * 3.6f;
 
                 var forwardSpeedKmh = Mathf.Max(0f, speedValue);
                 var backwardSpeedKmh = Mathf.Max(0f, Mathf.Abs(backSpeedValue));
@@ -114,6 +141,36 @@ namespace Systems.Car.Test_Arcade
                     ApplyAxleSlip(wheelInfoComponent, frontBaseSidewaysStiffness, frontMultiplier,
                         applyToSteeringWheels: true);
                 }
+
+
+                var flatFwd = new Vector3(tr.forward.x, 0f, tr.forward.z);
+
+                var hasVelocity = flatVel.sqrMagnitude > 0.01f;
+                var hasForward = flatFwd.sqrMagnitude > 0.01f;
+                var hasDriveDir = hasForward && currentGear != 0;
+
+                var slipAngle = 0f;
+
+                if (hasVelocity && hasDriveDir)
+                {
+                    var velDir = flatVel.normalized;
+                    var driveDir = flatFwd.normalized;
+
+                    if (currentGear < 0)
+                        driveDir = -driveDir;
+
+                    slipAngle = Vector3.Angle(driveDir, velDir);
+                }
+
+                var skidFromBrake = speedTotalKmh > MinBrakeSkidSpeedKmh && (brakeInput || handbrakePressed);
+
+                var skidFromSlipAngle = hasVelocity && hasDriveDir &&
+                                        speedTotalKmh > MinDriftSpeedKmh && slipAngle > SlipAngleThresholdDeg;
+
+                var skidFromFriction = speedTotalKmh > MinDriftSpeedKmh * 0.5f
+                                       && (backDrift > DriftVisualThresh || frontDrift > DriftVisualThresh);
+
+                skidFlag = skidFromBrake || skidFromSlipAngle || skidFromFriction;
             }
         }
 
@@ -132,7 +189,6 @@ namespace Systems.Car.Test_Arcade
             if (canDriftNow)
             {
                 drift = Mathf.MoveTowards(drift, 1f, enterSpeed * deltaTime);
-
                 shouldApplySlip = true;
             }
             else
@@ -140,7 +196,6 @@ namespace Systems.Car.Test_Arcade
                 if (!handbrakePressed && drift > 0f)
                 {
                     drift = Mathf.MoveTowards(drift, 0f, returnSpeed * deltaTime);
-
                     shouldApplySlip = true;
 
                     if (drift <= 0f)

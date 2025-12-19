@@ -16,7 +16,7 @@ TagManager:
   - Ground
   - Obstacles
   - WheelCollider
-  - 
+  - Damagable
   - 
   - 
   - 
