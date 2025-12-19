@@ -1,6 +1,6 @@
 using Components;
-using Configs.Helpers;
 using Configs.Impl;
+using Data.Helpers;
 using Signals;
 using TMPro;
 using UnityEngine;

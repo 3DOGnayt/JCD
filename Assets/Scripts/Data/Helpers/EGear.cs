@@ -1,4 +1,4 @@
-namespace Configs.Helpers
+namespace Data.Helpers
 {
     public enum EGear
     {

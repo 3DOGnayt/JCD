@@ -1,8 +1,6 @@
 using Scellecs.Morpeh;
-using Systems;
 using Systems.Car;
 using Systems.Car.Test_Arcade;
-using Systems.Car.Test_Manual;
 using Systems.Spawn;
 using Zenject;
 
@@ -56,6 +54,8 @@ namespace Installers
             // дым из под шин
             //Container.Bind<IFixedSystem>().To<SmokeEffectSystem_A>().AsSingle(); // перенести в запасную реализацию
             Container.Bind<IFixedSystem>().To<SkidSmokeSystem_A>().AsSingle();
+            
+            Container.Bind<IFixedSystem>().To<CrashEffectSystem_A>().AsSingle();
         }
     }
 }

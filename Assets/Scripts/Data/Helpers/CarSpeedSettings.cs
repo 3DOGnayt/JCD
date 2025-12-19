@@ -1,6 +1,6 @@
 using System;
 
-namespace Configs.Helpers
+namespace Data.Helpers
 {
     [Serializable]
     public class CarSpeedSettings

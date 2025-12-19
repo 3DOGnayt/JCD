@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Configs.Impl;
 using Data;
+using Services.Impl;
 using UnityEngine;
 
 namespace Core
@@ -13,6 +14,7 @@ namespace Core
         [SerializeField] private CarSetup _carSetup;
         [Space]
         [SerializeField] private CarEffects _carEffects;
+        [SerializeField] private CarCollisionListener _carCollisionListener;
         [Space]
         [SerializeField] private List<WheelInfo> _wheelInfos;
 
@@ -23,6 +25,7 @@ namespace Core
         public List<WheelInfo> CarWheelInfos { get => _wheelInfos; set => _wheelInfos = value; }
         
         CarEffects IEffectsView.CarEffects => _carEffects;
+        CarCollisionListener IEffectsView.CollisionListener => _carCollisionListener;
     }
 
     public interface ICarView
@@ -37,5 +40,6 @@ namespace Core
     public interface IEffectsView
     {
         CarEffects CarEffects { get; }
+        CarCollisionListener CollisionListener { get; }
     }
 }

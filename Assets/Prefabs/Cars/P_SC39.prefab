@@ -1156,6 +1156,7 @@ GameObject:
   - component: {fileID: 8646453167414145181}
   - component: {fileID: 5772110666094969943}
   - component: {fileID: 565225229298550646}
+  - component: {fileID: 4257682405173347952}
   m_Layer: 0
   m_Name: P_SC39
   m_TagString: Untagged
@@ -1250,10 +1251,32 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 2.0942516, y: 1.150677, z: 4.74059}
   m_Center: {x: -0.000025987625, y: 0.79333735, z: 0.090675}
+--- !u!64 &4257682405173347952
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5411730680352220546}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 8511902028321790968, guid: 41c288592429ad74ea436c2cc1011e3c, type: 3}
 --- !u!1 &5548859945002536254
 GameObject:
   m_ObjectHideFlags: 0
@@ -2063,6 +2086,7 @@ GameObject:
   - component: {fileID: 5283033300812890801}
   - component: {fileID: 1550213845451149244}
   - component: {fileID: 1704317199373089031}
+  - component: {fileID: 780397458678767915}
   m_Layer: 0
   m_Name: P_SC39
   m_TagString: Untagged
@@ -2152,6 +2176,7 @@ MonoBehaviour:
     - {fileID: 6364455920222321301}
     - {fileID: 332753392485002084}
     DamageSparks: []
+  _carCollisionListener: {fileID: 780397458678767915}
   _wheelInfos:
   - LeftWheel: {fileID: 8217919515254978958}
     RightWheel: {fileID: 2629409141995426167}
@@ -2203,6 +2228,22 @@ MonoBehaviour:
   lineSpacing: 0.18
   equalThreshold: 0.01
   recaptureBaseValues: 0
+--- !u!114 &780397458678767915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9039642172116725141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5b7c26a359f43948842fd50ef2c6158, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _minRelativeVelocity: 3
+  _damageableMask:
+    serializedVersion: 2
+    m_Bits: 2048
 --- !u!1 &9062278896347685609
 GameObject:
   m_ObjectHideFlags: 0
