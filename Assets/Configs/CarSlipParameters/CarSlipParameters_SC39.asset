@@ -17,4 +17,4 @@ MonoBehaviour:
   _BackStiffnessReturnSpeed: 1.5
   _handbrakeSidewaysForwardMultiplier: 0.95
   _forwardStiffnessEnterSpeed: 5
-  _forwardStiffnessReturnSpeed: 0.2
+  _forwardStiffnessReturnSpeed: 0.8
