@@ -10,7 +10,7 @@ namespace Systems.Car
     public sealed class RPMSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarParameters _params;
+        [Inject] private CarParameters _carParameters;
 
         private Filter _cars;
 
@@ -33,9 +33,6 @@ namespace Systems.Car
 
         private float _reverseMaxSpeedKmh;
         private bool _hasReverseBand;
-
-        private const float UpshiftRpmDropFactor = 0.6f; // TODO: Refactoring
-        private const float NeutralInputDeadZone = 0.05f; // TODO: Refactoring
 
         public void OnAwake()
         {
@@ -65,7 +62,7 @@ namespace Systems.Car
             _reverseMaxSpeedKmh = 0f;
             _hasReverseBand = false;
 
-            var speedsPreset = _params.SpeedsPresetParameters;
+            var speedsPreset = _carParameters.SpeedsPresetParameters;
             if (speedsPreset == null)
             {
                 Debug.LogError("RPMSystem_A: SpeedsPreset is null in CarParameters.");
@@ -130,7 +127,7 @@ namespace Systems.Car
                 return;
 
             //TODO: Refactoring
-            var movement = _params.MovementParameters;
+            var movement = _carParameters.MovementParameters;
             var idleRpm = movement.IdleRpm;
             var accelRpmPerSec = movement.AccelerationRate;
             var decelRpmPerSec = movement.DecelerationRate;
@@ -191,7 +188,8 @@ namespace Systems.Car
         {
             var absInput = Mathf.Abs(verticalInput);
 
-            if (absInput < NeutralInputDeadZone)
+            var systemHelpers = _carParameters.MovementParameters.HelpersSetup;
+            if (absInput < systemHelpers.NeutralInputDeadZone)
                 return idleRpm;
 
             var t = Mathf.Clamp01(absInput);
@@ -228,9 +226,10 @@ namespace Systems.Car
                 ? Mathf.InverseLerp(band.SpeedMinKmh, band.SpeedMaxKmh, v)
                 : 1f;
 
-            float gearMinRpm = bandIndex == 0
+            var systemHelpers = _carParameters.MovementParameters.HelpersSetup;
+            var gearMinRpm = bandIndex == 0
                 ? idleRpm
-                : rpmMax * UpshiftRpmDropFactor;
+                : rpmMax * systemHelpers.UpshiftRpmDropFactor;
 
             return Mathf.Lerp(gearMinRpm, rpmMax, t);
         }
@@ -246,8 +245,6 @@ namespace Systems.Car
             return -1;
         }
 
-        public void Dispose()
-        {
-        }
+        public void Dispose() { }
     }
 }

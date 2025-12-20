@@ -20,9 +20,6 @@ namespace Systems.Car
 
         private float _assistForwardSpeedMps;
 
-        private const float SleepSpeedThresholdMps = 0.05f; // TODO: Refactoring
-        private const float SleepAngularSpeedThreshold = 0.05f; // TODO: Refactoring
-
         public void OnAwake()
         {
             _cars = World.Filter
@@ -92,7 +89,8 @@ namespace Systems.Car
             Vector3 forward,
             float deltaTime)
         {
-            if (!_carParameters.MovementParameters.UseArcadeAssist)
+            var movementParameters = _carParameters.MovementParameters;
+            if (!movementParameters.UseArcadeAssist)
             {
                 _assistForwardSpeedMps = Vector3.Dot(velocity, forward);
                 return velocity;
@@ -100,7 +98,7 @@ namespace Systems.Car
 
             var forwardSpeed = Vector3.Dot(velocity, forward);
             var absForward = Mathf.Abs(forwardSpeed);
-            var minSpeedMps = _carParameters.MovementParameters.ArcadeAssistMinSpeedKmh / 3.6f;
+            var minSpeedMps = movementParameters.ArcadeAssistMinSpeedKmh / 3.6f;
 
             var wantForward = verticalInput > 0.01f;
             var movingForward = forwardSpeed > 0.01f;
@@ -116,7 +114,7 @@ namespace Systems.Car
 
             if (forwardSpeed < _assistForwardSpeedMps)
             {
-                var t = 1f - Mathf.Exp(-_carParameters.MovementParameters.ArcadeAssistLerpSpeed * deltaTime);
+                var t = 1f - Mathf.Exp(-movementParameters.ArcadeAssistLerpSpeed * deltaTime);
                 var targetForward = Mathf.Lerp(forwardSpeed, _assistForwardSpeedMps, t);
 
                 var forwardComponent = forward * forwardSpeed;
@@ -141,8 +139,9 @@ namespace Systems.Car
             var v = rb.velocity;
             var av = rb.angularVelocity;
 
-            var sleepSpeedThresholdMps = SleepSpeedThresholdMps * SleepSpeedThresholdMps;
-            var sleepAngularSpeedThreshold = SleepAngularSpeedThreshold * SleepAngularSpeedThreshold;
+            var systemHelpers = _carParameters.MovementParameters.HelpersSetup;
+            var sleepSpeedThresholdMps = systemHelpers.SleepSpeedThresholdMps * systemHelpers.SleepSpeedThresholdMps;
+            var sleepAngularSpeedThreshold = systemHelpers.SleepAngularSpeedThreshold * systemHelpers.SleepAngularSpeedThreshold;
             
             if (v.sqrMagnitude < sleepSpeedThresholdMps && av.sqrMagnitude < sleepAngularSpeedThreshold)
             {

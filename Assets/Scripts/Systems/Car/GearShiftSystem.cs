@@ -10,7 +10,7 @@ namespace Systems.Car
     public sealed class GearShiftSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarParameters _params;
+        [Inject] private CarParameters _carParameters;
 
         private Filter _cars;
         private Stash<GearComponent> _gearStash;
@@ -28,9 +28,6 @@ namespace Systems.Car
         private Dictionary<int, int> _forwardIndexByGearValue;
         private int _reverseGearValue;
         private int _neutralGearValue;
-
-        private const float StopSpeedKmh = 0.5f; // TODO: Refactoring
-        private const float InputDeadZone = 0.05f; // TODO: Refactoring
 
         public void OnAwake()
         {
@@ -56,7 +53,7 @@ namespace Systems.Car
             _reverseGearValue = -1;
             _neutralGearValue = 0;
 
-            var speedsPreset = _params.SpeedsPresetParameters;
+            var speedsPreset = _carParameters.SpeedsPresetParameters;
             if (speedsPreset == null)
             {
                 Debug.LogError("GearShiftSystem_A: SpeedPreset is null in CarParameters.");
@@ -130,10 +127,11 @@ namespace Systems.Car
         {
             var absoluteSpeedKmh = Mathf.Max(forwardSpeedKmh, backwardSpeedKmh);
 
-            var wantForward = verticalInput > InputDeadZone;
-            var wantBackward = verticalInput < -InputDeadZone;
+            var movementParameters = _carParameters.MovementParameters.HelpersSetup;
+            var wantForward = verticalInput > movementParameters.InputDeadZone;
+            var wantBackward = verticalInput < -movementParameters.InputDeadZone;
 
-            if (absoluteSpeedKmh < StopSpeedKmh)
+            if (absoluteSpeedKmh < movementParameters.StopThresholdKmh)
             {
                 if (wantForward)
                     currentGear = GetFirstForwardGear();

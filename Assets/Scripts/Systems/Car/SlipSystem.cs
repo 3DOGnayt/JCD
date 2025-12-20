@@ -24,11 +24,6 @@ namespace Systems.Car
 
         private Dictionary<Entity, float> _frontDriftValues;
 
-        private const float MinDriftSpeedKmh = 20f; // TODO: Refactoring
-        private const float MinBrakeSkidSpeedKmh = 5f; // TODO: Refactoring
-        private const float SlipAngleThresholdDeg = 20f; // TODO: Refactoring
-        private const float DriftVisualThresh = 0.05f; // TODO: Refactoring
-
         public void OnAwake()
         {
             _cars = World.Filter
@@ -102,7 +97,8 @@ namespace Systems.Car
                 var backwardSpeedKmh = Mathf.Max(0f, Mathf.Abs(backSpeedValue));
                 var scalarSpeedKmh = Mathf.Max(forwardSpeedKmh, backwardSpeedKmh);
 
-                var canDriftNow = handbrakePressed && scalarSpeedKmh > MinDriftSpeedKmh;
+                var helpersSetup = _carParameters.MovementParameters.HelpersSetup;
+                var canDriftNow = handbrakePressed && scalarSpeedKmh > helpersSetup.MinDriftSpeedKmh;
 
                 bool applyBack;
                 backDrift = UpdateDriftValueForAxle(
@@ -163,13 +159,13 @@ namespace Systems.Car
                     slipAngle = Vector3.Angle(driveDir, velDir);
                 }
 
-                var skidFromBrake = speedTotalKmh > MinBrakeSkidSpeedKmh && (brakeInput || handbrakePressed);
+                var skidFromBrake = speedTotalKmh > helpersSetup.MinBrakeSkidSpeedKmh && (brakeInput || handbrakePressed);
 
-                var skidFromSlipAngle = hasVelocity && hasDriveDir &&
-                                        speedTotalKmh > MinDriftSpeedKmh && slipAngle > SlipAngleThresholdDeg;
+                var skidFromSlipAngle = hasVelocity && hasDriveDir && speedTotalKmh > helpersSetup.MinDriftSpeedKmh
+                                        && slipAngle > helpersSetup.SlipAngleThresholdDeg;
 
-                var skidFromFriction = speedTotalKmh > MinDriftSpeedKmh * 0.5f
-                                       && (backDrift > DriftVisualThresh || frontDrift > DriftVisualThresh);
+                var checkDrift = backDrift > helpersSetup.DriftVisualThresh || frontDrift > helpersSetup.DriftVisualThresh;
+                var skidFromFriction = speedTotalKmh > helpersSetup.MinDriftSpeedKmh * 0.5f && checkDrift;
 
                 skidFlag = skidFromBrake || skidFromSlipAngle || skidFromFriction;
             }

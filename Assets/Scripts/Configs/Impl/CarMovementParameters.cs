@@ -1,3 +1,4 @@
+using Data.Helpers;
 using UnityEngine;
 
 namespace Configs.Impl
@@ -24,28 +25,32 @@ namespace Configs.Impl
         [SerializeField] private float _maxRpm;
         [SerializeField] private float _idleRpm;
         [Space]
+        [SerializeField] private SystemHelpersSetup _systemHelpersSetup;
         [Header("Arcade Assist")] 
         [Space]
         [SerializeField] private bool _useArcadeAssist = true;
         [SerializeField] private float _arcadeAssistMinSpeedKmh;
         [SerializeField] private float _arcadeAssistLerpSpeed = 1f;
         
-        public bool UseArcadeAssist => _useArcadeAssist;
-        public float ArcadeAssistMinSpeedKmh => _arcadeAssistMinSpeedKmh;
-        public float ArcadeAssistLerpSpeed => _arcadeAssistLerpSpeed;
-
         public float SpeedMultiplierMax => _speedMultiplierMax;
         public float SpeedMultiplierMin => _speedMultiplierMin;
         public float CarMassStandard => _carMassStandard;
         public float SteeringSpeedMultiplierMax => _steeringSpeedMultiplierMax;
         public float SteeringSpeedMultiplierMin => _steeringSpeedMultiplierMin;
 
-        public float BrakeTorque => _brakeTorque;
         public float HandbrakeTorque => _handbrakeTorque;
+        public float BrakeTorque => _brakeTorque;
 
         public float AccelerationRate => _accelerationRate;
         public float DecelerationRate => _decelerationRate;
+        
         public float MaxRpm => _maxRpm;
         public float IdleRpm => _idleRpm;
+        
+        public SystemHelpersSetup HelpersSetup => _systemHelpersSetup;
+        
+        public bool UseArcadeAssist => _useArcadeAssist;
+        public float ArcadeAssistMinSpeedKmh => _arcadeAssistMinSpeedKmh;
+        public float ArcadeAssistLerpSpeed => _arcadeAssistLerpSpeed;
     }
 }

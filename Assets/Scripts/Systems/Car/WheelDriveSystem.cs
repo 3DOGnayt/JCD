@@ -19,9 +19,6 @@ namespace Systems.Car
         private Stash<WheelInfoComponent> _wheelInfoStash;
         private Stash<VerticalInputComponent> _verticalInputStash;
 
-        private const float StopThresholdKmh = 0.5f; // TODO: Refactoring
-        private const float InputDeadZone = 0.05f; // TODO: Refactoring
-
         private Dictionary<int, float> _forwardGearTorque;
         private float _reverseGearTorque;
 
@@ -116,7 +113,8 @@ namespace Systems.Car
                 var scalarSpeedKmh = Mathf.Max(forwardSpeedKmh, backwardSpeedKmh);
 
                 var isMovingForward = forwardSpeedKmh >= backwardSpeedKmh;
-                var isAlmostStopped = scalarSpeedKmh < StopThresholdKmh;
+                var systemHelpers = _carParameters.MovementParameters.HelpersSetup;
+                var isAlmostStopped = scalarSpeedKmh < systemHelpers.StopThresholdKmh;
 
                 var wheelInfoComponent = _wheelInfoStash.Get(car);
 
@@ -157,7 +155,8 @@ namespace Systems.Car
             brakeForce = 0f;
             brakeInputFlag = false;
 
-            if (Mathf.Abs(verticalInput) < InputDeadZone)
+            var systemHelpers = _carParameters.MovementParameters.HelpersSetup;
+            if (Mathf.Abs(verticalInput) < systemHelpers.InputDeadZone)
                 return;
 
             var wantsForward = verticalInput > 0f;
@@ -233,10 +232,9 @@ namespace Systems.Car
 
         private void ApplyBrakes(WheelInfoComponent wheelInfoComponent, float brakeForce, bool handbrakePressed)
         {
-            var pedalBrakeTorque = _carParameters.MovementParameters.BrakeTorque * Mathf.Max(0f, brakeForce);
-            var handbrakeTorque = handbrakePressed
-                ? _carParameters.MovementParameters.HandbrakeTorque
-                : 0f;
+            var parameters = _carParameters.MovementParameters;
+            var pedalBrakeTorque = parameters.BrakeTorque * Mathf.Max(0f, brakeForce);
+            var handbrakeTorque = handbrakePressed ? parameters.HandbrakeTorque : 0f;
 
             foreach (var info in wheelInfoComponent.WheelInfo)
             {
