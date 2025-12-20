@@ -1,9 +1,9 @@
 using System;
 
-namespace Data
+namespace Data.Helpers
 {
     [Serializable]
-    public class ForwardAndSidewaysParameters
+    public class ForwardAndSidewaysSetup
     {
         public float ExtremumSlip;
         public float ExtremumValue;

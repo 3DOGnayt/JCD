@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
 
-namespace Data
+namespace Data.Helpers
 {
     [Serializable]
-    public class MainWheelParameters
+    public class MainWheelSetup
     {
         public float Mass;
         public float Radius;

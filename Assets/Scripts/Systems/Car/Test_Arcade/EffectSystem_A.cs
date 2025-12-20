@@ -1,6 +1,8 @@
 using Components;
 using Core;
 using Scellecs.Morpeh;
+using Views;
+using Views.Impl;
 using Zenject;
 
 namespace Systems.Car.Test_Arcade
@@ -34,7 +36,7 @@ namespace Systems.Car.Test_Arcade
 
                 ref var mark = ref _skidmarksStash.Get(car).Value;
 
-                var traces = trailView.CarEffects.TracesWheels;
+                var traces = trailView.CarEffectsSetup.TracesWheels;
                 if (traces == null)
                     continue;
 

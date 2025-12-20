@@ -2565,9 +2565,21 @@ PrefabInstance:
         type: 2}
     - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
         type: 3}
+      propertyPath: carPresetParameters
+      value: 
+      objectReference: {fileID: 11400000, guid: 314cb5b109249c24f9b0ab884476da62,
+        type: 2}
+    - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
       propertyPath: _carLightsParameters
       value: 
       objectReference: {fileID: 11400000, guid: ae89a026371445d4bb6249b7215d30f9,
+        type: 2}
+    - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
+      propertyPath: _carPresetParameters
+      value: 
+      objectReference: {fileID: 11400000, guid: 314cb5b109249c24f9b0ab884476da62,
         type: 2}
     - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
         type: 3}
@@ -2580,6 +2592,18 @@ PrefabInstance:
       propertyPath: _carSkidSmokeParameters
       value: 
       objectReference: {fileID: 11400000, guid: dd68b16c31c60e442982b89d35e789e0,
+        type: 2}
+    - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
+      propertyPath: carUISmoothingParameters
+      value: 
+      objectReference: {fileID: 11400000, guid: 651d069c447fd124c8d172922285d619,
+        type: 2}
+    - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
+      propertyPath: _carUISmoothingParameters
+      value: 
+      objectReference: {fileID: 11400000, guid: 651d069c447fd124c8d172922285d619,
         type: 2}
     - target: {fileID: 7824705624787612259, guid: f75ea5e5a3aab134184c4fbe7349d11d,
         type: 3}

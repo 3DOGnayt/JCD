@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 
 namespace Data.Helpers
 {
-    [System.Serializable]
-    public class CarLights
+    [Serializable]
+    public class CarLightsSetup
     {
         public Light ForwardLeft;
         public Light ForwardRight;

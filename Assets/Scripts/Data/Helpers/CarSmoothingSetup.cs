@@ -3,7 +3,7 @@ using System;
 namespace Data.Helpers
 {
     [Serializable]
-    public class CarSmoothingSettings
+    public class CarSmoothingSetup
     {
         public float SpeedSmoothing = 10f;
         public float RpmSmoothing = 10f;

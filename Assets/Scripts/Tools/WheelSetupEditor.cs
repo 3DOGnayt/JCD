@@ -3,6 +3,8 @@ using Core;
 using Data;
 using UnityEditor;
 using UnityEngine;
+using Views;
+using Views.Impl;
 
 namespace Tools
 {
@@ -23,12 +25,12 @@ namespace Tools
 
         private void AutoFill(CarView carSetup)
         {
-            var axles = new List<WheelInfo>();
+            var axles = new List<WheelInfoSetup>();
 
             var allChildren = carSetup.transform.GetComponentsInChildren<Transform>();
 
-            var front = new WheelInfo();
-            var back = new WheelInfo();
+            var front = new WheelInfoSetup();
+            var back = new WheelInfoSetup();
 
             foreach (var child in allChildren)
             {

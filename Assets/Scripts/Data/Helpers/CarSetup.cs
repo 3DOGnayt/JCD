@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Data
+namespace Data.Helpers
 {
     [Serializable]
     public class CarSetup

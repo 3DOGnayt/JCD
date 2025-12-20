@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
 
-namespace Data
+namespace Data.Helpers
 {
     [Serializable]
-    public class CarMassParameters
+    public class CarMassSetup
     {
         public float Mass;
         public bool AutomaticCenterOfMass;

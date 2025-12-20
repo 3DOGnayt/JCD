@@ -1,12 +1,12 @@
 using UnityEngine;
 
-namespace Data
+namespace Configs.Impl
 {
     [CreateAssetMenu(menuName = "Car/CrashEffectsParameters", fileName = "CrashEffectsParameters")]
     public class CrashEffectsParameters : ScriptableObject
     {
         [SerializeField] private GameObject _sparkPrefab;
-        [SerializeField] private int _poolSize = 12;
+        [SerializeField] private int _poolSize = 10;
         [Space]
         [SerializeField] private float _releaseDelaySeconds = 0.25f;
         [SerializeField] private float _heightOffset = 0.05f;

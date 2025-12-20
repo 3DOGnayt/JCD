@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Data
+namespace Configs.Impl
 {
     [CreateAssetMenu(menuName = "Car/" + nameof(SkidSmokeParameters), fileName = nameof(SkidSmokeParameters))]
     public class SkidSmokeParameters : ScriptableObject
@@ -9,18 +9,18 @@ namespace Data
         [SerializeField] private GameObject _smokePrefab;
 
         [Header("Axles")]
-        [SerializeField] private bool _enableFrontSmoke = true;
+        [SerializeField] private bool _enableFrontSmoke = false;
         [SerializeField] private bool _enableBackSmoke  = true;
         
         [Header("Pool")]
-        [SerializeField] private int _poolSize = 12;
+        [SerializeField] private int _poolSize = 32;
         [SerializeField] private int _emittersPerSkid = 4;
 
         [Header("Placement")]
-        [SerializeField] private float _heightOffset = 0.05f;
+        [SerializeField] private float _heightOffset = -0.5f;
 
         [Header("Reuse")]
-        [SerializeField] private float _releaseDelay = 1.5f; 
+        [SerializeField] private float _releaseDelay = 2f; 
 
         public GameObject SmokePrefab => _smokePrefab;
 

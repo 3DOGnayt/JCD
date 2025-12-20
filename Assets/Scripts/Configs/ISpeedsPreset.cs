@@ -5,6 +5,6 @@ namespace Configs
 {
     public interface ISpeedsPreset
     {
-        List<CarSpeedSettings> CarSpeedSettings { get; }
+        List<CarSpeedSetup> CarSpeedSettings { get; }
     }
 }

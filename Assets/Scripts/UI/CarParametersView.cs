@@ -19,7 +19,7 @@ namespace UI
         [SerializeField] private TMP_Text _gear;
         [SerializeField] private Image _rpm;
 
-        private CarUISmoothing _carUISmoothing;
+        private CarUISmoothingParameters _carUISmoothingParameters;
         private SignalBus _signalBus;
 
         private float _uiSpeed;
@@ -32,10 +32,10 @@ namespace UI
         private float _maxRpm;
 
         [Inject]
-        public void Construct(SignalBus signalBus, CarUISmoothing carUISmoothing)
+        public void Construct(SignalBus signalBus, CarUISmoothingParameters carUISmoothingParameters)
         {
             _signalBus = signalBus;
-            _carUISmoothing = carUISmoothing;
+            _carUISmoothingParameters = carUISmoothingParameters;
         }
 
         private void OnEnable()
@@ -88,7 +88,7 @@ namespace UI
             var absBackward = Mathf.Abs(targetBackSpeed);
             var maxAbsSpeed = Mathf.Max(absForward, absBackward);
 
-            var smoothingSettings = _carUISmoothing.SmoothingSettings;
+            var smoothingSettings = _carUISmoothingParameters.SmoothingSetup;
             var speedSmoothing = GetSpeedSmoothing(maxAbsSpeed, smoothingSettings);
 
             _uiSpeed = Smooth(_uiSpeed, targetSpeed, speedSmoothing);
@@ -131,11 +131,11 @@ namespace UI
             return Mathf.Lerp(current, target, time);
         }
 
-        private float GetSpeedSmoothing(float speedKmh, CarSmoothingSettings settings)
+        private float GetSpeedSmoothing(float speedKmh, CarSmoothingSetup setup)
         {
-            var baseValue = settings.SpeedSmoothing;
+            var baseValue = setup.SpeedSmoothing;
             var normalized = Mathf.InverseLerp(0f, _maxSpeed, speedKmh);
-            var smoothingMultiplier = Mathf.Lerp(1f, settings.MaxSmoothing, normalized);
+            var smoothingMultiplier = Mathf.Lerp(1f, setup.MaxSmoothing, normalized);
 
             return baseValue * smoothingMultiplier;
         }

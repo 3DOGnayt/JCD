@@ -1,11 +1,13 @@
 using System;
 using Core;
 using UnityEngine;
+using Views;
+using Views.Impl;
 
 namespace Data
 {
     [Serializable]
-    public class WheelInfo
+    public class WheelInfoSetup
     {
         public WheelCollider LeftWheel;
         public WheelCollider RightWheel;

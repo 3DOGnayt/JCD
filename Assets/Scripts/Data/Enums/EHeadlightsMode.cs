@@ -1,6 +1,6 @@
-namespace Data
+namespace Data.Enums
 {
-    public enum HeadlightsMode
+    public enum EHeadlightsMode
     {
         Off  = 0,
         Low  = 1,

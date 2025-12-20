@@ -1,27 +1,27 @@
 using System;
 using UnityEngine;
 
-namespace Data
+namespace Data.Helpers
 {
     [Serializable]
-    public class WheelParameters
+    public class WheelSetup
     {
-        public MainWheelParameters MainWheelParameters;
+        public MainWheelSetup mainWheelSetup;
         [Space]
-        public SuspensionSpringParameters SuspensionSpring;
+        public SuspensionSpringSetup SuspensionSpring;
         [Space] 
-        public ForwardAndSidewaysParameters ForwardFriction;
+        public ForwardAndSidewaysSetup ForwardFriction;
         [Space]
-        public ForwardAndSidewaysParameters SidewaysFriction;
+        public ForwardAndSidewaysSetup SidewaysFriction;
 
         public void SetAllParameters(WheelCollider wheel)
         {
-            wheel.mass = MainWheelParameters.Mass;
-            wheel.radius = MainWheelParameters.Radius;
-            wheel.wheelDampingRate = MainWheelParameters.DampingRate;
-            wheel.suspensionDistance = MainWheelParameters.SuspensionDistance;
-            wheel.forceAppPointDistance = MainWheelParameters.ForceAppPointDistance;
-            wheel.center = MainWheelParameters.Center;
+            wheel.mass = mainWheelSetup.Mass;
+            wheel.radius = mainWheelSetup.Radius;
+            wheel.wheelDampingRate = mainWheelSetup.DampingRate;
+            wheel.suspensionDistance = mainWheelSetup.SuspensionDistance;
+            wheel.forceAppPointDistance = mainWheelSetup.ForceAppPointDistance;
+            wheel.center = mainWheelSetup.Center;
             
             var suspensionSpring = wheel.suspensionSpring;
             suspensionSpring.spring = SuspensionSpring.Spring;
@@ -48,12 +48,12 @@ namespace Data
         
         public void SaveFromWheel(WheelCollider wheel)
         {
-            MainWheelParameters.Mass = wheel.mass;
-            MainWheelParameters.Radius = wheel.radius;
-            MainWheelParameters.DampingRate = wheel.wheelDampingRate;
-            MainWheelParameters.SuspensionDistance = wheel.suspensionDistance;
-            MainWheelParameters.ForceAppPointDistance = wheel.forceAppPointDistance;
-            MainWheelParameters.Center = wheel.center;
+            mainWheelSetup.Mass = wheel.mass;
+            mainWheelSetup.Radius = wheel.radius;
+            mainWheelSetup.DampingRate = wheel.wheelDampingRate;
+            mainWheelSetup.SuspensionDistance = wheel.suspensionDistance;
+            mainWheelSetup.ForceAppPointDistance = wheel.forceAppPointDistance;
+            mainWheelSetup.Center = wheel.center;
 
             var spring = wheel.suspensionSpring;
             SuspensionSpring.Spring = spring.spring;
@@ -77,12 +77,12 @@ namespace Data
 
         public void SetMainParameters(WheelCollider wheel)
         {
-            wheel.mass = MainWheelParameters.Mass;
-            wheel.radius = MainWheelParameters.Radius;
-            wheel.wheelDampingRate = MainWheelParameters.DampingRate;
-            wheel.suspensionDistance = MainWheelParameters.SuspensionDistance;
-            wheel.forceAppPointDistance = MainWheelParameters.ForceAppPointDistance;
-            wheel.center = MainWheelParameters.Center;
+            wheel.mass = mainWheelSetup.Mass;
+            wheel.radius = mainWheelSetup.Radius;
+            wheel.wheelDampingRate = mainWheelSetup.DampingRate;
+            wheel.suspensionDistance = mainWheelSetup.SuspensionDistance;
+            wheel.forceAppPointDistance = mainWheelSetup.ForceAppPointDistance;
+            wheel.center = mainWheelSetup.Center;
         }
 
         public void SetSuspensionParameters(WheelCollider wheel)

@@ -3,7 +3,7 @@ using System;
 namespace Data
 {
     [Serializable]
-    public class SuspensionSpringParameters
+    public class SuspensionSpringSetup
     {
         public float Spring;
         public float Damper;

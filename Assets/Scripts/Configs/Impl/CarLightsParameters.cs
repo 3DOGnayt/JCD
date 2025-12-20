@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Data
+namespace Configs.Impl
 {
     [CreateAssetMenu(menuName = "Car/CarLightsParameters", fileName = "CarLightsParameters")]
     public class CarLightsParameters : ScriptableObject

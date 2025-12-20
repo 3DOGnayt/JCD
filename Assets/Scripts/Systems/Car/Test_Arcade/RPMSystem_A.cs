@@ -65,7 +65,7 @@ namespace Systems.Car.Test_Arcade
             _reverseMaxSpeedKmh = 0f;
             _hasReverseBand = false;
 
-            var speedsPreset = _params.SpeedsPreset;
+            var speedsPreset = _params.SpeedsPresetParameters;
             if (speedsPreset == null)
             {
                 Debug.LogError("RPMSystem_A: SpeedsPreset is null in CarParameters.");
@@ -129,6 +129,7 @@ namespace Systems.Car.Test_Arcade
             if (_forwardBands == null || _forwardBands.Count == 0)
                 return;
 
+            //TODO: Refactoring
             var movement = _params.MovementParameters;
             var idleRpm = movement.IdleRpm;
             var accelRpmPerSec = movement.AccelerationRate;

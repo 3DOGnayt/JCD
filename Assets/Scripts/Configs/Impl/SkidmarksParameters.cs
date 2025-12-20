@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Data
+namespace Configs.Impl
 {
     [CreateAssetMenu(menuName = "Car/" + nameof(SkidmarksParameters), fileName = nameof(SkidmarksParameters))]
     public class SkidmarksParameters : ScriptableObject

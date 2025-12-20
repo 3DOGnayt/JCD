@@ -1,9 +1,13 @@
 using Components;
+using Configs.Impl;
 using Core;
 using Data;
+using Data.Enums;
 using Data.Helpers;
 using Scellecs.Morpeh;
 using UnityEngine;
+using Views;
+using Views.Impl;
 using Zenject;
 
 namespace Systems.Car.Test_Arcade
@@ -53,7 +57,7 @@ namespace Systems.Car.Test_Arcade
                 if (carView == null)
                     continue;
 
-                var lights = carView.CarEffects.CarLights;
+                var lights = carView.CarEffectsSetup.carLightsSetup;
                 if (lights == null)
                     continue;
 
@@ -68,32 +72,32 @@ namespace Systems.Car.Test_Arcade
             }
         }
 
-        private static HeadlightsMode NextMode(HeadlightsMode current)
+        private static EHeadlightsMode NextMode(EHeadlightsMode current)
         {
             return current switch
             {
-                HeadlightsMode.Off => HeadlightsMode.Low,
-                HeadlightsMode.Low => HeadlightsMode.High,
-                HeadlightsMode.High => HeadlightsMode.Off,
-                _ => HeadlightsMode.Off
+                EHeadlightsMode.Off => EHeadlightsMode.Low,
+                EHeadlightsMode.Low => EHeadlightsMode.High,
+                EHeadlightsMode.High => EHeadlightsMode.Off,
+                _ => EHeadlightsMode.Off
             };
         }
 
-        private void ApplyFrontLights(CarLights lights, HeadlightsMode mode)
+        private void ApplyFrontLights(CarLightsSetup lightsSetup, EHeadlightsMode mode)
         {
-            var forwardLeft = lights.ForwardLeft;
-            var forwardRight = lights.ForwardRight;
+            var forwardLeft = lightsSetup.ForwardLeft;
+            var forwardRight = lightsSetup.ForwardRight;
 
             if (forwardLeft == null && forwardRight == null)
                 return;
 
-            var enable = mode != HeadlightsMode.Off;
+            var enable = mode != EHeadlightsMode.Off;
 
-            var targetRange = mode == HeadlightsMode.High
+            var targetRange = mode == EHeadlightsMode.High
                 ? _lightsParams.HighRange
                 : _lightsParams.LowRange;
 
-            var targetIntensity = mode == HeadlightsMode.High
+            var targetIntensity = mode == EHeadlightsMode.High
                 ? _lightsParams.HighIntensity
                 : _lightsParams.LowIntensity;
 
@@ -118,10 +122,10 @@ namespace Systems.Car.Test_Arcade
             }
         }
 
-        private void ApplyRearLights(CarLights lights, bool isBraking)
+        private void ApplyRearLights(CarLightsSetup lightsSetup, bool isBraking)
         {
-            var backLeft = lights.BackLeft;
-            var backRight = lights.BackRight;
+            var backLeft = lightsSetup.BackLeft;
+            var backRight = lightsSetup.BackRight;
 
             if (backLeft == null && backRight == null)
                 return;

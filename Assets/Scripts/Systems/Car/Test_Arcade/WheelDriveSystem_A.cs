@@ -45,7 +45,7 @@ namespace Systems.Car.Test_Arcade
             _forwardGearTorque = new Dictionary<int, float>();
             _reverseGearTorque = 0f;
 
-            var speedsPreset = _carParameters.SpeedsPreset;
+            var speedsPreset = _carParameters.SpeedsPresetParameters;
             if (speedsPreset == null)
             {
                 Debug.LogError("WheelDriveSystem_A: SpeedsPreset is null in CarParameters.");

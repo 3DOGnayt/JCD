@@ -1,4 +1,4 @@
-namespace Data.Helpers
+namespace Data.Enums
 {
     public enum EGear
     {
