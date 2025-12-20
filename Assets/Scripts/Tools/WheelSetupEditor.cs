@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using Core;
 using Data;
 using UnityEditor;
 using UnityEngine;
-using Views;
 using Views.Impl;
 
 namespace Tools

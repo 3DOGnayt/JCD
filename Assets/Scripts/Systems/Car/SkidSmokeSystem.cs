@@ -1,15 +1,14 @@
 using System.Collections.Generic;
 using Components;
 using Configs.Impl;
-using Data;
 using Scellecs.Morpeh;
 using Services.Impl;
 using UnityEngine;
 using Zenject;
 
-namespace Systems.Car.Test_Arcade
+namespace Systems.Car
 {
-    public sealed class SkidSmokeSystem_A : IFixedSystem
+    public sealed class SkidSmokeSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
         [Inject] private ISkidSmokeService _smokeService;

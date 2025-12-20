@@ -2,172 +2,257 @@ using System.Collections.Generic;
 using Components;
 using Configs.Impl;
 using Scellecs.Morpeh;
+using Services;
 using UnityEngine;
 using Zenject;
 
 namespace Systems.Car
 {
-    public class WheelDriveSystem : IFixedSystem
+    public sealed class WheelDriveSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
+        [Inject] private IInputService _inputService;
         [Inject] private CarParameters _carParameters;
 
-        private Filter _filter;
-        private Stash<WheelInfoComponent> _wheelStash;
-        private Stash<GearComponent> _gearStash;
-        private Stash<EngineRpmComponent> _rpmStash;
-        private Stash<VerticalInputComponent> _vertStash;
+        private Filter _cars;
+        private AspectFactory<CarSetupAspect> _carAspectFactory;
+        private Stash<WheelInfoComponent> _wheelInfoStash;
+        private Stash<VerticalInputComponent> _verticalInputStash;
 
-        // лимиты скорости @ redline из пресета: ключ = номер передачи (-1..9), значение = км/ч
-        private readonly Dictionary<int, float> _kmhAtRedline = new(12);
-        private float _g1Limit = 0f; // лимит 1-й передачи для расчёта gearScale
+        private const float StopThresholdKmh = 0.5f; // TODO: Refactoring
+        private const float InputDeadZone = 0.05f; // TODO: Refactoring
 
-        // Временные константы (оставляю как были)
-        private const float TorqueBaseNm = 2300f;
-        private const float TorqueCapNm  = 9000f;
-        private const float SlipKp       = 1f;
-        private const float BrakeMaxNm   = 6000f;
-        private const float CoastBrakeNm = 0f;
+        private Dictionary<int, float> _forwardGearTorque;
+        private float _reverseGearTorque;
 
         public void OnAwake()
         {
-            _filter = World.Filter
+            _cars = World.Filter
+                .Extend<CarSetupAspect>()
                 .With<WheelInfoComponent>()
-                .With<GearComponent>()
-                .With<EngineRpmComponent>()
                 .With<VerticalInputComponent>()
                 .Build();
 
-            _wheelStash = World.GetStash<WheelInfoComponent>();
-            _gearStash  = World.GetStash<GearComponent>();
-            _rpmStash   = World.GetStash<EngineRpmComponent>();
-            _vertStash  = World.GetStash<VerticalInputComponent>();
+            _carAspectFactory = World.GetAspectFactory<CarSetupAspect>();
+            _wheelInfoStash = World.GetStash<WheelInfoComponent>();
+            _verticalInputStash = World.GetStash<VerticalInputComponent>();
 
-            // Собираем лимиты из SO
-            _kmhAtRedline.Clear();
-            _g1Limit = 0f;
-            /*foreach (var s in _carMovementParameters.SpeedPreset.CarSpeedSettings)
+            BuildGearTorqueFromPreset();
+        }
+
+        private void BuildGearTorqueFromPreset()
+        {
+            _forwardGearTorque = new Dictionary<int, float>();
+            _reverseGearTorque = 0f;
+
+            var speedsPreset = _carParameters.SpeedsPresetParameters;
+            if (speedsPreset == null)
             {
-                int gear = (int)s.EGear;                      // -1..9
-                float lim = Mathf.Max(0f, s.SpeedLimit);   // модуль
-                _kmhAtRedline[gear] = lim;
-                if (gear == 1) _g1Limit = lim;
-            }*/
+                Debug.LogError("WheelDriveSystem_A: SpeedsPreset is null in CarParameters.");
+                return;
+            }
+
+            var carSpeedSettings = speedsPreset.CarSpeedSettings;
+            if (carSpeedSettings == null || carSpeedSettings.Count == 0)
+            {
+                Debug.LogError("WheelDriveSystem_A: CarSpeedSettings is null or empty in SpeedsPreset.");
+                return;
+            }
+
+            var hasForward = false;
+            var hasReverse = false;
+
+            foreach (var speedSetting in carSpeedSettings)
+            {
+                var gearValue = (int)speedSetting.EGear;
+                var gearMotorTorque = Mathf.Max(0f, speedSetting.SpeedAcceleration);
+
+                if (gearValue > 0)
+                {
+                    _forwardGearTorque[gearValue] = gearMotorTorque;
+                    hasForward = true;
+                }
+                else if (gearValue < 0)
+                {
+                    _reverseGearTorque = gearMotorTorque;
+                    hasReverse = true;
+                }
+            }
+
+            if (!hasForward)
+            {
+                Debug.LogError("WheelDriveSystem_A: no forward gear torque values defined in SpeedsPreset.");
+                _forwardGearTorque.Clear();
+                return;
+            }
+
+            if (!hasReverse)
+            {
+                Debug.LogError("WheelDriveSystem_A: no reverse gear torque value defined in SpeedsPreset.");
+                _forwardGearTorque.Clear();
+                return;
+            }
         }
 
         public void OnUpdate(float deltaTime)
         {
-            float redline = _carParameters.MovementParameters.MaxRpm;
+            if (_forwardGearTorque == null || _forwardGearTorque.Count == 0)
+                return;
 
-            foreach (var ent in _filter)
+            foreach (var car in _cars)
             {
-                var wheels = _wheelStash.Get(ent);
-                ref var gb  = ref _gearStash.Get(ent);
-                ref var eng = ref _rpmStash.Get(ent);
-                ref var vIn = ref _vertStash.Get(ent);
+                var aspect = _carAspectFactory.Get(car);
 
-                // --- 1) целевая скорость от RPM/передачи (знак от передачи)
-                float speedTargetKmh = 0f;
-                float currentLimit = 0f;
-                int absGearIndex = Mathf.Abs(gb.Value);
-                if (absGearIndex >= 1 && _kmhAtRedline.TryGetValue(absGearIndex, out currentLimit) && currentLimit > 0f)
+                ref var speedValue = ref aspect.Speed.Value;
+                ref var backSpeedValue = ref aspect.BackSpeed.Value;
+                ref var brakeInputFlag = ref aspect.BrakeInput.Value;
+                ref var handbrakePressed = ref aspect.HandbrakeInput.Value;
+                ref var currentGear = ref aspect.Gear.Value;
+
+                var verticalInput = Mathf.Clamp(_verticalInputStash.Get(car).Value, -1f, 1f);
+
+                var forwardSpeedKmh = Mathf.Max(0f, speedValue);
+                var backwardSpeedKmh = Mathf.Max(0f, Mathf.Abs(backSpeedValue));
+                var scalarSpeedKmh = Mathf.Max(forwardSpeedKmh, backwardSpeedKmh);
+
+                var isMovingForward = forwardSpeedKmh >= backwardSpeedKmh;
+                var isAlmostStopped = scalarSpeedKmh < StopThresholdKmh;
+
+                var wheelInfoComponent = _wheelInfoStash.Get(car);
+
+                float maxMotorTorque;
+                float driveInput;
+                float brakeForce;
+
+                ResolveDriveAndBrake(
+                    verticalInput,
+                    currentGear,
+                    isMovingForward,
+                    isAlmostStopped,
+                    handbrakePressed,
+                    out maxMotorTorque,
+                    out driveInput,
+                    out brakeForce,
+                    out brakeInputFlag
+                );
+
+                _inputService.ApplyVerticalMove(maxMotorTorque, driveInput, wheelInfoComponent.WheelInfo);
+                ApplyBrakes(wheelInfoComponent, brakeForce, handbrakePressed);
+            }
+        }
+
+        private void ResolveDriveAndBrake(
+            float verticalInput,
+            int currentGear,
+            bool isMovingForward,
+            bool isAlmostStopped,
+            bool handbrakePressed,
+            out float maxMotorTorque,
+            out float driveInput,
+            out float brakeForce,
+            out bool brakeInputFlag)
+        {
+            maxMotorTorque = 0f;
+            driveInput = 0f;
+            brakeForce = 0f;
+            brakeInputFlag = false;
+
+            if (Mathf.Abs(verticalInput) < InputDeadZone)
+                return;
+
+            var wantsForward = verticalInput > 0f;
+            var wantsBackward = verticalInput < 0f;
+
+            if (currentGear == 0)
+            {
+                if (!isAlmostStopped)
+                    SetBrakeMode(verticalInput, out maxMotorTorque, out driveInput, out brakeForce, out brakeInputFlag);
+
+                if (handbrakePressed)
                 {
-                    float rpm01 = Mathf.Clamp01(eng.Value / Mathf.Max(1f, redline));
-                    speedTargetKmh = currentLimit * rpm01 * Mathf.Sign(gb.Value);
+                    maxMotorTorque = 0f;
+                    driveInput = 0f;
                 }
 
-                // --- 2) газ/тормоз с учётом направления
-                float throttle01, brake01;
-                if (gb.Value > 0)
+                return;
+            }
+
+            if (wantsForward)
+            {
+                if (!isMovingForward && !isAlmostStopped)
+                    SetBrakeMode(verticalInput, out maxMotorTorque, out driveInput, out brakeForce, out brakeInputFlag);
+                else if (currentGear > 0)
                 {
-                    throttle01 = Mathf.Max(0f,  vIn.Value);
-                    brake01    = Mathf.Max(0f, -vIn.Value);
-                }
-                else if (gb.Value < 0)
-                {
-                    throttle01 = Mathf.Max(0f, -vIn.Value);
-                    brake01    = Mathf.Max(0f,  vIn.Value);
+                    maxMotorTorque = GetForwardGearTorque(currentGear);
+                    driveInput = verticalInput;
                 }
                 else
+                    return;
+            }
+            else if (wantsBackward)
+            {
+                if (isMovingForward && !isAlmostStopped)
+                    SetBrakeMode(verticalInput, out maxMotorTorque, out driveInput, out brakeForce, out brakeInputFlag);
+                else if (currentGear < 0)
                 {
-                    throttle01 = 0f;
-                    brake01    = Mathf.Max(0f, -vIn.Value);
+                    maxMotorTorque = _reverseGearTorque;
+                    driveInput = verticalInput;
                 }
+                else
+                    return;
+            }
 
-                // --- 3) радиус и набор моторных колёс
-                var motorWheels = new List<WheelCollider>();
-                float radius = 0.35f;
-                foreach (var info in wheels.WheelInfo)
-                {
-                    if (info.Motor)
-                    {
-                        if (info.LeftWheel  != null) motorWheels.Add(info.LeftWheel);
-                        if (info.RightWheel != null) motorWheels.Add(info.RightWheel);
-                    }
-                }
+            if (handbrakePressed)
+            {
+                maxMotorTorque = 0f;
+                driveInput = 0f;
+            }
+        }
 
-                if (motorWheels.Count == 0)
-                {
-                    foreach (var info in wheels.WheelInfo)
-                    {
-                        SyncVisuals(info.LeftWheel,  info.LeftVisual);
-                        SyncVisuals(info.RightWheel, info.RightVisual);
-                    }
-                    continue;
-                }
+        private void SetBrakeMode(
+            float verticalInput,
+            out float maxMotorTorque,
+            out float driveInput,
+            out float brakeForce,
+            out bool brakeInputFlag)
+        {
+            maxMotorTorque = 0f;
+            driveInput = 0f;
+            brakeForce = Mathf.Abs(verticalInput);
+            brakeInputFlag = true;
+        }
 
-                var refWheel = motorWheels[0];
-                radius = Mathf.Max(radius, refWheel.radius);
+        private float GetForwardGearTorque(int gearValue)
+        {
+            if (_forwardGearTorque != null && _forwardGearTorque.TryGetValue(gearValue, out var torque))
+                return torque;
 
-                // --- 4) целевой/фактический rpm колеса
-                float wheelRpmTarget = (Mathf.Abs(speedTargetKmh) / 3.6f) / radius * (60f / (2f * Mathf.PI));
-                float wheelRpmActual = Mathf.Abs(refWheel.rpm);
+            Debug.LogError($"WheelDriveSystem_A: no torque value for forward gear {gearValue} in SpeedsPreset.");
+            return 0f;
+        }
 
-                // --- 5) множитель передачи по пресету (от 1-й)
-                float gearScale = 0f;
-                if (absGearIndex >= 1 && currentLimit > 0f && _g1Limit > 0f)
-                    gearScale = _g1Limit / currentLimit; // 1-я ≈1.0; дальше <1
+        private void ApplyBrakes(WheelInfoComponent wheelInfoComponent, float brakeForce, bool handbrakePressed)
+        {
+            var pedalBrakeTorque = _carParameters.MovementParameters.BrakeTorque * Mathf.Max(0f, brakeForce);
+            var handbrakeTorque = handbrakePressed
+                ? _carParameters.MovementParameters.HandbrakeTorque
+                : 0f;
 
-                // --- 6) момент на колёса
-                float slipErr = wheelRpmTarget - wheelRpmActual;
-                float driveNmOneWheel = Mathf.Clamp(
-                    (TorqueBaseNm * gearScale) * throttle01 + SlipKp * slipErr,
-                    0f, TorqueCapNm);
+            foreach (var info in wheelInfoComponent.WheelInfo)
+            {
+                var totalBrakeTorque = pedalBrakeTorque;
 
-                // знак по передаче
-                float signTorque = (throttle01 > 0f)
-                    ? (gb.Value >= 1 ? +1f : (gb.Value <= -1 ? -1f : 0f))
-                    : 0f;
+                if (handbrakePressed && info.Motor)
+                    totalBrakeTorque += handbrakeTorque;
 
-                // --- 7) равномерно раздаём момент по ведущим колёсам
-                float perWheelNm = driveNmOneWheel;
-                foreach (var info in wheels.WheelInfo)
-                {
-                    if (!info.Motor) continue;
-                    if (info.LeftWheel  != null) info.LeftWheel.motorTorque  = perWheelNm * signTorque;
-                    if (info.RightWheel != null) info.RightWheel.motorTorque = perWheelNm * signTorque;
-                }
+                if (info.LeftWheel != null)
+                    info.LeftWheel.brakeTorque = totalBrakeTorque;
 
-                // --- 8) тормоз (равномерно всем)
-                float brakeNm = Mathf.Max(BrakeMaxNm * brake01, CoastBrakeNm);
-                foreach (var info in wheels.WheelInfo)
-                {
-                    if (info.LeftWheel  != null) info.LeftWheel.brakeTorque  = brakeNm;
-                    if (info.RightWheel != null) info.RightWheel.brakeTorque = brakeNm;
-
-                    SyncVisuals(info.LeftWheel,  info.LeftVisual);
-                    SyncVisuals(info.RightWheel, info.RightVisual);
-                }
+                if (info.RightWheel != null)
+                    info.RightWheel.brakeTorque = totalBrakeTorque;
             }
         }
 
         public void Dispose() { }
-
-        private static void SyncVisuals(WheelCollider wheel, Transform visual)
-        {
-            if (wheel == null || visual == null) return;
-            wheel.GetWorldPose(out var pos, out var rot);
-            visual.SetPositionAndRotation(pos, rot);
-        }
     }
 }

@@ -1,18 +1,15 @@
 using Components;
 using Configs.Impl;
-using Core;
-using Data;
 using Data.Enums;
 using Data.Helpers;
 using Scellecs.Morpeh;
 using UnityEngine;
 using Views;
-using Views.Impl;
 using Zenject;
 
-namespace Systems.Car.Test_Arcade
+namespace Systems.Car
 {
-    public sealed class CarLightsSystem_A : IFixedSystem
+    public sealed class CarLightsSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
         [Inject] private CarLightsParameters _lightsParams;
@@ -23,7 +20,7 @@ namespace Systems.Car.Test_Arcade
         private Stash<BrakeInputComponent> _brakeStash;
         private Stash<HandbrakeInputComponent> _handbrakeStash;
         
-        private bool _headlightsKeyPrev; // TODO: this before update input system or new system 
+        private bool _headlightsKeyPrev; // TODO: Refactoring - this before update input system or new system 
 
         public void OnAwake()
         {
@@ -40,7 +37,7 @@ namespace Systems.Car.Test_Arcade
             _handbrakeStash = World.GetStash<HandbrakeInputComponent>();
             
             if (_lightsParams == null)
-                Debug.LogError($"{nameof(CarLightsSystem_A)}: CarLightsParameters is null. Lights will be disabled.");
+                Debug.LogError($"{nameof(CarLightsSystem)}: CarLightsParameters is null. Lights will be disabled.");
         }
 
         public void OnUpdate(float deltaTime)

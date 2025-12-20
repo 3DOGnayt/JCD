@@ -5,9 +5,9 @@ using Scellecs.Morpeh;
 using UnityEngine;
 using Zenject;
 
-namespace Systems.Car.Test_Arcade
+namespace Systems.Car
 {
-    public class SlipSystem_A : IFixedSystem
+    public class SlipSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
         [Inject] private CarParameters _carParameters;
@@ -24,10 +24,10 @@ namespace Systems.Car.Test_Arcade
 
         private Dictionary<Entity, float> _frontDriftValues;
 
-        private const float MinDriftSpeedKmh = 20f;
-        private const float MinBrakeSkidSpeedKmh = 5f;
-        private const float SlipAngleThresholdDeg = 20f;
-        private const float DriftVisualThresh = 0.05f;
+        private const float MinDriftSpeedKmh = 20f; // TODO: Refactoring
+        private const float MinBrakeSkidSpeedKmh = 5f; // TODO: Refactoring
+        private const float SlipAngleThresholdDeg = 20f; // TODO: Refactoring
+        private const float DriftVisualThresh = 0.05f; // TODO: Refactoring
 
         public void OnAwake()
         {
@@ -52,6 +52,7 @@ namespace Systems.Car.Test_Arcade
             _frontDriftValues = new Dictionary<Entity, float>();
         }
 
+        // TODO: Refactoring
         public void OnUpdate(float deltaTime)
         {
             var slipParameters = _carParameters.SlipParameters;
@@ -85,15 +86,15 @@ namespace Systems.Car.Test_Arcade
                 var backBaseSidewaysStiffness = _backSidewaysStiffnessStash.Get(car).Value;
                 var frontBaseSidewaysStiffness = _frontSidewaysStiffnessStash.Get(car).Value;
 
-                var rbComp = _rbStash.Get(car);
-                var trComp = _transformStash.Get(car);
-                var rb = rbComp.Value;
-                var tr = trComp.Value;
+                var rigidbodyComponent = _rbStash.Get(car);
+                var transformComponent = _transformStash.Get(car);
+                var rigidbody = rigidbodyComponent.Value;
+                var transform = transformComponent.Value;
 
-                if (rb == null || tr == null)
+                if (rigidbody == null || transform == null)
                     continue;
 
-                var vel = rb.velocity;
+                var vel = rigidbody.velocity;
                 var flatVel = new Vector3(vel.x, 0f, vel.z);
                 var speedTotalKmh = flatVel.magnitude * 3.6f;
 
@@ -143,7 +144,7 @@ namespace Systems.Car.Test_Arcade
                 }
 
 
-                var flatFwd = new Vector3(tr.forward.x, 0f, tr.forward.z);
+                var flatFwd = new Vector3(transform.forward.x, 0f, transform.forward.z);
 
                 var hasVelocity = flatVel.sqrMagnitude > 0.01f;
                 var hasForward = flatFwd.sqrMagnitude > 0.01f;

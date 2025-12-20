@@ -1,13 +1,10 @@
 using Components;
 using Configs.Impl;
-using Core;
-using Data;
 using Data.Enums;
 using Scellecs.Morpeh;
 using Signals;
 using UnityEngine;
 using Views;
-using Views.Impl;
 using Zenject;
 
 namespace Systems.Spawn
@@ -15,7 +12,7 @@ namespace Systems.Spawn
     public sealed class PlayerSpawnSystem : ISystem 
     {
         [Inject] public World World { get; set;}
-        [Inject] private CarPresetParameters _carPresetParameters; // переделать на выбор игрока
+        [Inject] private CarPresetParameters _carPresetParameters; // TODO: Refactoring - переделать на выбор игрока
         [Inject] private DiContainer _container;
         [Inject] private SignalBus _signalBus;
         
@@ -86,13 +83,10 @@ namespace Systems.Spawn
 
         private void AddCommonComponents(Entity entity, ICarView carView)
         {
-            //TODO: need change
+            //TODO: example
             var playerTag = World.GetStash<PlayerTagComponent>();
             playerTag.Set(entity, new PlayerTagComponent());
-            
             //entity.SetComponent(new PlayerTagComponent());
-
-            //entity.SetComponent(new CarViewComponent { Value = carView });
             
             entity.SetComponent(new TransformComponent { Value = carView.CarTransform });
             entity.SetComponent(new PositionComponent { Value = carView.CarTransform.position });

@@ -3,9 +3,9 @@ using Scellecs.Morpeh;
 using Services;
 using Zenject;
 
-namespace Systems.Car.Test_Arcade
+namespace Systems.Car
 {
-    public class SkidmarksSystem_A : IFixedSystem
+    public class SkidmarksSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
         [Inject] private ISkidmarksService _skidmarksService;
@@ -32,12 +32,12 @@ namespace Systems.Car.Test_Arcade
         {
             foreach (var car in _cars)
             {
-                var rbComp = _rbStash.Get(car);
+                var rigidbodyComponent = _rbStash.Get(car);
                 var info = _wheelInfoStash.Get(car);
                 var skidFlag = _skidmarksStash.Get(car).Value;
 
-                var rb = rbComp.Value;
-                if (rb == null || info.WheelInfo == null)
+                var rigidbody = rigidbodyComponent.Value;
+                if (rigidbody == null || info.WheelInfo == null)
                     continue;
 
                 foreach (var w in info.WheelInfo)
@@ -46,10 +46,10 @@ namespace Systems.Car.Test_Arcade
                         continue;
 
                     if (w.LeftWheel != null)
-                        _skidmarksService.UpdateWheel(rb, w.LeftWheel, skidFlag);
+                        _skidmarksService.UpdateWheel(rigidbody, w.LeftWheel, skidFlag);
 
                     if (w.RightWheel != null)
-                        _skidmarksService.UpdateWheel(rb, w.RightWheel, skidFlag);
+                        _skidmarksService.UpdateWheel(rigidbody, w.RightWheel, skidFlag);
                 }
             }
         }

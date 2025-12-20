@@ -7,168 +7,206 @@ using Zenject;
 
 namespace Systems.Car
 {
-    public class GearShiftSystem : IFixedSystem
+    public sealed class GearShiftSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarParameters _carParameters;
+        [Inject] private CarParameters _params;
 
-        private Filter _filter;
-        private Stash<EngineRpmComponent> _engineRpmStash;
+        private Filter _cars;
         private Stash<GearComponent> _gearStash;
         private Stash<SpeedComponent> _speedStash;
-        private Stash<VerticalInputComponent> _verticalStash;
+        private Stash<BackSpeedComponent> _backSpeedStash;
+        private Stash<VerticalInputComponent> _verticalInputStash;
 
-        private readonly Dictionary<int, float> _kmhAtRedline = new(10);
-        private int _maxForwardGear = 1;
+        private struct ForwardGearInfo
+        {
+            public int GearValue;
+            public float SpeedLimit;
+        }
 
-        private const float ThrottleThresh = 0.10f;
-        private const float StopKmh = 0.5f;
-        private const float DownshiftMarginKmh = 2f;
+        private List<ForwardGearInfo> _forwardGears;
+        private Dictionary<int, int> _forwardIndexByGearValue;
+        private int _reverseGearValue;
+        private int _neutralGearValue;
 
-        // ★ новые пороги для апшифта по скорости
-        private const float UpshiftSpeedRatio = 0.95f;
-        private const float UpshiftThrottleMin = 0.30f;
+        private const float StopSpeedKmh = 0.5f; // TODO: Refactoring
+        private const float InputDeadZone = 0.05f; // TODO: Refactoring
 
         public void OnAwake()
         {
-            _filter = World.Filter
-                .With<EngineRpmComponent>()
+            _cars = World.Filter
                 .With<GearComponent>()
                 .With<SpeedComponent>()
+                .With<BackSpeedComponent>()
                 .With<VerticalInputComponent>()
                 .Build();
 
-            _engineRpmStash = World.GetStash<EngineRpmComponent>();
             _gearStash = World.GetStash<GearComponent>();
             _speedStash = World.GetStash<SpeedComponent>();
-            _verticalStash = World.GetStash<VerticalInputComponent>();
+            _backSpeedStash = World.GetStash<BackSpeedComponent>();
+            _verticalInputStash = World.GetStash<VerticalInputComponent>();
 
-            _kmhAtRedline.Clear();
-            _maxForwardGear = 1;
-
-            /*foreach (var s in _carMovementParameters.SpeedPreset.CarSpeedSettings)
-            {
-                var gear = (int)s.EGear;
-                var limit = Mathf.Max(0f, s.SpeedLimit);
-                _kmhAtRedline[gear] = limit;
-
-                if (gear >= 1 && gear > _maxForwardGear)
-                    _maxForwardGear = gear;
-            }*/
+            BuildGearDataFromPreset();
         }
 
-        public void OnUpdate(float dt)
+        private void BuildGearDataFromPreset()
         {
-            var redline = _carParameters.MovementParameters.MaxRpm;
-            var idle = _carParameters.MovementParameters.IdleRpm;
+            _forwardGears = new List<ForwardGearInfo>();
+            _forwardIndexByGearValue = new Dictionary<int, int>();
+            _reverseGearValue = -1;
+            _neutralGearValue = 0;
 
-            foreach (var ent in _filter)
+            var speedsPreset = _params.SpeedsPresetParameters;
+            if (speedsPreset == null)
             {
-                ref var eng = ref _engineRpmStash.Get(ent);
-                ref var gb = ref _gearStash.Get(ent);
-                ref var sp = ref _speedStash.Get(ent);
-                ref var vert = ref _verticalStash.Get(ent);
+                Debug.LogError("GearShiftSystem_A: SpeedPreset is null in CarParameters.");
+                return;
+            }
 
-                // === Neutral (0)
-                if (gb.Value == 0)
+            var carSpeedSettings = speedsPreset.CarSpeedSettings;
+            if (carSpeedSettings == null || carSpeedSettings.Count == 0)
+            {
+                Debug.LogError("GearShiftSystem_A: CarSpeedSettings is null or empty in SpeedPreset.");
+                return;
+            }
+
+            foreach (var speedSetting in carSpeedSettings)
+            {
+                var gearValue = (int)speedSetting.EGear;
+
+                if (gearValue == 0)
+                    _neutralGearValue = gearValue;
+                else if (gearValue < 0)
+                    _reverseGearValue = gearValue;
+                else
                 {
-                    if (vert.Value > ThrottleThresh)
+                    _forwardGears.Add(new ForwardGearInfo
                     {
-                        gb.Value = 1;
-                        eng.Value = RpmFromSpeed(sp.Value, 1, redline, idle);
-                        continue;
-                    }
-
-                    if (vert.Value < -ThrottleThresh)
-                    {
-                        gb.Value = -1;
-                        eng.Value = RpmFromSpeed(sp.Value, 1, redline, idle);
-                        continue;
-                    }
-
-                    eng.Value = Mathf.Max(eng.Value, idle);
-                    continue;
+                        GearValue = gearValue,
+                        SpeedLimit = speedSetting.SpeedLimit
+                    });
                 }
+            }
 
-                // === Reverse (-1)
-                if (gb.Value < 0)
-                {
-                    if (sp.Value <= StopKmh && Mathf.Abs(vert.Value) <= ThrottleThresh)
-                    {
-                        gb.Value = 0;
-                        eng.Value = Mathf.Max(idle, eng.Value);
-                        continue;
-                    }
+            if (_forwardGears.Count == 0)
+            {
+                Debug.LogError("GearShiftSystem_A: no forward gears defined in SpeedPreset.");
+                return;
+            }
 
-                    if (sp.Value <= StopKmh && vert.Value > ThrottleThresh)
-                    {
-                        gb.Value = 1;
-                        eng.Value = RpmFromSpeed(sp.Value, 1, redline, idle);
-                    }
+            _forwardGears.Sort((a, b) => a.SpeedLimit.CompareTo(b.SpeedLimit));
 
-                    continue;
-                }
+            for (var index = 0; index < _forwardGears.Count; index++)
+                _forwardIndexByGearValue[_forwardGears[index].GearValue] = index;
+        }
 
-                // === Forward gears (1..N)
-                var current = gb.Value;
+        public void OnUpdate(float deltaTime)
+        {
+            if (_forwardGears == null || _forwardGears.Count == 0)
+                return;
 
-                if (sp.Value <= StopKmh && Mathf.Abs(vert.Value) <= ThrottleThresh)
-                {
-                    gb.Value = 0;
-                    eng.Value = Mathf.Max(idle, eng.Value);
-                    continue;
-                }
+            foreach (var car in _cars)
+            {
+                ref var gearComponent = ref _gearStash.Get(car);
+                ref var speedComponent = ref _speedStash.Get(car);
+                ref var backSpeedComponent = ref _backSpeedStash.Get(car);
 
-                if (sp.Value <= StopKmh && vert.Value < -ThrottleThresh)
-                {
-                    gb.Value = 0;
-                    eng.Value = Mathf.Max(idle, eng.Value);
-                    continue;
-                }
+                var verticalInput = _verticalInputStash.Get(car).Value;
+                var currentGear = gearComponent.Value;
+                var forwardSpeedKmh = Mathf.Max(0.0f, speedComponent.Value);
+                var backwardSpeedKmh = Mathf.Max(0.0f, backSpeedComponent.Value);
 
-                // ★ апшифт: по redline ИЛИ по скорости при нажатом газе
-                if (current < _maxForwardGear)
-                {
-                    var limCurr = GetLimit(current);
-                    bool gas = vert.Value >= UpshiftThrottleMin;
+                UpdateGear(ref currentGear, forwardSpeedKmh, backwardSpeedKmh, verticalInput);
 
-                    if (eng.Value >= redline - 1f
-                        || (gas && limCurr > 0f && sp.Value >= limCurr * UpshiftSpeedRatio))
-                    {
-                        gb.Value = current + 1;
-                        eng.Value = RpmFromSpeed(sp.Value, gb.Value, redline, idle);
-                        continue;
-                    }
-                }
-
-                // дауншифт по скорости с запасом вниз
-                if (current > 1)
-                {
-                    var lowerLim = GetLimit(current - 1);
-                    if (lowerLim > 0f && sp.Value <= lowerLim - DownshiftMarginKmh)
-                    {
-                        gb.Value = current - 1;
-                        eng.Value = RpmFromSpeed(sp.Value, gb.Value, redline, idle);
-                    }
-                }
+                gearComponent.Value = currentGear;
             }
         }
 
-        private float RpmFromSpeed(float kmh, int gear, float redline, float idle)
+        private void UpdateGear(
+            ref int currentGear,
+            float forwardSpeedKmh,
+            float backwardSpeedKmh,
+            float verticalInput)
         {
-            var g = Mathf.Clamp(gear, -1, _maxForwardGear);
-            var lim = GetLimit(g >= 1 ? g : 1);
-            var rpm = (lim <= 0f) ? idle : (kmh / lim) * redline;
-            return Mathf.Clamp(rpm, idle, redline);
+            var absoluteSpeedKmh = Mathf.Max(forwardSpeedKmh, backwardSpeedKmh);
+
+            var wantForward = verticalInput > InputDeadZone;
+            var wantBackward = verticalInput < -InputDeadZone;
+
+            if (absoluteSpeedKmh < StopSpeedKmh)
+            {
+                if (wantForward)
+                    currentGear = GetFirstForwardGear();
+                else if (wantBackward)
+                    currentGear = _reverseGearValue;
+                else
+                    currentGear = _neutralGearValue;
+
+                return;
+            }
+
+            var movingForward = forwardSpeedKmh >= backwardSpeedKmh;
+
+            if (!movingForward)
+            {
+                currentGear = _reverseGearValue;
+                return;
+            }
+
+            var idealIndex = SelectForwardGearIndexBySpeed(absoluteSpeedKmh);
+            if (idealIndex < 0)
+                return;
+
+            var currentIndex = GetForwardGearIndex(currentGear);
+            if (currentIndex < 0)
+                currentIndex = idealIndex;
+
+            if (wantForward)
+                currentIndex = idealIndex;
+            else
+            {
+                if (idealIndex < currentIndex)
+                    currentIndex = idealIndex;
+            }
+
+            currentGear = _forwardGears[currentIndex].GearValue;
         }
 
-        private float GetLimit(int gear)
+        private int SelectForwardGearIndexBySpeed(float absoluteSpeedKmh)
         {
-            return _kmhAtRedline.TryGetValue(gear, out var lim) ? lim : 0f;
+            if (_forwardGears == null || _forwardGears.Count == 0)
+                return -1;
+
+            var lastIndex = _forwardGears.Count - 1;
+
+            for (var i = 0; i < _forwardGears.Count; i++)
+            {
+                if (absoluteSpeedKmh <= _forwardGears[i].SpeedLimit)
+                    return i;
+            }
+
+            return lastIndex;
         }
 
-        public void Dispose()
+        private int GetForwardGearIndex(int gearValue)
         {
+            if (_forwardIndexByGearValue == null)
+                return -1;
+
+            if (_forwardIndexByGearValue.TryGetValue(gearValue, out var index))
+                return index;
+
+            return -1;
         }
+
+        private int GetFirstForwardGear()
+        {
+            if (_forwardGears != null && _forwardGears.Count > 0)
+                return _forwardGears[0].GearValue;
+
+            return 1;
+        }
+
+        public void Dispose() { }
     }
 }

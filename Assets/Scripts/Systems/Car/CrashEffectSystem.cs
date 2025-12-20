@@ -1,14 +1,12 @@
 using Components;
-using Core;
 using Scellecs.Morpeh;
 using Services;
 using Views;
-using Views.Impl;
 using Zenject;
 
-namespace Systems.Car.Test_Arcade
+namespace Systems.Car
 {
-    public sealed class CrashEffectSystem_A : IFixedSystem
+    public sealed class CrashEffectSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
         [Inject] private ICrashEffectService _crashEffectService;

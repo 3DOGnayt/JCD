@@ -1,8 +1,6 @@
 using Configs.Impl;
-using Core;
 using UnityEditor;
 using UnityEngine;
-using Views;
 using Views.Impl;
 
 namespace Tools
@@ -27,7 +25,7 @@ namespace Tools
             if (GUILayout.Button("Save parameters FROM Car → TO SO"))
                 SaveFromCar(preset);
 
-            if (GUILayout.Button("Apply parameters FROM SO → TO Car")) 
+            if (GUILayout.Button("Apply parameters FROM SO → TO Car"))
                 ApplyToCar(preset);
         }
 

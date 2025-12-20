@@ -1,13 +1,12 @@
 using Components;
-using Core;
 using Scellecs.Morpeh;
 using Views;
-using Views.Impl;
 using Zenject;
 
-namespace Systems.Car.Test_Arcade
+namespace Systems.Car
 {
-    public class EffectSystem_A : IFixedSystem
+    //TODO: plan B
+    public class EffectSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
 
