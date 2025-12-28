@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Configs.Impl
 {
     [CreateAssetMenu(menuName = "Car/CrashEffectsParameters", fileName = "CrashEffectsParameters")]
-    public class CrashEffectsParameters : ScriptableObject
+    public class CarCrashEffectsParameters : ScriptableObject
     {
         [SerializeField] private GameObject _sparkPrefab;
         [SerializeField] private int _poolSize = 10;

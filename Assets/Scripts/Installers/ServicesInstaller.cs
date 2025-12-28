@@ -7,9 +7,9 @@ namespace Installers
 {
     public class ServicesInstaller : MonoInstaller
     {
-        [SerializeField] private SkidmarksParameters _skidmarksParameters;
-        [SerializeField] private SkidSmokeParameters _skidSmokeParameters;
-        [SerializeField] private CrashEffectsParameters _crashEffectsParameters;
+        [SerializeField] private CarSkidmarksParameters _carSkidmarksParameters;
+        [SerializeField] private CarSkidSmokeParameters _carSkidSmokeParameters;
+        [SerializeField] private CarCrashEffectsParameters _carCrashEffectsParameters;
         
         public override void InstallBindings()
         {
@@ -19,9 +19,9 @@ namespace Installers
         private void Services()
         {
             Container.BindInterfacesAndSelfTo<InputService>().AsSingle();
-            Container.BindInterfacesAndSelfTo<SkidmarksService>().AsSingle().WithArguments(_skidmarksParameters);
-            Container.BindInterfacesAndSelfTo<SkidSmokeService>().AsSingle().WithArguments(_skidSmokeParameters);
-            Container.BindInterfacesAndSelfTo<CrashEffectService>().AsSingle().WithArguments(_crashEffectsParameters);
+            Container.BindInterfacesAndSelfTo<SkidmarksService>().AsSingle().WithArguments(_carSkidmarksParameters);
+            Container.BindInterfacesAndSelfTo<SkidSmokeService>().AsSingle().WithArguments(_carSkidSmokeParameters);
+            Container.BindInterfacesAndSelfTo<CrashEffectService>().AsSingle().WithArguments(_carCrashEffectsParameters);
         }
     }
 }

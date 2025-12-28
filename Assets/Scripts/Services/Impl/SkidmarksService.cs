@@ -7,7 +7,7 @@ using UnityEngine.Rendering;
 
 public class SkidmarksService : ISkidmarksService
 {
-    private readonly SkidmarksParameters _parameters;
+    private readonly CarSkidmarksParameters _parameters;
     private readonly Mesh _mesh;
     private readonly MeshFilter _meshFilter;
     private readonly MeshRenderer _meshRenderer;
@@ -56,7 +56,7 @@ public class SkidmarksService : ISkidmarksService
 
     private readonly Color32 _baseColor = Color.black;
 
-    public SkidmarksService(SkidmarksParameters parameters)
+    public SkidmarksService(CarSkidmarksParameters parameters)
     {
         _parameters = parameters;
 
