@@ -23,12 +23,12 @@ MonoBehaviour:
     BrakeInput: 0
     HandbrakeInput: 0
     DriftMultiplier: 0
-  carMassParameters:
+  carMassSetup:
     Mass: 1500
     AutomaticCenterOfMass: 0
     CenterOfMass: {x: 0, y: 0, z: 0}
-  _frontWheelParameters:
-    MainWheelParameters:
+  frontWheelSetup:
+    mainWheelSetup:
       Mass: 20
       Radius: 0.38
       DampingRate: 5
@@ -51,8 +51,8 @@ MonoBehaviour:
       AsymptoteSlip: 0.5
       AsymptoteValue: 0.75
       Stiffness: 4
-  _backWheelParameters:
-    MainWheelParameters:
+  backWheelSetup:
+    mainWheelSetup:
       Mass: 20
       Radius: 0.38
       DampingRate: 5

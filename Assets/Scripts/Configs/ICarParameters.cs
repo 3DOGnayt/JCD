@@ -5,6 +5,6 @@ namespace Configs
     public interface ICarParameters
     {
         public CarMovementParameters MovementParameters { get; }
-        public SpeedsPreset SpeedsPreset { get; }
+        public SpeedsPresetParameters SpeedsPresetParameters { get; }
     }
 }

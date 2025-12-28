@@ -13,9 +13,9 @@ namespace Components
     // MainWheelParameters
     public struct WheelInfoComponent : IComponent
     {
-        public List<WheelInfo> WheelInfo;
-        public WheelInfo FrontWheels => WheelInfo[0];
-        public WheelInfo BackWheels => WheelInfo[1];
+        public List<WheelInfoSetup> WheelInfo;
+        public WheelInfoSetup FrontWheels => WheelInfo[0];
+        public WheelInfoSetup BackWheels => WheelInfo[1];
     }
 
     //Front

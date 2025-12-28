@@ -1,6 +1,5 @@
 using Scellecs.Morpeh;
 using Systems.Car;
-using Systems.Car.Test_Arcade;
 using Systems.Spawn;
 using Zenject;
 
@@ -20,43 +19,24 @@ namespace Installers
             Container.Bind<ISystem>().To<PlayerSpawnSystem>().AsSingle();
             
             Container.Bind<ISystem>().To<InputSystem>().AsSingle();
-            //Container.Bind<IFixedSystem>().To<VerticalInputSystem>().AsSingle(); // mb later
-            //Container.Bind<IFixedSystem>().To<SpeedSystem>().AsSingle(); // mb later
             Container.Bind<IFixedSystem>().To<HorizontalInputSystem>().AsSingle();
-            //Container.Bind<IFixedSystem>().To<RPMSystem>().AsSingle();
-            //Container.Bind<IFixedSystem>().To<SpeedSystem>().AsSingle();
-            //Container.Bind<IFixedSystem>().To<PhysicsSpeedSystem>().AsSingle();
-            //Container.Bind<IFixedSystem>().To<GearShiftSystem>().AsSingle();
-            //Container.Bind<IFixedSystem>().To<WheelDriveSystem>().AsSingle();
             
-            //tests
-            // до основных систем рабочий варик более менее
-            //Container.Bind<IFixedSystem>().To<RPMSystem_Test>().AsSingle();
-            //Container.Bind<IFixedSystem>().To<GearShiftSystem_Test>().AsSingle();
-            //Container.Bind<IFixedSystem>().To<WheelDriveSystem_Test>().AsSingle();
-            //Container.Bind<IFixedSystem>().To<PhysicsSpeedSystem_Test>().AsSingle();
+            // base
+            Container.Bind<IFixedSystem>().To<WheelDriveSystem>().AsSingle();
+            Container.Bind<IFixedSystem>().To<PhysicsSpeedSystem>().AsSingle();
+            Container.Bind<IFixedSystem>().To<GearShiftSystem>().AsSingle();
+            Container.Bind<IFixedSystem>().To<RPMSystem>().AsSingle();
             
-            //Container.Bind<IFixedSystem>().To<RPMSystem_M>().AsSingle();
-            //Container.Bind<IFixedSystem>().To<GearShiftSystem_M>().AsSingle();
-            //Container.Bind<IFixedSystem>().To<WheelDriveSystem_M>().AsSingle();
-            //Container.Bind<IFixedSystem>().To<PhysicsSpeedSystem_M>().AsSingle();
-
-            Container.Bind<IFixedSystem>().To<WheelDriveSystem_A>().AsSingle();
-            Container.Bind<IFixedSystem>().To<PhysicsSpeedSystem_A>().AsSingle();
-            Container.Bind<IFixedSystem>().To<GearShiftSystem_A>().AsSingle();
-            Container.Bind<IFixedSystem>().To<RPMSystem_A>().AsSingle();
-            Container.Bind<IFixedSystem>().To<SlipSystem_A>().AsSingle();
+            // feature
+            Container.Bind<IFixedSystem>().To<SlipSystem>().AsSingle();
             
-            // следы шин
-            //Container.Bind<IFixedSystem>().To<EffectSystem_A>().AsSingle(); // перенести в запасную реализацию
-            Container.Bind<IFixedSystem>().To<SkidmarksSystem_A>().AsSingle();
+            //Container.Bind<IFixedSystem>().To<EffectSystem>().AsSingle(); // TODO: plan B
+            Container.Bind<IFixedSystem>().To<SkidmarksSystem>().AsSingle();
             
-            // дым из под шин
-            //Container.Bind<IFixedSystem>().To<SmokeEffectSystem_A>().AsSingle(); // перенести в запасную реализацию
-            Container.Bind<IFixedSystem>().To<SkidSmokeSystem_A>().AsSingle();
+            Container.Bind<IFixedSystem>().To<SkidSmokeSystem>().AsSingle();
             
-            Container.Bind<IFixedSystem>().To<CrashEffectSystem_A>().AsSingle();
-            Container.Bind<IFixedSystem>().To<CarLightsSystem_A>().AsSingle();
+            Container.Bind<IFixedSystem>().To<CrashEffectSystem>().AsSingle();
+            Container.Bind<IFixedSystem>().To<CarLightsSystem>().AsSingle();
         }
     }
 }

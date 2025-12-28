@@ -4,6 +4,6 @@ namespace Configs
 {
     public interface ICarUISmoothing
     {
-        CarSmoothingSettings SmoothingSettings { get; }
+        CarSmoothingSetup SmoothingSetup { get; }
     }
 }

@@ -5,11 +5,9 @@ namespace Tools
     [ExecuteAlways] // чтобы работало и в Play, и в Edit (не обязательно)
     public class VelocityDebugGizmo : MonoBehaviour
     {
-        [Header("Refs")]
-        public Rigidbody targetRigidbody;
+        [Header("Refs")] public Rigidbody targetRigidbody;
 
-        [Header("Draw settings")]
-        public float arrowLength = 3f;
+        [Header("Draw settings")] public float arrowLength = 3f;
         public float arrowsHeightOffset = 0.2f;
         public Color forwardColor = Color.green;
         public Color velocityColor = Color.cyan;

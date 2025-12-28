@@ -6,11 +6,11 @@ namespace Configs.Impl
     public class CarParameters : ScriptableObject, ICarParameters
     {
         [SerializeField] private CarMovementParameters _carMovementParameters;
-        [SerializeField] private SpeedsPreset _speedsPreset;
+        [SerializeField] private SpeedsPresetParameters _speedsPresetParameters;
         [SerializeField] private CarSlipParameters _carSlipParameters;
 
         public CarMovementParameters MovementParameters => _carMovementParameters;
-        public SpeedsPreset SpeedsPreset => _speedsPreset;
+        public SpeedsPresetParameters SpeedsPresetParameters => _speedsPresetParameters;
         public CarSlipParameters SlipParameters => _carSlipParameters;
     }
 }
