@@ -8,7 +8,7 @@ namespace Systems.Spawn
     public sealed class CanvasSpawnSystem : ISystem
     {
         [Inject] public World World { get; set; }
-        [Inject] public UnityEngine.Canvas _canvasPrefab;
+        [Inject] public Canvas _canvasPrefab;
         [Inject] public EventSystem _eventSystemPrefab;
         [Inject] private DiContainer _container;
 
@@ -31,7 +31,7 @@ namespace Systems.Spawn
                 return;
 
             var gameCanvasTransform = _canvasPrefab.transform;
-            _container.InstantiatePrefabForComponent<UnityEngine.Canvas>(
+            _container.InstantiatePrefabForComponent<Canvas>(
                 _canvasPrefab.gameObject,
                 gameCanvasTransform.position,
                 gameCanvasTransform.rotation,

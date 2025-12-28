@@ -10,8 +10,8 @@ public class WheelStiffnessDebugGizmo : MonoBehaviour
     public WheelCollider[] wheels;
 
     [Header("Draw settings")]
-    public float heightOffset   = 0.4f;
-    public float lineSpacing    = 0.18f; // расстояние между строками
+    public float heightOffset = 0.4f;
+    public float lineSpacing = 0.18f; // расстояние между строками
     public float equalThreshold = 0.01f; // допуск, когда считаем "как сток"
 
 #if UNITY_EDITOR
@@ -27,7 +27,7 @@ public class WheelStiffnessDebugGizmo : MonoBehaviour
         if (wheels == null || wheels.Length == 0)
             return;
 
-        _baseForwardStiffness  = new float[wheels.Length];
+        _baseForwardStiffness = new float[wheels.Length];
         _baseSidewaysStiffness = new float[wheels.Length];
 
         for (int i = 0; i < wheels.Length; i++)
@@ -39,7 +39,7 @@ public class WheelStiffnessDebugGizmo : MonoBehaviour
             var f = w.forwardFriction;
             var s = w.sidewaysFriction;
 
-            _baseForwardStiffness[i]  = f.stiffness;
+            _baseForwardStiffness[i] = f.stiffness;
             _baseSidewaysStiffness[i] = s.stiffness;
         }
 

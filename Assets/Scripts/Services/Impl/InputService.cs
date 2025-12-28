@@ -6,7 +6,7 @@ namespace Services.Impl
 {
     public class InputService : IInputService
     {
-        public void ApplyHorizontalMove(float targetAngle, float steeringSpeed, List<WheelInfo> wheelInfos)
+        public void ApplyHorizontalMove(float targetAngle, float steeringSpeed, List<WheelInfoSetup> wheelInfos)
         {
             foreach (var info in wheelInfos)
             {
@@ -31,7 +31,7 @@ namespace Services.Impl
             }
         }
 
-        public void ApplyVerticalMove(float currentMotorTorque, float input, List<WheelInfo> wheelInfos)
+        public void ApplyVerticalMove(float currentMotorTorque, float input, List<WheelInfoSetup> wheelInfos)
         {
             var torque = currentMotorTorque * input;
             //var torque = currentMotorTorque * Mathf.Sign(input);

@@ -1,4 +1,4 @@
-using Data;
+using Configs.Impl;
 using Services.Impl;
 using UnityEngine;
 using Zenject;

@@ -8,11 +8,11 @@ namespace Configs.Impl
         [Header("Sideways slip (handbrake)")]
         [SerializeField] private float _handbrakeSidewaysBackMultiplier = 0.6f;
         [SerializeField] private float _backStiffnessEnterSpeed = 5f;
-        [SerializeField] private float _BackStiffnessReturnSpeed = 2f;
+        [SerializeField] private float _BackStiffnessReturnSpeed = 1.5f;
         [Space]
-        [SerializeField] private float _handbrakeSidewaysForwardMultiplier = 0.8f;
+        [SerializeField] private float _handbrakeSidewaysForwardMultiplier = 0.95f;
         [SerializeField] private float _forwardStiffnessEnterSpeed = 5f;
-        [SerializeField] private float _forwardStiffnessReturnSpeed = 2f;
+        [SerializeField] private float _forwardStiffnessReturnSpeed = 0.8f;
         
         public float HandbrakeSidewaysBackMultiplier => _handbrakeSidewaysBackMultiplier;
         public float BackStiffnessEnterSpeed => _backStiffnessEnterSpeed;

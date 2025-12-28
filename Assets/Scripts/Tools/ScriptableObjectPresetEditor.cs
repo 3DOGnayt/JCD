@@ -1,18 +1,18 @@
 using Configs.Impl;
-using Core;
 using UnityEditor;
 using UnityEngine;
+using Views.Impl;
 
 namespace Tools
 {
-    [CustomEditor(typeof(CarPreset))]
+    [CustomEditor(typeof(CarPresetParameters))]
     public class ScriptableObjectPresetEditor : Editor
     {
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
 
-            var preset = (CarPreset)target;
+            var preset = (CarPresetParameters)target;
 
             if (preset.Car == null)
             {
@@ -25,81 +25,81 @@ namespace Tools
             if (GUILayout.Button("Save parameters FROM Car → TO SO"))
                 SaveFromCar(preset);
 
-            if (GUILayout.Button("Apply parameters FROM SO → TO Car")) 
+            if (GUILayout.Button("Apply parameters FROM SO → TO Car"))
                 ApplyToCar(preset);
         }
 
-        private void SaveFromCar(CarPreset preset)
+        private void SaveFromCar(CarPresetParameters presetParameters)
         {
-            var car = preset.Car;
+            var car = presetParameters.Car;
             var rb = car.GetComponentInChildren<Rigidbody>();
             if (rb != null)
             {
-                preset.CarMassParameters.Mass = rb.mass;
-                preset.CarMassParameters.AutomaticCenterOfMass = rb.automaticCenterOfMass;
-                preset.CarMassParameters.CenterOfMass = rb.centerOfMass;
+                presetParameters.CarMassSetup.Mass = rb.mass;
+                presetParameters.CarMassSetup.AutomaticCenterOfMass = rb.automaticCenterOfMass;
+                presetParameters.CarMassSetup.CenterOfMass = rb.centerOfMass;
             }
 
             var carView = car.GetComponent<CarView>();
             if (carView != null && carView.CarSetup != null)
             {
                 var setup = carView.CarSetup;
-                preset.CarSetup.SpeedMax = setup.SpeedMax;
-                preset.CarSetup.GearCount = setup.GearCount;
-                preset.CarSetup.BackSpeedMax = setup.BackSpeedMax;
-                preset.CarSetup.SteeringAngleMax = setup.SteeringAngleMax;
-                preset.CarSetup.SteeringSpeed = setup.SteeringSpeed;
-                preset.CarSetup.BrakeInput = setup.BrakeInput;
-                preset.CarSetup.HandbrakeInput = setup.HandbrakeInput;
-                preset.CarSetup.DriftMultiplier = setup.DriftMultiplier;
-                preset.CarSetup.EngineRpmMax = setup.EngineRpmMax;
+                presetParameters.CarSetup.SpeedMax = setup.SpeedMax;
+                presetParameters.CarSetup.GearCount = setup.GearCount;
+                presetParameters.CarSetup.BackSpeedMax = setup.BackSpeedMax;
+                presetParameters.CarSetup.SteeringAngleMax = setup.SteeringAngleMax;
+                presetParameters.CarSetup.SteeringSpeed = setup.SteeringSpeed;
+                presetParameters.CarSetup.BrakeInput = setup.BrakeInput;
+                presetParameters.CarSetup.HandbrakeInput = setup.HandbrakeInput;
+                presetParameters.CarSetup.DriftMultiplier = setup.DriftMultiplier;
+                presetParameters.CarSetup.EngineRpmMax = setup.EngineRpmMax;
             }
 
             var wheels = car.GetComponentsInChildren<WheelCollider>();
             if (wheels.Length >= 4)
             {
-                preset.FrontWheelParameters.SaveFromWheel(wheels[0]);
-                preset.FrontWheelParameters.SaveFromWheel(wheels[1]);
-                preset.BackWheelParameters.SaveFromWheel(wheels[wheels.Length - 2]);
-                preset.BackWheelParameters.SaveFromWheel(wheels[wheels.Length - 1]);
+                presetParameters.FrontWheelSetup.SaveFromWheel(wheels[0]);
+                presetParameters.FrontWheelSetup.SaveFromWheel(wheels[1]);
+                presetParameters.BackWheelSetup.SaveFromWheel(wheels[wheels.Length - 2]);
+                presetParameters.BackWheelSetup.SaveFromWheel(wheels[wheels.Length - 1]);
             }
 
-            EditorUtility.SetDirty(preset);
+            EditorUtility.SetDirty(presetParameters);
             EditorUtility.SetDirty(car);
             PrefabUtility.RecordPrefabInstancePropertyModifications(car);
 
             Debug.Log($"✅ {car.name}: данные сохранены в CarPreset");
         }
 
-        private void ApplyToCar(CarPreset preset)
+        private void ApplyToCar(CarPresetParameters presetParameters)
         {
-            var car = preset.Car;
+            var car = presetParameters.Car;
             var rb = car.GetComponentInChildren<Rigidbody>();
             if (rb != null)
-                preset.CarMassParameters.SetCarParameters(rb);
+                presetParameters.CarMassSetup.SetCarParameters(rb);
 
             var carView = car.GetComponent<CarView>();
             if (carView != null && carView.CarSetup != null)
             {
                 var setup = carView.CarSetup;
-                setup.SpeedMax = preset.CarSetup.SpeedMax;
-                setup.GearCount = preset.CarSetup.GearCount;
-                setup.BackSpeedMax = preset.CarSetup.BackSpeedMax;
-                setup.SteeringAngleMax = preset.CarSetup.SteeringAngleMax;
-                setup.SteeringSpeed = preset.CarSetup.SteeringSpeed;
-                setup.BrakeInput = preset.CarSetup.BrakeInput;
-                setup.HandbrakeInput = preset.CarSetup.HandbrakeInput;
-                setup.DriftMultiplier = preset.CarSetup.DriftMultiplier;
-                setup.EngineRpmMax = preset.CarSetup.EngineRpmMax;
+                setup.SpeedMax = presetParameters.CarSetup.SpeedMax;
+                setup.GearCount = presetParameters.CarSetup.GearCount;
+                setup.BackSpeedMax = presetParameters.CarSetup.BackSpeedMax;
+                setup.SteeringAngleMax = presetParameters.CarSetup.SteeringAngleMax;
+                setup.SteeringSpeed = presetParameters.CarSetup.SteeringSpeed;
+                setup.BrakeInput = presetParameters.CarSetup.BrakeInput;
+                setup.HandbrakeInput = presetParameters.CarSetup.HandbrakeInput;
+                setup.DriftMultiplier = presetParameters.CarSetup.DriftMultiplier;
+                setup.EngineRpmMax = presetParameters.CarSetup.EngineRpmMax;
             }
 
             var wheels = car.GetComponentsInChildren<WheelCollider>();
             if (wheels.Length >= 4)
             {
-                preset.FrontWheelParameters.SetAllParameters(wheels[0]);
-                preset.FrontWheelParameters.SetAllParameters(wheels[1]);
-                preset.BackWheelParameters.SetAllParameters(wheels[wheels.Length - 2]);
-                preset.BackWheelParameters.SetAllParameters(wheels[wheels.Length - 1]);
+                presetParameters.FrontWheelSetup.SetAllParameters(wheels[0]);
+                presetParameters.FrontWheelSetup.SetAllParameters(wheels[1]);
+                presetParameters.BackWheelSetup.SetAllParameters(wheels[wheels.Length - 2]);
+                presetParameters.BackWheelSetup.SetAllParameters(wheels[wheels.Length - 1]);
             }
 
             EditorUtility.SetDirty(car);
