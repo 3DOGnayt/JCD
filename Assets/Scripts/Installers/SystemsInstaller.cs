@@ -36,8 +36,6 @@ namespace Installers
             
             Container.Bind<IFixedSystem>().To<CrashEffectSystem>().AsSingle();
             Container.Bind<IFixedSystem>().To<CarLightsSystem>().AsSingle();
-            
-            Container.Bind<IFixedSystem>().To<CollisionSlideSystem>().AsSingle();
         }
     }
 }

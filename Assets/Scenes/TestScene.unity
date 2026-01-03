@@ -2641,18 +2641,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: dd68b16c31c60e442982b89d35e789e0,
         type: 2}
-    - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
-        type: 3}
-      propertyPath: carCarCollisionSlideParameters
-      value: 
-      objectReference: {fileID: 11400000, guid: 51839fed1654a3b46bebb566b5affc96,
-        type: 2}
-    - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
-        type: 3}
-      propertyPath: _carCarCollisionSlideParameters
-      value: 
-      objectReference: {fileID: 11400000, guid: 51839fed1654a3b46bebb566b5affc96,
-        type: 2}
     - target: {fileID: 7824705624787612259, guid: f75ea5e5a3aab134184c4fbe7349d11d,
         type: 3}
       propertyPath: _canvas
