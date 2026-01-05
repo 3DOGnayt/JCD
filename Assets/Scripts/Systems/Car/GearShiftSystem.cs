@@ -53,7 +53,7 @@ namespace Systems.Car
             _reverseGearValue = -1;
             _neutralGearValue = 0;
 
-            var speedsPreset = _carParameters.SpeedsPresetParameters;
+            var speedsPreset = _carParameters.CarSpeedsPresetParameters;
             if (speedsPreset == null)
             {
                 Debug.LogError("GearShiftSystem_A: SpeedPreset is null in CarParameters.");

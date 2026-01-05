@@ -62,7 +62,7 @@ namespace Systems.Car
             _reverseMaxSpeedKmh = 0f;
             _hasReverseBand = false;
 
-            var speedsPreset = _carParameters.SpeedsPresetParameters;
+            var speedsPreset = _carParameters.CarSpeedsPresetParameters;
             if (speedsPreset == null)
             {
                 Debug.LogError("RPMSystem_A: SpeedsPreset is null in CarParameters.");

@@ -28,14 +28,14 @@ namespace Services.Impl
             public int[] SlotIndices;
         }
 
-        private readonly SkidSmokeParameters _parameters;
+        private readonly CarSkidSmokeParameters _parameters;
         private readonly List<PoolSlot> _pool;
         private readonly Dictionary<int, SkidInstance> _activeSkids;
         private readonly Transform _root;
 
         private int _nextId = 1;
 
-        public SkidSmokeService(SkidSmokeParameters parameters)
+        public SkidSmokeService(CarSkidSmokeParameters parameters)
         {
             _parameters = parameters;
             _pool = new List<PoolSlot>(_parameters.PoolSize);

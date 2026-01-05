@@ -20,14 +20,14 @@ namespace Services.Impl
             public int SlotIndex = -1;
         }
 
-        private readonly CrashEffectsParameters _parameters;
+        private readonly CarCrashEffectsParameters _parameters;
         private readonly List<PoolSlot> _pool;
         private readonly Dictionary<Rigidbody, CrashInstance> _activeByRb;
         private readonly Transform _root;
 
         private int _nextSlotIndex = 0;
 
-        public CrashEffectService(CrashEffectsParameters parameters)
+        public CrashEffectService(CarCrashEffectsParameters parameters)
         {
             _parameters = parameters;
             _pool = new List<PoolSlot>();

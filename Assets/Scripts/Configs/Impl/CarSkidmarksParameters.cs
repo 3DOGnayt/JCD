@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace Configs.Impl
 {
-    [CreateAssetMenu(menuName = "Car/" + nameof(SkidmarksParameters), fileName = nameof(SkidmarksParameters))]
-    public class SkidmarksParameters : ScriptableObject
+    [CreateAssetMenu(menuName = "Car/" + nameof(CarSkidmarksParameters), fileName = nameof(CarSkidmarksParameters))]
+    public class CarSkidmarksParameters : ScriptableObject
     {
         [Header("Mesh / Visual")]
         [SerializeField] private Material _material;

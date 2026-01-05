@@ -2535,7 +2535,31 @@ PrefabInstance:
         type: 2}
     - target: {fileID: 5917382755348723880, guid: f75ea5e5a3aab134184c4fbe7349d11d,
         type: 3}
+      propertyPath: carSkidSmokeParameters
+      value: 
+      objectReference: {fileID: 11400000, guid: dd68b16c31c60e442982b89d35e789e0,
+        type: 2}
+    - target: {fileID: 5917382755348723880, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
+      propertyPath: _carSkidSmokeParameters
+      value: 
+      objectReference: {fileID: 11400000, guid: dd68b16c31c60e442982b89d35e789e0,
+        type: 2}
+    - target: {fileID: 5917382755348723880, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
+      propertyPath: _carSkidmarksParameters
+      value: 
+      objectReference: {fileID: 11400000, guid: 860ebde9f07ef364b9c0c36feae8cee9,
+        type: 2}
+    - target: {fileID: 5917382755348723880, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
       propertyPath: _crashEffectsParameters
+      value: 
+      objectReference: {fileID: 11400000, guid: 65cb0da86d41524488b13c36ed1fd3b6,
+        type: 2}
+    - target: {fileID: 5917382755348723880, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
+      propertyPath: _carCrashEffectsParameters
       value: 
       objectReference: {fileID: 11400000, guid: 65cb0da86d41524488b13c36ed1fd3b6,
         type: 2}
@@ -2604,6 +2628,18 @@ PrefabInstance:
       propertyPath: _carUISmoothingParameters
       value: 
       objectReference: {fileID: 11400000, guid: 651d069c447fd124c8d172922285d619,
+        type: 2}
+    - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
+      propertyPath: carCarSkidSmokeParameters
+      value: 
+      objectReference: {fileID: 11400000, guid: dd68b16c31c60e442982b89d35e789e0,
+        type: 2}
+    - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
+      propertyPath: _carCarSkidSmokeParameters
+      value: 
+      objectReference: {fileID: 11400000, guid: dd68b16c31c60e442982b89d35e789e0,
         type: 2}
     - target: {fileID: 7824705624787612259, guid: f75ea5e5a3aab134184c4fbe7349d11d,
         type: 3}

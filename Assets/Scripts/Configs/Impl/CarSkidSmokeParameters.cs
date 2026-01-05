@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace Configs.Impl
 {
-    [CreateAssetMenu(menuName = "Car/" + nameof(SkidSmokeParameters), fileName = nameof(SkidSmokeParameters))]
-    public class SkidSmokeParameters : ScriptableObject
+    [CreateAssetMenu(menuName = "Car/" + nameof(CarSkidSmokeParameters), fileName = nameof(CarSkidSmokeParameters))]
+    public class CarSkidSmokeParameters : ScriptableObject
     {
         [Header("Prefabs")]
         [SerializeField] private GameObject _smokePrefab;
