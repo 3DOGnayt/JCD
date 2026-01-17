@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6c2186f6b594687a697698d732fc0ef, type: 3}
+  m_Name: MapCatalog
+  m_EditorClassIdentifier: 
+  _maps:
+  - DisplayName: Poligon
+    Prefab: {fileID: 966750755263835405, guid: 54b7aefa62b14644a8ba472887801c8a, type: 3}
+    Preview: {fileID: 0}
+  - DisplayName: Akina
+    Prefab: {fileID: 966750755263835405, guid: d0534f8fb7ec95e499926741dfb41e6b, type: 3}
+    Preview: {fileID: 0}
+  - DisplayName: Akagi
+    Prefab: {fileID: 966750755263835405, guid: 7749a079e98a97740b392b8617a321d2, type: 3}
+    Preview: {fileID: 0}

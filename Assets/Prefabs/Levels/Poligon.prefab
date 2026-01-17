@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9198083312184269258}
   m_Layer: 0
-  m_Name: Level
+  m_Name: Poligon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -2641,6 +2641,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: dd68b16c31c60e442982b89d35e789e0,
         type: 2}
+    - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
+      propertyPath: _gameSelectionParametersParameters
+      value: 
+      objectReference: {fileID: 11400000, guid: c8c9b05e5525499b943131a8c65002a7,
+        type: 2}
     - target: {fileID: 7824705624787612259, guid: f75ea5e5a3aab134184c4fbe7349d11d,
         type: 3}
       propertyPath: _canvas

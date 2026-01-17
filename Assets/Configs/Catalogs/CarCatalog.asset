@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba1520dd49ae408cb6dde1404fd1caec, type: 3}
+  m_Name: CarCatalog
+  m_EditorClassIdentifier: 
+  _cars:
+  - DisplayName: N34
+    Preset: {fileID: 11400000, guid: 5c594316e21a99541926ca2e21cac6b9, type: 2}
+    Preview: {fileID: 0}
+  - DisplayName: Jeep
+    Preset: {fileID: 11400000, guid: 24e7060ee156d9446903d0d168ad946f, type: 2}
+    Preview: {fileID: 0}
+  - DisplayName: SC39
+    Preset: {fileID: 11400000, guid: 314cb5b109249c24f9b0ab884476da62, type: 2}
+    Preview: {fileID: 0}
+  - DisplayName: TestCar
+    Preset: {fileID: 11400000, guid: ebec29c619f1cba4f90bf5ff5a996e21, type: 2}
+    Preview: {fileID: 0}

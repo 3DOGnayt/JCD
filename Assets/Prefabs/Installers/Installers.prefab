@@ -262,7 +262,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97a56aca141d49f98dd7750669a1c994, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _carPreset: {fileID: 11400000, guid: 5c594316e21a99541926ca2e21cac6b9, type: 2}
+  _carPresetParameters: {fileID: 11400000, guid: 5c594316e21a99541926ca2e21cac6b9, type: 2}
+  _carParameters: {fileID: 11400000, guid: f8480b7e0f4acd04e81c153a8015aa14, type: 2}
+  _carUISmoothingParameters: {fileID: 11400000, guid: 651d069c447fd124c8d172922285d619, type: 2}
+  _carCarSkidSmokeParameters: {fileID: 11400000, guid: dd68b16c31c60e442982b89d35e789e0, type: 2}
+  _carLightsParameters: {fileID: 11400000, guid: ae89a026371445d4bb6249b7215d30f9, type: 2}
+  _gameSelection: {fileID: 11400000, guid: c8c9b05e5525499b943131a8c65002a7, type: 2}
 --- !u!1 &6998756251272193150
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,26 +13,41 @@ namespace Systems.Spawn
     {
         [Inject] public World World { get; set;}
         [Inject] private CarPresetParameters _carPresetParameters; // TODO: Refactoring - переделать на выбор игрока
+        [Inject] private GameSelectionParameters _gameSelectionParameters;
         [Inject] private DiContainer _container;
         [Inject] private SignalBus _signalBus;
         
         private Transform _playerGroup;
+        private GameObject _currentPlayer;
         
         public void OnAwake()
         {
             SetSpawnRoot();
-            SpawnPlayer();
+            _signalBus.Subscribe<StartRaceSignal>(OnStartRace);
         }
 
         private void SetSpawnRoot() => _playerGroup = new GameObject("Player").transform;
 
+        private void OnStartRace()
+        {
+            SpawnPlayer();
+        }
+
         private void SpawnPlayer()
         {
-            var player = _carPresetParameters.Car;
+            var selectedPreset = _gameSelectionParameters != null && _gameSelectionParameters.SelectedCar != null
+                ? _gameSelectionParameters.SelectedCar
+                : _carPresetParameters;
+
+            var player = selectedPreset != null ? selectedPreset.Car : null;
             if (player == null)
                 return;
 
+            if (_currentPlayer != null)
+                Object.Destroy(_currentPlayer);
+
             var instance = _container.InstantiatePrefabForComponent<ICarView>(player, Vector3.zero, Quaternion.identity, _playerGroup);
+            _currentPlayer = instance.CarTransform.gameObject;
 
             var entity = World.CreateEntity();
             AddGameComponents(entity, instance);
@@ -177,6 +192,10 @@ namespace Systems.Spawn
         }
 
         public void OnUpdate(float deltaTime) { }
-        public void Dispose() { }
+        public void Dispose()
+        {
+            if (_signalBus != null)
+                _signalBus.Unsubscribe<StartRaceSignal>(OnStartRace);
+        }
     }
 }
