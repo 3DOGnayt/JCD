@@ -9,7 +9,7 @@ namespace Systems.Car
     public sealed class PhysicsSpeedSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarParameters _carParameters;
+        [Inject] private GameSelectionParameters _gameSelectionParameters;
 
         private Filter _cars;
         private AspectFactory<CarSetupAspect> _carAspectFactory;
@@ -38,6 +38,10 @@ namespace Systems.Car
 
         public void OnUpdate(float deltaTime)
         {
+            var carParameters = _gameSelectionParameters != null ? _gameSelectionParameters.SelectedCarParameters : null;
+            if (carParameters == null)
+                return;
+
             foreach (var car in _cars)
             {
                 var aspect = _carAspectFactory.Get(car);
@@ -59,11 +63,11 @@ namespace Systems.Car
 
                 var velocity = rb.velocity;
 
-                velocity = ApplyArcadeAssist(velocity, input, forward, deltaTime);
+                velocity = ApplyArcadeAssist(velocity, input, forward, deltaTime, carParameters);
 
                 rb.velocity = velocity;
 
-                ApplySleepIfStopped(rb, input, handbrake);
+                ApplySleepIfStopped(rb, input, handbrake, carParameters);
 
                 velocity = rb.velocity;
 
@@ -87,9 +91,10 @@ namespace Systems.Car
             Vector3 velocity,
             float verticalInput,
             Vector3 forward,
-            float deltaTime)
+            float deltaTime,
+            CarParameters carParameters)
         {
-            var movementParameters = _carParameters.MovementParameters;
+            var movementParameters = carParameters.MovementParameters;
             if (!movementParameters.UseArcadeAssist)
             {
                 _assistForwardSpeedMps = Vector3.Dot(velocity, forward);
@@ -131,7 +136,7 @@ namespace Systems.Car
             return velocity;
         }
         
-        private void ApplySleepIfStopped(Rigidbody rb, float verticalInput, bool handbrake)
+        private void ApplySleepIfStopped(Rigidbody rb, float verticalInput, bool handbrake, CarParameters carParameters)
         {
             if (Mathf.Abs(verticalInput) > 0.01f && !handbrake)
                 return;
@@ -139,7 +144,7 @@ namespace Systems.Car
             var v = rb.velocity;
             var av = rb.angularVelocity;
 
-            var systemHelpers = _carParameters.MovementParameters.HelpersSetup;
+            var systemHelpers = carParameters.MovementParameters.HelpersSetup;
             var sleepSpeedThresholdMps = systemHelpers.SleepSpeedThresholdMps * systemHelpers.SleepSpeedThresholdMps;
             var sleepAngularSpeedThreshold = systemHelpers.SleepAngularSpeedThreshold * systemHelpers.SleepAngularSpeedThreshold;
             

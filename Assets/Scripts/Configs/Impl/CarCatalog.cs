@@ -17,6 +17,7 @@ namespace Configs.Impl
     {
         public string DisplayName;
         public CarPresetParameters Preset;
+        public CarParameters Parameters;
         public Sprite Preview;
     }
 }

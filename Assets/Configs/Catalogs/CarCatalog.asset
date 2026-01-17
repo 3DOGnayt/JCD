@@ -15,13 +15,9 @@ MonoBehaviour:
   _cars:
   - DisplayName: N34
     Preset: {fileID: 11400000, guid: 5c594316e21a99541926ca2e21cac6b9, type: 2}
-    Preview: {fileID: 0}
-  - DisplayName: Jeep
-    Preset: {fileID: 11400000, guid: 24e7060ee156d9446903d0d168ad946f, type: 2}
-    Preview: {fileID: 0}
+    Parameters: {fileID: 11400000, guid: 861d21277b11455459aba137c7957d16, type: 2}
+    Preview: {fileID: 21300000, guid: 63bdc25a69d52a44681a563fbf7310be, type: 3}
   - DisplayName: SC39
     Preset: {fileID: 11400000, guid: 314cb5b109249c24f9b0ab884476da62, type: 2}
-    Preview: {fileID: 0}
-  - DisplayName: TestCar
-    Preset: {fileID: 11400000, guid: ebec29c619f1cba4f90bf5ff5a996e21, type: 2}
-    Preview: {fileID: 0}
+    Parameters: {fileID: 11400000, guid: f8480b7e0f4acd04e81c153a8015aa14, type: 2}
+    Preview: {fileID: 21300000, guid: 1e63b594891ad3647b87fdd536a935e0, type: 3}

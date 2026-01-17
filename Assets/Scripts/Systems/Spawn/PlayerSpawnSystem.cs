@@ -12,7 +12,6 @@ namespace Systems.Spawn
     public sealed class PlayerSpawnSystem : ISystem 
     {
         [Inject] public World World { get; set;}
-        [Inject] private CarPresetParameters _carPresetParameters; // TODO: Refactoring - переделать на выбор игрока
         [Inject] private GameSelectionParameters _gameSelectionParameters;
         [Inject] private DiContainer _container;
         [Inject] private SignalBus _signalBus;
@@ -35,9 +34,9 @@ namespace Systems.Spawn
 
         private void SpawnPlayer()
         {
-            var selectedPreset = _gameSelectionParameters != null && _gameSelectionParameters.SelectedCar != null
+            var selectedPreset = _gameSelectionParameters != null
                 ? _gameSelectionParameters.SelectedCar
-                : _carPresetParameters;
+                : null;
 
             var player = selectedPreset != null ? selectedPreset.Car : null;
             if (player == null)

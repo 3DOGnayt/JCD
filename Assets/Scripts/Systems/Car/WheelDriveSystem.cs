@@ -12,7 +12,7 @@ namespace Systems.Car
     {
         [Inject] public World World { get; set; }
         [Inject] private IInputService _inputService;
-        [Inject] private CarParameters _carParameters;
+        [Inject] private GameSelectionParameters _gameSelectionParameters;
 
         private Filter _cars;
         private AspectFactory<CarSetupAspect> _carAspectFactory;
@@ -34,15 +34,19 @@ namespace Systems.Car
             _wheelInfoStash = World.GetStash<WheelInfoComponent>();
             _verticalInputStash = World.GetStash<VerticalInputComponent>();
 
-            BuildGearTorqueFromPreset();
+            var carParameters = _gameSelectionParameters != null ? _gameSelectionParameters.SelectedCarParameters : null;
+            BuildGearTorqueFromPreset(carParameters);
         }
 
-        private void BuildGearTorqueFromPreset()
+        private void BuildGearTorqueFromPreset(CarParameters carParameters)
         {
             _forwardGearTorque = new Dictionary<int, float>();
             _reverseGearTorque = 0f;
 
-            var speedsPreset = _carParameters.CarSpeedsPresetParameters;
+            if (carParameters == null)
+                return;
+
+            var speedsPreset = carParameters.CarSpeedsPresetParameters;
             if (speedsPreset == null)
             {
                 Debug.LogError("WheelDriveSystem_A: SpeedsPreset is null in CarParameters.");
@@ -93,8 +97,16 @@ namespace Systems.Car
 
         public void OnUpdate(float deltaTime)
         {
-            if (_forwardGearTorque == null || _forwardGearTorque.Count == 0)
+            var carParameters = _gameSelectionParameters != null ? _gameSelectionParameters.SelectedCarParameters : null;
+            if (carParameters == null)
                 return;
+
+            if (_forwardGearTorque == null || _forwardGearTorque.Count == 0)
+            {
+                BuildGearTorqueFromPreset(carParameters);
+                if (_forwardGearTorque == null || _forwardGearTorque.Count == 0)
+                    return;
+            }
 
             foreach (var car in _cars)
             {
@@ -113,7 +125,7 @@ namespace Systems.Car
                 var scalarSpeedKmh = Mathf.Max(forwardSpeedKmh, backwardSpeedKmh);
 
                 var isMovingForward = forwardSpeedKmh >= backwardSpeedKmh;
-                var systemHelpers = _carParameters.MovementParameters.HelpersSetup;
+                var systemHelpers = carParameters.MovementParameters.HelpersSetup;
                 var isAlmostStopped = scalarSpeedKmh < systemHelpers.StopThresholdKmh;
 
                 var wheelInfoComponent = _wheelInfoStash.Get(car);
@@ -128,6 +140,7 @@ namespace Systems.Car
                     isMovingForward,
                     isAlmostStopped,
                     handbrakePressed,
+                    carParameters,
                     out maxMotorTorque,
                     out driveInput,
                     out brakeForce,
@@ -135,7 +148,7 @@ namespace Systems.Car
                 );
 
                 _inputService.ApplyVerticalMove(maxMotorTorque, driveInput, wheelInfoComponent.WheelInfo);
-                ApplyBrakes(wheelInfoComponent, brakeForce, handbrakePressed);
+                ApplyBrakes(wheelInfoComponent, brakeForce, handbrakePressed, carParameters);
             }
         }
 
@@ -145,6 +158,7 @@ namespace Systems.Car
             bool isMovingForward,
             bool isAlmostStopped,
             bool handbrakePressed,
+            CarParameters carParameters,
             out float maxMotorTorque,
             out float driveInput,
             out float brakeForce,
@@ -155,7 +169,7 @@ namespace Systems.Car
             brakeForce = 0f;
             brakeInputFlag = false;
 
-            var systemHelpers = _carParameters.MovementParameters.HelpersSetup;
+            var systemHelpers = carParameters.MovementParameters.HelpersSetup;
             if (Mathf.Abs(verticalInput) < systemHelpers.InputDeadZone)
                 return;
 
@@ -230,9 +244,9 @@ namespace Systems.Car
             return 0f;
         }
 
-        private void ApplyBrakes(WheelInfoComponent wheelInfoComponent, float brakeForce, bool handbrakePressed)
+        private void ApplyBrakes(WheelInfoComponent wheelInfoComponent, float brakeForce, bool handbrakePressed, CarParameters carParameters)
         {
-            var parameters = _carParameters.MovementParameters;
+            var parameters = carParameters.MovementParameters;
             var pedalBrakeTorque = parameters.BrakeTorque * Mathf.Max(0f, brakeForce);
             var handbrakeTorque = handbrakePressed ? parameters.HandbrakeTorque : 0f;
 
