@@ -71,7 +71,7 @@ namespace Systems.Spawn
 
             var maxSpeedComponent = new SpeedMaxComponent { Value = carSetup.SpeedMax };
             var maxRpmComponent = new EngineRpmMaxComponent { Value = carSetup.EngineRpmMax };
-            
+
             entity.SetComponent(maxSpeedComponent);
             entity.SetComponent(new BackSpeedMaxComponent { Value = carSetup.BackSpeedMax });
             entity.SetComponent(new GearCountComponent { Value = carSetup.GearCount });
@@ -82,8 +82,6 @@ namespace Systems.Spawn
             entity.SetComponent(new SkidSmokeHandleComponent{ Value = -1 });
             entity.SetComponent(new HeadlightsComponent { Value = EHeadlightsMode.Off });
             
-            _signalBus.Fire(new ComponentChangeSignal<SpeedMaxComponent> { Component = maxSpeedComponent });
-            _signalBus.Fire(new ComponentChangeSignal<EngineRpmMaxComponent> { Component = maxRpmComponent });
         }
 
         private void AddInternalComponents(Entity entity, ICarView carView)

@@ -18,8 +18,6 @@ namespace Installers
             Container.DeclareSignal<PlayerSpawnedSignal>();
             Container.DeclareSignal<StartRaceSignal>();
             Container.DeclareSignal<ComponentChangeSignal<CarSetupAspect>>();
-            Container.DeclareSignal<ComponentChangeSignal<SpeedMaxComponent>>();
-            Container.DeclareSignal<ComponentChangeSignal<EngineRpmMaxComponent>>();
         }
     }
 }

@@ -21,6 +21,7 @@ namespace UI
 
         private CarUISmoothingParameters _carUISmoothingParameters;
         private SignalBus _signalBus;
+        private GameSelectionParameters _gameSelectionParameters;
 
         private float _uiSpeed;
         private float _uiBackSpeed;
@@ -32,24 +33,25 @@ namespace UI
         private float _maxRpm;
 
         [Inject]
-        public void Construct(SignalBus signalBus, CarUISmoothingParameters carUISmoothingParameters)
+        public void Construct(
+            SignalBus signalBus,
+            CarUISmoothingParameters carUISmoothingParameters,
+            GameSelectionParameters gameSelectionParameters)
         {
             _signalBus = signalBus;
             _carUISmoothingParameters = carUISmoothingParameters;
+            _gameSelectionParameters = gameSelectionParameters;
         }
 
         private void OnEnable()
         {
             _signalBus.Subscribe<ComponentChangeSignal<CarSetupAspect>>(OnCarSetupAspectChanged);
-            _signalBus.Subscribe<ComponentChangeSignal<SpeedMaxComponent>>(OnCarSpeedMaxChanged);
-            _signalBus.Subscribe<ComponentChangeSignal<EngineRpmMaxComponent>>(OnCarRpmMaxChanged);
+            CacheCarLimits();
         }
 
         private void OnDisable()
         {
             _signalBus.Unsubscribe<ComponentChangeSignal<CarSetupAspect>>(OnCarSetupAspectChanged);
-            _signalBus.Unsubscribe<ComponentChangeSignal<SpeedMaxComponent>>(OnCarSpeedMaxChanged);
-            _signalBus.Unsubscribe<ComponentChangeSignal<EngineRpmMaxComponent>>(OnCarRpmMaxChanged);
         }
 
         private void Awake()
@@ -62,16 +64,6 @@ namespace UI
                                    "BrakeInput\n" +
                                    "HandbrakeInput\n" +
                                    "Drift Multiplier";
-        }
-
-        private void OnCarSpeedMaxChanged(ComponentChangeSignal<SpeedMaxComponent> signal)
-        {
-            _maxSpeed = signal.Component.Value;
-        }
-
-        private void OnCarRpmMaxChanged(ComponentChangeSignal<EngineRpmMaxComponent> signal)
-        {
-            _maxRpm = signal.Component.Value;
         }
 
         private void OnCarSetupAspectChanged(ComponentChangeSignal<CarSetupAspect> signal)
@@ -105,6 +97,23 @@ namespace UI
             UpdateSpeedometer();
         }
 
+        private void CacheCarLimits()
+        {
+            if (_gameSelectionParameters == null)
+                return;
+
+            var selectedCar = _gameSelectionParameters.SelectedCar;
+            if (selectedCar == null)
+                return;
+
+            var carSetup = selectedCar.CarSetup;
+            if (carSetup == null)
+                return;
+
+            _maxSpeed = carSetup.SpeedMax;
+            _maxRpm = carSetup.EngineRpmMax;
+        }
+
         private void UpdateSpeedometer()
         {
             _speed.text = _uiSpeed > _uiBackSpeed ? $"{_uiSpeed:0}" : $"{_uiBackSpeed:0}";
@@ -119,7 +128,8 @@ namespace UI
                 _ => _gear.text
             };
 
-            _rpm.fillAmount = Mathf.Lerp(_rpm.fillAmount, _uiRpm / _maxRpm, Time.deltaTime);
+            var rpmMax = _maxRpm > 0f ? _maxRpm : 1f;
+            _rpm.fillAmount = Mathf.Lerp(_rpm.fillAmount, _uiRpm / rpmMax, Time.deltaTime);
         }
 
         private float Smooth(float current, float target, float smoothing)
