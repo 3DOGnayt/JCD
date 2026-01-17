@@ -22,6 +22,11 @@ namespace UI
         [SerializeField] private Button _startButton;
         [SerializeField] private Button _exitButton;
 
+        [Header("Back Buttons")]
+        [SerializeField] private Button _backFromMapButton;
+        [SerializeField] private Button _backFromCarButton;
+        [SerializeField] private Button _backFromRaceButton;
+
         [Header("Confirm Buttons")]
         [SerializeField] private Button _confirmMapButton;
         [SerializeField] private Button _confirmCarButton;
@@ -74,6 +79,15 @@ namespace UI
 
             if (_exitButton != null)
                 _exitButton.onClick.AddListener(Application.Quit);
+
+            if (_backFromMapButton != null)
+                _backFromMapButton.onClick.AddListener(ShowMainPanel);
+
+            if (_backFromCarButton != null)
+                _backFromCarButton.onClick.AddListener(ShowMainPanel);
+
+            if (_backFromRaceButton != null)
+                _backFromRaceButton.onClick.AddListener(ShowMapPanel);
 
             if (_confirmMapButton != null)
                 _confirmMapButton.onClick.AddListener(ConfirmMapSelection);
