@@ -18,6 +18,7 @@ namespace UI
         [SerializeField] private TMP_Text _speed;
         [SerializeField] private TMP_Text _gear;
         [SerializeField] private Image _rpm;
+        [SerializeField] private float _rpmMaxFill = 0.8f;
 
         private CarUISmoothingParameters _carUISmoothingParameters;
         private SignalBus _signalBus;
@@ -129,7 +130,9 @@ namespace UI
             };
 
             var rpmMax = _maxRpm > 0f ? _maxRpm : 1f;
-            _rpm.fillAmount = Mathf.Lerp(_rpm.fillAmount, _uiRpm / rpmMax, Time.deltaTime);
+            var normalizedRpm = Mathf.Clamp01(_uiRpm / rpmMax);
+            var targetFill = Mathf.Clamp01(_rpmMaxFill) * normalizedRpm;
+            _rpm.fillAmount = Mathf.Lerp(_rpm.fillAmount, targetFill, Time.deltaTime);
         }
 
         private float Smooth(float current, float target, float smoothing)
