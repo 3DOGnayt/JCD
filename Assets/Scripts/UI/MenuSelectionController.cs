@@ -15,10 +15,11 @@ namespace UI
         [SerializeField] private GameObject _mapPanel;
         [SerializeField] private GameObject _carPanel;
         [SerializeField] private GameObject _racePanel;
+        [SerializeField] private GameObject _settingsPanel;
 
         [Header("Buttons")]
-        [SerializeField] private Button _openMapPanelButton;
         [SerializeField] private Button _openCarPanelButton;
+        [SerializeField] private Button _openSettingsButton;
         [SerializeField] private Button _startButton;
         [SerializeField] private Button _exitButton;
 
@@ -68,11 +69,11 @@ namespace UI
 
         private void WireMainButtons()
         {
-            if (_openMapPanelButton != null)
-                _openMapPanelButton.onClick.AddListener(ShowMapPanel);
-
             if (_openCarPanelButton != null)
                 _openCarPanelButton.onClick.AddListener(ShowCarPanel);
+
+            if (_openSettingsButton != null)
+                _openSettingsButton.onClick.AddListener(ShowSettingsPanel);
 
             if (_startButton != null)
                 _startButton.onClick.AddListener(ShowMapPanel);
@@ -250,6 +251,8 @@ namespace UI
                 _carPanel.SetActive(false);
             if (_racePanel != null)
                 _racePanel.SetActive(false);
+            if (_settingsPanel != null)
+                _settingsPanel.SetActive(false);
         }
 
         private void ShowMapPanel()
@@ -263,6 +266,8 @@ namespace UI
                 _carPanel.SetActive(false);
             if (_racePanel != null)
                 _racePanel.SetActive(false);
+            if (_settingsPanel != null)
+                _settingsPanel.SetActive(false);
 
             RefreshMapButtons();
             UpdateMapPresentation();
@@ -279,6 +284,8 @@ namespace UI
                 _carPanel.SetActive(true);
             if (_racePanel != null)
                 _racePanel.SetActive(false);
+            if (_settingsPanel != null)
+                _settingsPanel.SetActive(false);
 
             RefreshCarButtons();
             UpdateCarPresentation();
@@ -319,6 +326,22 @@ namespace UI
                 _carPanel.SetActive(false);
             if (_racePanel != null)
                 _racePanel.SetActive(true);
+            if (_settingsPanel != null)
+                _settingsPanel.SetActive(false);
+        }
+
+        private void ShowSettingsPanel()
+        {
+            if (_mainPanel != null)
+                _mainPanel.SetActive(false);
+            if (_mapPanel != null)
+                _mapPanel.SetActive(false);
+            if (_carPanel != null)
+                _carPanel.SetActive(false);
+            if (_racePanel != null)
+                _racePanel.SetActive(false);
+            if (_settingsPanel != null)
+                _settingsPanel.SetActive(true);
         }
 
         private void PreparePendingMapSelection()

@@ -57,8 +57,10 @@ MonoBehaviour:
   _mapPanel: {fileID: 2663626453575774479}
   _carPanel: {fileID: 6239384240374274358}
   _racePanel: {fileID: 2759760589318717358}
-  _openMapPanelButton: {fileID: 1484194640214227832}
+  _settingsPanel: {fileID: 4186584242168924001}
+  _openMapPanelButton: {fileID: 0}
   _openCarPanelButton: {fileID: 1384247499625789803}
+  _openSettingsButton: {fileID: 1484194640214227832}
   _startButton: {fileID: 318920863273912486}
   _exitButton: {fileID: 9181736691640740636}
   _backFromMapButton: {fileID: 6767593984084793856}
@@ -2190,7 +2192,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7098446718067581640
 RectTransform:
   m_ObjectHideFlags: 0
