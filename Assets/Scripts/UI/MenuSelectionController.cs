@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Configs.Impl;
 using Signals;
@@ -41,12 +42,38 @@ namespace UI
         [SerializeField] private Image _mapPresentation;
         [SerializeField] private Image _carPresentation;
 
+        [Header("Transitions")]
+        [SerializeField] private float _panelSlideDuration = 0.25f;
+        [SerializeField] private AnimationCurve _panelSlideEase;
+        [SerializeField] private float _menuLeftShift = 450f;
+        [SerializeField] private float _mapSlideOffset = 600f;
+        [SerializeField] private float _carSlideOffset = 1100f;
+        [SerializeField] private float _raceSlideOffset = 600f;
+
         [Header("Data")]
         [SerializeField] private MapCatalog _mapCatalog;
         [SerializeField] private CarCatalog _carCatalog;
         [SerializeField] private GameSelectionParameters _gameSelectionParameters;
 
+        [SerializeField] private SettingsPanelController _settingsPanelController;
+
         [Inject] private SignalBus _signalBus;
+
+        private RectTransform _mainPanelTransform;
+        private RectTransform _mapPanelTransform;
+        private RectTransform _carPanelTransform;
+        private RectTransform _racePanelTransform;
+
+        private Vector2 _mainPanelBasePosition;
+        private Vector2 _mapPanelBasePosition;
+        private Vector2 _carPanelBasePosition;
+        private Vector2 _racePanelBasePosition;
+
+        private Coroutine _mainPanelSlideRoutine;
+        private Coroutine _mapPanelSlideRoutine;
+        private Coroutine _carPanelSlideRoutine;
+        private Coroutine _racePanelSlideRoutine;
+        private Coroutine _returnFromRaceRoutine;
 
         private int _pendingMapIndex = -1;
         private GameObject _pendingMapPrefab;
@@ -59,12 +86,46 @@ namespace UI
 
         private void Awake()
         {
+            CachePanelTransforms();
             WireMainButtons();
             EnsureDefaultSelection();
             BuildButtons(_mapButtons, _mapCatalog != null ? _mapCatalog.Maps.Count : 0);
             BuildButtons(_carButtons, _carCatalog != null ? _carCatalog.Cars.Count : 0);
             RefreshButtons();
             ShowMainPanel();
+
+            if (_settingsPanelController != null)
+                _settingsPanelController.Closed += HandleSettingsClosed;
+        }
+
+        private void OnDestroy()
+        {
+            if (_settingsPanelController != null)
+                _settingsPanelController.Closed -= HandleSettingsClosed;
+        }
+
+        private void CachePanelTransforms()
+        {
+            if (_mainPanelTransform == null && _mainPanel != null)
+                _mainPanelTransform = _mainPanel.GetComponent<RectTransform>();
+            if (_mapPanelTransform == null && _mapPanel != null)
+                _mapPanelTransform = _mapPanel.GetComponent<RectTransform>();
+            if (_carPanelTransform == null && _carPanel != null)
+                _carPanelTransform = _carPanel.GetComponent<RectTransform>();
+            if (_racePanelTransform == null && _racePanel != null)
+                _racePanelTransform = _racePanel.GetComponent<RectTransform>();
+
+            if (_mainPanelTransform != null)
+                _mainPanelBasePosition = _mainPanelTransform.anchoredPosition;
+            if (_mapPanelTransform != null)
+                _mapPanelBasePosition = _mapPanelTransform.anchoredPosition;
+            if (_carPanelTransform != null)
+                _carPanelBasePosition = _carPanelTransform.anchoredPosition;
+            if (_racePanelTransform != null)
+                _racePanelBasePosition = _racePanelTransform.anchoredPosition;
+
+            if (_settingsPanelController == null && _settingsPanel != null)
+                _settingsPanelController = _settingsPanel.GetComponent<SettingsPanelController>();
         }
 
         private void WireMainButtons()
@@ -82,13 +143,13 @@ namespace UI
                 _exitButton.onClick.AddListener(Application.Quit);
 
             if (_backFromMapButton != null)
-                _backFromMapButton.onClick.AddListener(ShowMainPanel);
+                _backFromMapButton.onClick.AddListener(ShowMainPanelFromMap);
 
             if (_backFromCarButton != null)
-                _backFromCarButton.onClick.AddListener(ShowMainPanel);
+                _backFromCarButton.onClick.AddListener(ShowMainPanelFromCar);
 
             if (_backFromRaceButton != null)
-                _backFromRaceButton.onClick.AddListener(ShowMapPanel);
+                _backFromRaceButton.onClick.AddListener(ShowMapPanelFromRace);
 
             if (_confirmMapButton != null)
                 _confirmMapButton.onClick.AddListener(ConfirmMapSelection);
@@ -253,13 +314,67 @@ namespace UI
                 _racePanel.SetActive(false);
             if (_settingsPanel != null)
                 _settingsPanel.SetActive(false);
+
+            ResetPanelPositions();
+            SetMenuButtonsInteractable(true);
+        }
+
+        private void ShowMainPanelFromMap()
+        {
+            if (_mainPanel != null)
+                _mainPanel.SetActive(true);
+            if (_carPanel != null)
+                _carPanel.SetActive(false);
+            if (_racePanel != null)
+                _racePanel.SetActive(false);
+            if (_settingsPanel != null)
+                _settingsPanel.SetActive(false);
+
+            SetMenuButtonsInteractable(true);
+            if (_mapPanelTransform != null)
+            {
+                SlidePanel(_mapPanelTransform, _mapPanelBasePosition + new Vector2(0f, _mapSlideOffset),
+                    ref _mapPanelSlideRoutine, true);
+            }
+            else if (_mapPanel != null)
+            {
+                _mapPanel.SetActive(false);
+            }
+
+            if (_mapPresentation != null)
+                _mapPresentation.gameObject.SetActive(false);
+            if (_confirmMapButton != null)
+                _confirmMapButton.gameObject.SetActive(false);
+        }
+
+        private void ShowMainPanelFromCar()
+        {
+            if (_mainPanel != null)
+                _mainPanel.SetActive(true);
+            if (_mapPanel != null)
+                _mapPanel.SetActive(false);
+            if (_racePanel != null)
+                _racePanel.SetActive(false);
+            if (_settingsPanel != null)
+                _settingsPanel.SetActive(false);
+
+            SetMenuButtonsInteractable(true);
+            if (_carPanelTransform != null)
+            {
+                SlidePanel(_carPanelTransform, _carPanelBasePosition + new Vector2(0f, _carSlideOffset),
+                    ref _carPanelSlideRoutine, true);
+            }
+            else if (_carPanel != null)
+            {
+                _carPanel.SetActive(false);
+            }
         }
 
         private void ShowMapPanel()
         {
             PreparePendingMapSelection();
             if (_mainPanel != null)
-                _mainPanel.SetActive(false);
+                _mainPanel.SetActive(true);
             if (_mapPanel != null)
                 _mapPanel.SetActive(true);
             if (_carPanel != null)
@@ -269,6 +384,17 @@ namespace UI
             if (_settingsPanel != null)
                 _settingsPanel.SetActive(false);
 
+            ResetPanelPositions();
+            SetMenuButtonsInteractable(false);
+            if (_mapPanelTransform != null)
+            {
+                _mapPanelTransform.anchoredPosition = _mapPanelBasePosition + new Vector2(0f, _mapSlideOffset);
+                SlidePanel(_mapPanelTransform, _mapPanelBasePosition, ref _mapPanelSlideRoutine);
+            }
+            if (_mapPresentation != null)
+                _mapPresentation.gameObject.SetActive(true);
+            if (_confirmMapButton != null)
+                _confirmMapButton.gameObject.SetActive(true);
             RefreshMapButtons();
             UpdateMapPresentation();
         }
@@ -277,7 +403,7 @@ namespace UI
         {
             PreparePendingCarSelection();
             if (_mainPanel != null)
-                _mainPanel.SetActive(false);
+                _mainPanel.SetActive(true);
             if (_mapPanel != null)
                 _mapPanel.SetActive(false);
             if (_carPanel != null)
@@ -286,6 +412,13 @@ namespace UI
                 _racePanel.SetActive(false);
             if (_settingsPanel != null)
                 _settingsPanel.SetActive(false);
+
+            SetMenuButtonsInteractable(false);
+            if (_carPanelTransform != null)
+            {
+                _carPanelTransform.anchoredPosition = _carPanelBasePosition + new Vector2(0f, _carSlideOffset);
+                SlidePanel(_carPanelTransform, _carPanelBasePosition, ref _carPanelSlideRoutine);
+            }
 
             RefreshCarButtons();
             UpdateCarPresentation();
@@ -319,29 +452,111 @@ namespace UI
         private void ShowRacePanel()
         {
             if (_mainPanel != null)
-                _mainPanel.SetActive(false);
+                _mainPanel.SetActive(true);
             if (_mapPanel != null)
-                _mapPanel.SetActive(false);
+                _mapPanel.SetActive(true);
             if (_carPanel != null)
                 _carPanel.SetActive(false);
             if (_racePanel != null)
                 _racePanel.SetActive(true);
             if (_settingsPanel != null)
                 _settingsPanel.SetActive(false);
+
+            SetMenuButtonsInteractable(false);
+            if (_mapPresentation != null)
+                _mapPresentation.gameObject.SetActive(false);
+            if (_confirmMapButton != null)
+                _confirmMapButton.gameObject.SetActive(false);
+
+            SlidePanel(_mainPanelTransform, _mainPanelBasePosition + new Vector2(-_menuLeftShift, 0f),
+                ref _mainPanelSlideRoutine);
+            SlidePanel(_mapPanelTransform, _mapPanelBasePosition + new Vector2(-_menuLeftShift, 0f),
+                ref _mapPanelSlideRoutine);
+
+            if (_racePanelTransform != null)
+            {
+                _racePanelTransform.anchoredPosition = _racePanelBasePosition + new Vector2(0f, _raceSlideOffset);
+                SlidePanel(_racePanelTransform, _racePanelBasePosition, ref _racePanelSlideRoutine);
+            }
+        }
+
+        private void ShowMapPanelFromRace()
+        {
+            if (_mainPanel != null)
+                _mainPanel.SetActive(true);
+            if (_mapPanel != null)
+                _mapPanel.SetActive(true);
+            if (_carPanel != null)
+                _carPanel.SetActive(false);
+            if (_settingsPanel != null)
+                _settingsPanel.SetActive(false);
+
+            SetMenuButtonsInteractable(false);
+            if (_returnFromRaceRoutine != null)
+                StopCoroutine(_returnFromRaceRoutine);
+
+            _returnFromRaceRoutine = StartCoroutine(ReturnFromRaceRoutine());
+        }
+
+        private IEnumerator ReturnFromRaceRoutine()
+        {
+            if (_racePanelTransform != null)
+            {
+                SlidePanel(_racePanelTransform, _racePanelBasePosition + new Vector2(0f, _raceSlideOffset),
+                    ref _racePanelSlideRoutine, true);
+            }
+            else if (_racePanel != null)
+            {
+                _racePanel.SetActive(false);
+            }
+
+            yield return new WaitForSeconds(_panelSlideDuration);
+
+            SlidePanel(_mainPanelTransform, _mainPanelBasePosition, ref _mainPanelSlideRoutine);
+            SlidePanel(_mapPanelTransform, _mapPanelBasePosition, ref _mapPanelSlideRoutine);
+
+            yield return new WaitForSeconds(_panelSlideDuration);
+
+            if (_mapPresentation != null)
+                _mapPresentation.gameObject.SetActive(true);
+            if (_confirmMapButton != null)
+                _confirmMapButton.gameObject.SetActive(true);
         }
 
         private void ShowSettingsPanel()
         {
             if (_mainPanel != null)
-                _mainPanel.SetActive(false);
+                _mainPanel.SetActive(true);
             if (_mapPanel != null)
                 _mapPanel.SetActive(false);
             if (_carPanel != null)
                 _carPanel.SetActive(false);
             if (_racePanel != null)
                 _racePanel.SetActive(false);
-            if (_settingsPanel != null)
-                _settingsPanel.SetActive(true);
+            if (_settingsPanelController != null)
+                _settingsPanelController.OpenSettings();
+
+            ResetPanelPositions();
+            SetMenuButtonsInteractable(false);
+        }
+
+        private void HandleSettingsClosed()
+        {
+            SetMenuButtonsInteractable(true);
+        }
+
+        private void SetMenuButtonsInteractable(bool isInteractable)
+        {
+            SetButtonInteractable(_openCarPanelButton, isInteractable);
+            SetButtonInteractable(_openSettingsButton, isInteractable);
+            SetButtonInteractable(_startButton, isInteractable);
+            SetButtonInteractable(_exitButton, isInteractable);
+        }
+
+        private void SetButtonInteractable(Button button, bool isInteractable)
+        {
+            if (button != null)
+                button.interactable = isInteractable;
         }
 
         private void PreparePendingMapSelection()
@@ -413,6 +628,62 @@ namespace UI
                 return _pendingCarIndex;
 
             return _gameSelectionParameters != null ? _gameSelectionParameters.SelectedCarIndex : -1;
+        }
+
+        private void ResetPanelPositions()
+        {
+            SetPanelPosition(_mainPanelTransform, _mainPanelBasePosition, ref _mainPanelSlideRoutine);
+            SetPanelPosition(_mapPanelTransform, _mapPanelBasePosition, ref _mapPanelSlideRoutine);
+            SetPanelPosition(_carPanelTransform, _carPanelBasePosition, ref _carPanelSlideRoutine);
+            SetPanelPosition(_racePanelTransform, _racePanelBasePosition, ref _racePanelSlideRoutine);
+        }
+
+        private void SetPanelPosition(RectTransform rect, Vector2 position, ref Coroutine routine)
+        {
+            if (rect == null)
+                return;
+
+            if (routine != null)
+            {
+                StopCoroutine(routine);
+                routine = null;
+            }
+
+            rect.anchoredPosition = position;
+        }
+
+        private void SlidePanel(RectTransform rect, Vector2 target, ref Coroutine routine, bool deactivateOnComplete = false)
+        {
+            if (rect == null)
+                return;
+
+            if (routine != null)
+                StopCoroutine(routine);
+
+            routine = StartCoroutine(SlidePanelRoutine(rect, rect.anchoredPosition, target, deactivateOnComplete));
+        }
+
+        private IEnumerator SlidePanelRoutine(RectTransform rect, Vector2 from, Vector2 to, bool deactivateOnComplete)
+        {
+            var duration = Mathf.Max(0.01f, _panelSlideDuration);
+            var ease = _panelSlideEase != null && _panelSlideEase.length > 0
+                ? _panelSlideEase
+                : AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+
+            var elapsed = 0f;
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                var t = Mathf.Clamp01(elapsed / duration);
+                var eased = ease.Evaluate(t);
+                rect.anchoredPosition = Vector2.LerpUnclamped(from, to, eased);
+                yield return null;
+            }
+
+            rect.anchoredPosition = to;
+
+            if (deactivateOnComplete)
+                rect.gameObject.SetActive(false);
         }
     }
 }

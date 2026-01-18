@@ -58,7 +58,6 @@ MonoBehaviour:
   _carPanel: {fileID: 6239384240374274358}
   _racePanel: {fileID: 2759760589318717358}
   _settingsPanel: {fileID: 4186584242168924001}
-  _openMapPanelButton: {fileID: 0}
   _openCarPanelButton: {fileID: 1384247499625789803}
   _openSettingsButton: {fileID: 1484194640214227832}
   _startButton: {fileID: 318920863273912486}
@@ -79,10 +78,57 @@ MonoBehaviour:
   - {fileID: 5908499985331898635}
   _mapPresentation: {fileID: 5542072417540442828}
   _carPresentation: {fileID: 2775742472257172226}
+  _panelSlideDuration: 0.25
+  _panelSlideEase:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.37854514
+      value: 0.17764638
+      inSlope: 1.2106926
+      outSlope: 1.2106926
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.6719635
+      value: 0.84571844
+      inSlope: 1.358194
+      outSlope: 1.358194
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _menuLeftShift: 600
+  _mapSlideOffset: 1100
+  _raceSlideOffset: 1100
   _mapCatalog: {fileID: 11400000, guid: 7935337dca084ab6a48c73dd52019aab, type: 2}
   _carCatalog: {fileID: 11400000, guid: cc0a33ed7d4a41358454f341b1a796b5, type: 2}
   _gameSelectionParameters: {fileID: 11400000, guid: c8c9b05e5525499b943131a8c65002a7,
     type: 2}
+  _settingsPanelController: {fileID: 9023456789012345678}
 --- !u!1 &251595612455469848
 GameObject:
   m_ObjectHideFlags: 0
@@ -4399,6 +4445,51 @@ MonoBehaviour:
   _closeButton: {fileID: 5258161172733686698}
   _settingsPanel: {fileID: 4186584242168924001}
   _menuPanel: {fileID: 2192599644426282843}
+  _panelTransform: {fileID: 3906798344582973837}
+  _slideDuration: 0.25
+  _slideEase:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.40799424
+      value: 0.2550029
+      inSlope: 1.5363929
+      outSlope: 1.5363929
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.4440595
+    - serializedVersion: 3
+      time: 0.62960345
+      value: 0.7524333
+      inSlope: 1.5650603
+      outSlope: 1.5650603
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _slideOffset: 1100
 --- !u!1 &4417143733449647135
 GameObject:
   m_ObjectHideFlags: 0
