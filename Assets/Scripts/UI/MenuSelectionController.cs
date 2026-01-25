@@ -17,6 +17,7 @@ namespace UI
         [SerializeField] private GameObject _carPanel;
         [SerializeField] private GameObject _racePanel;
         [SerializeField] private GameObject _settingsPanel;
+        [SerializeField] private GameObject _oponentPanel;
 
         [Header("Buttons")]
         [SerializeField] private Button _openCarPanelButton;
@@ -28,11 +29,14 @@ namespace UI
         [SerializeField] private Button _backFromMapButton;
         [SerializeField] private Button _backFromCarButton;
         [SerializeField] private Button _backFromRaceButton;
+        [SerializeField] private Button _backFromOpponentButton;
 
         [Header("Confirm Buttons")]
         [SerializeField] private Button _confirmMapButton;
         [SerializeField] private Button _confirmCarButton;
         [SerializeField] private Button _confirmRaceButton;
+        [SerializeField] private Button _confirmOpponentButton;
+        [SerializeField] private GameObject _opponentThings;
 
         [Header("Selection Buttons")]
         [SerializeField] private List<Button> _mapButtons = new List<Button>();
@@ -49,6 +53,11 @@ namespace UI
         [SerializeField] private float _mapSlideOffset = 600f;
         [SerializeField] private float _carSlideOffset = 1100f;
         [SerializeField] private float _raceSlideOffset = 600f;
+        [SerializeField] private float _oponentSlideOffset = 600f;
+        [SerializeField] private float _oponentPanelDelay = 0.25f;
+        [SerializeField] private float _mapPresentationDelay = 0.1f;
+        [SerializeField] private float _racePanelDelay = 0.25f;
+        [SerializeField] private float _oponentThingsDelay = 0.1f;
 
         [Header("Data")]
         [SerializeField] private MapCatalog _mapCatalog;
@@ -63,17 +72,26 @@ namespace UI
         private RectTransform _mapPanelTransform;
         private RectTransform _carPanelTransform;
         private RectTransform _racePanelTransform;
+        private RectTransform _oponentPanelTransform;
 
         private Vector2 _mainPanelBasePosition;
         private Vector2 _mapPanelBasePosition;
         private Vector2 _carPanelBasePosition;
         private Vector2 _racePanelBasePosition;
+        private Vector2 _oponentPanelBasePosition;
 
         private Coroutine _mainPanelSlideRoutine;
         private Coroutine _mapPanelSlideRoutine;
         private Coroutine _carPanelSlideRoutine;
         private Coroutine _racePanelSlideRoutine;
+        private Coroutine _oponentPanelSlideRoutine;
         private Coroutine _returnFromRaceRoutine;
+        private Coroutine _oponentPanelEntryRoutine;
+        private Coroutine _racePanelEntryRoutine;
+        private Coroutine _mapPanelReturnRoutine;
+        private Coroutine _mapPresentationRoutine;
+        private Coroutine _confirmMapRoutine;
+        private Coroutine _oponentThingsRoutine;
 
         private int _pendingMapIndex = -1;
         private GameObject _pendingMapPrefab;
@@ -114,6 +132,8 @@ namespace UI
                 _carPanelTransform = _carPanel.GetComponent<RectTransform>();
             if (_racePanelTransform == null && _racePanel != null)
                 _racePanelTransform = _racePanel.GetComponent<RectTransform>();
+            if (_oponentPanelTransform == null && _oponentPanel != null)
+                _oponentPanelTransform = _oponentPanel.GetComponent<RectTransform>();
 
             if (_mainPanelTransform != null)
                 _mainPanelBasePosition = _mainPanelTransform.anchoredPosition;
@@ -123,6 +143,8 @@ namespace UI
                 _carPanelBasePosition = _carPanelTransform.anchoredPosition;
             if (_racePanelTransform != null)
                 _racePanelBasePosition = _racePanelTransform.anchoredPosition;
+            if (_oponentPanelTransform != null)
+                _oponentPanelBasePosition = _oponentPanelTransform.anchoredPosition;
 
             if (_settingsPanelController == null && _settingsPanel != null)
                 _settingsPanelController = _settingsPanel.GetComponent<SettingsPanelController>();
@@ -149,7 +171,9 @@ namespace UI
                 _backFromCarButton.onClick.AddListener(ShowMainPanelFromCar);
 
             if (_backFromRaceButton != null)
-                _backFromRaceButton.onClick.AddListener(ShowMapPanelFromRace);
+                _backFromRaceButton.onClick.AddListener(ShowOpponentPanelFromRace);
+            if (_backFromOpponentButton != null)
+                _backFromOpponentButton.onClick.AddListener(ShowMapPanelFromOpponent);
 
             if (_confirmMapButton != null)
                 _confirmMapButton.onClick.AddListener(ConfirmMapSelection);
@@ -159,6 +183,8 @@ namespace UI
 
             if (_confirmRaceButton != null)
                 _confirmRaceButton.onClick.AddListener(ConfirmRaceSelection);
+            if (_confirmOpponentButton != null)
+                _confirmOpponentButton.onClick.AddListener(ConfirmOpponentSelection);
         }
 
         private void BuildButtons(List<Button> buttons, int needed)
@@ -314,6 +340,8 @@ namespace UI
                 _racePanel.SetActive(false);
             if (_settingsPanel != null)
                 _settingsPanel.SetActive(false);
+            if (_oponentPanel != null)
+                _oponentPanel.SetActive(false);
 
             ResetPanelPositions();
             SetMenuButtonsInteractable(true);
@@ -329,11 +357,13 @@ namespace UI
                 _racePanel.SetActive(false);
             if (_settingsPanel != null)
                 _settingsPanel.SetActive(false);
+            if (_oponentPanel != null)
+                _oponentPanel.SetActive(false);
 
             SetMenuButtonsInteractable(true);
             if (_mapPanelTransform != null)
             {
-                SlidePanel(_mapPanelTransform, _mapPanelBasePosition + new Vector2(0f, _mapSlideOffset),
+                SlidePanel(_mapPanelTransform, _mapPanelBasePosition - new Vector2(0f, _mapSlideOffset),
                     ref _mapPanelSlideRoutine, true);
             }
             else if (_mapPanel != null)
@@ -357,6 +387,8 @@ namespace UI
                 _racePanel.SetActive(false);
             if (_settingsPanel != null)
                 _settingsPanel.SetActive(false);
+            if (_oponentPanel != null)
+                _oponentPanel.SetActive(false);
 
             SetMenuButtonsInteractable(true);
             if (_carPanelTransform != null)
@@ -383,18 +415,26 @@ namespace UI
                 _racePanel.SetActive(false);
             if (_settingsPanel != null)
                 _settingsPanel.SetActive(false);
+            if (_oponentPanel != null)
+                _oponentPanel.SetActive(false);
 
             ResetPanelPositions();
             SetMenuButtonsInteractable(false);
             if (_mapPanelTransform != null)
             {
-                _mapPanelTransform.anchoredPosition = _mapPanelBasePosition + new Vector2(0f, _mapSlideOffset);
+                _mapPanelTransform.anchoredPosition = _mapPanelBasePosition - new Vector2(0f, _mapSlideOffset);
                 SlidePanel(_mapPanelTransform, _mapPanelBasePosition, ref _mapPanelSlideRoutine);
             }
             if (_mapPresentation != null)
-                _mapPresentation.gameObject.SetActive(true);
+            {
+                _mapPresentation.gameObject.SetActive(false);
+                ShowMapPresentationDelayed();
+            }
             if (_confirmMapButton != null)
-                _confirmMapButton.gameObject.SetActive(true);
+            {
+                _confirmMapButton.gameObject.SetActive(false);
+                ShowConfirmMapDelayed();
+            }
             RefreshMapButtons();
             UpdateMapPresentation();
         }
@@ -412,6 +452,8 @@ namespace UI
                 _racePanel.SetActive(false);
             if (_settingsPanel != null)
                 _settingsPanel.SetActive(false);
+            if (_oponentPanel != null)
+                _oponentPanel.SetActive(false);
 
             SetMenuButtonsInteractable(false);
             if (_carPanelTransform != null)
@@ -431,7 +473,7 @@ namespace UI
 
             _gameSelectionParameters.SetSelectedMap(_pendingMapPrefab, _pendingMapIndex);
             RefreshMapButtons();
-            ShowRacePanel();
+            ShowOpponentPanel();
         }
 
         private void ConfirmCarSelection()
@@ -449,6 +491,49 @@ namespace UI
             StartRace();
         }
 
+        private void ConfirmOpponentSelection()
+        {
+            ShowRacePanelFromOpponent();
+        }
+
+        private void ShowOpponentPanel()
+        {
+            if (_mainPanel != null)
+                _mainPanel.SetActive(true);
+            if (_mapPanel != null)
+                _mapPanel.SetActive(true);
+            if (_carPanel != null)
+                _carPanel.SetActive(false);
+            if (_racePanel != null)
+                _racePanel.SetActive(false);
+            if (_settingsPanel != null)
+                _settingsPanel.SetActive(false);
+            if (_oponentPanel != null)
+                _oponentPanel.SetActive(true);
+
+            SetMenuButtonsInteractable(false);
+            if (_mapPresentation != null)
+                _mapPresentation.gameObject.SetActive(false);
+            if (_confirmMapButton != null)
+                _confirmMapButton.gameObject.SetActive(false);
+
+            SlidePanel(_mainPanelTransform, _mainPanelBasePosition + new Vector2(-_menuLeftShift, 0f),
+                ref _mainPanelSlideRoutine);
+            if (_mapPanelTransform != null)
+            {
+                SlidePanel(_mapPanelTransform, _mapPanelBasePosition + new Vector2(-_menuLeftShift, 0f),
+                    ref _mapPanelSlideRoutine);
+            }
+
+            if (_oponentPanel != null)
+                _oponentPanel.SetActive(false);
+
+            if (_oponentPanelEntryRoutine != null)
+                StopCoroutine(_oponentPanelEntryRoutine);
+
+            _oponentPanelEntryRoutine = StartCoroutine(ShowOpponentAfterMapSlide());
+        }
+
         private void ShowRacePanel()
         {
             if (_mainPanel != null)
@@ -461,6 +546,8 @@ namespace UI
                 _racePanel.SetActive(true);
             if (_settingsPanel != null)
                 _settingsPanel.SetActive(false);
+            if (_oponentPanel != null)
+                _oponentPanel.SetActive(false);
 
             SetMenuButtonsInteractable(false);
             if (_mapPresentation != null)
@@ -472,15 +559,134 @@ namespace UI
                 ref _mainPanelSlideRoutine);
             SlidePanel(_mapPanelTransform, _mapPanelBasePosition + new Vector2(-_menuLeftShift, 0f),
                 ref _mapPanelSlideRoutine);
+            SlidePanel(_oponentPanelTransform, _oponentPanelBasePosition + new Vector2(-_menuLeftShift, 0f),
+                ref _oponentPanelSlideRoutine, true);
 
             if (_racePanelTransform != null)
             {
-                _racePanelTransform.anchoredPosition = _racePanelBasePosition + new Vector2(0f, _raceSlideOffset);
+                _racePanelTransform.anchoredPosition = _racePanelBasePosition + new Vector2(_raceSlideOffset, 0f);
                 SlidePanel(_racePanelTransform, _racePanelBasePosition, ref _racePanelSlideRoutine);
             }
         }
 
-        private void ShowMapPanelFromRace()
+        private void ShowRacePanelFromOpponent()
+        {
+            if (_mainPanel != null)
+                _mainPanel.SetActive(true);
+            if (_mapPanel != null)
+                _mapPanel.SetActive(true);
+            if (_carPanel != null)
+                _carPanel.SetActive(false);
+            if (_racePanel != null)
+                _racePanel.SetActive(true);
+            if (_settingsPanel != null)
+                _settingsPanel.SetActive(false);
+            if (_oponentPanel != null)
+                _oponentPanel.SetActive(true);
+
+            SetMenuButtonsInteractable(false);
+
+            if (_opponentThings != null)
+                _opponentThings.SetActive(false);
+            if (_confirmOpponentButton != null)
+                _confirmOpponentButton.gameObject.SetActive(false);
+
+            if (_racePanelTransform != null)
+                _racePanelTransform.anchoredPosition = _racePanelBasePosition + new Vector2(_raceSlideOffset, 0f);
+
+            SlidePanel(_mainPanelTransform, _mainPanelBasePosition + new Vector2(-_menuLeftShift * 2f, 0f),
+                ref _mainPanelSlideRoutine);
+            SlidePanel(_mapPanelTransform, _mapPanelBasePosition + new Vector2(-_menuLeftShift * 2f, 0f),
+                ref _mapPanelSlideRoutine);
+            SlidePanel(_oponentPanelTransform, _oponentPanelBasePosition + new Vector2(-_menuLeftShift, 0f),
+                ref _oponentPanelSlideRoutine);
+
+            if (_racePanelEntryRoutine != null)
+                StopCoroutine(_racePanelEntryRoutine);
+
+            _racePanelEntryRoutine = StartCoroutine(ShowRaceAfterOpponentShift());
+        }
+
+        private void ShowMapPanelFromOpponent()
+        {
+            if (_mainPanel != null)
+                _mainPanel.SetActive(true);
+            if (_mapPanel != null)
+                _mapPanel.SetActive(true);
+            if (_carPanel != null)
+                _carPanel.SetActive(false);
+            if (_racePanel != null)
+                _racePanel.SetActive(false);
+            if (_settingsPanel != null)
+                _settingsPanel.SetActive(false);
+
+            SetMenuButtonsInteractable(false);
+            if (_oponentPanelTransform != null)
+            {
+                SlidePanel(_oponentPanelTransform, _oponentPanelBasePosition + new Vector2(0f, _oponentSlideOffset),
+                    ref _oponentPanelSlideRoutine, true);
+            }
+            else if (_oponentPanel != null)
+            {
+                _oponentPanel.SetActive(false);
+            }
+
+            if (_mapPanelReturnRoutine != null)
+                StopCoroutine(_mapPanelReturnRoutine);
+
+            _mapPanelReturnRoutine = StartCoroutine(ReturnMapAfterOpponentExit());
+        }
+
+        private IEnumerator ShowOpponentAfterMapSlide()
+        {
+            var delay = Mathf.Max(0f, _oponentPanelDelay);
+            if (delay > 0f)
+                yield return new WaitForSeconds(delay);
+
+            if (_oponentPanelTransform == null)
+                yield break;
+
+            if (_oponentPanel != null)
+                _oponentPanel.SetActive(true);
+            _oponentPanelTransform.anchoredPosition = _oponentPanelBasePosition + new Vector2(0f, _oponentSlideOffset);
+            SlidePanel(_oponentPanelTransform, _oponentPanelBasePosition, ref _oponentPanelSlideRoutine);
+        }
+
+        private IEnumerator ReturnMapAfterOpponentExit()
+        {
+            yield return new WaitForSeconds(_panelSlideDuration);
+
+            SlidePanel(_mainPanelTransform, _mainPanelBasePosition, ref _mainPanelSlideRoutine);
+            if (_mapPanelTransform != null)
+            {
+                SlidePanel(_mapPanelTransform, _mapPanelBasePosition, ref _mapPanelSlideRoutine);
+            }
+
+            if (_mapPresentation != null)
+            {
+                _mapPresentation.gameObject.SetActive(false);
+                ShowMapPresentationDelayed();
+            }
+            if (_confirmMapButton != null)
+            {
+                _confirmMapButton.gameObject.SetActive(false);
+                ShowConfirmMapDelayed();
+            }
+        }
+
+        private IEnumerator ShowRaceAfterOpponentShift()
+        {
+            var delay = Mathf.Max(0f, _racePanelDelay);
+            if (delay > 0f)
+                yield return new WaitForSeconds(delay);
+
+            if (_racePanelTransform == null)
+                yield break;
+
+            SlidePanel(_racePanelTransform, _racePanelBasePosition, ref _racePanelSlideRoutine);
+        }
+
+        private void ShowOpponentPanelFromRace()
         {
             if (_mainPanel != null)
                 _mainPanel.SetActive(true);
@@ -490,8 +696,15 @@ namespace UI
                 _carPanel.SetActive(false);
             if (_settingsPanel != null)
                 _settingsPanel.SetActive(false);
+            if (_oponentPanel != null)
+                _oponentPanel.SetActive(true);
 
             SetMenuButtonsInteractable(false);
+            if (_mapPresentation != null)
+                _mapPresentation.gameObject.SetActive(false);
+            if (_confirmMapButton != null)
+                _confirmMapButton.gameObject.SetActive(false);
+
             if (_returnFromRaceRoutine != null)
                 StopCoroutine(_returnFromRaceRoutine);
 
@@ -502,7 +715,7 @@ namespace UI
         {
             if (_racePanelTransform != null)
             {
-                SlidePanel(_racePanelTransform, _racePanelBasePosition + new Vector2(0f, _raceSlideOffset),
+                SlidePanel(_racePanelTransform, _racePanelBasePosition + new Vector2(_raceSlideOffset, 0f),
                     ref _racePanelSlideRoutine, true);
             }
             else if (_racePanel != null)
@@ -512,15 +725,69 @@ namespace UI
 
             yield return new WaitForSeconds(_panelSlideDuration);
 
-            SlidePanel(_mainPanelTransform, _mainPanelBasePosition, ref _mainPanelSlideRoutine);
-            SlidePanel(_mapPanelTransform, _mapPanelBasePosition, ref _mapPanelSlideRoutine);
+            SlidePanel(_mainPanelTransform, _mainPanelBasePosition + new Vector2(-_menuLeftShift, 0f),
+                ref _mainPanelSlideRoutine);
+            SlidePanel(_mapPanelTransform, _mapPanelBasePosition + new Vector2(-_menuLeftShift, 0f),
+                ref _mapPanelSlideRoutine);
+            SlidePanel(_oponentPanelTransform, _oponentPanelBasePosition, ref _oponentPanelSlideRoutine);
 
-            yield return new WaitForSeconds(_panelSlideDuration);
+            ShowOpponentThingsDelayed();
+        }
+
+        private void ShowMapPresentationDelayed()
+        {
+            if (_mapPresentationRoutine != null)
+                StopCoroutine(_mapPresentationRoutine);
+
+            _mapPresentationRoutine = StartCoroutine(ShowMapPresentationAfterDelay());
+        }
+
+        private IEnumerator ShowMapPresentationAfterDelay()
+        {
+            var delay = Mathf.Max(0f, _mapPresentationDelay);
+            if (delay > 0f)
+                yield return new WaitForSeconds(delay);
 
             if (_mapPresentation != null)
                 _mapPresentation.gameObject.SetActive(true);
+        }
+
+        private void ShowConfirmMapDelayed()
+        {
+            if (_confirmMapRoutine != null)
+                StopCoroutine(_confirmMapRoutine);
+
+            _confirmMapRoutine = StartCoroutine(ShowConfirmMapAfterDelay());
+        }
+
+        private IEnumerator ShowConfirmMapAfterDelay()
+        {
+            var delay = Mathf.Max(0f, _mapPresentationDelay);
+            if (delay > 0f)
+                yield return new WaitForSeconds(delay);
+
             if (_confirmMapButton != null)
                 _confirmMapButton.gameObject.SetActive(true);
+        }
+
+        private void ShowOpponentThingsDelayed()
+        {
+            if (_oponentThingsRoutine != null)
+                StopCoroutine(_oponentThingsRoutine);
+
+            _oponentThingsRoutine = StartCoroutine(ShowOpponentThingsAfterDelay());
+        }
+
+        private IEnumerator ShowOpponentThingsAfterDelay()
+        {
+            var delay = Mathf.Max(0f, _oponentThingsDelay);
+            if (delay > 0f)
+                yield return new WaitForSeconds(delay);
+
+            if (_opponentThings != null)
+                _opponentThings.SetActive(true);
+            if (_confirmOpponentButton != null)
+                _confirmOpponentButton.gameObject.SetActive(true);
         }
 
         private void ShowSettingsPanel()
@@ -535,6 +802,8 @@ namespace UI
                 _racePanel.SetActive(false);
             if (_settingsPanelController != null)
                 _settingsPanelController.OpenSettings();
+            if (_oponentPanel != null)
+                _oponentPanel.SetActive(false);
 
             ResetPanelPositions();
             SetMenuButtonsInteractable(false);
@@ -636,6 +905,7 @@ namespace UI
             SetPanelPosition(_mapPanelTransform, _mapPanelBasePosition, ref _mapPanelSlideRoutine);
             SetPanelPosition(_carPanelTransform, _carPanelBasePosition, ref _carPanelSlideRoutine);
             SetPanelPosition(_racePanelTransform, _racePanelBasePosition, ref _racePanelSlideRoutine);
+            SetPanelPosition(_oponentPanelTransform, _oponentPanelBasePosition, ref _oponentPanelSlideRoutine);
         }
 
         private void SetPanelPosition(RectTransform rect, Vector2 position, ref Coroutine routine)
