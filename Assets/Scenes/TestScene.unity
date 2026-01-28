@@ -516,6 +516,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7146717253100232775, guid: 57c137a39a82f4c43a4a9923f3f92c30,
         type: 3}
+    - target: {fileID: 7824705624787612259, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
+      propertyPath: _menuSelectionTransitions
+      value: 
+      objectReference: {fileID: 11400000, guid: 55fd65d456a6a0b4eb7dc16265b3f7b8,
+        type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

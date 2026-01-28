@@ -1,9 +1,9 @@
-using System.Collections;
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.Canvas
 {
     public class SettingsPanelController : MonoBehaviour
     {
@@ -55,6 +55,12 @@ namespace UI
                 _menuPanel.SetActive(true);
 
             Closed?.Invoke();
+        }
+
+        public void HideInstantly()
+        {
+            if (_settingsPanel != null)
+                _settingsPanel.SetActive(false);
         }
 
         private void CachePositions()

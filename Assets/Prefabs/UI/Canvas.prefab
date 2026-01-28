@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5436404941513848660}
-  - component: {fileID: 9155555555555555555}
   m_Layer: 5
   m_Name: Menu
   m_TagString: Untagged
@@ -42,104 +41,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &9155555555555555555
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 120762049852641664}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1ccfd06cb324bae9058a4dde3341df3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mainPanel: {fileID: 2192599644426282843}
-  _mapPanel: {fileID: 2663626453575774479}
-  _carPanel: {fileID: 6239384240374274358}
-  _racePanel: {fileID: 2759760589318717358}
-  _settingsPanel: {fileID: 4186584242168924001}
-  _oponentPanel: {fileID: 2212586970625760083}
-  _openCarPanelButton: {fileID: 1384247499625789803}
-  _openSettingsButton: {fileID: 1484194640214227832}
-  _startButton: {fileID: 318920863273912486}
-  _exitButton: {fileID: 9181736691640740636}
-  _backFromMapButton: {fileID: 6767593984084793856}
-  _backFromCarButton: {fileID: 6765171934956344332}
-  _backFromRaceButton: {fileID: 46079633360859909}
-  _backFromOpponentButton: {fileID: 7732091874325100121}
-  _confirmMapButton: {fileID: 4614328213754437244}
-  _confirmCarButton: {fileID: 2363819671717270844}
-  _confirmRaceButton: {fileID: 6768840582484291769}
-  _confirmOpponentButton: {fileID: 6655695324666966713}
-  _opponentThings: {fileID: 2660178621861341644}
-  _mapButtons:
-  - {fileID: 505241501705733380}
-  - {fileID: 7044040811530557607}
-  - {fileID: 8533217427396718554}
-  _carButtons:
-  - {fileID: 6344030945895722966}
-  - {fileID: 8841448628215620829}
-  - {fileID: 5908499985331898635}
-  _mapPresentation: {fileID: 5542072417540442828}
-  _carPresentation: {fileID: 2775742472257172226}
-  _panelSlideDuration: 0.25
-  _panelSlideEase:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.37854514
-      value: 0.17764638
-      inSlope: 1.2106926
-      outSlope: 1.2106926
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.6719635
-      value: 0.84571844
-      inSlope: 1.358194
-      outSlope: 1.358194
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _menuLeftShift: 600
-  _mapSlideOffset: 1100
-  _carSlideOffset: 1100
-  _raceSlideOffset: 1360
-  _oponentSlideOffset: 1100
-  _oponentPanelDelay: 0.1
-  _mapPresentationDelay: 0.3
-  _racePanelDelay: 0.25
-  _oponentThingsDelay: 0.25
-  _mapCatalog: {fileID: 11400000, guid: 7935337dca084ab6a48c73dd52019aab, type: 2}
-  _carCatalog: {fileID: 11400000, guid: cc0a33ed7d4a41358454f341b1a796b5, type: 2}
-  _gameSelectionParameters: {fileID: 11400000, guid: c8c9b05e5525499b943131a8c65002a7,
-    type: 2}
-  _settingsPanelController: {fileID: 9023456789012345678}
 --- !u!1 &251595612455469848
 GameObject:
   m_ObjectHideFlags: 0
@@ -9077,6 +8978,8 @@ GameObject:
   - component: {fileID: 8755646511118254176}
   - component: {fileID: 950314718284045412}
   - component: {fileID: 9023456789012345680}
+  - component: {fileID: 3527734254439748423}
+  - component: {fileID: 2300298407261520752}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -9186,6 +9089,40 @@ MonoBehaviour:
   _buttonsContainer: {fileID: 7150609902356826453}
   _parametersContainer: {fileID: 3922216791728292281}
   _speedometer: {fileID: 1992776384927166861}
+--- !u!225 &3527734254439748423
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6878348546566864549}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &2300298407261520752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6878348546566864549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3234b9340a07aa5458505d91b8482905, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isPopup: 0
+  _isBackLogicIgnorable: 0
+  _animatedEmptyViews: []
+  _mainMenuView: {fileID: 0}
+  _mapSelectionView: {fileID: 0}
+  _carSelectionView: {fileID: 0}
+  _raceSelectionView: {fileID: 0}
+  _opponentSelectionView: {fileID: 0}
+  _settingsPanelController: {fileID: 0}
+  _transitions: {fileID: 0}
 --- !u!1 &6925101895325607963
 GameObject:
   m_ObjectHideFlags: 0
