@@ -16,6 +16,13 @@
       "dependencies": {},
       "hash": "73a63b7f672b88f7e9992f6917eb458a8cbb6fa9"
     },
+    "com.kienanunique.kobolduiframework": {
+      "version": "https://github.com/KienanUnique/KoboldUiFramework.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "e1dde192f64ba2210beffce8d4e945a5431786cb"
+    },
     "com.scellecs.morpeh": {
       "version": "https://github.com/scellecs/morpeh.git?path=Scellecs.Morpeh",
       "depth": 0,
