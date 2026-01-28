@@ -375,6 +375,8 @@ namespace UI
                 _mapPresentation.gameObject.SetActive(false);
             if (_confirmMapButton != null)
                 _confirmMapButton.gameObject.SetActive(false);
+            if (_backFromMapButton != null)
+                _backFromMapButton.gameObject.SetActive(false);
         }
 
         private void ShowMainPanelFromCar()
@@ -435,6 +437,8 @@ namespace UI
                 _confirmMapButton.gameObject.SetActive(false);
                 ShowConfirmMapDelayed();
             }
+            if (_backFromMapButton != null)
+                _backFromMapButton.gameObject.SetActive(false);
             RefreshMapButtons();
             UpdateMapPresentation();
         }
@@ -516,6 +520,8 @@ namespace UI
                 _mapPresentation.gameObject.SetActive(false);
             if (_confirmMapButton != null)
                 _confirmMapButton.gameObject.SetActive(false);
+            if (_backFromMapButton != null)
+                _backFromMapButton.gameObject.SetActive(false);
 
             SlidePanel(_mainPanelTransform, _mainPanelBasePosition + new Vector2(-_menuLeftShift, 0f),
                 ref _mainPanelSlideRoutine);
@@ -590,6 +596,8 @@ namespace UI
                 _opponentThings.SetActive(false);
             if (_confirmOpponentButton != null)
                 _confirmOpponentButton.gameObject.SetActive(false);
+            if (_backFromOpponentButton != null)
+                _backFromOpponentButton.gameObject.SetActive(false);
 
             if (_racePanelTransform != null)
                 _racePanelTransform.anchoredPosition = _racePanelBasePosition + new Vector2(_raceSlideOffset, 0f);
@@ -672,6 +680,8 @@ namespace UI
                 _confirmMapButton.gameObject.SetActive(false);
                 ShowConfirmMapDelayed();
             }
+            if (_backFromMapButton != null)
+                _backFromMapButton.gameObject.SetActive(false);
         }
 
         private IEnumerator ShowRaceAfterOpponentShift()
@@ -704,6 +714,8 @@ namespace UI
                 _mapPresentation.gameObject.SetActive(false);
             if (_confirmMapButton != null)
                 _confirmMapButton.gameObject.SetActive(false);
+            if (_backFromMapButton != null)
+                _backFromMapButton.gameObject.SetActive(false);
 
             if (_returnFromRaceRoutine != null)
                 StopCoroutine(_returnFromRaceRoutine);
@@ -768,6 +780,8 @@ namespace UI
 
             if (_confirmMapButton != null)
                 _confirmMapButton.gameObject.SetActive(true);
+            if (_backFromMapButton != null)
+                _backFromMapButton.gameObject.SetActive(true);
         }
 
         private void ShowOpponentThingsDelayed()
@@ -788,6 +802,8 @@ namespace UI
                 _opponentThings.SetActive(true);
             if (_confirmOpponentButton != null)
                 _confirmOpponentButton.gameObject.SetActive(true);
+            if (_backFromOpponentButton != null)
+                _backFromOpponentButton.gameObject.SetActive(true);
         }
 
         private void ShowSettingsPanel()
