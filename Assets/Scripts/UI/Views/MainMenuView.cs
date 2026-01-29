@@ -1,8 +1,7 @@
 using KoboldUi.Element.View;
-using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Canvas.Views
+namespace UI.Views
 {
     public class MainMenuView : AUiAnimatedView
     {

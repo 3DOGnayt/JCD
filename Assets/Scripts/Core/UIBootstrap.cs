@@ -1,6 +1,6 @@
 using System;
 using KoboldUi.Services.WindowsService;
-using UI.Canvas.Window;
+using UI.Window;
 using UniRx;
 using Zenject;
 

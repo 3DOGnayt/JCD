@@ -1,11 +1,11 @@
 using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
-using UI.Canvas.Views;
-using UI.Canvas.Window;
+using UI.Views;
+using UI.Window;
 using UniRx;
 using UnityEngine;
 
-namespace UI.Canvas.Controllers
+namespace UI.Controllers
 {
     public class MainMenuController : AUiController<MainMenuView>
     {
@@ -19,13 +19,13 @@ namespace UI.Canvas.Controllers
         public override void Initialize()
         {
             View.StartButton.OnClickAsObservable().Subscribe(_ => OnStartButtonClick()).AddTo(View);
-            //View.GarageButton.OnClickAsObservable().Subscribe(_ => OnGarageButtonClick()).AddTo(View);
+            View.GarageButton.OnClickAsObservable().Subscribe(_ => OnGarageButtonClick()).AddTo(View);
             View.SettingsButton.OnClickAsObservable().Subscribe(_ => OnSettingsButtonClick()).AddTo(View);
             View.ExitButton.OnClickAsObservable().Subscribe(_ => OnExitButtonClick()).AddTo(View);
         }
 
         private void OnStartButtonClick() => _localWindowsService.OpenWindow<MapWindow>();
-        //private void OnGarageButtonClick()=> _localWindowsService.OpenWindow<MapWindow>();
+        private void OnGarageButtonClick()=> _localWindowsService.OpenWindow<GarageWindow>();
         private void OnSettingsButtonClick() => _localWindowsService.OpenWindow<SettingsWindow>();
         private void OnExitButtonClick() => Application.Quit();
     }

@@ -1,9 +1,9 @@
 using KoboldUi.Windows;
-using UI.Canvas.Controllers;
-using UI.Canvas.Views;
+using UI.Controllers;
+using UI.Views;
 using UnityEngine;
 
-namespace UI.Canvas.Window
+namespace UI.Window
 {
     public class MainMenuWindow : AWindow
     {

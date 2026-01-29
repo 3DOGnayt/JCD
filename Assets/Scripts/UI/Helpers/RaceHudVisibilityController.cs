@@ -2,7 +2,7 @@ using Signals;
 using UnityEngine;
 using Zenject;
 
-namespace UI
+namespace UI.Helpers
 {
     public class RaceHudVisibilityController : MonoBehaviour
     {

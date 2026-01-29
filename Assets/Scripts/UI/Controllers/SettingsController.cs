@@ -1,7 +1,7 @@
 using KoboldUi.Element.Controller;
-using UI.Canvas.Views;
+using UI.Views;
 
-namespace UI.Canvas.Controllers
+namespace UI.Controllers
 {
     public class SettingsController : AUiController<SettingsView>
     {

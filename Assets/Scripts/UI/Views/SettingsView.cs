@@ -1,6 +1,6 @@
 using KoboldUi.Element.View;
 
-namespace UI.Canvas.Views
+namespace UI.Views
 {
     public class SettingsView : AUiAnimatedView
     {

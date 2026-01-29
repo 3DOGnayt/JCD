@@ -1,21 +1,13 @@
-using KoboldUi.Services.WindowsService.Impl;
-using UnityEngine;
-using UnityEngine.EventSystems;
+using Core;
 using Zenject;
 
 namespace Installers
 {
     public class UIInstaller : MonoInstaller
     {
-        [SerializeField] private Canvas _canvas;
-        [SerializeField] private EventSystem _eventSystem;
-        
         public override void InstallBindings()
         {
-            Container.Bind<Canvas>().FromInstance(_canvas).AsSingle();
-            Container.Bind<EventSystem>().FromInstance(_eventSystem).AsSingle();
-            
-            Container.BindInterfacesTo<LocalWindowsService>().AsSingle().NonLazy();
+            Container.BindInterfacesTo<UIBootstrap>().AsSingle().NonLazy();
         }
     }
 }

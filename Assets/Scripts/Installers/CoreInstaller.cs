@@ -18,8 +18,6 @@ namespace Installers
         {
             Container.Bind<World>().FromMethod(_ => World.Create()).AsSingle();
             Container.Bind<Startup>().FromInstance(startup).AsSingle();
-            
-            Container.BindInterfacesTo<UIBootstrap>().AsSingle().NonLazy();
         }
     }
 }
