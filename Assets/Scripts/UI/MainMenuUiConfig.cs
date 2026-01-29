@@ -23,8 +23,10 @@ namespace UI
         public override void InstallBindings()
         {
             var canvasInstance = Instantiate(_canvas);
+            var eventSystemInstance = Instantiate(_eventSystem);
+            
             Container.Bind<Canvas>().FromInstance(canvasInstance).AsSingle();
-            Container.Bind<EventSystem>().FromInstance(_eventSystem).AsSingle();
+            Container.Bind<EventSystem>().FromInstance(eventSystemInstance).AsSingle();
             
             Container.BindWindowFromPrefab(canvasInstance, _mainMenuWindow);
             Container.BindWindowFromPrefab(canvasInstance, _settingsWindow);

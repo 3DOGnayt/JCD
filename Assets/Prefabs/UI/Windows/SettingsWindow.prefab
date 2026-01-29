@@ -272,6 +272,7 @@ GameObject:
   - component: {fileID: 7184920375188971043}
   - component: {fileID: 2046971894807237264}
   - component: {fileID: 2682540561055281740}
+  - component: {fileID: 8578531447785769152}
   m_Layer: 5
   m_Name: SettingsView
   m_TagString: Untagged
@@ -349,8 +350,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1feca28a28bb4988acfbf69eb4f84455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _openAnimation: {fileID: 0}
-  _closeAnimation: {fileID: 0}
+  _openAnimation: {fileID: 8578531447785769152}
+  _closeAnimation: {fileID: 8578531447785769152}
+  CloseButton: {fileID: 6646997095825542879}
+--- !u!114 &8578531447785769152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 866822124091555965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85535bd58ab1f264ca3bca0573cd91b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _needWaitAnimation: 0
+  _useDefaultParameters: 1
+  _animationParameters: {fileID: 0}
+  _fromAppearAnchoredPosition: {x: 0, y: -1100}
+  _disappearToTheSamePlace: 1
+  _toDisappearAnchoredPosition: {x: 0, y: 1100}
 --- !u!1 &2054872500734543134
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,7 +804,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81abc80aab754d1f9e2ee1d462940220, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isPopup: 0
+  _isPopup: 1
   _isBackLogicIgnorable: 0
   _animatedEmptyViews: []
   _settingsView: {fileID: 2682540561055281740}
