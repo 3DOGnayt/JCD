@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5436404941513848660}
+  - component: {fileID: 5548861501403119429}
   m_Layer: 5
   m_Name: Menu
   m_TagString: Untagged
@@ -41,6 +42,24 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5548861501403119429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120762049852641664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11785d8ea5d3f54499ccc6bd63d50357, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _openAnimation: {fileID: 0}
+  _closeAnimation: {fileID: 0}
+  StartButton: {fileID: 0}
+  GarageButton: {fileID: 0}
+  SettingsButton: {fileID: 0}
+  ExitButton: {fileID: 0}
 --- !u!1 &251595612455469848
 GameObject:
   m_ObjectHideFlags: 0
@@ -5676,7 +5695,6 @@ GameObject:
   - component: {fileID: 3906798344582973837}
   - component: {fileID: 5115230839398819305}
   - component: {fileID: 5558072887550814815}
-  - component: {fileID: 9023456789012345678}
   m_Layer: 5
   m_Name: SettingsPanel
   m_TagString: Untagged
@@ -5742,66 +5760,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &9023456789012345678
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4186584242168924001}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfa32caa973d47f08d999f93b544b177, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _closeButton: {fileID: 5258161172733686698}
-  _settingsPanel: {fileID: 4186584242168924001}
-  _menuPanel: {fileID: 2192599644426282843}
-  _panelTransform: {fileID: 3906798344582973837}
-  _slideDuration: 0.25
-  _slideEase:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.40799424
-      value: 0.2550029
-      inSlope: 1.5363929
-      outSlope: 1.5363929
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.4440595
-    - serializedVersion: 3
-      time: 0.62960345
-      value: 0.7524333
-      inSlope: 1.5650603
-      outSlope: 1.5650603
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _slideOffset: 1100
 --- !u!1 &4236632324627118495
 GameObject:
   m_ObjectHideFlags: 0
@@ -8979,7 +8937,6 @@ GameObject:
   - component: {fileID: 950314718284045412}
   - component: {fileID: 9023456789012345680}
   - component: {fileID: 3527734254439748423}
-  - component: {fileID: 2300298407261520752}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -9101,28 +9058,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &2300298407261520752
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6878348546566864549}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3234b9340a07aa5458505d91b8482905, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isPopup: 0
-  _isBackLogicIgnorable: 0
-  _animatedEmptyViews: []
-  _mainMenuView: {fileID: 0}
-  _mapSelectionView: {fileID: 0}
-  _carSelectionView: {fileID: 0}
-  _raceSelectionView: {fileID: 0}
-  _opponentSelectionView: {fileID: 0}
-  _settingsPanelController: {fileID: 0}
-  _transitions: {fileID: 0}
 --- !u!1 &6925101895325607963
 GameObject:
   m_ObjectHideFlags: 0
