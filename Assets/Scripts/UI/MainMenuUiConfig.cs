@@ -17,6 +17,8 @@ namespace UI
         [SerializeField] private SettingsWindow _settingsWindow;
         [SerializeField] private GarageWindow _garageWindow;
         [SerializeField] private MapWindow _mapWindow;
+        [SerializeField] private OpponentWindow _opponentWindow;
+        [SerializeField] private RaceWindow _raceWindow;
 
         public override void InstallBindings()
         {
@@ -28,6 +30,8 @@ namespace UI
             Container.BindWindowFromPrefab(canvasInstance, _settingsWindow);
             Container.BindWindowFromPrefab(canvasInstance, _garageWindow);
             Container.BindWindowFromPrefab(canvasInstance, _mapWindow);
+            Container.BindWindowFromPrefab(canvasInstance, _opponentWindow);
+            Container.BindWindowFromPrefab(canvasInstance, _raceWindow);
         }
     }
 }

@@ -15,5 +15,15 @@ MonoBehaviour:
   _canvas: {fileID: 4016678542420778910, guid: a488e38e41289b943ae40149d99c434e, type: 3}
   _eventSystem: {fileID: 7146717253100232775, guid: 57c137a39a82f4c43a4a9923f3f92c30,
     type: 3}
-  mainMenuWindow: {fileID: 3206903702381248714, guid: f97c335513ac8a649951be6acfb27683,
+  _mainMenuWindow: {fileID: 3206903702381248714, guid: f97c335513ac8a649951be6acfb27683,
+    type: 3}
+  _settingsWindow: {fileID: 7115931168990043207, guid: 11dc294583715ea4b9271e3ba763b97d,
+    type: 3}
+  _garageWindow: {fileID: 7607127019479341561, guid: 99b9f3fbf1295a14ab8575e973878460,
+    type: 3}
+  _mapWindow: {fileID: 8468494751456667978, guid: ff625295f16ecde408f6abc2eb9d8864,
+    type: 3}
+  _opponentWindow: {fileID: 5814599427580494353, guid: 03724bab95c16c6459d72beed352f379,
+    type: 3}
+  _raceWindow: {fileID: 406041144084256462, guid: fb310a09bc3e6494da57579eb54c138c,
     type: 3}
