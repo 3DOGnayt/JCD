@@ -38,6 +38,7 @@ namespace UI.Controllers
 
         private void OnConfirmButtonClick()
         {
+            // need close all windows
             _signalBus.Fire(new StartRaceSignal());
         }
 

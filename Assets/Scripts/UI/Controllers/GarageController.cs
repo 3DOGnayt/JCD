@@ -33,7 +33,12 @@ namespace UI.Controllers
             //View.CarPresentation.sprite = _carCatalog... // new sprite by index
         }
 
-        private void OnConfirmButtonClick() => _localWindowsService.OpenWindow<MainMenuWindow>();
+        private void OnConfirmButtonClick()
+        {
+            // save car
+            _localWindowsService.OpenWindow<MainMenuWindow>();
+        }
+
         private void OnBackButtonClick() => _localWindowsService.OpenWindow<MainMenuWindow>();
     }
 }

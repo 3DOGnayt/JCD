@@ -1266,8 +1266,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _needWaitAnimation: 0
-  _useDefaultParameters: 1
-  _animationParameters: {fileID: 0}
+  _useDefaultParameters: 0
+  _animationParameters: {fileID: 11400000, guid: 4b01b7c043090324599d1bc5c503a6b0,
+    type: 2}
   _fromAppearAnchoredPosition: {x: 1700, y: 0}
   _disappearToTheSamePlace: 1
   _toDisappearAnchoredPosition: {x: -1700, y: 0}
