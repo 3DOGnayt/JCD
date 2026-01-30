@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 7439137679099227201}
   - component: {fileID: 2341613448953441870}
   m_Layer: 5
-  m_Name: Button (6)
+  m_Name: AkinaButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -268,7 +268,7 @@ GameObject:
   - component: {fileID: 1696505364344743275}
   - component: {fileID: 4022405787855935795}
   m_Layer: 5
-  m_Name: Button (7)
+  m_Name: AkagiButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -510,7 +510,7 @@ GameObject:
   - component: {fileID: 1839397054358327171}
   - component: {fileID: 1710826619626813959}
   m_Layer: 5
-  m_Name: Button (8)
+  m_Name: SameButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -613,7 +613,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1839397054358327171}
   m_OnClick:
     m_PersistentCalls:
@@ -1160,6 +1160,7 @@ GameObject:
   - component: {fileID: 8530762945969072677}
   - component: {fileID: 6461948491812657789}
   - component: {fileID: 6902255558321701429}
+  - component: {fileID: 7895298256137714003}
   m_Layer: 5
   m_Name: MapView
   m_TagString: Untagged
@@ -1243,8 +1244,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bae36b3477c3429aa1f73d78f3f2d4c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _openAnimation: {fileID: 0}
-  _closeAnimation: {fileID: 0}
+  _openAnimation: {fileID: 7895298256137714003}
+  _closeAnimation: {fileID: 7895298256137714003}
+  MapButtons:
+  - {fileID: 5097118970162656237}
+  - {fileID: 2341613448953441870}
+  - {fileID: 4022405787855935795}
+  MapPresentation: {fileID: 961242863914105893}
+  ConfirmButton: {fileID: 123571752187127957}
+  BackButton: {fileID: 2041593075582004457}
+--- !u!114 &7895298256137714003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4230953793433745344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85535bd58ab1f264ca3bca0573cd91b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _needWaitAnimation: 0
+  _useDefaultParameters: 1
+  _animationParameters: {fileID: 0}
+  _fromAppearAnchoredPosition: {x: 1700, y: 0}
+  _disappearToTheSamePlace: 1
+  _toDisappearAnchoredPosition: {x: -1700, y: 0}
 --- !u!1 &5002228457788372642
 GameObject:
   m_ObjectHideFlags: 0
@@ -1525,7 +1551,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 562fbe4acdaf426c8712ad57ae9349a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isPopup: 0
+  _isPopup: 1
   _isBackLogicIgnorable: 0
   _animatedEmptyViews: []
   _mapView: {fileID: 6902255558321701429}
@@ -1885,7 +1911,7 @@ GameObject:
   - component: {fileID: 5184576505340311930}
   - component: {fileID: 5097118970162656237}
   m_Layer: 5
-  m_Name: Button (5)
+  m_Name: PoligonButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

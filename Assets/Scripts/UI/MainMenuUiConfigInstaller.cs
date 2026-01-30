@@ -6,8 +6,8 @@ using Zenject;
 
 namespace UI
 {
-    [CreateAssetMenu(fileName = nameof(MainMenuUiConfig), menuName = "UI/" + nameof(MainMenuUiConfig), order = 0)]
-    public class MainMenuUiConfig : ScriptableObjectInstaller
+    [CreateAssetMenu(fileName = nameof(MainMenuUiConfigInstaller), menuName = "UI/" + nameof(MainMenuUiConfigInstaller), order = 0)]
+    public class MainMenuUiConfigInstaller : ScriptableObjectInstaller
     {
         [SerializeField] private Canvas _canvas;
         [SerializeField] private EventSystem _eventSystem;

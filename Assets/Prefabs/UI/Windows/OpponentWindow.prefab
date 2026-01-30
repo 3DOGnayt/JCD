@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 770971273992131313}
   - component: {fileID: 4505616024248535342}
   m_Layer: 5
-  m_Name: Button (6)
+  m_Name: NormalButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,11 +32,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6958743325092312257}
-  m_Father: {fileID: 2893193885679267822}
+  m_Father: {fileID: 7168259516165229902}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 250, y: -410}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 400, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7319088831864942325
@@ -597,6 +597,7 @@ GameObject:
   - component: {fileID: 5044532989325022944}
   - component: {fileID: 1187629449667206155}
   - component: {fileID: 7489726555538703446}
+  - component: {fileID: 5382335529254485978}
   m_Layer: 5
   m_Name: OpponentView
   m_TagString: Untagged
@@ -619,12 +620,8 @@ RectTransform:
   - {fileID: 384340789407304064}
   - {fileID: 4218223398786799285}
   - {fileID: 7168259516165229902}
-  - {fileID: 2268693170168472285}
-  - {fileID: 8429900907318236624}
-  - {fileID: 2215330192676462110}
-  - {fileID: 7480338466643495357}
-  - {fileID: 4546675631578596634}
   - {fileID: 8032055073621925989}
+  - {fileID: 4546675631578596634}
   m_Father: {fileID: 6197435364841904514}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -682,8 +679,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6cb2a796abf40c6831fc4927d195eae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _openAnimation: {fileID: 0}
-  _closeAnimation: {fileID: 0}
+  _openAnimation: {fileID: 5382335529254485978}
+  _closeAnimation: {fileID: 5382335529254485978}
+  OpponentButtons:
+  - {fileID: 2379181728695861636}
+  - {fileID: 4505616024248535342}
+  - {fileID: 8999344906144822879}
+  - {fileID: 5267124441812189245}
+  OpponentPresentation: {fileID: 6212415687025156866}
+  OpponentDifficulty: {fileID: 3952962381018233787}
+  ConfirmButton: {fileID: 8014439230066197355}
+  BackButton: {fileID: 6352658442118317963}
+--- !u!114 &5382335529254485978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1301511236154825506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85535bd58ab1f264ca3bca0573cd91b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _needWaitAnimation: 0
+  _useDefaultParameters: 1
+  _animationParameters: {fileID: 0}
+  _fromAppearAnchoredPosition: {x: 1700, y: 0}
+  _disappearToTheSamePlace: 1
+  _toDisappearAnchoredPosition: {x: -1700, y: 0}
 --- !u!1 &1455544723932295400
 GameObject:
   m_ObjectHideFlags: 0
@@ -697,7 +721,7 @@ GameObject:
   - component: {fileID: 2422516446879266320}
   - component: {fileID: 2379181728695861636}
   m_Layer: 5
-  m_Name: Button (5)
+  m_Name: EaseButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -716,11 +740,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7380458535795823148}
-  m_Father: {fileID: 2893193885679267822}
+  m_Father: {fileID: 7168259516165229902}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 250, y: -340}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 400, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2712675060674151903
@@ -1005,7 +1029,7 @@ GameObject:
   - component: {fileID: 670906099885243193}
   - component: {fileID: 8999344906144822879}
   m_Layer: 5
-  m_Name: Button (7)
+  m_Name: HardButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1024,11 +1048,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8684806912971008309}
-  m_Father: {fileID: 2893193885679267822}
+  m_Father: {fileID: 7168259516165229902}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 250, y: -480}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 400, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9193354922149634074
@@ -1334,7 +1358,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0585fb10b064da8a1750f821b0f7afc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isPopup: 0
+  _isPopup: 1
   _isBackLogicIgnorable: 0
   _animatedEmptyViews: []
   _opponentView: {fileID: 7489726555538703446}
@@ -1748,7 +1772,11 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2268693170168472285}
+  - {fileID: 8429900907318236624}
+  - {fileID: 2215330192676462110}
+  - {fileID: 7480338466643495357}
   m_Father: {fileID: 2893193885679267822}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
@@ -2184,7 +2212,7 @@ GameObject:
   - component: {fileID: 1114862905783000447}
   - component: {fileID: 5267124441812189245}
   m_Layer: 5
-  m_Name: Button (8)
+  m_Name: ExtremeButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2203,11 +2231,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3740724750473771092}
-  m_Father: {fileID: 2893193885679267822}
+  m_Father: {fileID: 7168259516165229902}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 250, y: -550}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 400, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1455433811693719977
