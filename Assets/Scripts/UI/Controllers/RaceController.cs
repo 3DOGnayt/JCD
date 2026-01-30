@@ -1,17 +1,14 @@
 using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
-using Signals;
 using UI.Views;
 using UI.Window;
 using UniRx;
-using Zenject;
 
 namespace UI.Controllers
 {
     public class RaceController : AUiController<RaceView>
     {
         private readonly ILocalWindowsService _localWindowsService;
-        [Inject] private SignalBus _signalBus;
 
         public RaceController(ILocalWindowsService localWindowsService)
         {
@@ -36,11 +33,7 @@ namespace UI.Controllers
             //change game mod
         }
 
-        private void OnConfirmButtonClick()
-        {
-            // need close all windows
-            _signalBus.Fire(new StartRaceSignal());
-        }
+        private void OnConfirmButtonClick() => _localWindowsService.OpenWindow<LoadingWindow>();
 
         private void OnBackButtonClick() => _localWindowsService.OpenWindow<OpponentWindow>();
     }

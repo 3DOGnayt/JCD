@@ -5,13 +5,12 @@ using UnityEngine;
 
 namespace UI.Window
 {
-    public class MainMenuWindow : AWindow
+    public class LoadingWindow : AWindow
     {
-        [SerializeField] private MainMenuView mainMenuView;
-        
+        [SerializeField] private LoadingView _loadingView;
         protected override void AddControllers()
         {
-            AddController<MainMenuController, MainMenuView>(mainMenuView);
+            AddController<LoadingController, LoadingView>(_loadingView);
         }
     }
 }
