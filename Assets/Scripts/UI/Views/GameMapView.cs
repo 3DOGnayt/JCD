@@ -9,6 +9,7 @@ namespace UI.Views
     
     public class GameSpeedometerView : AUiAnimatedView
     {
+        // in canvas
         // speedometer
     }
     
@@ -17,14 +18,14 @@ namespace UI.Views
         // Total time / Section time (1/2/..)
     }
     
-    public class StoryOpponentView : AUiAnimatedView
+    public class StoryOpponentView : AUiAnimatedView // ???
     {
         // image + name + car vs player + car / adavntage (+/- 4.9m) /
     }
     
     public class TrainingOpponentView : AUiAnimatedView
     {
-        // best time / best time on this car / difference total / player + car
+        // best time / difference total / (player + car)???
     }
     
     public class GamePauseView : AUiAnimatedView
