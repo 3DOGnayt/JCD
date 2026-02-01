@@ -5,14 +5,11 @@ using UnityEngine;
 
 namespace UI.Window
 {
-    public class StoryGameWindow : AWindow
+    public class GameMapWindow : AWindow
     {
         [SerializeField] private GameMapView _gameMapView;
         protected override void AddControllers()
         {
-            AddController<GameMapController, GameMapView>(_gameMapView);
-            AddController<GameMapController, GameMapView>(_gameMapView);
-            AddController<GameMapController, GameMapView>(_gameMapView);
             AddController<GameMapController, GameMapView>(_gameMapView);
         }
     }

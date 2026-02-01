@@ -37,6 +37,6 @@ namespace UI.Controllers
             _signalBus.Fire(new StartRaceSignal());
         }
 
-        private void OnBackButtonClick() => _localWindowsService.OpenWindow<StoryGameWindow>();
+        private void OnBackButtonClick() => _localWindowsService.OpenWindow<GameMapWindow>();
     }
 }
