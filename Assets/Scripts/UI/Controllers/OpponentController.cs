@@ -1,14 +1,27 @@
+using Configs.Impl;
 using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
+using TMPro;
 using UI.Views;
 using UI.Window;
 using UniRx;
+using UnityEngine;
+using Zenject;
 
 namespace UI.Controllers
 {
     public class OpponentController : AUiController<OpponentView>
     {
-        private ILocalWindowsService _localWindowsService;
+        private readonly ILocalWindowsService _localWindowsService;
+
+        private string _pendingOpponentName;
+        private Sprite _pendingOpponentPreview;
+        private float _pendingOpponentDifficulty;
+        private int _pendingOpponentIndex = -1;
+        private bool _isReady;
+
+        [Inject] private OpponentCatalog _opponentCatalog;
+        [Inject] private GameSelectionParameters _gameSelectionParameters;
 
         public OpponentController(ILocalWindowsService localWindowsService)
         {
@@ -17,25 +30,130 @@ namespace UI.Controllers
 
         public override void Initialize()
         {
+            _isReady = _opponentCatalog != null && _gameSelectionParameters != null;
+            if (!_isReady)
+                return;
+
             for (var i = 0; i < View.OpponentButtons.Count; i++)
             {
-                View.OpponentButtons[i].OnClickAsObservable().Subscribe(_ => OnOpponentButtonClick(i)).AddTo(View); // save opponent 
+                var buttonIndex = i;
+                View.OpponentButtons[buttonIndex].OnClickAsObservable()
+                    .Subscribe(_ => OnOpponentButtonClick(buttonIndex)).AddTo(View);
             }
-
-            //View.OpponentPresentation.sprite = _opponentCatalog... // last save
-            //View.OpponentDifficulty.fillAmount = _opponentCatalog... // last save
 
             View.ConfirmButton.OnClickAsObservable().Subscribe(_ => OnConfirmButtonClick()).AddTo(View);
             View.BackButton.OnClickAsObservable().Subscribe(_ => OnBackButtonClick()).AddTo(View);
         }
 
-        private void OnOpponentButtonClick(int index)
+        protected override void OnOpen()
         {
-            //View.OpponentPresentation.sprite = _opponentCatalog... // new sprite by index
-            //View.OpponentDifficulty.fillAmount = _opponentCatalog... // new dif by index
+            if (!_isReady)
+                return;
+
+            InitializeOpponentButtonLabels();
+            EnsureDefaultSelection();
+            PreparePendingOpponentSelection();
+            RefreshOpponentButtons();
+            UpdateOpponentPresentation();
         }
 
-        private void OnConfirmButtonClick() => _localWindowsService.OpenWindow<RaceWindow>();
+        private void InitializeOpponentButtonLabels()
+        {
+            var opponentCount = _opponentCatalog.Opponents.Count;
+            for (var index = 0; index < View.OpponentButtons.Count && index < opponentCount; index++)
+            {
+                var label = View.OpponentButtons[index].GetComponentInChildren<TMP_Text>(true);
+                if (label != null)
+                    label.text = _opponentCatalog.Opponents[index].DisplayName;
+            }
+        }
+
+        private void EnsureDefaultSelection()
+        {
+            if (!string.IsNullOrEmpty(_gameSelectionParameters.SelectedOpponentName) || _opponentCatalog.Opponents.Count <= 0)
+                return;
+
+            var entry = _opponentCatalog.Opponents[0];
+            _gameSelectionParameters.SetSelectedOpponent(entry.DisplayName, entry.Difficulty, 0);
+        }
+
+        private void PreparePendingOpponentSelection()
+        {
+            if (_opponentCatalog.Opponents.Count == 0)
+                return;
+
+            var clamped = Mathf.Clamp(_gameSelectionParameters.SelectedOpponentIndex, 0, _opponentCatalog.Opponents.Count - 1);
+            ApplyPendingOpponent(clamped);
+        }
+
+        private void RefreshOpponentButtons()
+        {
+            var selectedIndex = GetOpponentSelectionIndexForButtons();
+            var opponentCount = _opponentCatalog != null ? _opponentCatalog.Opponents.Count : 0;
+
+            for (var index = 0; index < View.OpponentButtons.Count; index++)
+            {
+                var button = View.OpponentButtons[index];
+                var isValid = index < opponentCount;
+
+                button.gameObject.SetActive(isValid);
+                if (!isValid)
+                    continue;
+
+                var selected = selectedIndex == index;
+                button.interactable = !selected;
+            }
+        }
+
+        private int GetOpponentSelectionIndexForButtons()
+        {
+            if (_pendingOpponentIndex >= 0)
+                return _pendingOpponentIndex;
+
+            return _gameSelectionParameters != null ? _gameSelectionParameters.SelectedOpponentIndex : -1;
+        }
+
+        private void ApplyPendingOpponent(int index)
+        {
+            var entry = _opponentCatalog.Opponents[index];
+            _pendingOpponentIndex = index;
+            _pendingOpponentName = entry.DisplayName;
+            _pendingOpponentPreview = entry.Preview;
+            _pendingOpponentDifficulty = entry.Difficulty;
+            UpdateOpponentPresentation();
+        }
+
+        private void UpdateOpponentPresentation()
+        {
+            if (View.OpponentPresentation != null)
+            {
+                View.OpponentPresentation.sprite = _pendingOpponentPreview;
+                View.OpponentPresentation.enabled = View.OpponentPresentation.sprite != null;
+            }
+
+            if (View.OpponentDifficulty != null)
+                View.OpponentDifficulty.fillAmount = Mathf.Clamp01(_pendingOpponentDifficulty);
+        }
+
+        private void OnOpponentButtonClick(int index)
+        {
+            if (index < 0 || index >= _opponentCatalog.Opponents.Count)
+                return;
+
+            ApplyPendingOpponent(index);
+            RefreshOpponentButtons();
+        }
+
+        private void OnConfirmButtonClick()
+        {
+            if (_pendingOpponentIndex < 0)
+                return;
+
+            _gameSelectionParameters.SetSelectedOpponent(_pendingOpponentName, _pendingOpponentDifficulty, _pendingOpponentIndex);
+            RefreshOpponentButtons();
+            _localWindowsService.OpenWindow<RaceWindow>();
+        }
+
         private void OnBackButtonClick() => _localWindowsService.OpenWindow<MapWindow>();
     }
 }

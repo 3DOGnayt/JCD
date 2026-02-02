@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Configs.Impl
 {
-    [CreateAssetMenu(menuName = "Map/MapCatalog", fileName = "MapCatalog")]
+    [CreateAssetMenu(menuName = "Game/" + nameof(MapCatalog), fileName = nameof(MapCatalog), order = 3)]
     public class MapCatalog : ScriptableObject
     {
         [SerializeField] private List<MapCatalogEntry> _maps = new List<MapCatalogEntry>();

@@ -58,6 +58,17 @@ namespace UI.Controllers
             UpdateCarPresentation();
         }
 
+        private void InitializeCarButtonLabels()
+        {
+            var carCount = _carCatalog.Cars.Count;
+            for (var index = 0; index < View.CarButtons.Count && index < carCount; index++)
+            {
+                var label = View.CarButtons[index].GetComponentInChildren<TMP_Text>(true);
+                if (label != null)
+                    label.text = _carCatalog.Cars[index].DisplayName;
+            }
+        }
+
         private void EnsureDefaultSelection()
         {
             if (_gameSelectionParameters.SelectedCar != null || _carCatalog.Cars.Count <= 0)
@@ -92,17 +103,6 @@ namespace UI.Controllers
 
                 var selected = selectedIndex == index;
                 button.interactable = !selected;
-            }
-        }
-
-        private void InitializeCarButtonLabels()
-        {
-            var carCount = _carCatalog.Cars.Count;
-            for (var index = 0; index < View.CarButtons.Count && index < carCount; index++)
-            {
-                var label = View.CarButtons[index].GetComponentInChildren<TMP_Text>(true);
-                if (label != null)
-                    label.text = _carCatalog.Cars[index].DisplayName;
             }
         }
 
