@@ -9,14 +9,20 @@ namespace Installers
         [SerializeField] private CarUISmoothingParameters _carUISmoothingParameters;
         [SerializeField] private CarSkidSmokeParameters _carCarSkidSmokeParameters;
         [SerializeField] private CarLightsParameters _carLightsParameters;
-        [SerializeField] private GameSelectionParameters _gameSelectionParametersParameters;
-        
+        [Space]
+        [SerializeField] private GameSelectionParameters _gameSelectionParameters;
+        [SerializeField] private CarCatalog _carCatalog;
+        [SerializeField] private MapCatalog _mapCatalog;
+
         public override void InstallBindings()
         {
             Container.Bind<CarUISmoothingParameters>().FromInstance(_carUISmoothingParameters).AsSingle();
             Container.Bind<CarSkidSmokeParameters>().FromInstance(_carCarSkidSmokeParameters).AsSingle();
             Container.Bind<CarLightsParameters>().FromInstance(_carLightsParameters).AsSingle();
-            Container.Bind<GameSelectionParameters>().FromInstance(_gameSelectionParametersParameters).AsSingle();
+            
+            Container.Bind<GameSelectionParameters>().FromInstance(_gameSelectionParameters).AsSingle();
+            Container.Bind<CarCatalog>().FromInstance(_carCatalog).AsSingle();
+            Container.Bind<MapCatalog>().FromInstance(_mapCatalog).AsSingle();
         }
     }
 }
