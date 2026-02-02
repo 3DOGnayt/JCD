@@ -27,3 +27,5 @@ MonoBehaviour:
     type: 3}
   _raceWindow: {fileID: 406041144084256462, guid: fb310a09bc3e6494da57579eb54c138c,
     type: 3}
+  _loadingWindow: {fileID: 432804810832913289, guid: 78719b29e9bd47242a13ccb917f387d3,
+    type: 3}

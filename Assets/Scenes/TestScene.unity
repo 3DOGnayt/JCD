@@ -473,6 +473,12 @@ PrefabInstance:
         type: 2}
     - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
         type: 3}
+      propertyPath: _opponentCatalog
+      value: 
+      objectReference: {fileID: 11400000, guid: 8854c501c2d6b63409e39eba290e75df,
+        type: 2}
+    - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
       propertyPath: carPresetParameters
       value: 
       objectReference: {fileID: 11400000, guid: 314cb5b109249c24f9b0ab884476da62,

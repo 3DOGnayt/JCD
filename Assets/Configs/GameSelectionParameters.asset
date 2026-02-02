@@ -15,7 +15,10 @@ MonoBehaviour:
   _selectedCar: {fileID: 11400000, guid: 5c594316e21a99541926ca2e21cac6b9, type: 2}
   _selectedCarParameters: {fileID: 11400000, guid: 861d21277b11455459aba137c7957d16,
     type: 2}
+  _selectedCarIndex: 0
   _selectedMapPrefab: {fileID: 966750755263835405, guid: 54b7aefa62b14644a8ba472887801c8a,
     type: 3}
-  _selectedCarIndex: 0
   _selectedMapIndex: 0
+  _selectedOpponentName: loh
+  _selectedOpponentDifficulty: 0
+  _selectedOpponentIndex: 0
