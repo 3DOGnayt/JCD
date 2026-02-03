@@ -1,17 +1,9 @@
 using System.Collections.Generic;
 using Configs.Impl;
-using Data;
 using UnityEngine;
 
 namespace Services.Impl
 {
-    public interface ISkidSmokeService
-    {
-        int BeginSkid(List<Vector3> wheelPositions);
-        void UpdateSkid(int handle, List<Vector3> wheelPositions);
-        void EndSkid(int handle);
-    }
-
     public sealed class SkidSmokeService : ISkidSmokeService
     {
         private class PoolSlot

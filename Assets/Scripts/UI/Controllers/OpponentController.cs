@@ -1,7 +1,6 @@
 using Configs.Impl;
 using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
-using TMPro;
 using UI.Views;
 using UI.Window;
 using UniRx;
@@ -62,9 +61,8 @@ namespace UI.Controllers
             var opponentCount = _opponentCatalog.Opponents.Count;
             for (var index = 0; index < View.OpponentButtons.Count && index < opponentCount; index++)
             {
-                var label = View.OpponentButtons[index].GetComponentInChildren<TMP_Text>(true);
-                if (label != null)
-                    label.text = _opponentCatalog.Opponents[index].DisplayName;
+                var label = View.OpponentButtonsText[index];
+                label.text = _opponentCatalog.Opponents[index].DisplayName;
             }
         }
 

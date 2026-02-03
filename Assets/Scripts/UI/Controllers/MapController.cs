@@ -1,7 +1,6 @@
 using Configs.Impl;
 using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
-using TMPro;
 using UI.Views;
 using UI.Window;
 using UniRx;
@@ -61,9 +60,8 @@ namespace UI.Controllers
             var mapCount = _mapCatalog.Maps.Count;
             for (var index = 0; index < View.MapButtons.Count && index < mapCount; index++)
             {
-                var label = View.MapButtons[index].GetComponentInChildren<TMP_Text>(true);
-                if (label != null)
-                    label.text = _mapCatalog.Maps[index].DisplayName;
+                var label = View.MapButtonsText[index];
+                label.text = _mapCatalog.Maps[index].DisplayName;
             }
         }
 

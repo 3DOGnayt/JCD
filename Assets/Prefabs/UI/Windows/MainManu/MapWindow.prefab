@@ -509,7 +509,7 @@ GameObject:
   - component: {fileID: 181797276411935122}
   - component: {fileID: 2103131405622365090}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: PoligonText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -783,7 +783,7 @@ GameObject:
   - component: {fileID: 5805241510539906652}
   - component: {fileID: 1361337456274229215}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: AkagiText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1128,6 +1128,10 @@ MonoBehaviour:
   - {fileID: 5097118970162656237}
   - {fileID: 2341613448953441870}
   - {fileID: 4022405787855935795}
+  MapButtonsText:
+  - {fileID: 2103131405622365090}
+  - {fileID: 8131058454888271181}
+  - {fileID: 1361337456274229215}
   MapPresentation: {fileID: 961242863914105893}
   ConfirmButton: {fileID: 123571752187127957}
   BackButton: {fileID: 2041593075582004457}
@@ -1446,7 +1450,7 @@ GameObject:
   - component: {fileID: 3583924956996542441}
   - component: {fileID: 8131058454888271181}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: AkinaText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

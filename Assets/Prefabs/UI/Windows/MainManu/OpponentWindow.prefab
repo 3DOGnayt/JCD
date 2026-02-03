@@ -463,7 +463,7 @@ GameObject:
   - component: {fileID: 8986118673160645371}
   - component: {fileID: 6437421420878119329}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: ExtremeText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -686,6 +686,11 @@ MonoBehaviour:
   - {fileID: 4505616024248535342}
   - {fileID: 8999344906144822879}
   - {fileID: 5267124441812189245}
+  OpponentButtonsText:
+  - {fileID: 6767130247562533139}
+  - {fileID: 1615654794955309794}
+  - {fileID: 490129464292703456}
+  - {fileID: 6437421420878119329}
   OpponentPresentation: {fileID: 6212415687025156866}
   OpponentDifficulty: {fileID: 3952962381018233787}
   ConfirmButton: {fileID: 8014439230066197355}
@@ -1375,7 +1380,7 @@ GameObject:
   - component: {fileID: 7822101740216186396}
   - component: {fileID: 6767130247562533139}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: EaseText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1548,7 +1553,7 @@ GameObject:
   - component: {fileID: 5405533488637894193}
   - component: {fileID: 490129464292703456}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: HardText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1823,7 +1828,7 @@ GameObject:
   - component: {fileID: 2260001008067203615}
   - component: {fileID: 1615654794955309794}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: NormalText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
