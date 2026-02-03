@@ -35,6 +35,6 @@ namespace UI.Controllers
 
         private void OnConfirmButtonClick() => _localWindowsService.OpenWindow<LoadingWindow>();
 
-        private void OnBackButtonClick() => _localWindowsService.OpenWindow<OpponentWindow>();
+        private void OnBackButtonClick() => _localWindowsService.CloseWindow();
     }
 }

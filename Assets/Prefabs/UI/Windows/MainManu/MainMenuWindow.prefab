@@ -1061,7 +1061,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isPopup: 0
-  _isBackLogicIgnorable: 0
+  _isBackLogicIgnorable: 1
   _animatedEmptyViews: []
   mainMenuView: {fileID: 7054622730136122272}
 --- !u!1 &6655125085171150493

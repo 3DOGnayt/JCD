@@ -377,7 +377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38062bd47837489280e4c573aacb5b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isPopup: 0
+  _isPopup: 1
   _isBackLogicIgnorable: 0
   _animatedEmptyViews: []
   _raceView: {fileID: 3021414971575322001}
@@ -1615,4 +1615,4 @@ MonoBehaviour:
     type: 2}
   _fromAppearAnchoredPosition: {x: 1700, y: 0}
   _disappearToTheSamePlace: 1
-  _toDisappearAnchoredPosition: {x: -1700, y: 0}
+  _toDisappearAnchoredPosition: {x: 0, y: 0}

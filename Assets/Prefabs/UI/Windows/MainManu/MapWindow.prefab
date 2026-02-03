@@ -1149,7 +1149,7 @@ MonoBehaviour:
     type: 2}
   _fromAppearAnchoredPosition: {x: 1700, y: 0}
   _disappearToTheSamePlace: 1
-  _toDisappearAnchoredPosition: {x: -1700, y: 0}
+  _toDisappearAnchoredPosition: {x: 0, y: 0}
 --- !u!1 &5002228457788372642
 GameObject:
   m_ObjectHideFlags: 0

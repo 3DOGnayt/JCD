@@ -149,6 +149,6 @@ namespace UI.Controllers
             _localWindowsService.OpenWindow<OpponentWindow>();
         }
 
-        private void OnBackButtonClick() => _localWindowsService.OpenWindow<MainMenuWindow>();
+        private void OnBackButtonClick() => _localWindowsService.CloseWindow();
     }
 }

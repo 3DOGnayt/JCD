@@ -154,6 +154,6 @@ namespace UI.Controllers
             _localWindowsService.OpenWindow<RaceWindow>();
         }
 
-        private void OnBackButtonClick() => _localWindowsService.OpenWindow<MapWindow>();
+        private void OnBackButtonClick() => _localWindowsService.CloseWindow();
     }
 }
