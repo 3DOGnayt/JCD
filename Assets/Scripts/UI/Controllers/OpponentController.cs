@@ -149,7 +149,7 @@ namespace UI.Controllers
 
             _gameSelectionParameters.SetSelectedOpponent(_pendingOpponentName, _pendingOpponentDifficulty, _pendingOpponentIndex);
             RefreshOpponentButtons();
-            _localWindowsService.OpenWindow<RaceWindow>();
+            _localWindowsService.OpenWindow<LoadingWindow>();
         }
 
         private void OnBackButtonClick() => _localWindowsService.CloseWindow();
