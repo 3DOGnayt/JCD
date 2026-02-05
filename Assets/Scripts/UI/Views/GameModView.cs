@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace UI.Views
 {
-    public class RaceView : AUiAnimatedView
+    public class GameModView : AUiAnimatedView
     {
         public Button TrainingButton;
         public Button StoryButton;

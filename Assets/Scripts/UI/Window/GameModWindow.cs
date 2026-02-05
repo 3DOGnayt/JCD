@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace UI.Window
 {
-    public class GameMapWindow : AWindow
+    public class GameModWindow : AWindow
     {
-        [SerializeField] private GameMapView _gameMapView;
+        [SerializeField] private GameModView _gameModView;
         protected override void AddControllers()
         {
-            AddController<GameMapController, GameMapView>(_gameMapView);
+            AddController<GameModController, GameModView>(_gameModView);
         }
     }
 }

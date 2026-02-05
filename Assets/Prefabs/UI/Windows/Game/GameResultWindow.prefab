@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1096226538869761493}
   - component: {fileID: 7184920375188971043}
+  - component: {fileID: 8289598038566257426}
   m_Layer: 5
   m_Name: GameResultView
   m_TagString: Untagged
@@ -47,6 +48,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 866822124091555965}
   m_CullTransparentMesh: 1
+--- !u!114 &8289598038566257426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 866822124091555965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a42537b7c9c349e9a0a843bd2fe8e622, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _openAnimation: {fileID: 0}
+  _closeAnimation: {fileID: 0}
 --- !u!1 &1127906520968714324
 GameObject:
   m_ObjectHideFlags: 0
@@ -834,6 +849,7 @@ GameObject:
   - component: {fileID: 2518041586529809656}
   - component: {fileID: 5925239878136338588}
   - component: {fileID: 2267648432660411170}
+  - component: {fileID: 1658120900065636783}
   m_Layer: 5
   m_Name: GameResultWindow
   m_TagString: Untagged
@@ -881,6 +897,22 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1658120900065636783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3377665849200278036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 452f86b7c2ee45b98f4542d77d62fb26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isPopup: 0
+  _isBackLogicIgnorable: 0
+  _animatedEmptyViews: []
+  _gameResultView: {fileID: 8289598038566257426}
 --- !u!1 &3377928761964568981
 GameObject:
   m_ObjectHideFlags: 0

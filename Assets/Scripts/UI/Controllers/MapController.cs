@@ -144,7 +144,7 @@ namespace UI.Controllers
 
             _gameSelectionParameters.SetSelectedMap(_pendingMapPrefab, _pendingMapIndex);
             RefreshMapButtons();
-            _localWindowsService.OpenWindow<RaceWindow>();
+            _localWindowsService.OpenWindow<GameModWindow>();
         }
 
         private void OnBackButtonClick() => _localWindowsService.CloseWindow();

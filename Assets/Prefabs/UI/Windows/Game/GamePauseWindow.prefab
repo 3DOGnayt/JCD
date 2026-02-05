@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1096226538869761493}
   - component: {fileID: 7184920375188971043}
+  - component: {fileID: 6575420877689168999}
   m_Layer: 5
   m_Name: GamePauseView
   m_TagString: Untagged
@@ -46,6 +47,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 866822124091555965}
   m_CullTransparentMesh: 1
+--- !u!114 &6575420877689168999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 866822124091555965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d74699453e84e4c9c8984a88eea2c02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _openAnimation: {fileID: 0}
+  _closeAnimation: {fileID: 0}
 --- !u!1 &3177219561555109828
 GameObject:
   m_ObjectHideFlags: 0
@@ -298,6 +313,7 @@ GameObject:
   - component: {fileID: 2518041586529809656}
   - component: {fileID: 5925239878136338588}
   - component: {fileID: 2267648432660411170}
+  - component: {fileID: 9139685634994085724}
   m_Layer: 5
   m_Name: GamePauseWindow
   m_TagString: Untagged
@@ -345,6 +361,22 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &9139685634994085724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3377665849200278036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ae5e70225c04ee483182cf5b99544dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isPopup: 1
+  _isBackLogicIgnorable: 0
+  _animatedEmptyViews: []
+  _gamePauseView: {fileID: 6575420877689168999}
 --- !u!1 &5715405350838175600
 GameObject:
   m_ObjectHideFlags: 0

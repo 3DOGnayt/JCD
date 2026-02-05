@@ -356,7 +356,7 @@ GameObject:
   - component: {fileID: 5310635620122556340}
   - component: {fileID: 406041144084256462}
   m_Layer: 5
-  m_Name: RaceWindow
+  m_Name: GameModWindow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -417,7 +417,7 @@ MonoBehaviour:
   _isPopup: 1
   _isBackLogicIgnorable: 0
   _animatedEmptyViews: []
-  _raceView: {fileID: 3021414971575322001}
+  _gameModView: {fileID: 3021414971575322001}
 --- !u!1 &1419922437658678069
 GameObject:
   m_ObjectHideFlags: 0
@@ -1587,7 +1587,7 @@ GameObject:
   - component: {fileID: 3021414971575322001}
   - component: {fileID: 1578885240336251142}
   m_Layer: 5
-  m_Name: RaceView
+  m_Name: GameModView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
