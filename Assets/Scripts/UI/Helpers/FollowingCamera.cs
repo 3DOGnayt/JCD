@@ -1,5 +1,7 @@
-using Signals;
+using Services;
+using UniRx;
 using UnityEngine;
+using Views;
 using Zenject;
 
 namespace UI.Helpers
@@ -30,14 +32,14 @@ namespace UI.Helpers
         private float _currentDistance;
 
         [Inject]
-        public void Construct(SignalBus signalBus)
+        public void Construct(ILoadingService loadingService)
         {
-            signalBus.Subscribe<PlayerSpawnedSignal>(OnPlayerSpawned);
+            loadingService.PlayerSpawnedStream.Subscribe(OnPlayerSpawned).AddTo(this);
         }
 
-        private void OnPlayerSpawned(PlayerSpawnedSignal signal)
+        private void OnPlayerSpawned(ICarView carView)
         {
-            _target = signal.CarView.CarTransform.gameObject;
+            _target = carView.CarTransform.gameObject;
 
             var targetPosition = _target.transform.position;
             var direction = transform.position - targetPosition;
@@ -72,8 +74,7 @@ namespace UI.Helpers
             var rot = Quaternion.Euler(_pitch, _yaw, 0f);
             var pos = _target.transform.position - (rot * Vector3.forward * _currentDistance);
 
-            transform.rotation =
-                Quaternion.Slerp(transform.rotation, rot, 1f - Mathf.Exp(-rotateDamp * Time.deltaTime));
+            transform.rotation = Quaternion.Slerp(transform.rotation, rot, 1f - Mathf.Exp(-rotateDamp * Time.deltaTime));
             transform.position = pos;
 
             transform.LookAt(_target.transform, Vector3.up);

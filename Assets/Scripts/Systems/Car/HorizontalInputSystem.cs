@@ -2,7 +2,6 @@ using Components;
 using Configs.Impl;
 using Scellecs.Morpeh;
 using Services;
-using Signals;
 using UnityEngine;
 using Zenject;
 
@@ -11,11 +10,10 @@ namespace Systems.Car
     public class HorizontalInputSystem : IFixedSystem
     {
         [Inject] public World World { get; set;}
-        [Inject] private SignalBus _signalBus;
+        [Inject] private ILoadingService _loadingService;
+        [Inject] private IInputService _inputService;
         [Inject] private GameSelectionParameters _gameSelectionParameters;
 
-        private IInputService _inputService;
-        
         private Filter _cars;
         private AspectFactory<CarSetupAspect> _carSetupAspect;
         
@@ -46,12 +44,6 @@ namespace Systems.Car
                 SteeringSpeedMultiplierMax = movementParameters.SteeringSpeedMultiplierMax;
                 SteeringSpeedMultiplierMin = movementParameters.SteeringSpeedMultiplierMin;
             }
-        }
-
-        [Inject]
-        public void Construct(IInputService inputService)
-        {
-            _inputService = inputService;
         }
         
         public void OnAwake()
@@ -100,7 +92,7 @@ namespace Systems.Car
 
                 _inputService.ApplyHorizontalMove(targetAngle, dynamicSteeringSpeed, wheelInfo.WheelInfo);
                 
-                _signalBus.Fire(new ComponentChangeSignal<CarSetupAspect> { Component = carSetupAspect });
+                _loadingService.PublishCarSetupChanged(carSetupAspect);  //TODO: replace
             }
         }
 

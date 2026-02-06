@@ -2,7 +2,9 @@ using Components;
 using Configs.Impl;
 using Data.Enums;
 using Scellecs.Morpeh;
-using Signals;
+using Services;
+using System;
+using UniRx;
 using UnityEngine;
 using Views;
 using Zenject;
@@ -14,15 +16,15 @@ namespace Systems.Spawn
         [Inject] public World World { get; set;}
         [Inject] private GameSelectionParameters _gameSelectionParameters;
         [Inject] private DiContainer _container;
-        [Inject] private SignalBus _signalBus;
+        [Inject] private ILoadingService _loadingService;
         
         private Transform _playerGroup;
-        private GameObject _currentPlayer;
+        private IDisposable _startRaceDisposable;
         
         public void OnAwake()
         {
             SetSpawnRoot();
-            _signalBus.Subscribe<StartRaceSignal>(OnStartRace);
+            _startRaceDisposable = _loadingService.StartRaceStream.Subscribe(_ => OnStartRace());
         }
 
         private void SetSpawnRoot() => _playerGroup = new GameObject("Player").transform;
@@ -42,17 +44,13 @@ namespace Systems.Spawn
             if (player == null)
                 return;
 
-            if (_currentPlayer != null)
-                Object.Destroy(_currentPlayer);
-
             var instance = _container.InstantiatePrefabForComponent<ICarView>(player, Vector3.zero, Quaternion.identity, _playerGroup);
-            _currentPlayer = instance.CarTransform.gameObject;
-
+            
             var entity = World.CreateEntity();
             AddGameComponents(entity, instance);
             AddInternalComponents(entity, instance);
             
-            _signalBus.Fire(new PlayerSpawnedSignal { CarView = instance });
+            _loadingService.PublishPlayerSpawned(instance);
         }
 
         private void AddGameComponents(Entity entity, ICarView carView)
@@ -191,8 +189,7 @@ namespace Systems.Spawn
         public void OnUpdate(float deltaTime) { }
         public void Dispose()
         {
-            if (_signalBus != null)
-                _signalBus.Unsubscribe<StartRaceSignal>(OnStartRace);
+            _startRaceDisposable?.Dispose();
         }
     }
 }

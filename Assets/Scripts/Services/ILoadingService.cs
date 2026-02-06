@@ -1,4 +1,7 @@
+using System;
 using UniRx;
+using Components;
+using Views;
 
 namespace Services
 {
@@ -6,6 +9,14 @@ namespace Services
     {
         IReactiveProperty<float> LoadingProgress { get; }
         IReactiveProperty<bool> IsLoadingCompleted { get; }
+
+        IObservable<Unit> StartRaceStream { get; }
+        IObservable<ICarView> PlayerSpawnedStream { get; }
+        IObservable<CarSetupAspect> CarSetupChangedStream { get; }
+
+        void PublishStartRace();
+        void PublishPlayerSpawned(ICarView carView);
+        void PublishCarSetupChanged(CarSetupAspect carSetupAspect);
         
         void ReloadCurrentScene();
     }

@@ -2,8 +2,9 @@ using System;
 using Components;
 using Configs.Impl;
 using Data.Helpers;
-using Signals;
+using Services;
 using TMPro;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -14,15 +15,16 @@ namespace UI.Helpers
     {
         [SerializeField] private TMP_Text _parametersText;
         [SerializeField] private TMP_Text _parametersValue;
-        
+        [Space]
         [SerializeField] private TMP_Text _speed;
         [SerializeField] private TMP_Text _gear;
         [SerializeField] private Image _rpm;
         [SerializeField] private float _rpmMaxFill = 0.8f;
 
+        private ILoadingService _loadingService;
         private CarUISmoothingParameters _carUISmoothingParameters;
-        private SignalBus _signalBus;
         private GameSelectionParameters _gameSelectionParameters;
+        private IDisposable _carSetupChangedDisposable;
 
         private float _uiSpeed;
         private float _uiBackSpeed;
@@ -35,24 +37,27 @@ namespace UI.Helpers
 
         [Inject]
         public void Construct(
-            SignalBus signalBus,
+            ILoadingService loadingService,
             CarUISmoothingParameters carUISmoothingParameters,
             GameSelectionParameters gameSelectionParameters)
         {
-            _signalBus = signalBus;
+            _loadingService = loadingService;
             _carUISmoothingParameters = carUISmoothingParameters;
             _gameSelectionParameters = gameSelectionParameters;
         }
 
         private void OnEnable()
         {
-            _signalBus.Subscribe<ComponentChangeSignal<CarSetupAspect>>(OnCarSetupAspectChanged);
+            if (_loadingService == null)
+                return;
+
+            _carSetupChangedDisposable = _loadingService.CarSetupChangedStream.Subscribe(OnCarSetupAspectChanged);
             CacheCarLimits();
         }
 
         private void OnDisable()
         {
-            _signalBus.Unsubscribe<ComponentChangeSignal<CarSetupAspect>>(OnCarSetupAspectChanged);
+            _carSetupChangedDisposable?.Dispose();
         }
 
         private void Awake()
@@ -67,10 +72,8 @@ namespace UI.Helpers
                                    "Drift Multiplier";
         }
 
-        private void OnCarSetupAspectChanged(ComponentChangeSignal<CarSetupAspect> signal)
+        private void OnCarSetupAspectChanged(CarSetupAspect aspect)
         {
-            var aspect = signal.Component;
-
             var targetSpeed = aspect.Speed.Value;
             var targetBackSpeed = aspect.BackSpeed.Value;
             float targetGear = aspect.Gear.Value;

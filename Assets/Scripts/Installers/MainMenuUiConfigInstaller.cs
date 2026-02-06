@@ -3,7 +3,7 @@ using UI.Window;
 using UnityEngine;
 using Zenject;
 
-namespace UI
+namespace Installers
 {
     [CreateAssetMenu(menuName = "Game/UI/" + nameof(MainMenuUiConfigInstaller), fileName = nameof(MainMenuUiConfigInstaller), order = 0)]
     public class MainMenuUiConfigInstaller : ScriptableObjectInstaller

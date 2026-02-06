@@ -1,6 +1,8 @@
-using Signals;
+using Services;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using Views;
 using Zenject;
 
 namespace UI.Helpers
@@ -13,14 +15,14 @@ namespace UI.Helpers
         public float ForceToUpCar;
 
         [Inject]
-        public void Construct(SignalBus signalBus)
+        public void Construct(ILoadingService loadingService)
         {
-            signalBus.Subscribe<PlayerSpawnedSignal>(OnPlayerSpawned);
+            loadingService.PlayerSpawnedStream.Subscribe(OnPlayerSpawned).AddTo(this);
         }
 
-        private void OnPlayerSpawned(PlayerSpawnedSignal signal)
+        private void OnPlayerSpawned(ICarView carView)
         {
-            _car = signal.CarView.CarTransform.gameObject;
+            _car = carView.CarTransform.gameObject;
         }
 
         private void Awake()

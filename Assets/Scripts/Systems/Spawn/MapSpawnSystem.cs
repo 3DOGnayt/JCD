@@ -1,6 +1,8 @@
 using Configs.Impl;
 using Scellecs.Morpeh;
-using Signals;
+using Services;
+using System;
+using UniRx;
 using UnityEngine;
 using Zenject;
 
@@ -11,15 +13,15 @@ namespace Systems.Spawn
         [Inject] public World World { get; set; }
         [Inject] private GameSelectionParameters _gameSelectionParameters;
         [Inject] private DiContainer _container;
-        [Inject] private SignalBus _signalBus;
+        [Inject] private ILoadingService _loadingService;
 
         private Transform _mapRoot;
-        private GameObject _currentMap;
+        private IDisposable _startRaceDisposable;
 
         public void OnAwake()
         {
             _mapRoot = new GameObject("Map").transform;
-            _signalBus.Subscribe<StartRaceSignal>(OnStartRace);
+            _startRaceDisposable = _loadingService.StartRaceStream.Subscribe(_ => OnStartRace());
         }
 
         private void OnStartRace()
@@ -28,19 +30,14 @@ namespace Systems.Spawn
             if (prefab == null)
                 return;
 
-            if (_currentMap != null)
-                Object.Destroy(_currentMap);
-
-            var instance = _container.InstantiatePrefab(prefab, Vector3.zero, Quaternion.identity, _mapRoot);
-            _currentMap = instance;
+            _container.InstantiatePrefab(prefab, Vector3.zero, Quaternion.identity, _mapRoot);
         }
 
         public void OnUpdate(float deltaTime) { }
 
         public void Dispose()
         {
-            if (_signalBus != null)
-                _signalBus.Unsubscribe<StartRaceSignal>(OnStartRace);
+            _startRaceDisposable?.Dispose();
         }
     }
 }

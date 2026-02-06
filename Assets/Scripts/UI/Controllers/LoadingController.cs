@@ -1,11 +1,10 @@
 using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
-using Signals;
+using Services;
 using System;
 using UI.Views;
 using UI.Window;
 using UniRx;
-using Zenject;
 
 namespace UI.Controllers
 {
@@ -15,13 +14,16 @@ namespace UI.Controllers
         private const float FakeLoadingDurationSeconds = 3.5f;
         
         private readonly ILocalWindowsService _localWindowsService;
+        private readonly ILoadingService _loadingService;
         private IDisposable _loadingDisposable;
-        
-        [Inject] private SignalBus _signalBus;
 
-        public LoadingController(ILocalWindowsService localWindowsService)
+        public LoadingController(
+            ILocalWindowsService localWindowsService,
+            ILoadingService loadingService
+        )
         {
             _localWindowsService = localWindowsService;
+            _loadingService = loadingService;
         }
 
         public override void Initialize() { }
@@ -36,6 +38,8 @@ namespace UI.Controllers
             if (View.LoadingText == null)
                 return;
 
+            _loadingService.IsLoadingCompleted.Value = false;
+            _loadingService.LoadingProgress.Value = 0f;
             View.LoadingText.text = FormatProgress(0);
 
             var stepInterval = FakeLoadingDurationSeconds / MaxProgress;
@@ -50,6 +54,7 @@ namespace UI.Controllers
         private void UpdateProgress(int progress)
         {
             var clamped = progress > MaxProgress ? MaxProgress : progress;
+            _loadingService.LoadingProgress.Value = clamped / (float)MaxProgress;
             View.LoadingText.text = FormatProgress(clamped);
 
             if (clamped >= MaxProgress)
@@ -63,7 +68,8 @@ namespace UI.Controllers
 
         private void OnLoadCompleted()
         {
-            _signalBus.Fire(new StartRaceSignal());
+            _loadingService.IsLoadingCompleted.Value = true;
+            _loadingService.PublishStartRace();
             
             _localWindowsService.CloseToWindow<MainMenuWindow>();
             _localWindowsService.OpenWindow<GameWindow>();

@@ -1,4 +1,5 @@
-using Signals;
+using Services;
+using UniRx;
 using UnityEngine;
 using Zenject;
 
@@ -9,29 +10,16 @@ namespace UI.Helpers
         [SerializeField] private GameObject _buttonsContainer;
         [SerializeField] private GameObject _parametersContainer;
         [SerializeField] private GameObject _speedometer;
-
-        [Inject] private SignalBus _signalBus;
-
-        private void Awake()
+        
+        [Inject]
+        public void Construct(ILoadingService loadingService)
         {
-            SetHudVisible(false);
+            loadingService.IsLoadingCompleted.Subscribe(OnPlayerSpawned).AddTo(this);
         }
 
-        private void OnEnable()
+        private void OnPlayerSpawned(bool isActive)
         {
-            if (_signalBus != null)
-                _signalBus.Subscribe<PlayerSpawnedSignal>(OnPlayerSpawned);
-        }
-
-        private void OnDisable()
-        {
-            if (_signalBus != null)
-                _signalBus.Unsubscribe<PlayerSpawnedSignal>(OnPlayerSpawned);
-        }
-
-        private void OnPlayerSpawned(PlayerSpawnedSignal signal)
-        {
-            SetHudVisible(true);
+            SetHudVisible(isActive);
         }
 
         private void SetHudVisible(bool isVisible)
