@@ -281,6 +281,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _openAnimation: {fileID: 0}
   _closeAnimation: {fileID: 0}
+  SpeedText: {fileID: 5310308039472807618}
+  GearText: {fileID: 7639942466218272431}
+  RpmFill: {fileID: 9134971372776578692}
+  RpmMaxFill: 0.8
 --- !u!1 &4825737843836459741
 GameObject:
   m_ObjectHideFlags: 0

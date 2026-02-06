@@ -9,7 +9,6 @@ namespace UI.Helpers
     {
         [SerializeField] private GameObject _buttonsContainer;
         [SerializeField] private GameObject _parametersContainer;
-        [SerializeField] private GameObject _speedometer;
         
         [Inject]
         public void Construct(ILoadingService loadingService)
@@ -28,8 +27,6 @@ namespace UI.Helpers
                 _buttonsContainer.SetActive(isVisible);
             if (_parametersContainer != null)
                 _parametersContainer.SetActive(isVisible);
-            if (_speedometer != null)
-                _speedometer.SetActive(isVisible);
         }
     }
 }

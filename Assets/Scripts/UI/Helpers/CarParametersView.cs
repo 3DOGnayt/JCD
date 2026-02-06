@@ -6,7 +6,6 @@ using Services;
 using TMPro;
 using UniRx;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
 
 namespace UI.Helpers
@@ -15,11 +14,6 @@ namespace UI.Helpers
     {
         [SerializeField] private TMP_Text _parametersText;
         [SerializeField] private TMP_Text _parametersValue;
-        [Space]
-        [SerializeField] private TMP_Text _speed;
-        [SerializeField] private TMP_Text _gear;
-        [SerializeField] private Image _rpm;
-        [SerializeField] private float _rpmMaxFill = 0.8f;
 
         private ILoadingService _loadingService;
         private CarUISmoothingParameters _carUISmoothingParameters;
@@ -33,7 +27,6 @@ namespace UI.Helpers
         private float _uiDrift;
         
         private float _maxSpeed;
-        private float _maxRpm;
 
         [Inject]
         public void Construct(
@@ -97,8 +90,6 @@ namespace UI.Helpers
             _parametersValue.text =
                 $"{_uiSpeed:0} :\n{_uiBackSpeed:0} :\n{_uiGear:0} :\n{_uiRpm:0} :\n" +
                 $"\n{aspect.BrakeInput.Value} :\n{aspect.HandbrakeInput.Value} :\n{_uiDrift:0.00} :";
-
-            UpdateSpeedometer();
         }
 
         private void CacheCarLimits()
@@ -115,27 +106,6 @@ namespace UI.Helpers
                 return;
 
             _maxSpeed = carSetup.SpeedMax;
-            _maxRpm = carSetup.EngineRpmMax;
-        }
-
-        private void UpdateSpeedometer()
-        {
-            _speed.text = _uiSpeed > _uiBackSpeed ? $"{_uiSpeed:0}" : $"{_uiBackSpeed:0}";
-
-            var gear = (float)Math.Round(_uiGear);
-
-            _gear.text = gear switch
-            {
-                < 0 => "R",
-                > 0 => $"{_uiGear:0}",
-                0 => "N",
-                _ => _gear.text
-            };
-
-            var rpmMax = _maxRpm > 0f ? _maxRpm : 1f;
-            var normalizedRpm = Mathf.Clamp01(_uiRpm / rpmMax);
-            var targetFill = Mathf.Clamp01(_rpmMaxFill) * normalizedRpm;
-            _rpm.fillAmount = Mathf.Lerp(_rpm.fillAmount, targetFill, Time.deltaTime);
         }
 
         private float Smooth(float current, float target, float smoothing)
