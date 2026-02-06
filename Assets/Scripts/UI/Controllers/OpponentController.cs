@@ -149,6 +149,7 @@ namespace UI.Controllers
 
             _gameSelectionParameters.SetSelectedOpponent(_pendingOpponentName, _pendingOpponentDifficulty, _pendingOpponentIndex);
             RefreshOpponentButtons();
+            _localWindowsService.CloseToWindow<MainMenuWindow>();
             _localWindowsService.OpenWindow<LoadingWindow>();
         }
 

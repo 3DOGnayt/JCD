@@ -55,6 +55,7 @@ namespace UI.Controllers
             switch (_gameSelectionParameters.GameMod)
             {
                 case EGameMod.Training:
+                    _localWindowsService.CloseToWindow<MainMenuWindow>();
                     _localWindowsService.OpenWindow<LoadingWindow>();
                     break;
                 case EGameMod.Story:
