@@ -14,6 +14,7 @@ namespace Installers
         [SerializeField] private CarCatalogParameters _carCatalogParameters;
         [SerializeField] private MapCatalogParameters _mapCatalogParameters;
         [SerializeField] private OpponentCatalogParameters _opponentCatalogParameters;
+        [SerializeField] private TrainingTimeScoreParameters _trainingTimeScoreParameters;
 
         public override void InstallBindings()
         {
@@ -25,6 +26,7 @@ namespace Installers
             Container.Bind<CarCatalogParameters>().FromInstance(_carCatalogParameters).AsSingle();
             Container.Bind<MapCatalogParameters>().FromInstance(_mapCatalogParameters).AsSingle();
             Container.Bind<OpponentCatalogParameters>().FromInstance(_opponentCatalogParameters).AsSingle();
+            Container.Bind<TrainingTimeScoreParameters>().FromInstance(_trainingTimeScoreParameters).AsSingle();
         }
     }
 }

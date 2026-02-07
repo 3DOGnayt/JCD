@@ -288,6 +288,8 @@ MonoBehaviour:
     type: 2}
   _opponentCatalogParameters: {fileID: 11400000, guid: 8854c501c2d6b63409e39eba290e75df,
     type: 2}
+  _trainingTimeScoreParameters: {fileID: 11400000, guid: 0fbae2a894c7986469a71c7b3527eae5,
+    type: 2}
 --- !u!1 &6713453049578964672
 GameObject:
   m_ObjectHideFlags: 0

@@ -107,7 +107,7 @@ namespace UI.Controllers
             var clamped = Mathf.Max(0f, seconds);
             var timeSpan = TimeSpan.FromSeconds(clamped);
             var centiseconds = timeSpan.Milliseconds / 10;
-            return $"{timeSpan.Minutes:00}:{timeSpan.Seconds:00}.{centiseconds:00}";
+            return $"{timeSpan.Minutes:00}''{timeSpan.Seconds:00}''{centiseconds:00}";
         }
     }
 }

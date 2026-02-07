@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Data.Enums;
 using UnityEngine;
 
 namespace Configs.Impl
@@ -15,7 +16,7 @@ namespace Configs.Impl
     [Serializable]
     public struct MapCatalogEntry
     {
-        public string DisplayName;
+        public EMap EMap;
         public GameObject Prefab;
         public Sprite Preview;
         public int SelectionCount;

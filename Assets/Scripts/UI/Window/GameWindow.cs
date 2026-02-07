@@ -10,13 +10,16 @@ namespace UI.Window
         [SerializeField] private GameMapView _gameMapView;
         [SerializeField] private GameSpeedometerView _gameSpeedometerView;
         [SerializeField] private GameTimerView _gameTimerView;
-        [SerializeField] private TrainingOpponentView _trainingOpponentView;
+        [SerializeField] private GameTrainingView _gameTrainingView;
+        [SerializeField] private GameStoryView _gameStoryView;
+        
         protected override void AddControllers()
         {
             AddController<GameMapController, GameMapView>(_gameMapView);
             AddController<GameSpeedometerController, GameSpeedometerView>(_gameSpeedometerView);
             AddController<GameTimerController, GameTimerView>(_gameTimerView);
-            AddController<TrainingOpponentController, TrainingOpponentView>(_trainingOpponentView);
+            AddController<GameTrainingController, GameTrainingView>(_gameTrainingView);
+            AddController<GameStoryController, GameStoryView>(_gameStoryView);
         }
     }
 }
