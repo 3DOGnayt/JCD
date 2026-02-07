@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace UI.Helpers
+namespace Helpers
 {
     public class RestartLevel : MonoBehaviour
     {

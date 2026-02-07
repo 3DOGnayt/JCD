@@ -282,9 +282,12 @@ MonoBehaviour:
     type: 2}
   _gameSelectionParameters: {fileID: 11400000, guid: c8c9b05e5525499b943131a8c65002a7,
     type: 2}
-  _carCatalog: {fileID: 11400000, guid: cc0a33ed7d4a41358454f341b1a796b5, type: 2}
-  _mapCatalog: {fileID: 11400000, guid: 7935337dca084ab6a48c73dd52019aab, type: 2}
-  _opponentCatalog: {fileID: 11400000, guid: 8854c501c2d6b63409e39eba290e75df, type: 2}
+  _carCatalogParameters: {fileID: 11400000, guid: cc0a33ed7d4a41358454f341b1a796b5,
+    type: 2}
+  _mapCatalogParameters: {fileID: 11400000, guid: 7935337dca084ab6a48c73dd52019aab,
+    type: 2}
+  _opponentCatalogParameters: {fileID: 11400000, guid: 8854c501c2d6b63409e39eba290e75df,
+    type: 2}
 --- !u!1 &6713453049578964672
 GameObject:
   m_ObjectHideFlags: 0

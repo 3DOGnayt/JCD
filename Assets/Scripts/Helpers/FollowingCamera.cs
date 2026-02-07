@@ -4,7 +4,7 @@ using UnityEngine;
 using Views;
 using Zenject;
 
-namespace UI.Helpers
+namespace Helpers
 {
     public class FollowingCamera : MonoBehaviour
     {

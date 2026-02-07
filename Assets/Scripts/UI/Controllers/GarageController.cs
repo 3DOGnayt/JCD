@@ -21,7 +21,7 @@ namespace UI.Controllers
         private int _pendingCarIndex = -1;
         private bool _isReady;
         
-        [Inject] private CarCatalog _carCatalog;
+        [Inject] private CarCatalogParameters _carCatalogParameters;
         [Inject] private GameSelectionParameters _gameSelectionParameters;
 
         public GarageController(ILocalWindowsService localWindowsService)
@@ -31,7 +31,7 @@ namespace UI.Controllers
 
         public override void Initialize()
         {
-            _isReady = _carCatalog != null && _gameSelectionParameters != null;
+            _isReady = _carCatalogParameters != null && _gameSelectionParameters != null;
             if (!_isReady)
                 return;
 
@@ -60,37 +60,37 @@ namespace UI.Controllers
 
         private void InitializeCarButtonLabels()
         {
-            var carCount = _carCatalog.Cars.Count;
+            var carCount = _carCatalogParameters.Cars.Count;
             for (var index = 0; index < View.CarButtons.Count && index < carCount; index++)
             {
                 var label = View.CarButtons[index].GetComponentInChildren<TMP_Text>(true);
                 if (label != null)
-                    label.text = _carCatalog.Cars[index].DisplayName;
+                    label.text = _carCatalogParameters.Cars[index].DisplayName;
             }
         }
 
         private void EnsureDefaultSelection()
         {
-            if (_gameSelectionParameters.SelectedCar != null || _carCatalog.Cars.Count <= 0)
+            if (_gameSelectionParameters.SelectedCar != null || _carCatalogParameters.Cars.Count <= 0)
                 return;
             
-            var entry = _carCatalog.Cars[0];
+            var entry = _carCatalogParameters.Cars[0];
             _gameSelectionParameters.SetSelectedCar(entry.Preset, entry.Parameters, 0);
         }
 
         private void PreparePendingCarSelection()
         {
-            if (_carCatalog.Cars.Count == 0)
+            if (_carCatalogParameters.Cars.Count == 0)
                 return;
 
-            var clamped = Mathf.Clamp(_gameSelectionParameters.SelectedCarIndex, 0, _carCatalog.Cars.Count - 1);
+            var clamped = Mathf.Clamp(_gameSelectionParameters.SelectedCarIndex, 0, _carCatalogParameters.Cars.Count - 1);
             ApplyPendingCar(clamped);
         }
 
         private void RefreshCarButtons()
         {
             var selectedIndex = GetCarSelectionIndexForButtons();
-            var carCount = _carCatalog != null ? _carCatalog.Cars.Count : 0;
+            var carCount = _carCatalogParameters != null ? _carCatalogParameters.Cars.Count : 0;
 
             for (var index = 0; index < View.CarButtons.Count; index++)
             {
@@ -116,7 +116,7 @@ namespace UI.Controllers
 
         private void ApplyPendingCar(int index)
         {
-            var entry = _carCatalog.Cars[index];
+            var entry = _carCatalogParameters.Cars[index];
             _pendingCarIndex = index;
             _pendingCarPreset = entry.Preset;
             _pendingCarParameters = entry.Parameters;
@@ -135,7 +135,7 @@ namespace UI.Controllers
 
         private void OnCarButtonClick(int index)
         {
-            if (index < 0 || index >= _carCatalog.Cars.Count)
+            if (index < 0 || index >= _carCatalogParameters.Cars.Count)
                 return;
 
             ApplyPendingCar(index);

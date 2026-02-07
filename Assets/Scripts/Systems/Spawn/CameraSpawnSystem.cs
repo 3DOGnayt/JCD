@@ -1,7 +1,7 @@
 using Cinemachine;
+using Helpers;
 using Scellecs.Morpeh;
 using UI;
-using UI.Helpers;
 using UnityEngine;
 using Zenject;
 

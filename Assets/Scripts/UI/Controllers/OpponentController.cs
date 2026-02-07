@@ -19,7 +19,7 @@ namespace UI.Controllers
         private int _pendingOpponentIndex = -1;
         private bool _isReady;
 
-        [Inject] private OpponentCatalog _opponentCatalog;
+        [Inject] private OpponentCatalogParameters _opponentCatalogParameters;
         [Inject] private GameSelectionParameters _gameSelectionParameters;
 
         public OpponentController(ILocalWindowsService localWindowsService)
@@ -29,7 +29,7 @@ namespace UI.Controllers
 
         public override void Initialize()
         {
-            _isReady = _opponentCatalog != null && _gameSelectionParameters != null;
+            _isReady = _opponentCatalogParameters != null && _gameSelectionParameters != null;
             if (!_isReady)
                 return;
 
@@ -58,36 +58,36 @@ namespace UI.Controllers
 
         private void InitializeOpponentButtonLabels()
         {
-            var opponentCount = _opponentCatalog.Opponents.Count;
+            var opponentCount = _opponentCatalogParameters.Opponents.Count;
             for (var index = 0; index < View.OpponentButtons.Count && index < opponentCount; index++)
             {
                 var label = View.OpponentButtonsText[index];
-                label.text = _opponentCatalog.Opponents[index].DisplayName;
+                label.text = _opponentCatalogParameters.Opponents[index].DisplayName;
             }
         }
 
         private void EnsureDefaultSelection()
         {
-            if (!string.IsNullOrEmpty(_gameSelectionParameters.SelectedOpponentName) || _opponentCatalog.Opponents.Count <= 0)
+            if (!string.IsNullOrEmpty(_gameSelectionParameters.SelectedOpponentName) || _opponentCatalogParameters.Opponents.Count <= 0)
                 return;
 
-            var entry = _opponentCatalog.Opponents[0];
+            var entry = _opponentCatalogParameters.Opponents[0];
             _gameSelectionParameters.SetSelectedOpponent(entry.DisplayName, entry.Difficulty, 0);
         }
 
         private void PreparePendingOpponentSelection()
         {
-            if (_opponentCatalog.Opponents.Count == 0)
+            if (_opponentCatalogParameters.Opponents.Count == 0)
                 return;
 
-            var clamped = Mathf.Clamp(_gameSelectionParameters.SelectedOpponentIndex, 0, _opponentCatalog.Opponents.Count - 1);
+            var clamped = Mathf.Clamp(_gameSelectionParameters.SelectedOpponentIndex, 0, _opponentCatalogParameters.Opponents.Count - 1);
             ApplyPendingOpponent(clamped);
         }
 
         private void RefreshOpponentButtons()
         {
             var selectedIndex = GetOpponentSelectionIndexForButtons();
-            var opponentCount = _opponentCatalog != null ? _opponentCatalog.Opponents.Count : 0;
+            var opponentCount = _opponentCatalogParameters != null ? _opponentCatalogParameters.Opponents.Count : 0;
 
             for (var index = 0; index < View.OpponentButtons.Count; index++)
             {
@@ -113,7 +113,7 @@ namespace UI.Controllers
 
         private void ApplyPendingOpponent(int index)
         {
-            var entry = _opponentCatalog.Opponents[index];
+            var entry = _opponentCatalogParameters.Opponents[index];
             _pendingOpponentIndex = index;
             _pendingOpponentName = entry.DisplayName;
             _pendingOpponentPreview = entry.Preview;
@@ -135,7 +135,7 @@ namespace UI.Controllers
 
         private void OnOpponentButtonClick(int index)
         {
-            if (index < 0 || index >= _opponentCatalog.Opponents.Count)
+            if (index < 0 || index >= _opponentCatalogParameters.Opponents.Count)
                 return;
 
             ApplyPendingOpponent(index);

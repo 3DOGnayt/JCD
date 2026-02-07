@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using Views;
 using Zenject;
 
-namespace UI.Helpers
+namespace Helpers
 {
     public class ResetCar : MonoBehaviour
     {

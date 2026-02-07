@@ -11,9 +11,9 @@ namespace Installers
         [SerializeField] private CarLightsParameters _carLightsParameters;
         [Space]
         [SerializeField] private GameSelectionParameters _gameSelectionParameters;
-        [SerializeField] private CarCatalog _carCatalog;
-        [SerializeField] private MapCatalog _mapCatalog;
-        [SerializeField] private OpponentCatalog _opponentCatalog;
+        [SerializeField] private CarCatalogParameters _carCatalogParameters;
+        [SerializeField] private MapCatalogParameters _mapCatalogParameters;
+        [SerializeField] private OpponentCatalogParameters _opponentCatalogParameters;
 
         public override void InstallBindings()
         {
@@ -22,9 +22,9 @@ namespace Installers
             Container.Bind<CarLightsParameters>().FromInstance(_carLightsParameters).AsSingle();
             
             Container.Bind<GameSelectionParameters>().FromInstance(_gameSelectionParameters).AsSingle();
-            Container.Bind<CarCatalog>().FromInstance(_carCatalog).AsSingle();
-            Container.Bind<MapCatalog>().FromInstance(_mapCatalog).AsSingle();
-            Container.Bind<OpponentCatalog>().FromInstance(_opponentCatalog).AsSingle();
+            Container.Bind<CarCatalogParameters>().FromInstance(_carCatalogParameters).AsSingle();
+            Container.Bind<MapCatalogParameters>().FromInstance(_mapCatalogParameters).AsSingle();
+            Container.Bind<OpponentCatalogParameters>().FromInstance(_opponentCatalogParameters).AsSingle();
         }
     }
 }

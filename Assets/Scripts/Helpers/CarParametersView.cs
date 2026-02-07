@@ -8,7 +8,7 @@ using UniRx;
 using UnityEngine;
 using Zenject;
 
-namespace UI.Helpers
+namespace Helpers
 {
     public class CarParametersView : MonoBehaviour
     {

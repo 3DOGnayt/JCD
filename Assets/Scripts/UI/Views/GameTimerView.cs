@@ -1,9 +1,12 @@
+using System.Collections.Generic;
 using KoboldUi.Element.View;
+using TMPro;
 
 namespace UI.Views
 {
     public class GameTimerView : AUiAnimatedView
     {
-        // Total time / Section time (1/2/..)
+        public TMP_Text TotalTimeText;
+        public List<TMP_Text> SelectionTimeTextList;
     }
 }

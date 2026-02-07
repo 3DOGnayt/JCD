@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Configs.Impl
 {
-    [CreateAssetMenu(menuName = "Game/" + nameof(OpponentCatalog), fileName = nameof(OpponentCatalog), order = 4)]
-    public class OpponentCatalog : ScriptableObject
+    [CreateAssetMenu(menuName = "Game/" + nameof(OpponentCatalogParameters), fileName = nameof(OpponentCatalogParameters), order = 4)]
+    public class OpponentCatalogParameters : ScriptableObject
     {
         [SerializeField] private List<OpponentCatalogEntry> _opponents = new List<OpponentCatalogEntry>();
 

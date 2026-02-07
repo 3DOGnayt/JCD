@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Configs.Impl
 {
-    [CreateAssetMenu(menuName = "Game/" + nameof(MapCatalog), fileName = nameof(MapCatalog), order = 3)]
-    public class MapCatalog : ScriptableObject
+    [CreateAssetMenu(menuName = "Game/" + nameof(MapCatalogParameters), fileName = nameof(MapCatalogParameters), order = 3)]
+    public class MapCatalogParameters : ScriptableObject
     {
         [SerializeField] private List<MapCatalogEntry> _maps = new List<MapCatalogEntry>();
 
@@ -18,5 +18,7 @@ namespace Configs.Impl
         public string DisplayName;
         public GameObject Prefab;
         public Sprite Preview;
+        public int SelectionCount;
+        public int LapCount;
     }
 }

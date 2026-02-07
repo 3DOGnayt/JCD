@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Configs.Impl
 {
-    [CreateAssetMenu(menuName = "Game/" + nameof(CarCatalog), fileName = nameof(CarCatalog), order = 2)]
-    public class CarCatalog : ScriptableObject
+    [CreateAssetMenu(menuName = "Game/" + nameof(CarCatalogParameters), fileName = nameof(CarCatalogParameters), order = 2)]
+    public class CarCatalogParameters : ScriptableObject
     {
         [SerializeField] private List<CarCatalogEntry> _cars = new List<CarCatalogEntry>();
 

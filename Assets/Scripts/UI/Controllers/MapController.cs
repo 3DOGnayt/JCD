@@ -18,7 +18,7 @@ namespace UI.Controllers
         private int _pendingMapIndex = -1;
         private bool _isReady;
 
-        [Inject] private MapCatalog _mapCatalog;
+        [Inject] private MapCatalogParameters _mapCatalogParameters;
         [Inject] private GameSelectionParameters _gameSelectionParameters;
 
         public MapController(ILocalWindowsService localWindowsService)
@@ -28,7 +28,7 @@ namespace UI.Controllers
 
         public override void Initialize()
         {
-            _isReady = _mapCatalog != null && _gameSelectionParameters != null;
+            _isReady = _mapCatalogParameters != null && _gameSelectionParameters != null;
             if (!_isReady)
                 return;
 
@@ -57,36 +57,36 @@ namespace UI.Controllers
 
         private void InitializeMapButtonLabels()
         {
-            var mapCount = _mapCatalog.Maps.Count;
+            var mapCount = _mapCatalogParameters.Maps.Count;
             for (var index = 0; index < View.MapButtons.Count && index < mapCount; index++)
             {
                 var label = View.MapButtonsText[index];
-                label.text = _mapCatalog.Maps[index].DisplayName;
+                label.text = _mapCatalogParameters.Maps[index].DisplayName;
             }
         }
 
         private void EnsureDefaultSelection()
         {
-            if (_gameSelectionParameters.SelectedMapPrefab != null || _mapCatalog.Maps.Count <= 0)
+            if (_gameSelectionParameters.SelectedMapPrefab != null || _mapCatalogParameters.Maps.Count <= 0)
                 return;
 
-            var entry = _mapCatalog.Maps[0];
-            _gameSelectionParameters.SetSelectedMap(entry.Prefab, 0);
+            var entry = _mapCatalogParameters.Maps[0];
+            _gameSelectionParameters.SetSelectedMap(entry.Prefab, 0, entry.SelectionCount, entry.LapCount);
         }
 
         private void PreparePendingMapSelection()
         {
-            if (_mapCatalog.Maps.Count == 0)
+            if (_mapCatalogParameters.Maps.Count == 0)
                 return;
 
-            var clamped = Mathf.Clamp(_gameSelectionParameters.SelectedMapIndex, 0, _mapCatalog.Maps.Count - 1);
+            var clamped = Mathf.Clamp(_gameSelectionParameters.SelectedMapIndex, 0, _mapCatalogParameters.Maps.Count - 1);
             ApplyPendingMap(clamped);
         }
 
         private void RefreshMapButtons()
         {
             var selectedIndex = GetMapSelectionIndexForButtons();
-            var mapCount = _mapCatalog != null ? _mapCatalog.Maps.Count : 0;
+            var mapCount = _mapCatalogParameters != null ? _mapCatalogParameters.Maps.Count : 0;
 
             for (var index = 0; index < View.MapButtons.Count; index++)
             {
@@ -112,7 +112,7 @@ namespace UI.Controllers
 
         private void ApplyPendingMap(int index)
         {
-            var entry = _mapCatalog.Maps[index];
+            var entry = _mapCatalogParameters.Maps[index];
             _pendingMapIndex = index;
             _pendingMapPrefab = entry.Prefab;
             _pendingMapPreview = entry.Preview;
@@ -130,7 +130,7 @@ namespace UI.Controllers
 
         private void OnMapButtonClick(int index)
         {
-            if (index < 0 || index >= _mapCatalog.Maps.Count)
+            if (index < 0 || index >= _mapCatalogParameters.Maps.Count)
                 return;
 
             ApplyPendingMap(index);
@@ -142,7 +142,8 @@ namespace UI.Controllers
             if (_pendingMapIndex < 0)
                 return;
 
-            _gameSelectionParameters.SetSelectedMap(_pendingMapPrefab, _pendingMapIndex);
+            var entry = _mapCatalogParameters.Maps[_pendingMapIndex];
+            _gameSelectionParameters.SetSelectedMap(_pendingMapPrefab, _pendingMapIndex, entry.SelectionCount, entry.LapCount);
             RefreshMapButtons();
             _localWindowsService.OpenWindow<GameModWindow>();
         }

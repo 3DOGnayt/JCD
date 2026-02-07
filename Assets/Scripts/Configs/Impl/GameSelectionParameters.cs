@@ -14,6 +14,8 @@ namespace Configs.Impl
         [Header("Selected Map")]
         [SerializeField] private GameObject _selectedMapPrefab;
         [SerializeField] private int _selectedMapIndex;
+        [SerializeField] private int _selectedMapSelectionCount;
+        [SerializeField] private int _selectedMapLapCount;
         [Space]
         [Header("Selected GameMod")]
         [SerializeField] private EGameMod _gameMod;
@@ -29,6 +31,8 @@ namespace Configs.Impl
         
         public GameObject SelectedMapPrefab => _selectedMapPrefab;
         public int SelectedMapIndex => _selectedMapIndex;
+        public int SelectedMapSelectionCount => _selectedMapSelectionCount;
+        public int SelectedMapLapCount => _selectedMapLapCount;
 
         public EGameMod GameMod => _gameMod;
         
@@ -43,10 +47,12 @@ namespace Configs.Impl
             _selectedCarIndex = index;
         }
 
-        public void SetSelectedMap(GameObject mapPrefab, int index)
+        public void SetSelectedMap(GameObject mapPrefab, int index, int selectionCount, int lapCount)
         {
             _selectedMapPrefab = mapPrefab;
             _selectedMapIndex = index;
+            _selectedMapSelectionCount = selectionCount;
+            _selectedMapLapCount = lapCount;
         } 
         
         public void SetSelectedGameMode(EGameMod gameMod)
