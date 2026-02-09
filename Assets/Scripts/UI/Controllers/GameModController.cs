@@ -1,11 +1,13 @@
 using System;
 using Configs.Impl;
+using DG.Tweening;
 using Data.Enums;
 using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
 using UI.Views;
 using UI.Window;
 using UniRx;
+using UnityEngine;
 using Zenject;
 
 namespace UI.Controllers
@@ -13,6 +15,7 @@ namespace UI.Controllers
     public class GameModController : AUiController<GameModView>
     {
         private readonly ILocalWindowsService _localWindowsService;
+        private Tween _presentationTween;
         
         [Inject] private GameSelectionParameters _gameSelectionParameters;
 
@@ -32,6 +35,14 @@ namespace UI.Controllers
             View.BackButton.OnClickAsObservable().Subscribe(_ => OnBackButtonClick()).AddTo(View);
         }
 
+        protected override void OnOpen()
+        {
+            _presentationTween?.Kill();
+
+            _presentationTween = DOVirtual.DelayedCall(View.PresentationDelay, () => SetPresentationState(true))
+                .SetUpdate(true).SetLink(View.gameObject);
+        }
+
         private void OnTrainingButtonClick()
         {
             SetInteractableButtons(false);
@@ -49,6 +60,13 @@ namespace UI.Controllers
             View.TrainingButton.interactable = isActive;
             View.StoryButton.interactable = !isActive;
         }
+        
+        private void SetPresentationState(bool isActive)
+        {
+            View.ConfirmButton.gameObject.SetActive(isActive);
+            View.BackButton.gameObject.SetActive(isActive);
+            View.GameModPresentation.gameObject.SetActive(isActive);
+        }
 
         private void OnConfirmButtonClick()
         {
@@ -59,6 +77,12 @@ namespace UI.Controllers
                     _localWindowsService.OpenWindow<LoadingWindow>();
                     break;
                 case EGameMod.Story:
+                    _localWindowsService.AnimateWindow<MainMenuWindow>(Vector2.right * -1200);
+                    _localWindowsService.AnimateWindow<MapWindow>(Vector2.right * -1200);
+                    _localWindowsService.AnimateWindow<GameModWindow>(Vector2.right * -600);
+
+                    SetPresentationState(false);
+
                     _localWindowsService.OpenWindow<OpponentWindow>();
                     break;
                 case EGameMod.None:
@@ -67,6 +91,12 @@ namespace UI.Controllers
             }
         }
 
-        private void OnBackButtonClick() => _localWindowsService.CloseWindow();
+        private void OnBackButtonClick()
+        {
+            _localWindowsService.AnimateWindow<MainMenuWindow>(Vector2.zero);
+            _localWindowsService.AnimateWindow<MapWindow>(Vector2.zero);
+            
+            _localWindowsService.CloseWindow();
+        }
     }
 }

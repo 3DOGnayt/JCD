@@ -8,8 +8,11 @@ namespace UI.Views
     {
         public Button TrainingButton;
         public Button StoryButton;
+        public Image GameModPresentation;
         [Space]
         public Button ConfirmButton;
         public Button BackButton;
+        [Space]
+        public float PresentationDelay;
     }
 }

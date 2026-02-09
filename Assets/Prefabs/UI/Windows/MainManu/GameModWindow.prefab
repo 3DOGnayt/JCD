@@ -1586,6 +1586,7 @@ GameObject:
   - component: {fileID: 443585384465935253}
   - component: {fileID: 3021414971575322001}
   - component: {fileID: 1578885240336251142}
+  - component: {fileID: 2429512841905421185}
   m_Layer: 5
   m_Name: GameModView
   m_TagString: Untagged
@@ -1671,8 +1672,10 @@ MonoBehaviour:
   _closeAnimation: {fileID: 1578885240336251142}
   TrainingButton: {fileID: 9117606867357139371}
   StoryButton: {fileID: 5004855024093717344}
+  GameModPresentation: {fileID: 6147323561316473150}
   ConfirmButton: {fileID: 8172056728677089751}
   BackButton: {fileID: 3180825322509582955}
+  PresentationDelay: 0.3
 --- !u!114 &1578885240336251142
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1692,3 +1695,18 @@ MonoBehaviour:
   _fromAppearAnchoredPosition: {x: 1700, y: 0}
   _disappearToTheSamePlace: 1
   _toDisappearAnchoredPosition: {x: 0, y: 0}
+--- !u!114 &2429512841905421185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9070897593257593672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d951083eccb5dc04b8a68e360b67fbaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _duration: 0.2
+  _ease: 1
+  _useUnscaledTime: 1

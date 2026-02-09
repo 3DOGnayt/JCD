@@ -1039,6 +1039,7 @@ GameObject:
   - component: {fileID: 6461948491812657789}
   - component: {fileID: 6902255558321701429}
   - component: {fileID: 7895298256137714003}
+  - component: {fileID: 1715593742716613887}
   m_Layer: 5
   m_Name: MapView
   m_TagString: Untagged
@@ -1135,6 +1136,7 @@ MonoBehaviour:
   MapPresentation: {fileID: 961242863914105893}
   ConfirmButton: {fileID: 123571752187127957}
   BackButton: {fileID: 2041593075582004457}
+  PresentationDelay: 0.3
 --- !u!114 &7895298256137714003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1154,6 +1156,21 @@ MonoBehaviour:
   _fromAppearAnchoredPosition: {x: 1700, y: 0}
   _disappearToTheSamePlace: 1
   _toDisappearAnchoredPosition: {x: 0, y: 0}
+--- !u!114 &1715593742716613887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4230953793433745344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d951083eccb5dc04b8a68e360b67fbaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _duration: 0.2
+  _ease: 1
+  _useUnscaledTime: 1
 --- !u!1 &5002228457788372642
 GameObject:
   m_ObjectHideFlags: 0

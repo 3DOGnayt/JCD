@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7587252405415353295}
   - component: {fileID: 727674113937898066}
   - component: {fileID: 7054622730136122272}
+  - component: {fileID: 7934436053807080535}
   m_Layer: 5
   m_Name: MainMenuView
   m_TagString: Untagged
@@ -96,6 +97,21 @@ MonoBehaviour:
   GarageButton: {fileID: 6737603046105665497}
   SettingsButton: {fileID: 6498123241483980234}
   ExitButton: {fileID: 3591910280238964142}
+--- !u!114 &7934436053807080535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 952422173373183154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d951083eccb5dc04b8a68e360b67fbaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _duration: 0.2
+  _ease: 1
+  _useUnscaledTime: 1
 --- !u!1 &1078574457595157957
 GameObject:
   m_ObjectHideFlags: 0

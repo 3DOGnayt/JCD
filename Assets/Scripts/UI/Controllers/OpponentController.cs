@@ -153,6 +153,13 @@ namespace UI.Controllers
             _localWindowsService.OpenWindow<LoadingWindow>();
         }
 
-        private void OnBackButtonClick() => _localWindowsService.CloseWindow();
+        private void OnBackButtonClick()
+        {
+            _localWindowsService.AnimateWindow<MainMenuWindow>(Vector2.right * -600);
+            _localWindowsService.AnimateWindow<MapWindow>(Vector2.right * -600);
+            _localWindowsService.AnimateWindow<GameModWindow>(Vector2.zero);
+            
+            _localWindowsService.CloseWindow();
+        }
     }
 }

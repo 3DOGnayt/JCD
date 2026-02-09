@@ -14,5 +14,7 @@ namespace UI.Views
         [Space]
         public Button ConfirmButton;
         public Button BackButton;
+        [Space]
+        public float PresentationDelay;
     }
 }

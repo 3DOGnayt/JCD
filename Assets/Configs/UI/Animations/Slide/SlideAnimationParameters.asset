@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad017fbd2cf9ff54987b38257a1be319, type: 3}
   m_Name: SlideAnimationParameters
   m_EditorClassIdentifier: 
-  appearEase: 27
-  appearDuration: 0.4
-  disappearEase: 26
-  disappearDuration: 0.4
+  appearEase: 1
+  appearDuration: 0.2
+  disappearEase: 1
+  disappearDuration: 0.2

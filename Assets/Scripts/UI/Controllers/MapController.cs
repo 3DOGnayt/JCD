@@ -1,4 +1,5 @@
 using Configs.Impl;
+using DG.Tweening;
 using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
 using UI.Views;
@@ -12,6 +13,7 @@ namespace UI.Controllers
     public class MapController : AUiController<MapView>
     {
         private readonly ILocalWindowsService _localWindowsService;
+        private Tween _presentationTween;
 
         private GameObject _pendingMapPrefab;
         private Sprite _pendingMapPreview;
@@ -53,6 +55,11 @@ namespace UI.Controllers
             PreparePendingMapSelection();
             RefreshMapButtons();
             UpdateMapPresentation();
+            
+            _presentationTween?.Kill();
+
+            _presentationTween = DOVirtual.DelayedCall(View.PresentationDelay, () => SetPresentationState(true))
+                .SetUpdate(true).SetLink(View.gameObject);
         }
 
         private void InitializeMapButtonLabels()
@@ -147,7 +154,20 @@ namespace UI.Controllers
                 _pendingMapPrefab, _pendingMapIndex, entry.EMap, entry.SelectionCount, entry.LapCount);
             
             RefreshMapButtons();
+
+            _localWindowsService.AnimateWindow<MainMenuWindow>(Vector2.right * -600);
+            _localWindowsService.AnimateWindow<MapWindow>(Vector2.right * -600);
+            
+            SetPresentationState(false);
+
             _localWindowsService.OpenWindow<GameModWindow>();
+        }
+
+        private void SetPresentationState(bool isActive)
+        {
+            View.ConfirmButton.gameObject.SetActive(isActive);
+            View.BackButton.gameObject.SetActive(isActive);
+            View.MapPresentation.gameObject.SetActive(isActive);
         }
 
         private void OnBackButtonClick() => _localWindowsService.CloseWindow();
