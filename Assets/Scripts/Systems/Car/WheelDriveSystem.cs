@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using Components;
 using Configs.Impl;
 using Scellecs.Morpeh;
 using Services;
+using UniRx;
 using UnityEngine;
 using Zenject;
 
@@ -11,6 +13,7 @@ namespace Systems.Car
     public sealed class WheelDriveSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
+        [Inject] private ILoadingService _loadingService;
         [Inject] private IInputService _inputService;
         [Inject] private GameSelectionParameters _gameSelectionParameters;
 
@@ -21,6 +24,8 @@ namespace Systems.Car
 
         private Dictionary<int, float> _forwardGearTorque;
         private float _reverseGearTorque;
+        private bool _inputEnabled = true;
+        private IDisposable _inputEnabledSubscription;
 
         public void OnAwake()
         {
@@ -36,6 +41,8 @@ namespace Systems.Car
 
             var carParameters = _gameSelectionParameters != null ? _gameSelectionParameters.SelectedCarParameters : null;
             BuildGearTorqueFromPreset(carParameters);
+
+            _inputEnabledSubscription = _loadingService.InputEnabledStream.Subscribe(SetInputEnabled);
         }
 
         private void BuildGearTorqueFromPreset(CarParameters carParameters)
@@ -117,6 +124,12 @@ namespace Systems.Car
                 ref var brakeInputFlag = ref aspect.BrakeInput.Value;
                 ref var handbrakePressed = ref aspect.HandbrakeInput.Value;
                 ref var currentGear = ref aspect.Gear.Value;
+
+                if (!_inputEnabled)
+                {
+                    ref var cachedVertical = ref _verticalInputStash.Get(car).Value;
+                    cachedVertical = 0f;
+                }
 
                 var verticalInput = Mathf.Clamp(_verticalInputStash.Get(car).Value, -1f, 1f);
 
@@ -265,6 +278,14 @@ namespace Systems.Car
             }
         }
 
-        public void Dispose() { }
+        private void SetInputEnabled(bool isEnabled)
+        {
+            _inputEnabled = isEnabled;
+        }
+
+        public void Dispose()
+        {
+            _inputEnabledSubscription?.Dispose();
+        }
     }
 }

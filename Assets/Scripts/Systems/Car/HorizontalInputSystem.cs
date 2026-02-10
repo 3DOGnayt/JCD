@@ -1,7 +1,9 @@
+using System;
 using Components;
 using Configs.Impl;
 using Scellecs.Morpeh;
 using Services;
+using UniRx;
 using UnityEngine;
 using Zenject;
 
@@ -26,6 +28,8 @@ namespace Systems.Car
 
         private MovementCache _movementCache;
         private bool _hasCache;
+        private bool _inputEnabled = true;
+        private IDisposable _inputEnabledSubscription;
 
         private struct MovementCache
         {
@@ -59,6 +63,7 @@ namespace Systems.Car
             _speedMaxStash = World.GetStash<SpeedMaxComponent>();
 
             TryCacheMovementParameters();
+            _inputEnabledSubscription = _loadingService.InputEnabledStream.Subscribe(SetInputEnabled);
         }
 
         public void OnUpdate(float deltaTime)
@@ -84,13 +89,20 @@ namespace Systems.Car
                 var speedFactor = Mathf.Lerp(_movementCache.SpeedMultiplierMax, _movementCache.SpeedMultiplierMin, speed.Value / speedMax.Value);
                 var massFactor = Mathf.Clamp01(_movementCache.CarMassStandard / carMass.Value);
 
-                var adjustedAngle = steeringAngle.Value * speedFactor * massFactor;
-                var targetAngle = adjustedAngle * horizontal.Value;
-                
                 var dynamicSteeringSpeed = steeringSpeed.Value * Mathf.Lerp(
                     _movementCache.SteeringSpeedMultiplierMax, _movementCache.SteeringSpeedMultiplierMin, speed.Value / speedMax.Value);
 
-                _inputService.ApplyHorizontalMove(targetAngle, dynamicSteeringSpeed, wheelInfo.WheelInfo);
+                if (!_inputEnabled)
+                {
+                    horizontal.Value = 0f;
+                    _inputService.ApplyHorizontalMove(0f, dynamicSteeringSpeed, wheelInfo.WheelInfo);
+                }
+                else
+                {
+                    var adjustedAngle = steeringAngle.Value * speedFactor * massFactor;
+                    var targetAngle = adjustedAngle * horizontal.Value;
+                    _inputService.ApplyHorizontalMove(targetAngle, dynamicSteeringSpeed, wheelInfo.WheelInfo);
+                }
                 
                 _loadingService.PublishCarSetupChanged(carSetupAspect);  //TODO: replace
             }
@@ -109,6 +121,14 @@ namespace Systems.Car
             _hasCache = true;
         }
 
-        public void Dispose() { }
+        private void SetInputEnabled(bool isEnabled)
+        {
+            _inputEnabled = isEnabled;
+        }
+
+        public void Dispose()
+        {
+            _inputEnabledSubscription?.Dispose();
+        }
     }
 }
