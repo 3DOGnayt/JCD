@@ -7,6 +7,8 @@ namespace UI.Window
 {
     public class GameWindow : AWindow
     {
+        [SerializeField] private GameView _gameView;
+        [Space]
         [SerializeField] private GameMapView _gameMapView;
         [SerializeField] private GameSpeedometerView _gameSpeedometerView;
         [SerializeField] private GameTimerView _gameTimerView;
@@ -15,6 +17,8 @@ namespace UI.Window
         
         protected override void AddControllers()
         {
+            AddController<GameController, GameView>(_gameView);
+            
             AddController<GameMapController, GameMapView>(_gameMapView);
             AddController<GameSpeedometerController, GameSpeedometerView>(_gameSpeedometerView);
             AddController<GameTimerController, GameTimerView>(_gameTimerView);

@@ -1,13 +1,28 @@
+using System;
 using System.Collections.Generic;
 using Data;
+using UniRx;
 using UnityEngine;
 
 namespace Services.Impl
 {
-    public class InputService : IInputService
+    public class InputService : IInputService, IDisposable
     {
+        private readonly ILoadingService _loadingService;
+        private readonly IDisposable _inputEnabledSubscription;
+        private bool _inputEnabled = true;
+
+        public InputService(ILoadingService loadingService)
+        {
+            _loadingService = loadingService;
+            _inputEnabledSubscription = _loadingService.InputEnabledStream.Subscribe(SetInputEnabled);
+        }
+
         public void ApplyHorizontalMove(float targetAngle, float steeringSpeed, List<WheelInfoSetup> wheelInfos)
         {
+            if (!_inputEnabled)
+                return;
+
             foreach (var info in wheelInfos)
             {
                 if (!info.Steering)
@@ -33,6 +48,9 @@ namespace Services.Impl
 
         public void ApplyVerticalMove(float currentMotorTorque, float input, List<WheelInfoSetup> wheelInfos)
         {
+            if (!_inputEnabled)
+                return;
+
             var torque = currentMotorTorque * input;
             //var torque = currentMotorTorque * Mathf.Sign(input);
             
@@ -57,6 +75,16 @@ namespace Services.Impl
 
             visualWheel.position = position;
             visualWheel.rotation = rotation;
+        }
+
+        private void SetInputEnabled(bool isEnabled)
+        {
+            _inputEnabled = isEnabled;
+        }
+
+        public void Dispose()
+        {
+            _inputEnabledSubscription?.Dispose();
         }
     }
 }

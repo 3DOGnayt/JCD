@@ -24,7 +24,7 @@ namespace Services.Impl
         public RaceTimerService(ILoadingService loadingService)
         {
             _loadingService = loadingService;
-            _startRaceDisposable = _loadingService.StartRaceStream.Subscribe(_ => StartRace());
+            _startRaceDisposable = _loadingService.CountdownFinishedStream.Subscribe(_ => StartRace());
         }
 
         public IObservable<RaceLapRecord> LapCompletedStream => _lapCompletedSubject;

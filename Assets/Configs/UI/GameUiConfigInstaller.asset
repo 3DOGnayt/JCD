@@ -18,3 +18,5 @@ MonoBehaviour:
     type: 3}
   _gameResultWindow: {fileID: 1658120900065636783, guid: d2174cc53cf6b834fbab7a9363fe2867,
     type: 3}
+  _gameStartEndWindow: {fileID: 8877179061500872971, guid: 08a38ed742523ea4fafd13e151ee42e1,
+    type: 3}

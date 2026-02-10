@@ -12,6 +12,7 @@ namespace Installers
         [SerializeField] private GameWindow _gameWindow;
         [SerializeField] private GamePauseWindow _gamePauseWindow;
         [SerializeField] private GameResultWindow _gameResultWindow;
+        [SerializeField] private GameStartEndWindow _gameStartEndWindow;
 
         public override void InstallBindings()
         {
@@ -20,6 +21,7 @@ namespace Installers
             Container.BindWindowFromPrefab(canvas, _gameWindow);
             Container.BindWindowFromPrefab(canvas, _gamePauseWindow);
             Container.BindWindowFromPrefab(canvas, _gameResultWindow);
+            Container.BindWindowFromPrefab(canvas, _gameStartEndWindow);
         }
     }
 }
