@@ -5,7 +5,7 @@ using UI.Animations;
 using UnityEngine;
 using Zenject;
 
-namespace KoboldUi.Services.WindowsService
+namespace Tools
 {
     public static class LocalWindowsServiceExtensions
     {

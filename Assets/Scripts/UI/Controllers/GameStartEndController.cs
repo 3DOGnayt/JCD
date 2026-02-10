@@ -139,6 +139,7 @@ namespace UI.Controllers
 
             HideCountdownImages();
 
+            //todo: game result
             // var result = _gameResultParameters.Result;
             // if (result == EGameResult.Win)
             // {
@@ -156,6 +157,8 @@ namespace UI.Controllers
             View.Win.gameObject.SetActive(false);
 
             ShowResultImage(View.Lose, View.WinFadeInSeconds);
+            
+            _loadingService.PublishWinResultChanged(true);
 
             _loadingService?.PublishInputEnabled(false);
             _localWindowsService?.OpenWindow<GameResultWindow>();

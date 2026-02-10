@@ -14,6 +14,7 @@ namespace Services.Impl
         private readonly Subject<ICarView> _playerSpawnedSubject = new();
         private readonly Subject<CarSetupAspect> _carSetupChangedSubject = new();
         private readonly Subject<bool> _inputEnabledSubject = new();
+        private readonly Subject<bool> _resultSubject = new();
         
         public IReactiveProperty<float> LoadingProgress => _loadingProgress;
         public IReactiveProperty<bool> IsLoadingCompleted => _isLoadingCompleted;
@@ -22,6 +23,7 @@ namespace Services.Impl
         public IObservable<ICarView> PlayerSpawnedStream => _playerSpawnedSubject;
         public IObservable<CarSetupAspect> CarSetupChangedStream => _carSetupChangedSubject;
         public IObservable<bool> InputEnabledStream => _inputEnabledSubject;
+        public IObservable<bool> ResultSubject => _resultSubject;
 
         public void PublishStartRace() => _startRaceSubject.OnNext(Unit.Default);
         public void PublishCountdownFinished() => _countdownBeforeStartFinishedSubject.OnNext(Unit.Default);
@@ -30,6 +32,7 @@ namespace Services.Impl
 
         public void PublishCarSetupChanged(CarSetupAspect carSetupAspect) => _carSetupChangedSubject.OnNext(carSetupAspect);
         public void PublishInputEnabled(bool isEnabled) => _inputEnabledSubject.OnNext(isEnabled);
+        public void PublishWinResultChanged(bool isEnabled) => _resultSubject.OnNext(isEnabled);
 
         public void ReloadCurrentScene()
         {

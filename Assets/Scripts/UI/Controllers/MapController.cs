@@ -2,6 +2,7 @@ using Configs.Impl;
 using DG.Tweening;
 using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
+using Tools;
 using UI.Views;
 using UI.Window;
 using UniRx;

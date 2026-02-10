@@ -15,12 +15,14 @@ namespace Services
         IObservable<ICarView> PlayerSpawnedStream { get; }
         IObservable<CarSetupAspect> CarSetupChangedStream { get; }
         IObservable<bool> InputEnabledStream { get; }
+        IObservable<bool> ResultSubject { get; }
 
         void PublishStartRace();
         void PublishCountdownFinished();
         void PublishPlayerSpawned(ICarView carView);
         void PublishCarSetupChanged(CarSetupAspect carSetupAspect);
         void PublishInputEnabled(bool isEnabled);
+        void PublishWinResultChanged(bool isEnabled);
         
         void ReloadCurrentScene();
     }
