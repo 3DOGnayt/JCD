@@ -3,6 +3,7 @@ using DG.Tweening;
 using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
 using Services;
+using Tools;
 using UI.Views;
 using UI.Window;
 using UniRx;
@@ -144,7 +145,9 @@ namespace UI.Controllers
         private void OnMainMenuClick()
         {
             //todo: выгружаем что есть, и открываем меню
-            _localWindowsService.OpenWindow<MainMenuWindow>();
+            
+            _localWindowsService.CloseToWindow<MainMenuWindow>();
+            _localWindowsService.AnimateWindow<MainMenuWindow>(Vector2.zero);
         }
 
         public void Dispose()
