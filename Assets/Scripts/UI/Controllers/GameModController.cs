@@ -4,6 +4,7 @@ using DG.Tweening;
 using Data.Enums;
 using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
+using Services;
 using Tools;
 using UI.Views;
 using UI.Window;
@@ -16,13 +17,15 @@ namespace UI.Controllers
     public class GameModController : AUiController<GameModView>
     {
         private readonly ILocalWindowsService _localWindowsService;
+        private readonly IGameSessionService _gameSessionService;
         private Tween _presentationTween;
         
         [Inject] private GameSelectionParameters _gameSelectionParameters;
 
-        public GameModController(ILocalWindowsService localWindowsService)
+        public GameModController(ILocalWindowsService localWindowsService, IGameSessionService gameSessionService)
         {
             _localWindowsService = localWindowsService;
+            _gameSessionService = gameSessionService;
         }
 
         public override void Initialize()
@@ -75,7 +78,7 @@ namespace UI.Controllers
             {
                 case EGameMod.Training:
                     _localWindowsService.CloseToWindow<MainMenuWindow>();
-                    _localWindowsService.OpenWindow<LoadingWindow>();
+                    _gameSessionService?.BeginGame();
                     break;
                 case EGameMod.Story:
                     _localWindowsService.AnimateWindow<MainMenuWindow>(Vector2.right * -1200);

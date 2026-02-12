@@ -6,6 +6,7 @@ using UI.Views;
 using UI.Window;
 using UniRx;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace UI.Controllers
 {
@@ -15,15 +16,18 @@ namespace UI.Controllers
         
         private readonly ILocalWindowsService _localWindowsService;
         private readonly ILoadingService _loadingService;
+        private readonly IGameSessionService _gameSessionService;
         private IDisposable _loadingDisposable;
 
         public LoadingController(
             ILocalWindowsService localWindowsService,
-            ILoadingService loadingService
+            ILoadingService loadingService,
+            IGameSessionService gameSessionService
         )
         {
             _localWindowsService = localWindowsService;
             _loadingService = loadingService;
+            _gameSessionService = gameSessionService;
         }
 
         public override void Initialize() { }
@@ -78,12 +82,21 @@ namespace UI.Controllers
         private void OnLoadCompleted()
         {
             _loadingService.IsLoadingCompleted.Value = true;
-            _loadingService.PublishStartRace();
 
             _loadingDisposable?.Dispose();
             _loadingDisposable = null;
             
-            _localWindowsService.OpenWindow<GameWindow>();
+            var target = _gameSessionService != null ? _gameSessionService.Target : GameSessionTarget.Game;
+            if (target == GameSessionTarget.Game)
+            {
+                _loadingService.PublishStartRace();
+                _localWindowsService.OpenWindow<GameWindow>(
+                    () => _localWindowsService.CloseToWindow<GameWindow>(),
+                    EPreviousWindowPolicy.CloseAfterOpenAndForget);
+                return;
+            }
+
+            SceneManager.LoadScene(0);
         }
     }
 }

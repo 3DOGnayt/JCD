@@ -16,6 +16,7 @@ namespace UI.Controllers
         private readonly ILocalWindowsService _localWindowsService;
         private readonly ILoadingService _loadingService;
         private readonly IRaceTimerService _raceTimerService;
+        private readonly IGameSessionService _gameSessionService;
         
         private IDisposable _resultSubscription;
         private Sequence _winMoveSequence;
@@ -27,12 +28,14 @@ namespace UI.Controllers
         public GameResultController(
             ILocalWindowsService localWindowsService,
             ILoadingService loadingService,
-            IRaceTimerService raceTimerService
+            IRaceTimerService raceTimerService,
+            IGameSessionService gameSessionService
         )
         {
             _localWindowsService = localWindowsService;
             _loadingService = loadingService;
             _raceTimerService = raceTimerService;
+            _gameSessionService = gameSessionService;
         }
 
         public override void Initialize()
@@ -139,15 +142,12 @@ namespace UI.Controllers
 
         private void OnRetryClick()
         {
-            //todo: все как обычно с загрузочного экрана
+            _gameSessionService?.RestartGame();
         }
 
         private void OnMainMenuClick()
         {
-            //todo: выгружаем что есть, и открываем меню
-            
-            _localWindowsService.CloseToWindow<MainMenuWindow>();
-            _localWindowsService.AnimateWindow<MainMenuWindow>(Vector2.zero);
+            _gameSessionService?.ExitToMenu();
         }
 
         public void Dispose()

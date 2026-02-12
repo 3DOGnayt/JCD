@@ -1,6 +1,7 @@
 using Configs.Impl;
 using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
+using Services;
 using Tools;
 using UI.Views;
 using UI.Window;
@@ -13,6 +14,7 @@ namespace UI.Controllers
     public class OpponentController : AUiController<OpponentView>
     {
         private readonly ILocalWindowsService _localWindowsService;
+        private readonly IGameSessionService _gameSessionService;
 
         private string _pendingOpponentName;
         private Sprite _pendingOpponentPreview;
@@ -23,9 +25,10 @@ namespace UI.Controllers
         [Inject] private OpponentCatalogParameters _opponentCatalogParameters;
         [Inject] private GameSelectionParameters _gameSelectionParameters;
 
-        public OpponentController(ILocalWindowsService localWindowsService)
+        public OpponentController(ILocalWindowsService localWindowsService, IGameSessionService gameSessionService)
         {
             _localWindowsService = localWindowsService;
+            _gameSessionService = gameSessionService;
         }
 
         public override void Initialize()
@@ -151,7 +154,7 @@ namespace UI.Controllers
             _gameSelectionParameters.SetSelectedOpponent(_pendingOpponentName, _pendingOpponentDifficulty, _pendingOpponentIndex);
             RefreshOpponentButtons();
             _localWindowsService.CloseToWindow<MainMenuWindow>();
-            _localWindowsService.OpenWindow<LoadingWindow>();
+            _gameSessionService?.BeginGame();
         }
 
         private void OnBackButtonClick()

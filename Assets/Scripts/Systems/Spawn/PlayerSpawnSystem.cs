@@ -17,6 +17,7 @@ namespace Systems.Spawn
         [Inject] private GameSelectionParameters _gameSelectionParameters;
         [Inject] private DiContainer _container;
         [Inject] private ILoadingService _loadingService;
+        [Inject] private IGameSessionService _gameSessionService;
         
         private Transform _playerGroup;
         private IDisposable _startRaceDisposable;
@@ -24,6 +25,7 @@ namespace Systems.Spawn
         public void OnAwake()
         {
             SetSpawnRoot();
+            
             _startRaceDisposable = _loadingService.StartRaceStream.Subscribe(_ => OnStartRace());
         }
 
@@ -50,7 +52,10 @@ namespace Systems.Spawn
             AddGameComponents(entity, instance);
             AddInternalComponents(entity, instance);
             
+            _gameSessionService?.RegisterRuntimeEntity(entity);
             _loadingService.PublishPlayerSpawned(instance);
+            
+            _gameSessionService?.RegisterRuntimeRoot(instance.CarTransform.gameObject);
         }
 
         private void AddGameComponents(Entity entity, ICarView carView)

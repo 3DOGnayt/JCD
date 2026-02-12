@@ -14,6 +14,7 @@ namespace Systems.Spawn
         [Inject] private GameSelectionParameters _gameSelectionParameters;
         [Inject] private DiContainer _container;
         [Inject] private ILoadingService _loadingService;
+        [Inject] private IGameSessionService _gameSessionService;
 
         private Transform _mapRoot;
         private IDisposable _startRaceDisposable;
@@ -30,7 +31,8 @@ namespace Systems.Spawn
             if (prefab == null)
                 return;
 
-            _container.InstantiatePrefab(prefab, Vector3.zero, Quaternion.identity, _mapRoot);
+            var instance = _container.InstantiatePrefab(prefab, Vector3.zero, Quaternion.identity, _mapRoot);
+            _gameSessionService?.RegisterRuntimeRoot(instance);
         }
 
         public void OnUpdate(float deltaTime) { }
