@@ -78,6 +78,7 @@ namespace Services.Impl
         private void OpenLoading()
         {
             _loadingService?.PublishInputEnabled(false);
+            _localWindowsService?.CloseToWindow<LoadingWindow>();
             _localWindowsService?.OpenWindow<LoadingWindow>(
                 null, EPreviousWindowPolicy.CloseAfterOpenAndForget);
         }
@@ -105,6 +106,7 @@ namespace Services.Impl
 
             _runtimeInstances.Clear();
 
+            _loadingService?.ResetEvents();
             _raceTimerService?.ResetRace();
         }
 

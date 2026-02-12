@@ -14,20 +14,25 @@ namespace UI.Controllers
     public class GameTrainingController : AUiController<GameTrainingView>
     {
         private readonly IRaceTimerService _raceTimerService;
+        private readonly ILoadingService _loadingService;
+        
         private readonly GameSelectionParameters _gameSelectionParameters;
         private readonly TrainingTimeScoreParameters _trainingTimeScoreParameters;
-        private readonly List<float> _currentSegmentTimes = new List<float>();
+        private readonly List<float> _currentSegmentTimes = new();
         private TrainingTimeScoreEntry _currentEntry;
         private int _segmentCount;
 
         public GameTrainingController(
             IRaceTimerService raceTimerService,
             GameSelectionParameters gameSelectionParameters,
-            TrainingTimeScoreParameters trainingTimeScoreParameters)
+            TrainingTimeScoreParameters trainingTimeScoreParameters,
+            ILoadingService loadingService
+        )
         {
             _raceTimerService = raceTimerService;
             _gameSelectionParameters = gameSelectionParameters;
             _trainingTimeScoreParameters = trainingTimeScoreParameters;
+            _loadingService = loadingService;
         }
 
         public override void Initialize()
@@ -43,11 +48,16 @@ namespace UI.Controllers
         {
             if (_gameSelectionParameters.GameMod == EGameMod.Story) 
                 View.gameObject.SetActive(false);
-            
+
+            if (_loadingService.IsTimersRefreshed.Value)
+                return;
+
             InitializeSegmentCount();
             InitializeEntry();
             InitializeDifferenceTexts();
             RefreshBestTime();
+            
+            _loadingService.PublishTimersRefreshed(true);
         }
 
         private void InitializeSegmentCount()

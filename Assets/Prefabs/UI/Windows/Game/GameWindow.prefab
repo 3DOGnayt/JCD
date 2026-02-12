@@ -135,6 +135,7 @@ MonoBehaviour:
   _gameTimerView: {fileID: 7440892475412770430}
   _gameTrainingView: {fileID: 4548219128495793970}
   _gameStoryView: {fileID: 6260432141333331685}
+  _gamePauseView: {fileID: 0}
 --- !u!1001 &724273976295052651
 PrefabInstance:
   m_ObjectHideFlags: 0

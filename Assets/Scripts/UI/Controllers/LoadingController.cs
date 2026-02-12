@@ -90,9 +90,7 @@ namespace UI.Controllers
             if (target == GameSessionTarget.Game)
             {
                 _loadingService.PublishStartRace();
-                _localWindowsService.OpenWindow<GameWindow>(
-                    () => _localWindowsService.CloseToWindow<GameWindow>(),
-                    EPreviousWindowPolicy.CloseAfterOpenAndForget);
+                _localWindowsService.OpenWindow<GameWindow>();
                 return;
             }
 

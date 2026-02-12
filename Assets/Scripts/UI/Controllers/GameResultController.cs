@@ -1,11 +1,8 @@
 using System;
 using DG.Tweening;
 using KoboldUi.Element.Controller;
-using KoboldUi.Services.WindowsService;
 using Services;
-using Tools;
 using UI.Views;
-using UI.Window;
 using UniRx;
 using UnityEngine;
 
@@ -13,7 +10,6 @@ namespace UI.Controllers
 {
     public class GameResultController : AUiController<GameResultView>, IDisposable
     {
-        private readonly ILocalWindowsService _localWindowsService;
         private readonly ILoadingService _loadingService;
         private readonly IRaceTimerService _raceTimerService;
         private readonly IGameSessionService _gameSessionService;
@@ -26,13 +22,11 @@ namespace UI.Controllers
         private bool _resultGame;
 
         public GameResultController(
-            ILocalWindowsService localWindowsService,
             ILoadingService loadingService,
             IRaceTimerService raceTimerService,
             IGameSessionService gameSessionService
         )
         {
-            _localWindowsService = localWindowsService;
             _loadingService = loadingService;
             _raceTimerService = raceTimerService;
             _gameSessionService = gameSessionService;
@@ -53,6 +47,8 @@ namespace UI.Controllers
 
         protected override void OnOpen()
         {
+            _loadingService?.PublishInputEnabled(false);
+            
             SetWinResult(_resultGame);
             if (View.TimePanel != null)
                 View.TimePanel.SetActive(false);

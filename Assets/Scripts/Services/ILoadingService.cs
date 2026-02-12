@@ -9,6 +9,9 @@ namespace Services
     {
         IReactiveProperty<float> LoadingProgress { get; }
         IReactiveProperty<bool> IsLoadingCompleted { get; }
+        IReactiveProperty<bool> IsGameStarted { get; }
+        IReactiveProperty<bool> IsTimersRefreshed { get; }
+
 
         IObservable<Unit> StartRaceStream { get; }
         IObservable<Unit> CountdownFinishedStream { get; }
@@ -23,7 +26,9 @@ namespace Services
         void PublishCarSetupChanged(CarSetupAspect carSetupAspect);
         void PublishInputEnabled(bool isEnabled);
         void PublishWinResultChanged(bool isEnabled);
+        void PublishGameStarted(bool isEnabled);
+        void PublishTimersRefreshed(bool isEnabled);
         
-        void ReloadCurrentScene();
+        void ResetEvents();
     }
 }
