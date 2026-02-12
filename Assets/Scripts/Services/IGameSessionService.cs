@@ -17,7 +17,7 @@ namespace Services
         void RestartGame();
         void ExitToMenu();
 
-        void RegisterRuntimeRoot(GameObject root);
+        void RegisterRuntimeRoot(GameObject instance);
         void RegisterRuntimeEntity(Entity entity);
     }
 }

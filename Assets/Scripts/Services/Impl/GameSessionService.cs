@@ -16,7 +16,7 @@ namespace Services.Impl
         private readonly GameSelectionParameters _selectionParameters;
         private readonly World _world;
 
-        private readonly List<GameObject> _runtimeRoots = new();
+        private readonly List<GameObject> _runtimeInstances = new();
         private readonly List<Entity> _runtimeEntities = new();
 
         private bool _hasSnapshot;
@@ -61,12 +61,12 @@ namespace Services.Impl
             OpenLoading();
         }
 
-        public void RegisterRuntimeRoot(GameObject root)
+        public void RegisterRuntimeRoot(GameObject instance)
         {
-            if (root == null || _runtimeRoots.Contains(root))
+            if (instance == null || _runtimeInstances.Contains(instance))
                 return;
 
-            _runtimeRoots.Add(root);
+            _runtimeInstances.Add(instance);
         }
 
         public void RegisterRuntimeEntity(Entity entity)
@@ -96,14 +96,14 @@ namespace Services.Impl
 
             _runtimeEntities.Clear();
 
-            for (var i = 0; i < _runtimeRoots.Count; i++)
+            for (var i = 0; i < _runtimeInstances.Count; i++)
             {
-                var root = _runtimeRoots[i];
+                var instance = _runtimeInstances[i];
                 
-                Object.Destroy(root);
+                Object.Destroy(instance);
             }
 
-            _runtimeRoots.Clear();
+            _runtimeInstances.Clear();
 
             _raceTimerService?.ResetRace();
         }
