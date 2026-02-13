@@ -4,6 +4,7 @@ using DG.Tweening;
 using UI.Views;
 using UI.Window;
 using Services;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,16 +29,21 @@ namespace UI.Controllers
             _localWindowsService = localWindowsService;
         }
 
+        public override void Initialize()
+        {
+            _raceTimerService.RaceFinishedStream.Subscribe(_ => ShowResult()).AddTo(View);
+        }
+
         protected override void OnOpen()
         {
             _loadingService?.PublishInputEnabled(false);
             SetStateImages();
             
-            if (_raceTimerService != null && _raceTimerService.IsFinished)
+            /*if (_raceTimerService != null && _raceTimerService.IsFinished)
             {
                 ShowResult();
                 return;
-            }
+            }*/
 
             PlayCountdown();
         }

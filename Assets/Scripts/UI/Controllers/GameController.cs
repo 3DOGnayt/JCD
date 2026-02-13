@@ -52,6 +52,7 @@ namespace UI.Controllers
 
         private void ShowResult()
         {
+            Debug.Log($"AAA results");
             _localWindowsService.OpenWindow<GameStartEndWindow>();
         }
 

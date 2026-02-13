@@ -29,4 +29,10 @@ MonoBehaviour:
     - 0
   - Map: 3
     BestTotalTime: 0
-    BestSegmentTimes: []
+    BestSegmentTimes:
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0

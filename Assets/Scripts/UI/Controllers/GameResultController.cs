@@ -47,13 +47,13 @@ namespace UI.Controllers
 
         protected override void OnOpen()
         {
+            Debug.Log($"AAA fin");
             _loadingService?.PublishInputEnabled(false);
             
             SetWinResult(_resultGame);
-            if (View.TimePanel != null)
-                View.TimePanel.SetActive(false);
-            if (View.ResultButtons != null)
-                View.ResultButtons.SetActive(false);
+            View.TimePanel.SetActive(false);
+            View.ResultButtons.SetActive(false);
+            
             PlayWinMoveSequence();
         }
 
@@ -70,12 +70,6 @@ namespace UI.Controllers
 
         private void PlayWinMoveSequence()
         {
-            if (View.Win == null || !View.Win.gameObject.activeSelf)
-            {
-                ShowResults();
-                return;
-            }
-
             var rect = View.Win.rectTransform;
             if (!_hasWinStartPosition)
             {
@@ -98,9 +92,7 @@ namespace UI.Controllers
 
         private void ShowResults()
         {
-            if (View.TimePanel != null)
-                View.TimePanel.SetActive(true);
-            
+            View.TimePanel.SetActive(true);
             View.ResultButtons.SetActive(true);
 
             FillTimeValues();
