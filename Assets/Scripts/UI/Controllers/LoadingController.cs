@@ -34,6 +34,9 @@ namespace UI.Controllers
 
         protected override void OnOpen()
         {
+            if (_loadingService.IsGameStarted.Value)
+                return;
+
             StartFakeLoading();
         }
 

@@ -35,7 +35,7 @@ namespace UI.Controllers
                 .AddTo(View);
 
             _loadingService.InputEnabledStream.Subscribe(value => _isInputUnlocked = value).AddTo(View);
-            _loadingService.IsGameStarted.Subscribe(_ => OnStartGame()).AddTo(View);
+            _loadingService.IsGameStarted.Subscribe(OnStartGame).AddTo(View);
 
             _raceTimerService.RaceFinishedStream.Subscribe(_ => ShowResult()).AddTo(View);
         }
@@ -45,14 +45,16 @@ namespace UI.Controllers
             _loadingService.PublishGameStarted(true);
         }
 
-        private void OnStartGame()
+        private void OnStartGame(bool value)
         {
+            if (!value)
+                return;
+
             _localWindowsService.OpenWindow<GameStartEndWindow>();
         }
 
         private void ShowResult()
         {
-            Debug.Log($"AAA results");
             _localWindowsService.OpenWindow<GameStartEndWindow>();
         }
 

@@ -72,6 +72,7 @@ MonoBehaviour:
   CountdownFadeInSeconds: 0.2
   CountdownFadeOutSeconds: 0.2
   WinFadeInSeconds: 0.2
+  ResultHoldSeconds: 3
   Win: {fileID: 4636584795445821453}
   Lose: {fileID: 6431590725099708886}
 --- !u!1 &2238945929349980855

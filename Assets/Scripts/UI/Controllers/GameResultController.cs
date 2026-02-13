@@ -47,7 +47,6 @@ namespace UI.Controllers
 
         protected override void OnOpen()
         {
-            Debug.Log($"AAA fin");
             _loadingService?.PublishInputEnabled(false);
             
             SetWinResult(_resultGame);

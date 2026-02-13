@@ -79,8 +79,7 @@ namespace Services.Impl
         {
             _loadingService?.PublishInputEnabled(false);
             _localWindowsService?.CloseToWindow<LoadingWindow>();
-            _localWindowsService?.OpenWindow<LoadingWindow>(
-                null, EPreviousWindowPolicy.CloseAfterOpenAndForget);
+            _localWindowsService?.OpenWindow<LoadingWindow>();
         }
 
         private void CleanupRuntime()

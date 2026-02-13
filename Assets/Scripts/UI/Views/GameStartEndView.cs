@@ -15,6 +15,7 @@ namespace UI.Views
         public float CountdownFadeInSeconds = 0.2f;
         public float CountdownFadeOutSeconds = 0.2f;
         public float WinFadeInSeconds = 0.2f;
+        public float ResultHoldSeconds = 1.2f;
         [Space]
         public Image Win;
         public Image Lose;

@@ -18,6 +18,7 @@ namespace UI.Controllers
         
         private Sequence _countdownSequence;
         private Tween _winTween;
+        private Sequence _resultSequence;
 
         public GameStartEndController(
             ILoadingService loadingService,
@@ -29,22 +30,19 @@ namespace UI.Controllers
             _localWindowsService = localWindowsService;
         }
 
-        public override void Initialize()
-        {
-            _raceTimerService.RaceFinishedStream.Subscribe(_ => ShowResult()).AddTo(View);
-        }
+        public override void Initialize() { }
 
         protected override void OnOpen()
         {
             _loadingService?.PublishInputEnabled(false);
-            SetStateImages();
             
-            /*if (_raceTimerService != null && _raceTimerService.IsFinished)
+            if (_raceTimerService.IsFinished)
             {
                 ShowResult();
                 return;
-            }*/
-
+            }
+            
+            SetStateImages();
             PlayCountdown();
         }
 
@@ -119,6 +117,7 @@ namespace UI.Controllers
 
             _countdownSequence.AppendCallback(PublishCountdownFinished);
             _countdownSequence.AppendCallback(() => _loadingService?.PublishInputEnabled(true));
+            _countdownSequence.AppendCallback(() => _localWindowsService.CloseWindow());
         }
 
         private float GetHoldSeconds(int index)
@@ -133,6 +132,7 @@ namespace UI.Controllers
         {
             _countdownSequence?.Kill();
             _winTween?.Kill();
+            _resultSequence?.Kill();
 
             HideCountdownImages();
 
@@ -151,14 +151,12 @@ namespace UI.Controllers
             //     ShowResultImage(View.Lose, View.WinFadeInSeconds);
             // }
             
-            View.Win.gameObject.SetActive(false);
-
-            ShowResultImage(View.Lose, View.WinFadeInSeconds);
-            
+            View.Win.gameObject.SetActive(true);
+            ShowResultImage(View.Win, View.WinFadeInSeconds);
+            _loadingService.PublishInputEnabled(false);
             _loadingService.PublishWinResultChanged(true);
-
-            _loadingService?.PublishInputEnabled(false);
-            _localWindowsService?.OpenWindow<GameResultWindow>();
+            
+            StartResultFlow();
         }
 
         private void HideCountdownImages()
@@ -209,6 +207,21 @@ namespace UI.Controllers
 
             SetImageAlpha(image, 0f);
             _winTween = image.DOFade(1f, fadeIn).SetLink(image.gameObject);
+        }
+
+        private void StartResultFlow()
+        {
+            var delay = Mathf.Max(0f, View.WinFadeInSeconds) + Mathf.Max(0f, View.ResultHoldSeconds);
+            _resultSequence?.Kill();
+            _resultSequence = DOTween.Sequence().SetLink(View.gameObject);
+            _resultSequence.AppendInterval(delay);
+            _resultSequence.AppendCallback(CompleteResultFlow);
+        }
+
+        private void CompleteResultFlow()
+        {
+            _localWindowsService.CloseToWindow<GameWindow>();
+            _localWindowsService.OpenWindow<GameResultWindow>();
         }
     }
 }
