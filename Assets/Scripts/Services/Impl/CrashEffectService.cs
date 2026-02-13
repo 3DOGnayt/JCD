@@ -23,7 +23,7 @@ namespace Services.Impl
         private readonly CarCrashEffectsParameters _parameters;
         private readonly List<PoolSlot> _pool;
         private readonly Dictionary<Rigidbody, CrashInstance> _activeByRb;
-        private readonly Transform _root;
+        private Transform _root;
 
         private int _nextSlotIndex = 0;
 
@@ -32,6 +32,16 @@ namespace Services.Impl
             _parameters = parameters;
             _pool = new List<PoolSlot>();
             _activeByRb = new Dictionary<Rigidbody, CrashInstance>();
+
+            ResetPool();
+        }
+
+        public void ResetPool()
+        {
+            DestroyRoot();
+            _pool.Clear();
+            _activeByRb.Clear();
+            _nextSlotIndex = 0;
 
             if (_parameters == null)
             {
@@ -45,12 +55,25 @@ namespace Services.Impl
                 return;
             }
 
+            CreateRoot();
+            InitPool();
+        }
+
+        private void CreateRoot()
+        {
             var rootGo = new GameObject("CrashEffectsPool");
             _root = rootGo.transform;
             _root.position = Vector3.zero;
             _root.rotation = Quaternion.identity;
+        }
 
-            InitPool();
+        private void DestroyRoot()
+        {
+            if (_root == null)
+                return;
+
+            Object.Destroy(_root.gameObject);
+            _root = null;
         }
 
         private void InitPool()

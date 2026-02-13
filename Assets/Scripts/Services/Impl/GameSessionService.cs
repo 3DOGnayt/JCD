@@ -3,6 +3,7 @@ using Configs.Impl;
 using Data.Enums;
 using KoboldUi.Services.WindowsService;
 using Scellecs.Morpeh;
+using Services;
 using UI.Window;
 using UnityEngine;
 
@@ -13,6 +14,8 @@ namespace Services.Impl
         private readonly ILocalWindowsService _localWindowsService;
         private readonly IRaceTimerService _raceTimerService;
         private readonly ILoadingService _loadingService;
+        private readonly ISkidSmokeService _skidSmokeService;
+        private readonly ICrashEffectService _crashEffectService;
         private readonly GameSelectionParameters _selectionParameters;
         private readonly World _world;
 
@@ -28,12 +31,16 @@ namespace Services.Impl
             ILocalWindowsService localWindowsService,
             IRaceTimerService raceTimerService,
             ILoadingService loadingService,
+            ISkidSmokeService skidSmokeService,
+            ICrashEffectService crashEffectService,
             GameSelectionParameters selectionParameters,
             World world)
         {
             _localWindowsService = localWindowsService;
             _raceTimerService = raceTimerService;
             _loadingService = loadingService;
+            _skidSmokeService = skidSmokeService;
+            _crashEffectService = crashEffectService;
             _selectionParameters = selectionParameters;
             _world = world;
         }
@@ -107,6 +114,8 @@ namespace Services.Impl
 
             _loadingService?.ResetEvents();
             _raceTimerService?.ResetRace();
+            _skidSmokeService?.ResetPool();
+            _crashEffectService?.ResetPool();
         }
 
         private void CaptureSnapshot()
