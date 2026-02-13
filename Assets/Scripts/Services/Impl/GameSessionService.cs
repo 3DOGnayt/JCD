@@ -16,6 +16,7 @@ namespace Services.Impl
         private readonly ILoadingService _loadingService;
         private readonly ISkidSmokeService _skidSmokeService;
         private readonly ICrashEffectService _crashEffectService;
+        private readonly ISkidmarksService _skidmarksService;
         private readonly GameSelectionParameters _selectionParameters;
         private readonly World _world;
 
@@ -33,6 +34,7 @@ namespace Services.Impl
             ILoadingService loadingService,
             ISkidSmokeService skidSmokeService,
             ICrashEffectService crashEffectService,
+            ISkidmarksService skidmarksService,
             GameSelectionParameters selectionParameters,
             World world)
         {
@@ -41,6 +43,7 @@ namespace Services.Impl
             _loadingService = loadingService;
             _skidSmokeService = skidSmokeService;
             _crashEffectService = crashEffectService;
+            _skidmarksService = skidmarksService;
             _selectionParameters = selectionParameters;
             _world = world;
         }
@@ -85,7 +88,7 @@ namespace Services.Impl
         private void OpenLoading()
         {
             _loadingService?.PublishInputEnabled(false);
-            _localWindowsService?.CloseToWindow<LoadingWindow>();
+            _localWindowsService?.CloseAllWindows();
             _localWindowsService?.OpenWindow<LoadingWindow>();
         }
 
@@ -116,6 +119,7 @@ namespace Services.Impl
             _raceTimerService?.ResetRace();
             _skidSmokeService?.ResetPool();
             _crashEffectService?.ResetPool();
+            _skidmarksService?.ResetMesh();
         }
 
         private void CaptureSnapshot()

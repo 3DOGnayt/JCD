@@ -21,7 +21,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "e1dde192f64ba2210beffce8d4e945a5431786cb"
+      "hash": "af94fb4a1610a0d7ba02268c5a7feb4eb7d8d1e8"
     },
     "com.scellecs.morpeh": {
       "version": "https://github.com/scellecs/morpeh.git?path=Scellecs.Morpeh",

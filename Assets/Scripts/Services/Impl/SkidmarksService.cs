@@ -8,9 +8,10 @@ namespace Services.Impl
     public class SkidmarksService : ISkidmarksService
     {
         private readonly CarSkidmarksParameters _parameters;
-        private readonly Mesh _mesh;
-        private readonly MeshFilter _meshFilter;
-        private readonly MeshRenderer _meshRenderer;
+        private GameObject _root;
+        private Mesh _mesh;
+        private MeshFilter _meshFilter;
+        private MeshRenderer _meshRenderer;
 
         private class WheelState
         {
@@ -41,15 +42,15 @@ namespace Services.Impl
         private readonly float _minSqrDistance;
         private readonly float _maxOpacity;
 
-        private readonly MarkSection[] _marks;
+        private MarkSection[] _marks;
         private int _markIndex;
 
-        private readonly Vector3[] _vertices;
-        private readonly Vector3[] _normals;
-        private readonly Vector4[] _tangents;
-        private readonly Color32[] _colors;
-        private readonly Vector2[] _uvs;
-        private readonly int[] _triangles;
+        private Vector3[] _vertices;
+        private Vector3[] _normals;
+        private Vector4[] _tangents;
+        private Color32[] _colors;
+        private Vector2[] _uvs;
+        private int[] _triangles;
 
         private bool _meshDirty;
         private bool _boundsSet;
@@ -66,35 +67,23 @@ namespace Services.Impl
             _minSqrDistance = _parameters.MinDistance * _parameters.MinDistance;
             _maxOpacity = _parameters.MaxOpacity;
 
-            var go = new GameObject("Skidmarks");
-            go.transform.position = Vector3.zero;
-            go.transform.rotation = Quaternion.identity;
+            ResetMesh();
+        }
 
-            _meshFilter = go.AddComponent<MeshFilter>();
-            _meshRenderer = go.AddComponent<MeshRenderer>();
-
-            _mesh = new Mesh();
-            _mesh.MarkDynamic();
-
-            _meshFilter.sharedMesh = _mesh;
-
-            _meshRenderer.material = _parameters.Material;
-            _meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
-            _meshRenderer.receiveShadows = false;
-            _meshRenderer.lightProbeUsage = LightProbeUsage.Off;
-
-            _marks = new MarkSection[_maxMarks];
-            for (var i = 0; i < _maxMarks; i++)
-                _marks[i] = new MarkSection();
-
-            _vertices = new Vector3[_maxMarks * 4];
-            _normals = new Vector3[_maxMarks * 4];
-            _tangents = new Vector4[_maxMarks * 4];
-            _colors = new Color32[_maxMarks * 4];
-            _uvs = new Vector2[_maxMarks * 4];
-            _triangles = new int[_maxMarks * 6];
-
+        public void ResetMesh()
+        {
+            DestroyRoot();
+            _wheelStates.Clear();
             _markIndex = 0;
+            _meshDirty = false;
+            _boundsSet = false;
+
+            if (_parameters == null)
+                return;
+
+            CreateRoot();
+            InitMesh();
+            InitMarksAndBuffers();
         }
 
         public void UpdateWheel(Rigidbody rb, WheelCollider wheel, bool skidNow)
@@ -319,6 +308,55 @@ namespace Services.Impl
             }
 
             _meshFilter.sharedMesh = _mesh;
+        }
+
+        private void CreateRoot()
+        {
+            _root = new GameObject("Skidmarks");
+            _root.transform.position = Vector3.zero;
+            _root.transform.rotation = Quaternion.identity;
+
+            _meshFilter = _root.AddComponent<MeshFilter>();
+            _meshRenderer = _root.AddComponent<MeshRenderer>();
+        }
+
+        private void DestroyRoot()
+        {
+            if (_root == null)
+                return;
+
+            Object.Destroy(_root);
+            _root = null;
+            _meshFilter = null;
+            _meshRenderer = null;
+            _mesh = null;
+        }
+
+        private void InitMesh()
+        {
+            _mesh = new Mesh();
+            _mesh.MarkDynamic();
+
+            _meshFilter.sharedMesh = _mesh;
+
+            _meshRenderer.material = _parameters.Material;
+            _meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
+            _meshRenderer.receiveShadows = false;
+            _meshRenderer.lightProbeUsage = LightProbeUsage.Off;
+        }
+
+        private void InitMarksAndBuffers()
+        {
+            _marks = new MarkSection[_maxMarks];
+            for (var i = 0; i < _maxMarks; i++)
+                _marks[i] = new MarkSection();
+
+            _vertices = new Vector3[_maxMarks * 4];
+            _normals = new Vector3[_maxMarks * 4];
+            _tangents = new Vector4[_maxMarks * 4];
+            _colors = new Color32[_maxMarks * 4];
+            _uvs = new Vector2[_maxMarks * 4];
+            _triangles = new int[_maxMarks * 6];
         }
     }
 }
