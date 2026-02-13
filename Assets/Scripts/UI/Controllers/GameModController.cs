@@ -19,7 +19,8 @@ namespace UI.Controllers
         private readonly ILocalWindowsService _localWindowsService;
         private readonly IGameSessionService _gameSessionService;
         private Tween _presentationTween;
-        
+        private Tween _delayTween;
+
         [Inject] private GameSelectionParameters _gameSelectionParameters;
 
         public GameModController(ILocalWindowsService localWindowsService, IGameSessionService gameSessionService)
@@ -87,7 +88,9 @@ namespace UI.Controllers
 
                     SetPresentationState(false);
 
-                    _localWindowsService.OpenWindow<OpponentWindow>();
+                    _delayTween?.Kill();
+                    _delayTween = DOVirtual.DelayedCall(0.2f, () => _localWindowsService.OpenWindow<OpponentWindow>())
+                        .SetUpdate(true).SetLink(View.gameObject);
                     break;
                 case EGameMod.None:
                 default:

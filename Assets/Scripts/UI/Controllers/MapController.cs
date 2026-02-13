@@ -15,6 +15,7 @@ namespace UI.Controllers
     {
         private readonly ILocalWindowsService _localWindowsService;
         private Tween _presentationTween;
+        private Tween _delayTween;
 
         private GameObject _pendingMapPrefab;
         private Sprite _pendingMapPreview;
@@ -161,7 +162,9 @@ namespace UI.Controllers
             
             SetPresentationState(false);
 
-            _localWindowsService.OpenWindow<GameModWindow>();
+            _delayTween?.Kill();
+            _delayTween = DOVirtual.DelayedCall(0.2f, () => _localWindowsService.OpenWindow<GameModWindow>())
+                .SetUpdate(true).SetLink(View.gameObject);
         }
 
         private void SetPresentationState(bool isActive)
