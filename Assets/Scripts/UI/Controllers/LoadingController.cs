@@ -2,6 +2,7 @@ using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
 using Services;
 using System;
+using Data.Enums;
 using UI.Views;
 using UI.Window;
 using UniRx;
@@ -12,7 +13,7 @@ namespace UI.Controllers
 {
     public class LoadingController : AUiController<LoadingView>
     {
-        private const int MaxProgress = 100;
+        private const int MAX_PROGRESS = 100;
         
         private readonly ILocalWindowsService _localWindowsService;
         private readonly ILoadingService _loadingService;
@@ -59,7 +60,7 @@ namespace UI.Controllers
                     elapsed += Time.deltaTime;
                     var t = Mathf.Clamp01(elapsed / duration);
                     var curved = Mathf.Clamp01(curve.Evaluate(t));
-                    UpdateProgress(Mathf.RoundToInt(curved * MaxProgress));
+                    UpdateProgress(Mathf.RoundToInt(curved * MAX_PROGRESS));
                 });
             _loadingDisposable.AddTo(View);
         }
@@ -69,11 +70,11 @@ namespace UI.Controllers
             if (_loadingService.IsLoadingCompleted.Value)
                 return;
 
-            var clamped = progress > MaxProgress ? MaxProgress : progress;
-            _loadingService.LoadingProgress.Value = clamped / (float)MaxProgress;
+            var clamped = progress > MAX_PROGRESS ? MAX_PROGRESS : progress;
+            _loadingService.LoadingProgress.Value = clamped / (float)MAX_PROGRESS;
             View.LoadingText.text = FormatProgress(clamped);
 
-            if (clamped >= MaxProgress)
+            if (clamped >= MAX_PROGRESS)
                 OnLoadCompleted();
         }
 
@@ -89,8 +90,8 @@ namespace UI.Controllers
             _loadingDisposable?.Dispose();
             _loadingDisposable = null;
             
-            var target = _gameSessionService != null ? _gameSessionService.Target : GameSessionTarget.Game;
-            if (target == GameSessionTarget.Game)
+            var target = _gameSessionService != null ? _gameSessionService.Target : EGameSessionTarget.Game;
+            if (target == EGameSessionTarget.Game)
             {
                 _loadingService.PublishStartRace();
                 _localWindowsService.OpenWindow<GameWindow>();

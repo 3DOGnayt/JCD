@@ -1,7 +1,7 @@
 using System;
 using Components;
 using Configs.Impl;
-using Data.Helpers;
+using Data.HelperClass;
 using KoboldUi.Element.Controller;
 using Services;
 using UI.Views;

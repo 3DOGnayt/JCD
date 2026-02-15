@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Services.Impl
+namespace Helpers
 {
     public sealed class CarCollisionListener : MonoBehaviour
     {

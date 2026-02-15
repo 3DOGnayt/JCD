@@ -1,7 +1,7 @@
 using System;
 using Components;
 using Configs.Impl;
-using Data.Helpers;
+using Data.HelperClass;
 using Services;
 using TMPro;
 using UniRx;
@@ -86,7 +86,7 @@ namespace Helpers
             _uiRpm = Smooth(_uiRpm, targetRpm, smoothingSettings.RpmSmoothing);
             _uiDrift = Smooth(_uiDrift, targetDrift, smoothingSettings.DriftSmoothing);
 
-            //todo: remove after all
+            //TODO: Remove after all
             _parametersValue.text =
                 $"{_uiSpeed:0} :\n{_uiBackSpeed:0} :\n{_uiGear:0} :\n{_uiRpm:0} :\n" +
                 $"\n{aspect.BrakeInput.Value} :\n{aspect.HandbrakeInput.Value} :\n{_uiDrift:0.00} :";

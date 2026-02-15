@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Data.Enums;
+using Data.HelperClass;
 using UnityEngine;
 
 namespace Configs.Impl
@@ -8,22 +8,22 @@ namespace Configs.Impl
     [CreateAssetMenu(menuName = "Game/" + nameof(TrainingTimeScoreParameters), fileName = nameof(TrainingTimeScoreParameters), order = 8)]
     public class TrainingTimeScoreParameters : ScriptableObject
     {
-        [SerializeField] private List<TrainingTimeScoreEntry> _entries = new List<TrainingTimeScoreEntry>();
+        [SerializeField] private List<TrainingTimeScoreSetup> _entries = new();
 
-        public IReadOnlyList<TrainingTimeScoreEntry> Entries => _entries;
+        public IReadOnlyList<TrainingTimeScoreSetup> Entries => _entries;
 
-        private TrainingTimeScoreEntry GetEntry(EMap map)
+        private TrainingTimeScoreSetup GetEntry(EMap map)
         {
             return _entries.Find(entry => entry.Map == map);
         }
 
-        public TrainingTimeScoreEntry GetOrCreateEntry(EMap map, int segmentCount)
+        public TrainingTimeScoreSetup GetOrCreateEntry(EMap map, int segmentCount)
         {
             var entry = GetEntry(map);
             if (entry != null)
                 return entry;
 
-            entry = new TrainingTimeScoreEntry
+            entry = new TrainingTimeScoreSetup
             {
                 Map = map,
                 BestTotalTime = 0f,
@@ -33,16 +33,16 @@ namespace Configs.Impl
             return entry;
         }
 
-        public void EnsureSegmentCount(TrainingTimeScoreEntry entry, int segmentCount)
+        public void EnsureSegmentCount(TrainingTimeScoreSetup setup, int segmentCount)
         {
-            if (entry == null)
+            if (setup == null)
                 return;
 
-            if (entry.BestSegmentTimes == null)
-                entry.BestSegmentTimes = new List<float>();
+            if (setup.BestSegmentTimes == null)
+                setup.BestSegmentTimes = new List<float>();
 
-            while (entry.BestSegmentTimes.Count < segmentCount)
-                entry.BestSegmentTimes.Add(0f);
+            while (setup.BestSegmentTimes.Count < segmentCount)
+                setup.BestSegmentTimes.Add(0f);
         }
 
         private List<float> CreateSegmentList(int segmentCount)
@@ -74,13 +74,5 @@ namespace Configs.Impl
             UnityEditor.EditorUtility.SetDirty(this);
         }
 #endif
-    }
-
-    [Serializable]
-    public class TrainingTimeScoreEntry
-    {
-        public EMap Map;
-        public float BestTotalTime;
-        public List<float> BestSegmentTimes = new List<float>();
     }
 }

@@ -1,11 +1,9 @@
 using System.Collections.Generic;
 using Configs.Impl;
-using Data;
-using Data.Helpers;
-using Services.Impl;
+using Data.HelperClass;
 using UnityEngine;
 
-namespace Views.Impl
+namespace Helpers.CarView.Impl
 {
     public class CarView : MonoBehaviour, ICarView, IEffectsView
     {

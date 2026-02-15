@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace UI.Animations
+namespace Helpers.Animations
 {
     public interface IWindowAnimator
     {

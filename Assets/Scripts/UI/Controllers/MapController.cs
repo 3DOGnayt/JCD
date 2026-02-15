@@ -13,6 +13,8 @@ namespace UI.Controllers
 {
     public class MapController : AUiController<MapView>
     {
+        private const int LEFT_SLIDE_600 = -600;
+        
         private readonly ILocalWindowsService _localWindowsService;
         private Tween _presentationTween;
         private Tween _delayTween;
@@ -21,6 +23,7 @@ namespace UI.Controllers
         private Sprite _pendingMapPreview;
         private int _pendingMapIndex = -1;
         private bool _isReady;
+        private float _delaySlideAnimationOnView = 0.2f;
 
         [Inject] private MapCatalogParameters _mapCatalogParameters;
         [Inject] private GameSelectionParameters _gameSelectionParameters;
@@ -156,14 +159,15 @@ namespace UI.Controllers
                 _pendingMapPrefab, _pendingMapIndex, entry.EMap, entry.SelectionCount, entry.LapCount);
             
             RefreshMapButtons();
-
-            _localWindowsService.AnimateWindow<MainMenuWindow>(Vector2.right * -600);
-            _localWindowsService.AnimateWindow<MapWindow>(Vector2.right * -600);
+            
+            _localWindowsService.AnimateWindow<MainMenuWindow>(Vector2.right * LEFT_SLIDE_600);
+            _localWindowsService.AnimateWindow<MapWindow>(Vector2.right * LEFT_SLIDE_600);
             
             SetPresentationState(false);
 
             _delayTween?.Kill();
-            _delayTween = DOVirtual.DelayedCall(0.2f, () => _localWindowsService.OpenWindow<GameModWindow>())
+            _delayTween = DOVirtual
+                .DelayedCall(_delaySlideAnimationOnView, () => _localWindowsService.OpenWindow<GameModWindow>())
                 .SetUpdate(true).SetLink(View.gameObject);
         }
 

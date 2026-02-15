@@ -1,7 +1,7 @@
 using System;
 using UniRx;
 using Components;
-using Views;
+using Helpers.CarView;
 
 namespace Services
 {

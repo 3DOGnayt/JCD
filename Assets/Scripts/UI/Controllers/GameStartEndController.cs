@@ -4,7 +4,6 @@ using DG.Tweening;
 using UI.Views;
 using UI.Window;
 using Services;
-using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 

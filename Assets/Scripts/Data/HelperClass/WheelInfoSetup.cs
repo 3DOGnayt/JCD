@@ -1,10 +1,8 @@
 using System;
-using Core;
+using Helpers.CarView.Impl;
 using UnityEngine;
-using Views;
-using Views.Impl;
 
-namespace Data
+namespace Data.HelperClass
 {
     [Serializable]
     public class WheelInfoSetup

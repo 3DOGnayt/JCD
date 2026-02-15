@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Configs.Impl;
 using Data.Enums;
+using Data.HelperClass;
 using Data.Struct;
 using KoboldUi.Element.Controller;
 using Services;
@@ -19,7 +20,7 @@ namespace UI.Controllers
         private readonly GameSelectionParameters _gameSelectionParameters;
         private readonly TrainingTimeScoreParameters _trainingTimeScoreParameters;
         private readonly List<float> _currentSegmentTimes = new();
-        private TrainingTimeScoreEntry _currentEntry;
+        private TrainingTimeScoreSetup _currentSetup;
         private int _segmentCount;
 
         public GameTrainingController(
@@ -88,12 +89,12 @@ namespace UI.Controllers
 
             if (mapId == EMap.None)
             {
-                _currentEntry = null;
+                _currentSetup = null;
                 return;
             }
 
-            _currentEntry = _trainingTimeScoreParameters.GetOrCreateEntry(mapId, _segmentCount);
-            _trainingTimeScoreParameters.EnsureSegmentCount(_currentEntry, _segmentCount);
+            _currentSetup = _trainingTimeScoreParameters.GetOrCreateEntry(mapId, _segmentCount);
+            _trainingTimeScoreParameters.EnsureSegmentCount(_currentSetup, _segmentCount);
         }
 
         private void InitializeDifferenceTexts()
@@ -119,7 +120,7 @@ namespace UI.Controllers
             if (View.BestTimeText == null)
                 return;
 
-            var bestTime = _currentEntry != null ? _currentEntry.BestTotalTime : 0f;
+            var bestTime = _currentSetup != null ? _currentSetup.BestTotalTime : 0f;
             View.BestTimeText.text = FormatTime(bestTime);
         }
 
@@ -137,13 +138,13 @@ namespace UI.Controllers
             if (targetText == null)
                 return;
 
-            if (_currentEntry == null || _currentEntry.BestSegmentTimes.Count <= index)
+            if (_currentSetup == null || _currentSetup.BestSegmentTimes.Count <= index)
             {
                 targetText.text = FormatTime(record.LapTime);
                 return;
             }
 
-            var bestSegmentTime = _currentEntry.BestSegmentTimes[index];
+            var bestSegmentTime = _currentSetup.BestSegmentTimes[index];
             if (bestSegmentTime <= 0f)
             {
                 targetText.text = FormatTime(record.LapTime);
@@ -159,21 +160,21 @@ namespace UI.Controllers
             if (_raceTimerService == null || _trainingTimeScoreParameters == null)
                 return;
 
-            if (_currentEntry == null)
+            if (_currentSetup == null)
                 InitializeEntry();
 
-            if (_currentEntry == null)
+            if (_currentSetup == null)
                 return;
 
             var totalTime = _raceTimerService.TotalRaceTime;
-            var isBest = _currentEntry.BestTotalTime <= 0f || totalTime < _currentEntry.BestTotalTime;
+            var isBest = _currentSetup.BestTotalTime <= 0f || totalTime < _currentSetup.BestTotalTime;
             if (!isBest)
                 return;
 
-            _currentEntry.BestTotalTime = totalTime;
-            _currentEntry.BestSegmentTimes.Clear();
+            _currentSetup.BestTotalTime = totalTime;
+            _currentSetup.BestSegmentTimes.Clear();
             for (var i = 0; i < _segmentCount; i++)
-                _currentEntry.BestSegmentTimes.Add(_currentSegmentTimes[i]);
+                _currentSetup.BestSegmentTimes.Add(_currentSegmentTimes[i]);
 
             RefreshBestTime();
         }

@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace UI.Animations
+namespace Helpers.Animations
 {
     [RequireComponent(typeof(RectTransform))]
     public class WindowSlideAnimator : MonoBehaviour, IWindowAnimator

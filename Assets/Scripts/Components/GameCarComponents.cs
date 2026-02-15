@@ -1,9 +1,6 @@
-using Core;
-using Data;
 using Data.Enums;
+using Helpers.CarView;
 using Scellecs.Morpeh;
-using Views;
-using Views.Impl;
 
 namespace Components
 {

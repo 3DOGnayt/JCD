@@ -83,7 +83,9 @@ namespace UI.Controllers
             if (_carCatalogParameters.Cars.Count == 0)
                 return;
 
-            var clamped = Mathf.Clamp(_gameSelectionParameters.SelectedCarIndex, 0, _carCatalogParameters.Cars.Count - 1);
+            var clamped = Mathf.Clamp(
+                _gameSelectionParameters.SelectedCarIndex, 0, _carCatalogParameters.Cars.Count - 1);
+            
             ApplyPendingCar(clamped);
         }
 

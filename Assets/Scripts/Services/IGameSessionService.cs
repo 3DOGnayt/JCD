@@ -1,17 +1,12 @@
+using Data.Enums;
 using Scellecs.Morpeh;
 using UnityEngine;
 
 namespace Services
 {
-    public enum GameSessionTarget
-    {
-        Menu,
-        Game
-    }
-
     public interface IGameSessionService
     {
-        GameSessionTarget Target { get; }
+        EGameSessionTarget Target { get; }
 
         void BeginGame();
         void RestartGame();

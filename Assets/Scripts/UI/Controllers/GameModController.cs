@@ -16,10 +16,14 @@ namespace UI.Controllers
 {
     public class GameModController : AUiController<GameModView>
     {
+        private const int LEFT_SLIDE_1200 = -1200;
+        private const int LEFT_SLIDE_600 = -600;
+        
         private readonly ILocalWindowsService _localWindowsService;
         private readonly IGameSessionService _gameSessionService;
         private Tween _presentationTween;
         private Tween _delayTween;
+        private float _delaySlideAnimationOnView = 0.2f;
 
         [Inject] private GameSelectionParameters _gameSelectionParameters;
 
@@ -44,7 +48,8 @@ namespace UI.Controllers
         {
             _presentationTween?.Kill();
 
-            _presentationTween = DOVirtual.DelayedCall(View.PresentationDelay, () => SetPresentationState(true))
+            _presentationTween = DOVirtual
+                .DelayedCall(View.PresentationDelay, () => SetPresentationState(true))
                 .SetUpdate(true).SetLink(View.gameObject);
         }
 
@@ -82,14 +87,15 @@ namespace UI.Controllers
                     _gameSessionService?.BeginGame();
                     break;
                 case EGameMod.Story:
-                    _localWindowsService.AnimateWindow<MainMenuWindow>(Vector2.right * -1200);
-                    _localWindowsService.AnimateWindow<MapWindow>(Vector2.right * -1200);
-                    _localWindowsService.AnimateWindow<GameModWindow>(Vector2.right * -600);
+                    _localWindowsService.AnimateWindow<MainMenuWindow>(Vector2.right * LEFT_SLIDE_1200);
+                    _localWindowsService.AnimateWindow<MapWindow>(Vector2.right * LEFT_SLIDE_1200);
+                    _localWindowsService.AnimateWindow<GameModWindow>(Vector2.right * LEFT_SLIDE_600);
 
                     SetPresentationState(false);
 
                     _delayTween?.Kill();
-                    _delayTween = DOVirtual.DelayedCall(0.2f, () => _localWindowsService.OpenWindow<OpponentWindow>())
+                    _delayTween = DOVirtual
+                        .DelayedCall(_delaySlideAnimationOnView, () => _localWindowsService.OpenWindow<OpponentWindow>())
                         .SetUpdate(true).SetLink(View.gameObject);
                     break;
                 case EGameMod.None:

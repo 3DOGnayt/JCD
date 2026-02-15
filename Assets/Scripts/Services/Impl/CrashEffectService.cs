@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using Configs.Impl;
-using Data;
 using UnityEngine;
 
 namespace Services.Impl
 {
     public class CrashEffectService : ICrashEffectService
     {
+        //TODO: REFACTORING
         private class PoolSlot
         {
             public GameObject GameObject;
@@ -102,15 +102,15 @@ namespace Services.Impl
             }
         }
 
-        public void UpdateCrash(Rigidbody rb, bool hasContact, Vector3 contactPoint)
+        public void UpdateCrash(Rigidbody rigidbody, bool hasContact, Vector3 contactPoint)
         {
-            if (rb == null || _pool == null || _pool.Count == 0)
+            if (rigidbody == null || _pool == null || _pool.Count == 0)
                 return;
 
-            if (!_activeByRb.TryGetValue(rb, out var instance))
+            if (!_activeByRb.TryGetValue(rigidbody, out var instance))
             {
                 instance = new CrashInstance();
-                _activeByRb[rb] = instance;
+                _activeByRb[rigidbody] = instance;
             }
 
             var now = Time.time;
@@ -163,8 +163,8 @@ namespace Services.Impl
 
             instance.SlotIndex = slotIndex;
 
-            var t = slot.GameObject.transform;
-            t.position = contactPoint + Vector3.up * _parameters.HeightOffset;
+            var transform = slot.GameObject.transform;
+            transform.position = contactPoint + Vector3.up * _parameters.HeightOffset;
 
             slot.ParticleSystem.Clear(true);
             slot.ParticleSystem.Play(true);
@@ -172,14 +172,14 @@ namespace Services.Impl
 
         private void UpdateEffectPosition(CrashInstance instance, Vector3 contactPoint)
         {
-            var idx = instance.SlotIndex;
-            if (idx < 0 || idx >= _pool.Count)
+            var index = instance.SlotIndex;
+            if (index < 0 || index >= _pool.Count)
             {
                 instance.SlotIndex = -1;
                 return;
             }
 
-            var slot = _pool[idx];
+            var slot = _pool[index];
             if (slot.GameObject == null)
             {
                 instance.SlotIndex = -1;

@@ -1,6 +1,6 @@
 using Components;
+using Helpers.CarView;
 using Scellecs.Morpeh;
-using Views;
 using Zenject;
 
 namespace Systems.Car

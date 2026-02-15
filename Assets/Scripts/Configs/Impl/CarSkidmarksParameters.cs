@@ -30,7 +30,6 @@ namespace Configs.Impl
         public float ForwardOffsetMax => _forwardOffsetMax;
         public float ReferenceSpeedMps => _referenceSpeedMps;
 
-
         public float FadeInSpeed => _fadeInSpeed;
         public float FadeOutSpeed => _fadeOutSpeed;
         public float MinVisibleAlpha => _minVisibleAlpha;

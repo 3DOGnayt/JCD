@@ -1,7 +1,6 @@
-using Data.Helpers;
-using Services.Impl;
+using Data.HelperClass;
 
-namespace Views
+namespace Helpers.CarView
 {
     public interface IEffectsView
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
+using Helpers.Animations;
 using KoboldUi.Services.WindowsService;
-using UI.Animations;
 using UnityEngine;
 using Zenject;
 

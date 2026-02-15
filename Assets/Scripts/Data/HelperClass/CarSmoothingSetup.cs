@@ -1,6 +1,6 @@
 using System;
 
-namespace Data.Helpers
+namespace Data.HelperClass
 {
     [Serializable]
     public class CarSmoothingSetup

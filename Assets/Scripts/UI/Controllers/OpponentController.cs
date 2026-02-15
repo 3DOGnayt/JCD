@@ -13,6 +13,8 @@ namespace UI.Controllers
 {
     public class OpponentController : AUiController<OpponentView>
     {
+        private const int LEFT_SLIDE_600 = -600;
+        
         private readonly ILocalWindowsService _localWindowsService;
         private readonly IGameSessionService _gameSessionService;
 
@@ -84,7 +86,10 @@ namespace UI.Controllers
             if (_opponentCatalogParameters.Opponents.Count == 0)
                 return;
 
-            var clamped = Mathf.Clamp(_gameSelectionParameters.SelectedOpponentIndex, 0, _opponentCatalogParameters.Opponents.Count - 1);
+            var clamped = Mathf.Clamp(
+                _gameSelectionParameters.SelectedOpponentIndex,
+                0, _opponentCatalogParameters.Opponents.Count - 1);
+            
             ApplyPendingOpponent(clamped);
         }
 
@@ -151,7 +156,9 @@ namespace UI.Controllers
             if (_pendingOpponentIndex < 0)
                 return;
 
-            _gameSelectionParameters.SetSelectedOpponent(_pendingOpponentName, _pendingOpponentDifficulty, _pendingOpponentIndex);
+            _gameSelectionParameters.SetSelectedOpponent(
+                _pendingOpponentName, _pendingOpponentDifficulty, _pendingOpponentIndex);
+            
             RefreshOpponentButtons();
             _localWindowsService.CloseToWindow<MainMenuWindow>();
             _gameSessionService?.BeginGame();
@@ -159,8 +166,8 @@ namespace UI.Controllers
 
         private void OnBackButtonClick()
         {
-            _localWindowsService.AnimateWindow<MainMenuWindow>(Vector2.right * -600);
-            _localWindowsService.AnimateWindow<MapWindow>(Vector2.right * -600);
+            _localWindowsService.AnimateWindow<MainMenuWindow>(Vector2.right * LEFT_SLIDE_600);
+            _localWindowsService.AnimateWindow<MapWindow>(Vector2.right * LEFT_SLIDE_600);
             _localWindowsService.AnimateWindow<GameModWindow>(Vector2.zero);
             
             _localWindowsService.CloseWindow();

@@ -1,4 +1,4 @@
-using Configs.Impl;
+using Data.Struct;
 using KoboldUi.Element.View;
 using UnityEngine;
 using UnityEngine.UI;

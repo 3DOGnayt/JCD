@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Data.Helpers
+namespace Data.HelperClass
 {
     [Serializable]
     public class SystemHelpersSetup

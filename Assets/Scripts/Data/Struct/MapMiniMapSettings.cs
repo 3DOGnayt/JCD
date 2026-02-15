@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Configs.Impl
+namespace Data.Struct
 {
     [Serializable]
     public struct MapMiniMapSettings

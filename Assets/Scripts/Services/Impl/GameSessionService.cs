@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Configs.Impl;
 using Data.Enums;
+using Data.Struct;
 using KoboldUi.Services.WindowsService;
 using Scellecs.Morpeh;
-using Services;
 using UI.Window;
 using UnityEngine;
 
@@ -24,9 +24,9 @@ namespace Services.Impl
         private readonly List<Entity> _runtimeEntities = new();
 
         private bool _hasSnapshot;
-        private Snapshot _snapshot;
+        private GameSessionSnapshot _gameSessionSnapshot;
 
-        public GameSessionTarget Target { get; private set; } = GameSessionTarget.Menu;
+        public EGameSessionTarget Target { get; private set; } = EGameSessionTarget.Menu;
 
         public GameSessionService(
             ILocalWindowsService localWindowsService,
@@ -51,7 +51,7 @@ namespace Services.Impl
         public void BeginGame()
         {
             CaptureSnapshot();
-            Target = GameSessionTarget.Game;
+            Target = EGameSessionTarget.Game;
             CleanupRuntime();
             OpenLoading();
         }
@@ -59,14 +59,14 @@ namespace Services.Impl
         public void RestartGame()
         {
             RestoreSnapshot();
-            Target = GameSessionTarget.Game;
+            Target = EGameSessionTarget.Game;
             CleanupRuntime();
             OpenLoading();
         }
 
         public void ExitToMenu()
         {
-            Target = GameSessionTarget.Menu;
+            Target = EGameSessionTarget.Menu;
             CleanupRuntime();
             OpenLoading();
         }
@@ -127,7 +127,7 @@ namespace Services.Impl
             if (_selectionParameters == null)
                 return;
 
-            _snapshot = new Snapshot
+            _gameSessionSnapshot = new GameSessionSnapshot
             {
                 SelectedCar = _selectionParameters.SelectedCar,
                 SelectedCarParameters = _selectionParameters.SelectedCarParameters,
@@ -152,41 +152,22 @@ namespace Services.Impl
                 return;
 
             _selectionParameters.SetSelectedCar(
-                _snapshot.SelectedCar,
-                _snapshot.SelectedCarParameters,
-                _snapshot.SelectedCarIndex);
+                _gameSessionSnapshot.SelectedCar,
+                _gameSessionSnapshot.SelectedCarParameters,
+                _gameSessionSnapshot.SelectedCarIndex);
 
             _selectionParameters.SetSelectedMap(
-                _snapshot.SelectedMapPrefab,
-                _snapshot.SelectedMapIndex,
-                _snapshot.SelectedMap,
-                _snapshot.SelectedMapSelectionCount,
-                _snapshot.SelectedMapLapCount);
+                _gameSessionSnapshot.SelectedMapPrefab,
+                _gameSessionSnapshot.SelectedMapIndex,
+                _gameSessionSnapshot.SelectedMap,
+                _gameSessionSnapshot.SelectedMapSelectionCount,
+                _gameSessionSnapshot.SelectedMapLapCount);
 
-            _selectionParameters.SetSelectedGameMode(_snapshot.GameMod);
+            _selectionParameters.SetSelectedGameMode(_gameSessionSnapshot.GameMod);
             _selectionParameters.SetSelectedOpponent(
-                _snapshot.SelectedOpponentName,
-                _snapshot.SelectedOpponentDifficulty,
-                _snapshot.SelectedOpponentIndex);
-        }
-
-        private struct Snapshot
-        {
-            public CarPresetParameters SelectedCar;
-            public CarParameters SelectedCarParameters;
-            public int SelectedCarIndex;
-
-            public GameObject SelectedMapPrefab;
-            public int SelectedMapIndex;
-            public int SelectedMapSelectionCount;
-            public int SelectedMapLapCount;
-            public EMap SelectedMap;
-
-            public EGameMod GameMod;
-
-            public string SelectedOpponentName;
-            public float SelectedOpponentDifficulty;
-            public int SelectedOpponentIndex;
+                _gameSessionSnapshot.SelectedOpponentName,
+                _gameSessionSnapshot.SelectedOpponentDifficulty,
+                _gameSessionSnapshot.SelectedOpponentIndex);
         }
     }
 }

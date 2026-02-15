@@ -2,7 +2,7 @@ using System;
 using Data.Enums;
 using UnityEngine;
 
-namespace Configs.Impl
+namespace Data.Struct
 {
     [Serializable]
     public struct MapCatalogEntry

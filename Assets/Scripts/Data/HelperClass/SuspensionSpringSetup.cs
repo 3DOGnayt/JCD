@@ -1,6 +1,6 @@
 using System;
 
-namespace Data
+namespace Data.HelperClass
 {
     [Serializable]
     public class SuspensionSpringSetup

@@ -1,7 +1,7 @@
+using Helpers.CarView;
 using Services;
 using UniRx;
 using UnityEngine;
-using Views;
 using Zenject;
 
 namespace Helpers

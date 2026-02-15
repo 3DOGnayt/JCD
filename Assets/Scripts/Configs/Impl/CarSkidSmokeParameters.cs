@@ -9,7 +9,7 @@ namespace Configs.Impl
         [SerializeField] private GameObject _smokePrefab;
 
         [Header("Axles")]
-        [SerializeField] private bool _enableFrontSmoke = false;
+        [SerializeField] private bool _enableFrontSmoke;
         [SerializeField] private bool _enableBackSmoke  = true;
         
         [Header("Pool")]

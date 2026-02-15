@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using Data.Struct;
 using UnityEngine;
 
 namespace Configs.Impl
@@ -7,16 +7,8 @@ namespace Configs.Impl
     [CreateAssetMenu(menuName = "Game/" + nameof(OpponentCatalogParameters), fileName = nameof(OpponentCatalogParameters), order = 4)]
     public class OpponentCatalogParameters : ScriptableObject
     {
-        [SerializeField] private List<OpponentCatalogEntry> _opponents = new List<OpponentCatalogEntry>();
+        [SerializeField] private List<OpponentCatalogEntry> _opponents = new();
 
         public IReadOnlyList<OpponentCatalogEntry> Opponents => _opponents;
-    }
-
-    [Serializable]
-    public struct OpponentCatalogEntry
-    {
-        public string DisplayName;
-        public Sprite Preview;
-        public float Difficulty;
     }
 }

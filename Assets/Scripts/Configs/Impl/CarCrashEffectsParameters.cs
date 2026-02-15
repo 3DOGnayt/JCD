@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Configs.Impl
 {
-    [CreateAssetMenu(menuName = "Car/CrashEffectsParameters", fileName = "CrashEffectsParameters")]
+    [CreateAssetMenu(menuName = "Car/" + nameof(CarCrashEffectsParameters), fileName = nameof(CarCrashEffectsParameters))]
     public class CarCrashEffectsParameters : ScriptableObject
     {
         [SerializeField] private GameObject _sparkPrefab;

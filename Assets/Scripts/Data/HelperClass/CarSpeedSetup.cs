@@ -1,7 +1,7 @@
 using System;
 using Data.Enums;
 
-namespace Data.Helpers
+namespace Data.HelperClass
 {
     [Serializable]
     public class CarSpeedSetup
@@ -9,7 +9,7 @@ namespace Data.Helpers
         public EGear EGear;
         public int SpeedLimit;
         public int SpeedAcceleration;
-        public int SpeedDecelerationNoGas; // TODO: Refactoring
-        public int SpeedDecelerationBrake; // TODO: Refactoring
+        public int SpeedDecelerationNoGas; // TODO: CHANGE OR DELETE
+        public int SpeedDecelerationBrake; // TODO: CHANGE OR DELETE
     }
 }

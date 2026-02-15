@@ -1,10 +1,10 @@
 using Components;
 using Configs.Impl;
 using Data.Enums;
-using Data.Helpers;
+using Data.HelperClass;
+using Helpers.CarView;
 using Scellecs.Morpeh;
 using UnityEngine;
-using Views;
 using Zenject;
 
 namespace Systems.Car

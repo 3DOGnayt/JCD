@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using Configs.Impl;
-using Data;
-using Data.Helpers;
+using Data.HelperClass;
 using UnityEngine;
 
-namespace Views
+namespace Helpers.CarView
 {
     public interface ICarView
     {

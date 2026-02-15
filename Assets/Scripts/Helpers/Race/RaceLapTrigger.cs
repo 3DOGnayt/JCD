@@ -1,5 +1,4 @@
 using UnityEngine;
-using Views.Impl;
 
 namespace Helpers.Race
 {
@@ -21,7 +20,7 @@ namespace Helpers.Race
             if (_manager == null || _checkpointIndex < 0 || other == null)
                 return;
 
-            var carView = other.GetComponentInParent<CarView>();
+            var carView = other.GetComponentInParent<CarView.Impl.CarView>();
             if (carView == null)
                 return;
 
