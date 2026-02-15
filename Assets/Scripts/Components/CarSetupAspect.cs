@@ -42,6 +42,5 @@ namespace Components
             .With<HandbrakeInputComponent>()
             .With<DriftMultiplierComponent>()
         ;
-
     }
 }

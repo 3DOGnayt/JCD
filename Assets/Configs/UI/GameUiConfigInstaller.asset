@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7648fe648a764a3dbffeddb23673b805, type: 3}
+  m_Name: GameUiConfigInstaller
+  m_EditorClassIdentifier: 
+  _gameWindow: {fileID: 3300377081014407994, guid: 80e45b158702fcd46881cbc6bbd6afc0,
+    type: 3}
+  _gamePauseWindow: {fileID: 9139685634994085724, guid: 31625717dc574cc47bf9b8a43f07990e,
+    type: 3}
+  _gameResultWindow: {fileID: 1658120900065636783, guid: d2174cc53cf6b834fbab7a9363fe2867,
+    type: 3}
+  _gameStartEndWindow: {fileID: 8877179061500872971, guid: 08a38ed742523ea4fafd13e151ee42e1,
+    type: 3}

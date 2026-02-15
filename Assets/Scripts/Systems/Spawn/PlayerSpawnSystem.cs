@@ -2,9 +2,11 @@ using Components;
 using Configs.Impl;
 using Data.Enums;
 using Scellecs.Morpeh;
-using Signals;
+using Services;
+using System;
+using Helpers.CarView;
+using UniRx;
 using UnityEngine;
-using Views;
 using Zenject;
 
 namespace Systems.Spawn
@@ -12,33 +14,48 @@ namespace Systems.Spawn
     public sealed class PlayerSpawnSystem : ISystem 
     {
         [Inject] public World World { get; set;}
-        [Inject] private CarPresetParameters _carPresetParameters; // TODO: Refactoring - переделать на выбор игрока
+        [Inject] private GameSelectionParameters _gameSelectionParameters;
         [Inject] private DiContainer _container;
-        [Inject] private SignalBus _signalBus;
+        [Inject] private ILoadingService _loadingService;
+        [Inject] private IGameSessionService _gameSessionService;
         
         private Transform _playerGroup;
+        private IDisposable _startRaceDisposable;
         
         public void OnAwake()
         {
             SetSpawnRoot();
-            SpawnPlayer();
+            
+            _startRaceDisposable = _loadingService.StartRaceStream.Subscribe(_ => OnStartRace());
         }
 
         private void SetSpawnRoot() => _playerGroup = new GameObject("Player").transform;
 
+        private void OnStartRace()
+        {
+            SpawnPlayer();
+        }
+
         private void SpawnPlayer()
         {
-            var player = _carPresetParameters.Car;
+            var selectedPreset = _gameSelectionParameters != null
+                ? _gameSelectionParameters.SelectedCar
+                : null;
+
+            var player = selectedPreset != null ? selectedPreset.Car : null;
             if (player == null)
                 return;
 
             var instance = _container.InstantiatePrefabForComponent<ICarView>(player, Vector3.zero, Quaternion.identity, _playerGroup);
-
+            
             var entity = World.CreateEntity();
             AddGameComponents(entity, instance);
             AddInternalComponents(entity, instance);
             
-            _signalBus.Fire(new PlayerSpawnedSignal { CarView = instance });
+            _gameSessionService?.RegisterRuntimeEntity(entity);
+            _loadingService.PublishPlayerSpawned(instance);
+            
+            _gameSessionService?.RegisterRuntimeRoot(instance.CarTransform.gameObject);
         }
 
         private void AddGameComponents(Entity entity, ICarView carView)
@@ -57,7 +74,7 @@ namespace Systems.Spawn
 
             var maxSpeedComponent = new SpeedMaxComponent { Value = carSetup.SpeedMax };
             var maxRpmComponent = new EngineRpmMaxComponent { Value = carSetup.EngineRpmMax };
-            
+
             entity.SetComponent(maxSpeedComponent);
             entity.SetComponent(new BackSpeedMaxComponent { Value = carSetup.BackSpeedMax });
             entity.SetComponent(new GearCountComponent { Value = carSetup.GearCount });
@@ -68,8 +85,6 @@ namespace Systems.Spawn
             entity.SetComponent(new SkidSmokeHandleComponent{ Value = -1 });
             entity.SetComponent(new HeadlightsComponent { Value = EHeadlightsMode.Off });
             
-            _signalBus.Fire(new ComponentChangeSignal<SpeedMaxComponent> { Component = maxSpeedComponent });
-            _signalBus.Fire(new ComponentChangeSignal<EngineRpmMaxComponent> { Component = maxRpmComponent });
         }
 
         private void AddInternalComponents(Entity entity, ICarView carView)
@@ -177,6 +192,9 @@ namespace Systems.Spawn
         }
 
         public void OnUpdate(float deltaTime) { }
-        public void Dispose() { }
+        public void Dispose()
+        {
+            _startRaceDisposable?.Dispose();
+        }
     }
 }

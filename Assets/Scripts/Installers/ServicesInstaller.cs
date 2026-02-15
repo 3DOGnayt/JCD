@@ -18,10 +18,13 @@ namespace Installers
 
         private void Services()
         {
+            Container.BindInterfacesAndSelfTo<LoadingService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<RaceTimerService>().AsSingle();
             Container.BindInterfacesAndSelfTo<InputService>().AsSingle();
             Container.BindInterfacesAndSelfTo<SkidmarksService>().AsSingle().WithArguments(_carSkidmarksParameters);
             Container.BindInterfacesAndSelfTo<SkidSmokeService>().AsSingle().WithArguments(_carSkidSmokeParameters);
             Container.BindInterfacesAndSelfTo<CrashEffectService>().AsSingle().WithArguments(_carCrashEffectsParameters);
+            Container.BindInterfacesAndSelfTo<GameSessionService>().AsSingle();
         }
     }
 }

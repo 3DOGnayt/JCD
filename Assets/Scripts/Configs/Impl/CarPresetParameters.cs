@@ -1,4 +1,4 @@
-using Data.Helpers;
+using Data.HelperClass;
 using UnityEngine;
 
 namespace Configs.Impl

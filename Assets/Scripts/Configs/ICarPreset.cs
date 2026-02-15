@@ -1,5 +1,5 @@
 using Data;
-using Data.Helpers;
+using Data.HelperClass;
 using UnityEngine;
 
 namespace Configs

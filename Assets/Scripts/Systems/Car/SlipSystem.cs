@@ -10,7 +10,7 @@ namespace Systems.Car
     public class SlipSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarParameters _carParameters;
+        [Inject] private GameSelectionParameters _gameSelectionParameters;
 
         private Filter _cars;
         private AspectFactory<CarSetupAspect> _carAspectFactory;
@@ -50,7 +50,11 @@ namespace Systems.Car
         // TODO: Refactoring
         public void OnUpdate(float deltaTime)
         {
-            var slipParameters = _carParameters.SlipParameters;
+            var carParameters = _gameSelectionParameters != null ? _gameSelectionParameters.SelectedCarParameters : null;
+            if (carParameters == null)
+                return;
+
+            var slipParameters = carParameters.SlipParameters;
             if (slipParameters == null)
                 return;
 
@@ -97,7 +101,7 @@ namespace Systems.Car
                 var backwardSpeedKmh = Mathf.Max(0f, Mathf.Abs(backSpeedValue));
                 var scalarSpeedKmh = Mathf.Max(forwardSpeedKmh, backwardSpeedKmh);
 
-                var helpersSetup = _carParameters.MovementParameters.HelpersSetup;
+                var helpersSetup = carParameters.MovementParameters.HelpersSetup;
                 var canDriftNow = handbrakePressed && scalarSpeedKmh > helpersSetup.MinDriftSpeedKmh;
 
                 bool applyBack;

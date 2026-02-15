@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Components;
 using Configs.Impl;
 using Scellecs.Morpeh;
-using Services.Impl;
+using Services;
 using UnityEngine;
 using Zenject;
 

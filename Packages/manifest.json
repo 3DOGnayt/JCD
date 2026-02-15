@@ -1,7 +1,10 @@
 {
   "dependencies": {
     "com.codewriter.triinspector": "https://github.com/codewriter-packages/Tri-Inspector.git",
+    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+    "com.kienanunique.kobolduiframework": "https://github.com/KienanUnique/KoboldUiFramework.git",
     "com.scellecs.morpeh": "https://github.com/scellecs/morpeh.git?path=Scellecs.Morpeh",
+    "com.unity.2d.sprite": "1.0.0",
     "com.unity.addressables": "1.22.3",
     "com.unity.cinemachine": "2.10.4",
     "com.unity.collab-proxy": "2.9.2",

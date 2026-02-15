@@ -10,7 +10,7 @@ namespace Systems.Car
     public sealed class GearShiftSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarParameters _carParameters;
+        [Inject] private GameSelectionParameters _gameSelectionParameters;
 
         private Filter _cars;
         private Stash<GearComponent> _gearStash;
@@ -43,17 +43,21 @@ namespace Systems.Car
             _backSpeedStash = World.GetStash<BackSpeedComponent>();
             _verticalInputStash = World.GetStash<VerticalInputComponent>();
 
-            BuildGearDataFromPreset();
+            var carParameters = _gameSelectionParameters != null ? _gameSelectionParameters.SelectedCarParameters : null;
+            BuildGearDataFromPreset(carParameters);
         }
 
-        private void BuildGearDataFromPreset()
+        private void BuildGearDataFromPreset(CarParameters carParameters)
         {
             _forwardGears = new List<ForwardGearInfo>();
             _forwardIndexByGearValue = new Dictionary<int, int>();
             _reverseGearValue = -1;
             _neutralGearValue = 0;
 
-            var speedsPreset = _carParameters.CarSpeedsPresetParameters;
+            if (carParameters == null)
+                return;
+
+            var speedsPreset = carParameters.CarSpeedsPresetParameters;
             if (speedsPreset == null)
             {
                 Debug.LogError("GearShiftSystem_A: SpeedPreset is null in CarParameters.");
@@ -99,8 +103,16 @@ namespace Systems.Car
 
         public void OnUpdate(float deltaTime)
         {
-            if (_forwardGears == null || _forwardGears.Count == 0)
+            var carParameters = _gameSelectionParameters != null ? _gameSelectionParameters.SelectedCarParameters : null;
+            if (carParameters == null)
                 return;
+
+            if (_forwardGears == null || _forwardGears.Count == 0)
+            {
+                BuildGearDataFromPreset(carParameters);
+                if (_forwardGears == null || _forwardGears.Count == 0)
+                    return;
+            }
 
             foreach (var car in _cars)
             {
@@ -113,7 +125,7 @@ namespace Systems.Car
                 var forwardSpeedKmh = Mathf.Max(0.0f, speedComponent.Value);
                 var backwardSpeedKmh = Mathf.Max(0.0f, backSpeedComponent.Value);
 
-                UpdateGear(ref currentGear, forwardSpeedKmh, backwardSpeedKmh, verticalInput);
+                UpdateGear(ref currentGear, forwardSpeedKmh, backwardSpeedKmh, verticalInput, carParameters);
 
                 gearComponent.Value = currentGear;
             }
@@ -123,11 +135,12 @@ namespace Systems.Car
             ref int currentGear,
             float forwardSpeedKmh,
             float backwardSpeedKmh,
-            float verticalInput)
+            float verticalInput,
+            CarParameters carParameters)
         {
             var absoluteSpeedKmh = Mathf.Max(forwardSpeedKmh, backwardSpeedKmh);
 
-            var movementParameters = _carParameters.MovementParameters.HelpersSetup;
+            var movementParameters = carParameters.MovementParameters.HelpersSetup;
             var wantForward = verticalInput > movementParameters.InputDeadZone;
             var wantBackward = verticalInput < -movementParameters.InputDeadZone;
 
