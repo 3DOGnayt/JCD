@@ -1,7 +1,7 @@
 using Configs.Impl;
+using Helpers.CarView.Impl;
 using UnityEditor;
 using UnityEngine;
-using Views.Impl;
 
 namespace Tools
 {

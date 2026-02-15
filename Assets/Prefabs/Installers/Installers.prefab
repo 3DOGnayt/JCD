@@ -44,11 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f35f50caada14cca956774c3f7e1b070, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameUI:
-    GameCanvas: {fileID: 4016678542420778910, guid: a488e38e41289b943ae40149d99c434e,
-      type: 3}
-    GameEventSystem: {fileID: 7146717253100232775, guid: 57c137a39a82f4c43a4a9923f3f92c30,
-      type: 3}
 --- !u!1 &2142215953976396755
 GameObject:
   m_ObjectHideFlags: 0
@@ -103,6 +98,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3773088219472732103}
   - component: {fileID: 255317552953038673}
+  - component: {fileID: 4429819216445681394}
   m_Layer: 0
   m_Name: Installers
   m_TagString: Untagged
@@ -126,10 +122,10 @@ Transform:
   - {fileID: 6759247762040260111}
   - {fileID: 5631259785591759542}
   - {fileID: 5182680325621981498}
-  - {fileID: 136178605043951638}
   - {fileID: 1855511058949250956}
   - {fileID: 826231487143610866}
   - {fileID: 5505903787698411279}
+  - {fileID: 6803139614179440750}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &255317552953038673
@@ -144,15 +140,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89715ad69b973a14899afa2c6730b30b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _scriptableObjectInstallers: []
+  _scriptableObjectInstallers:
+  - {fileID: 11400000, guid: 441c7b0f48ad057458d58897f0dfd54a, type: 2}
+  - {fileID: 11400000, guid: 118f7105d936f194694afa33662997c4, type: 2}
+  - {fileID: 11400000, guid: 71825ced5604d104d82cc8a7d76b0d54, type: 2}
   _monoInstallers:
   - {fileID: 7824705624787612259}
   - {fileID: 14604637014948833}
   - {fileID: 7000140884856235716}
-  - {fileID: 1309756752679937449}
   - {fileID: 5522086432751060452}
   - {fileID: 5917382755348723880}
   - {fileID: 90022454016733078}
+  - {fileID: 3954850056880062454}
+  - {fileID: 4429819216445681394}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -170,6 +170,18 @@ MonoBehaviour:
   _parentNewObjectsUnderSceneContext: 0
   _contractNames: []
   _parentContractNames: []
+--- !u!114 &4429819216445681394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2149802023120195288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eecbe86e3a5b5ad47a288ad4afa17000, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4676636425208314458
 GameObject:
   m_ObjectHideFlags: 0
@@ -262,7 +274,68 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97a56aca141d49f98dd7750669a1c994, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _carPreset: {fileID: 11400000, guid: 5c594316e21a99541926ca2e21cac6b9, type: 2}
+  _carUISmoothingParameters: {fileID: 11400000, guid: 651d069c447fd124c8d172922285d619,
+    type: 2}
+  _carCarSkidSmokeParameters: {fileID: 11400000, guid: dd68b16c31c60e442982b89d35e789e0,
+    type: 2}
+  _carLightsParameters: {fileID: 11400000, guid: ae89a026371445d4bb6249b7215d30f9,
+    type: 2}
+  _gameSelectionParameters: {fileID: 11400000, guid: c8c9b05e5525499b943131a8c65002a7,
+    type: 2}
+  _carCatalogParameters: {fileID: 11400000, guid: cc0a33ed7d4a41358454f341b1a796b5,
+    type: 2}
+  _mapCatalogParameters: {fileID: 11400000, guid: 7935337dca084ab6a48c73dd52019aab,
+    type: 2}
+  _opponentCatalogParameters: {fileID: 11400000, guid: 8854c501c2d6b63409e39eba290e75df,
+    type: 2}
+  _trainingTimeScoreParameters: {fileID: 11400000, guid: 0fbae2a894c7986469a71c7b3527eae5,
+    type: 2}
+--- !u!1 &6713453049578964672
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6803139614179440750}
+  - component: {fileID: 3954850056880062454}
+  m_Layer: 0
+  m_Name: DebugInstaller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6803139614179440750
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6713453049578964672}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3773088219472732103}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3954850056880062454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6713453049578964672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c35fff0328a74768b94b57b778a7a66b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _visibilityController: {fileID: 5279353730293408677, guid: 254db564d2c802b4a80ecb678714761c,
+    type: 3}
 --- !u!1 &6998756251272193150
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,47 +438,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d617c78a0d684e1190fc91bdafdc8de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &8468064700072567278
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 136178605043951638}
-  - component: {fileID: 1309756752679937449}
-  m_Layer: 0
-  m_Name: SignalsInstaller
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &136178605043951638
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8468064700072567278}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3773088219472732103}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1309756752679937449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8468064700072567278}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31838441f3e547ef8654af9e3c211790, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  _carSkidmarksParameters: {fileID: 11400000, guid: 860ebde9f07ef364b9c0c36feae8cee9,
+    type: 2}
+  _carSkidSmokeParameters: {fileID: 11400000, guid: dd68b16c31c60e442982b89d35e789e0,
+    type: 2}
+  _carCrashEffectsParameters: {fileID: 11400000, guid: 65cb0da86d41524488b13c36ed1fd3b6,
+    type: 2}

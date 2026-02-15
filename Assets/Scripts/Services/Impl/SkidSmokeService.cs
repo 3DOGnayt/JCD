@@ -1,19 +1,12 @@
 using System.Collections.Generic;
 using Configs.Impl;
-using Data;
 using UnityEngine;
 
 namespace Services.Impl
 {
-    public interface ISkidSmokeService
-    {
-        int BeginSkid(List<Vector3> wheelPositions);
-        void UpdateSkid(int handle, List<Vector3> wheelPositions);
-        void EndSkid(int handle);
-    }
-
     public sealed class SkidSmokeService : ISkidSmokeService
     {
+        //TODO: REFACTORING
         private class PoolSlot
         {
             public GameObject GameObject;
@@ -28,18 +21,34 @@ namespace Services.Impl
             public int[] SlotIndices;
         }
 
-        private readonly SkidSmokeParameters _parameters;
+        private readonly CarSkidSmokeParameters _parameters;
         private readonly List<PoolSlot> _pool;
         private readonly Dictionary<int, SkidInstance> _activeSkids;
-        private readonly Transform _root;
+        private Transform _root;
 
         private int _nextId = 1;
 
-        public SkidSmokeService(SkidSmokeParameters parameters)
+        public SkidSmokeService(CarSkidSmokeParameters parameters)
         {
             _parameters = parameters;
-            _pool = new List<PoolSlot>(_parameters.PoolSize);
+            _pool = new List<PoolSlot>();
             _activeSkids = new Dictionary<int, SkidInstance>();
+
+            ResetPool();
+        }
+
+        public void ResetPool()
+        {
+            DestroyRoot();
+            _pool.Clear();
+            _activeSkids.Clear();
+            _nextId = 1;
+
+            if (_parameters == null)
+            {
+                Debug.LogError("SkidSmokeService: parameters is null.");
+                return;
+            }
 
             if (_parameters.SmokePrefab == null)
             {
@@ -47,30 +56,8 @@ namespace Services.Impl
                 return;
             }
 
-            var rootGo = new GameObject("SkidSmokePool");
-            _root = rootGo.transform;
-            _root.position = Vector3.zero;
-            _root.rotation = Quaternion.identity;
-
-            for (var i = 0; i < _parameters.PoolSize; i++)
-            {
-                var go = Object.Instantiate(_parameters.SmokePrefab, _root);
-                go.SetActive(true);
-
-                var ps = go.GetComponent<ParticleSystem>();
-                if (ps == null)
-                {
-                    Debug.LogError("SkidSmokeService: SmokePrefab has no ParticleSystem.");
-                }
-
-                _pool.Add(new PoolSlot
-                {
-                    GameObject = go,
-                    ParticleSystem = ps,
-                    Busy = false,
-                    ReleaseTime = 0f
-                });
-            }
+            CreateRoot();
+            InitPool();
         }
 
         public int BeginSkid(List<Vector3> wheelPositions)
@@ -209,6 +196,47 @@ namespace Services.Impl
 
                 slot.Busy = true;
                 slot.ReleaseTime = float.PositiveInfinity;
+            }
+        }
+
+        private void CreateRoot()
+        {
+            var rootGo = new GameObject("SkidSmokePool");
+            _root = rootGo.transform;
+            _root.position = Vector3.zero;
+            _root.rotation = Quaternion.identity;
+        }
+
+        private void DestroyRoot()
+        {
+            if (_root == null)
+                return;
+
+            Object.Destroy(_root.gameObject);
+            _root = null;
+        }
+
+        private void InitPool()
+        {
+            var poolSize = Mathf.Max(1, _parameters.PoolSize);
+            _pool.Capacity = Mathf.Max(_pool.Capacity, poolSize);
+
+            for (var i = 0; i < poolSize; i++)
+            {
+                var go = Object.Instantiate(_parameters.SmokePrefab, _root);
+                go.SetActive(true);
+
+                var ps = go.GetComponent<ParticleSystem>();
+                if (ps == null)
+                    Debug.LogError("SkidSmokeService: SmokePrefab has no ParticleSystem.");
+
+                _pool.Add(new PoolSlot
+                {
+                    GameObject = go,
+                    ParticleSystem = ps,
+                    Busy = false,
+                    ReleaseTime = 0f
+                });
             }
         }
     }

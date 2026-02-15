@@ -1,8 +1,9 @@
+using System;
 using Components;
 using Configs.Impl;
 using Scellecs.Morpeh;
 using Services;
-using Signals;
+using UniRx;
 using UnityEngine;
 using Zenject;
 
@@ -11,11 +12,10 @@ namespace Systems.Car
     public class HorizontalInputSystem : IFixedSystem
     {
         [Inject] public World World { get; set;}
-        [Inject] private SignalBus _signalBus;
-        [Inject] private CarParameters _carParameters;
-        
-        private IInputService _inputService;
-        
+        [Inject] private ILoadingService _loadingService;
+        [Inject] private IInputService _inputService;
+        [Inject] private GameSelectionParameters _gameSelectionParameters;
+
         private Filter _cars;
         private AspectFactory<CarSetupAspect> _carSetupAspect;
         
@@ -26,16 +26,28 @@ namespace Systems.Car
         private Stash<SteeringAngleComponent> _steeringAngleStash;
         private Stash<SpeedMaxComponent> _speedMaxStash;
 
-        private float _steeringSpeedMultiplierMax;
-        private float _steeringSpeedMultiplierMin;
-        private float _carMassStandard; 
-        private float _speedMultiplierMax;
-        private float _speedMultiplierMin;
+        private MovementCache _movementCache;
+        private bool _hasCache;
+        private bool _inputEnabled = true;
+        private IDisposable _inputEnabledSubscription;
 
-        [Inject]
-        public void Construct(IInputService inputService)
+        private struct MovementCache
         {
-            _inputService = inputService;
+            public float SteeringSpeedMultiplierMax;
+            public float SteeringSpeedMultiplierMin;
+            public float CarMassStandard;
+            public float SpeedMultiplierMax;
+            public float SpeedMultiplierMin;
+
+            public void ApplyFrom(CarParameters carParameters)
+            {
+                var movementParameters = carParameters.MovementParameters;
+                SpeedMultiplierMax = movementParameters.SpeedMultiplierMax;
+                SpeedMultiplierMin = movementParameters.SpeedMultiplierMin;
+                CarMassStandard = movementParameters.CarMassStandard;
+                SteeringSpeedMultiplierMax = movementParameters.SteeringSpeedMultiplierMax;
+                SteeringSpeedMultiplierMin = movementParameters.SteeringSpeedMultiplierMin;
+            }
         }
         
         public void OnAwake()
@@ -50,16 +62,18 @@ namespace Systems.Car
             _steeringAngleStash = World.GetStash<SteeringAngleComponent>();
             _speedMaxStash = World.GetStash<SpeedMaxComponent>();
 
-            _speedMultiplierMax = _carParameters.MovementParameters.SpeedMultiplierMax;
-            _speedMultiplierMin = _carParameters.MovementParameters.SpeedMultiplierMin;
-            _carMassStandard = _carParameters.MovementParameters.CarMassStandard;
-            
-            _steeringSpeedMultiplierMax = _carParameters.MovementParameters.SteeringSpeedMultiplierMax;
-            _steeringSpeedMultiplierMin = _carParameters.MovementParameters.SteeringSpeedMultiplierMin;
+            TryCacheMovementParameters();
+            _inputEnabledSubscription = _loadingService.InputEnabledStream.Subscribe(SetInputEnabled);
         }
 
         public void OnUpdate(float deltaTime)
         {
+            if (!_hasCache)
+                TryCacheMovementParameters();
+
+            if (!_hasCache)
+                return;
+
             foreach (var car in _cars)
             {
                 var carSetupAspect = _carSetupAspect.Get(car);
@@ -72,21 +86,49 @@ namespace Systems.Car
                 var steeringAngle = _steeringAngleStash.Get(car);
                 var speedMax = _speedMaxStash.Get(car);
 
-                var speedFactor = Mathf.Lerp(_speedMultiplierMax, _speedMultiplierMin, speed.Value / speedMax.Value);
-                var massFactor = Mathf.Clamp01(_carMassStandard / carMass.Value);
+                var speedFactor = Mathf.Lerp(_movementCache.SpeedMultiplierMax, _movementCache.SpeedMultiplierMin, speed.Value / speedMax.Value);
+                var massFactor = Mathf.Clamp01(_movementCache.CarMassStandard / carMass.Value);
 
-                var adjustedAngle = steeringAngle.Value * speedFactor * massFactor;
-                var targetAngle = adjustedAngle * horizontal.Value;
-                
                 var dynamicSteeringSpeed = steeringSpeed.Value * Mathf.Lerp(
-                    _steeringSpeedMultiplierMax, _steeringSpeedMultiplierMin, speed.Value / speedMax.Value);
+                    _movementCache.SteeringSpeedMultiplierMax, _movementCache.SteeringSpeedMultiplierMin, speed.Value / speedMax.Value);
 
-                _inputService.ApplyHorizontalMove(targetAngle, dynamicSteeringSpeed, wheelInfo.WheelInfo);
+                if (!_inputEnabled)
+                {
+                    horizontal.Value = 0f;
+                    _inputService.ApplyHorizontalMove(0f, dynamicSteeringSpeed, wheelInfo.WheelInfo);
+                }
+                else
+                {
+                    var adjustedAngle = steeringAngle.Value * speedFactor * massFactor;
+                    var targetAngle = adjustedAngle * horizontal.Value;
+                    _inputService.ApplyHorizontalMove(targetAngle, dynamicSteeringSpeed, wheelInfo.WheelInfo);
+                }
                 
-                _signalBus.Fire(new ComponentChangeSignal<CarSetupAspect> { Component = carSetupAspect });
+                _loadingService.PublishCarSetupChanged(carSetupAspect);  //TODO: replace
             }
         }
 
-        public void Dispose() { }
+        private void TryCacheMovementParameters()
+        {
+            if (_gameSelectionParameters == null)
+                return;
+
+            var carParameters = _gameSelectionParameters.SelectedCarParameters;
+            if (carParameters == null)
+                return;
+
+            _movementCache.ApplyFrom(carParameters);
+            _hasCache = true;
+        }
+
+        private void SetInputEnabled(bool isEnabled)
+        {
+            _inputEnabled = isEnabled;
+        }
+
+        public void Dispose()
+        {
+            _inputEnabledSubscription?.Dispose();
+        }
     }
 }

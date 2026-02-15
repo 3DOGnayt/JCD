@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Components;
 using Configs.Impl;
 using Scellecs.Morpeh;
-using Services.Impl;
+using Services;
 using UnityEngine;
 using Zenject;
 
@@ -12,7 +12,7 @@ namespace Systems.Car
     {
         [Inject] public World World { get; set; }
         [Inject] private ISkidSmokeService _smokeService;
-        [Inject] private SkidSmokeParameters _smokeParams;
+        [Inject] private CarSkidSmokeParameters _smokeParams;
 
         private Filter _cars;
         private Stash<WheelInfoComponent> _wheelInfoStash;

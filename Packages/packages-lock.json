@@ -9,12 +9,32 @@
       },
       "hash": "1921fb03fe903a64f9244106f3152c41404c2fc5"
     },
+    "com.cysharp.unitask": {
+      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "73a63b7f672b88f7e9992f6917eb458a8cbb6fa9"
+    },
+    "com.kienanunique.kobolduiframework": {
+      "version": "https://github.com/KienanUnique/KoboldUiFramework.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "af94fb4a1610a0d7ba02268c5a7feb4eb7d8d1e8"
+    },
     "com.scellecs.morpeh": {
       "version": "https://github.com/scellecs/morpeh.git?path=Scellecs.Morpeh",
       "depth": 0,
       "source": "git",
       "dependencies": {},
       "hash": "7bcaf7845e667e9aec397ad97911ba2c5a28a296"
+    },
+    "com.unity.2d.sprite": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {}
     },
     "com.unity.addressables": {
       "version": "1.22.3",

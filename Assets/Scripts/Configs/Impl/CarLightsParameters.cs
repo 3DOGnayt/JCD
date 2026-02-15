@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Configs.Impl
 {
-    [CreateAssetMenu(menuName = "Car/CarLightsParameters", fileName = "CarLightsParameters")]
+    [CreateAssetMenu(menuName = "Car/" + nameof(CarLightsParameters), fileName = nameof(CarLightsParameters))]
     public class CarLightsParameters : ScriptableObject
     {
         [Header("Headlights")] 

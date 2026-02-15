@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2f35a93dc8a4071bd95531184b97706, type: 3}
+  m_Name: GameSelectionParameters
+  m_EditorClassIdentifier: 
+  _selectedCar: {fileID: 11400000, guid: 5c594316e21a99541926ca2e21cac6b9, type: 2}
+  _selectedCarParameters: {fileID: 11400000, guid: 861d21277b11455459aba137c7957d16,
+    type: 2}
+  _selectedCarIndex: 0
+  _selectedMapPrefab: {fileID: 966750755263835405, guid: 54b7aefa62b14644a8ba472887801c8a,
+    type: 3}
+  _selectedMapIndex: 0
+  _selectedOpponentName: loh
+  _selectedOpponentDifficulty: 0
+  _selectedOpponentIndex: 0

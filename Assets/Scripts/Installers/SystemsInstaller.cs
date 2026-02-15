@@ -15,7 +15,7 @@ namespace Installers
         private void Systems()
         {
             Container.Bind<ISystem>().To<CameraSpawnSystem>().AsSingle();
-            Container.Bind<ISystem>().To<CanvasSpawnSystem>().AsSingle();
+            Container.Bind<ISystem>().To<MapSpawnSystem>().AsSingle();
             Container.Bind<ISystem>().To<PlayerSpawnSystem>().AsSingle();
             
             Container.Bind<ISystem>().To<InputSystem>().AsSingle();
@@ -32,7 +32,6 @@ namespace Installers
             
             //Container.Bind<IFixedSystem>().To<EffectSystem>().AsSingle(); // TODO: plan B
             Container.Bind<IFixedSystem>().To<SkidmarksSystem>().AsSingle();
-            
             Container.Bind<IFixedSystem>().To<SkidSmokeSystem>().AsSingle();
             
             Container.Bind<IFixedSystem>().To<CrashEffectSystem>().AsSingle();

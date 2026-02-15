@@ -12,32 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1de9c742da1f41ee921f71ecb7e10122, type: 3}
   m_Name: CarPreset_N34
   m_EditorClassIdentifier: 
-  _car: {fileID: 9039642172116725141, guid: 8032a9469da0495489fd955acec86caf, type: 3}
+  _car: {fileID: 9039642172116725141, guid: cbd5c64dfa5771f4bbad22194098e11e, type: 3}
   _carSetup:
     SpeedMax: 200
-    BackSpeedMax: 80
-    GearCount: 6
-    EngineRpmMax: 9000
+    BackSpeedMax: 60
+    GearCount: 5
+    EngineRpmMax: 11000
     SteeringAngleMax: 35
     SteeringSpeed: 100
     BrakeInput: 0
     HandbrakeInput: 0
     DriftMultiplier: 0
-  _carParameters:
+  carMassSetup:
     Mass: 1500
     AutomaticCenterOfMass: 0
     CenterOfMass: {x: 0, y: 0, z: 0}
-  _frontWheelParameters:
-    MainWheelParameters:
+  frontWheelSetup:
+    mainWheelSetup:
       Mass: 20
-      Radius: 0.35
+      Radius: 0.38
       DampingRate: 5
-      SuspensionDistance: 0.5
-      ForceAppPointDistance: 0.5
+      SuspensionDistance: 0.3
+      ForceAppPointDistance: 0.3
       Center: {x: 0, y: 0, z: 0}
     SuspensionSpring:
-      Spring: 35000
-      Damper: 4500
+      Spring: 50000
+      Damper: 9000
       TargetPosition: 0.5
     ForwardFriction:
       ExtremumSlip: 0.4
@@ -51,17 +51,17 @@ MonoBehaviour:
       AsymptoteSlip: 0.5
       AsymptoteValue: 0.75
       Stiffness: 4
-  _backWheelParameters:
-    MainWheelParameters:
+  backWheelSetup:
+    mainWheelSetup:
       Mass: 20
-      Radius: 0.35
+      Radius: 0.38
       DampingRate: 5
-      SuspensionDistance: 0.5
-      ForceAppPointDistance: 0.5
+      SuspensionDistance: 0.3
+      ForceAppPointDistance: 0.3
       Center: {x: 0, y: 0, z: 0}
     SuspensionSpring:
-      Spring: 35000
-      Damper: 4500
+      Spring: 50000
+      Damper: 9000
       TargetPosition: 0.5
     ForwardFriction:
       ExtremumSlip: 0.4
@@ -74,4 +74,4 @@ MonoBehaviour:
       ExtremumValue: 1
       AsymptoteSlip: 0.5
       AsymptoteValue: 0.75
-      Stiffness: 3
+      Stiffness: 5

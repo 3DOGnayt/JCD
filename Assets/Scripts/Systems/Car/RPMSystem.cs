@@ -10,7 +10,7 @@ namespace Systems.Car
     public sealed class RPMSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private CarParameters _carParameters;
+        [Inject] private GameSelectionParameters _gameSelectionParameters;
 
         private Filter _cars;
 
@@ -52,17 +52,21 @@ namespace Systems.Car
             _gearStash = World.GetStash<GearComponent>();
             _verticalInputStash = World.GetStash<VerticalInputComponent>();
 
-            BuildRpmBandsFromPreset();
+            var carParameters = _gameSelectionParameters != null ? _gameSelectionParameters.SelectedCarParameters : null;
+            BuildRpmBandsFromPreset(carParameters);
         }
 
-        private void BuildRpmBandsFromPreset()
+        private void BuildRpmBandsFromPreset(CarParameters carParameters)
         {
             _forwardBands = null;
             _forwardBandIndexByGear = null;
             _reverseMaxSpeedKmh = 0f;
             _hasReverseBand = false;
 
-            var speedsPreset = _carParameters.SpeedsPresetParameters;
+            if (carParameters == null)
+                return;
+
+            var speedsPreset = carParameters.CarSpeedsPresetParameters;
             if (speedsPreset == null)
             {
                 Debug.LogError("RPMSystem_A: SpeedsPreset is null in CarParameters.");
@@ -123,11 +127,19 @@ namespace Systems.Car
 
         public void OnUpdate(float deltaTime)
         {
-            if (_forwardBands == null || _forwardBands.Count == 0)
+            var carParameters = _gameSelectionParameters != null ? _gameSelectionParameters.SelectedCarParameters : null;
+            if (carParameters == null)
                 return;
 
+            if (_forwardBands == null || _forwardBands.Count == 0)
+            {
+                BuildRpmBandsFromPreset(carParameters);
+                if (_forwardBands == null || _forwardBands.Count == 0)
+                    return;
+            }
+
             //TODO: Refactoring
-            var movement = _carParameters.MovementParameters;
+            var movement = carParameters.MovementParameters;
             var idleRpm = movement.IdleRpm;
             var accelRpmPerSec = movement.AccelerationRate;
             var decelRpmPerSec = movement.DecelerationRate;
@@ -155,7 +167,7 @@ namespace Systems.Car
 
                 if (gear == 0)
                 {
-                    targetRpm = CalculateNeutralRpm(idleRpm, neutralMaxRpm, verticalInput);
+                    targetRpm = CalculateNeutralRpm(idleRpm, neutralMaxRpm, verticalInput, carParameters);
                 }
                 else if (gear < 0)
                 {
@@ -165,7 +177,7 @@ namespace Systems.Car
                 else
                 {
                     var forwardSpeedKmh = Mathf.Max(0f, speedComponent.Value);
-                    targetRpm = CalculateForwardRpm(gear, forwardSpeedKmh, idleRpm, rpmMax);
+                    targetRpm = CalculateForwardRpm(gear, forwardSpeedKmh, idleRpm, rpmMax, carParameters);
                 }
 
                 var changeSpeed = targetRpm > currentRpm
@@ -184,11 +196,12 @@ namespace Systems.Car
         private float CalculateNeutralRpm(
             float idleRpm,
             float neutralMaxRpm,
-            float verticalInput)
+            float verticalInput,
+            CarParameters carParameters)
         {
             var absInput = Mathf.Abs(verticalInput);
 
-            var systemHelpers = _carParameters.MovementParameters.HelpersSetup;
+            var systemHelpers = carParameters.MovementParameters.HelpersSetup;
             if (absInput < systemHelpers.NeutralInputDeadZone)
                 return idleRpm;
 
@@ -212,7 +225,8 @@ namespace Systems.Car
             int gear,
             float forwardSpeedKmh,
             float idleRpm,
-            float rpmMax)
+            float rpmMax,
+            CarParameters carParameters)
         {
             var bandIndex = GetForwardBandIndex(gear);
             if (bandIndex < 0)
@@ -226,7 +240,7 @@ namespace Systems.Car
                 ? Mathf.InverseLerp(band.SpeedMinKmh, band.SpeedMaxKmh, v)
                 : 1f;
 
-            var systemHelpers = _carParameters.MovementParameters.HelpersSetup;
+            var systemHelpers = carParameters.MovementParameters.HelpersSetup;
             var gearMinRpm = bandIndex == 0
                 ? idleRpm
                 : rpmMax * systemHelpers.UpshiftRpmDropFactor;
