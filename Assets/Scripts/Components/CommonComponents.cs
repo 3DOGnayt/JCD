@@ -17,4 +17,8 @@ namespace Components
     //Car sub components
     public struct VerticalInputComponent : IComponent { public float Value; }
     public struct HorizontalInputComponent : IComponent { public float Value; }
+    
+    // Sounds
+    public struct BackgroundAudioComponent : IComponent { public float Value; }
+    public struct CarAudioComponent : IComponent { public float Value; }
 }
