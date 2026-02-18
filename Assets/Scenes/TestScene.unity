@@ -198,6 +198,12 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2052409868490308649, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
+      propertyPath: _musicMixerGroup
+      value: 
+      objectReference: {fileID: -6467038866702591389, guid: 1172f820654437e409ff21d1c760d24b,
+        type: 2}
     - target: {fileID: 2149802023120195288, guid: f75ea5e5a3aab134184c4fbe7349d11d,
         type: 3}
       propertyPath: m_Name
@@ -253,6 +259,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5194650387233552706, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
+      propertyPath: m_Name
+      value: ConfigsInstaller
+      objectReference: {fileID: 0}
+    - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
+      propertyPath: _audioCatalogParameters
+      value: 
+      objectReference: {fileID: 11400000, guid: 95cc23c9a6244fa4ab22f27ef26c73a8,
+        type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

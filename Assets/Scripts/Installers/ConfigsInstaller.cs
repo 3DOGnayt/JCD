@@ -4,7 +4,7 @@ using Zenject;
 
 namespace Installers
 {
-    public class CarConfigInstaller : MonoInstaller
+    public class ConfigsInstaller : MonoInstaller
     {
         [SerializeField] private CarUISmoothingParameters _carUISmoothingParameters;
         [SerializeField] private CarSkidSmokeParameters _carCarSkidSmokeParameters;
@@ -15,6 +15,7 @@ namespace Installers
         [SerializeField] private MapCatalogParameters _mapCatalogParameters;
         [SerializeField] private OpponentCatalogParameters _opponentCatalogParameters;
         [SerializeField] private TrainingTimeScoreParameters _trainingTimeScoreParameters;
+        [SerializeField] private AudioCatalogParameters _audioCatalogParameters;
 
         public override void InstallBindings()
         {
@@ -27,6 +28,7 @@ namespace Installers
             Container.Bind<MapCatalogParameters>().FromInstance(_mapCatalogParameters).AsSingle();
             Container.Bind<OpponentCatalogParameters>().FromInstance(_opponentCatalogParameters).AsSingle();
             Container.Bind<TrainingTimeScoreParameters>().FromInstance(_trainingTimeScoreParameters).AsSingle();
+            Container.Bind<AudioCatalogParameters>().FromInstance(_audioCatalogParameters).AsSingle();
         }
     }
 }
