@@ -160,7 +160,7 @@ namespace UI.Controllers
             if (index < 0 || index >= _mapCatalogParameters.Maps.Count)
                 return;
 
-            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_1);
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonSelect);
             
             ApplyPendingMap(index);
             RefreshMapButtons();
@@ -171,7 +171,7 @@ namespace UI.Controllers
             if (_pendingMapIndex < 0)
                 return;
 
-            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_2);
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonConfirm);
             
             var entry = _mapCatalogParameters.Maps[_pendingMapIndex];
             _gameSelectionParameters.SetSelectedMap(
@@ -199,7 +199,7 @@ namespace UI.Controllers
 
         private void OnBackButtonClick()
         {
-            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_5);
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonBack);
             
             _localWindowsService.CloseWindow();
         }

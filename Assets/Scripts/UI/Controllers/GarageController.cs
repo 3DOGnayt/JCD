@@ -157,7 +157,7 @@ namespace UI.Controllers
             if (index < 0 || index >= _carCatalogParameters.Cars.Count)
                 return;
 
-            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_1);
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonSelect);
             
             ApplyPendingCar(index);
             RefreshCarButtons();
@@ -168,7 +168,7 @@ namespace UI.Controllers
             if (_pendingCarIndex < 0)
                 return;
 
-            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_2);
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonConfirm);
             
             _gameSelectionParameters.SetSelectedCar(_pendingCarPreset, _pendingCarParameters, _pendingCarIndex);
             RefreshCarButtons();
@@ -177,7 +177,7 @@ namespace UI.Controllers
 
         private void OnBackButtonClick()
         {
-            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_5);
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonBack);
             
             _localWindowsService.OpenWindow<MainMenuWindow>();
         }

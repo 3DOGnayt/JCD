@@ -48,8 +48,11 @@ namespace UI.Controllers
 
         public override void Initialize()
         {
-            if (View.TrainingButton.interactable && View.StoryButton.interactable) 
-                OnTrainingButtonClick();
+            if (View.TrainingButton.interactable && View.StoryButton.interactable)
+            {
+                SetInteractableButtons(false);
+                _gameSelectionParameters.SetSelectedGameMode(EGameMod.Training);
+            }
 
             View.TrainingButton.OnClickAsObservable().Subscribe(_ => OnTrainingButtonClick()).AddTo(View);
             View.StoryButton.OnClickAsObservable().Subscribe(_ => OnStoryButtonClick()).AddTo(View);
@@ -68,7 +71,7 @@ namespace UI.Controllers
 
         private void OnTrainingButtonClick()
         {
-            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_1);
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonSelect);
             
             SetInteractableButtons(false);
             _gameSelectionParameters.SetSelectedGameMode(EGameMod.Training);
@@ -76,7 +79,7 @@ namespace UI.Controllers
 
         private void OnStoryButtonClick()
         {
-            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_1);
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonSelect);
             
             SetInteractableButtons(true);
             _gameSelectionParameters.SetSelectedGameMode(EGameMod.Story);
@@ -97,7 +100,7 @@ namespace UI.Controllers
 
         private void OnConfirmButtonClick()
         {
-            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_2);
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonConfirm);
             
             switch (_gameSelectionParameters.GameMod)
             {
@@ -125,7 +128,7 @@ namespace UI.Controllers
 
         private void OnBackButtonClick()
         {
-            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_5);
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonBack);
             
             _localWindowsService.AnimateWindow<MainMenuWindow>(Vector2.zero);
             _localWindowsService.AnimateWindow<MapWindow>(Vector2.zero);

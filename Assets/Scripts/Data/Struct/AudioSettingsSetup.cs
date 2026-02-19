@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Data.Enums;
 
 namespace Data.Struct
@@ -7,6 +8,6 @@ namespace Data.Struct
     public struct AudioSettingsSetup
     {
         public EAudioType AudioType;
-        public AudioSettings AudioSettings;
+        public List<AudioSettingsEntry> AudioSettingsEntry;
     }
 }

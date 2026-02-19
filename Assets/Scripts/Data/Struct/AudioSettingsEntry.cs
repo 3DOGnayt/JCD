@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Data.Struct
 {
     [Serializable]
-    public struct AudioSettings
+    public struct AudioSettingsEntry
     {
         public EAudioSubType AudioSubType;
         public AudioClip AudioClip;

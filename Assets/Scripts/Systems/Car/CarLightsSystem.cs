@@ -63,7 +63,7 @@ namespace Systems.Car
                 ref var headlights = ref _headlightsStash.Get(car);
                 if (togglePressed)
                 {
-                    _audioService.PlaySfx2DAudio(EAudioType.Sfx, EAudioSubType.Sfx_5);
+                    _audioService.PlaySfx2DAudio(EAudioType.Ui, EAudioSubType.Ui_Finish);
                     headlights.Value = NextMode(headlights.Value);
                 }
 

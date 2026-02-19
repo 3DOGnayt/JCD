@@ -67,13 +67,30 @@ namespace Services.Impl
             for (var i = 0; i < setups.Count; i++)
             {
                 var setup = setups[i];
+                if (setup.AudioType != audioType)
+                    continue;
 
-                if (setup.AudioType == audioType && setup.AudioSettings.AudioSubType == audioSubType)
+                for (var k = 0; k < setup.AudioSettingsEntry.Count; k++)
                 {
-                    play(setup.AudioSettings.AudioClip);
+                    var settingsEntry = setup.AudioSettingsEntry[k];
+                    if (settingsEntry.AudioSubType != audioSubType) 
+                        continue;
+                    
+                    play(settingsEntry.AudioClip);
                     return;
                 }
             }
+
+            // for (var i = 0; i < setups.Count; i++) // ne po tomy
+            // {
+            //     var setup = setups[i];
+            //
+            //     if (setup.AudioType == audioType && setup.AudioSettingsEntry[i].AudioSubType == audioSubType) // nepravilno
+            //     {
+            //         play(setup.AudioSettingsEntry[i].AudioClip);
+            //         return;
+            //     }
+            // }
         }
     }
 }

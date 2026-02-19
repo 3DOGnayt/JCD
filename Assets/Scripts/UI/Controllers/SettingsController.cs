@@ -44,7 +44,7 @@ namespace UI.Controllers
 
         private void OnCloseButtonClick()
         {
-            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_5);
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonBack);
             
             _localWindowsService.OpenWindow<MainMenuWindow>();
         }

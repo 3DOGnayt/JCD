@@ -38,28 +38,28 @@ namespace UI.Controllers
 
         private void OnStartButtonClick()
         {
-            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_3);
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonSelect);
             
             _localWindowsService.OpenWindow<MapWindow>();
         }
 
         private void OnGarageButtonClick()
         {
-            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_3);
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonSelect);
 
             _localWindowsService.OpenWindow<GarageWindow>();
         }
 
         private void OnSettingsButtonClick()
         {
-            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_3);
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonSelect);
             
             _localWindowsService.OpenWindow<SettingsWindow>();
         }
 
         private void OnExitButtonClick()
         {
-            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_4);
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonBack);
             
             Application.Quit();
         }

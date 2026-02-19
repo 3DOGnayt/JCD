@@ -90,7 +90,7 @@ namespace UI.Controllers
             var fadeIn = View.CountdownFadeInSeconds;
             var fadeOut = View.CountdownFadeOutSeconds;
 
-            _audioService.PlaySfx2DAudio(EAudioType.Sfx, EAudioSubType.Sfx_1);
+            _audioService.PlaySfx2DAudio(EAudioType.Ui, EAudioSubType.Ui_3);
             
             for (var i = 0; i < View.СountdownList.Count; i++)
             {
@@ -123,7 +123,7 @@ namespace UI.Controllers
 
             _countdownSequence.AppendCallback(PublishCountdownFinished);
             _countdownSequence.AppendCallback(() => _loadingService?.PublishInputEnabled(true));
-            _countdownSequence.AppendCallback(() => _audioService.PlaySfx2DAudio(EAudioType.Sfx, EAudioSubType.Sfx_2));
+            _countdownSequence.AppendCallback(() => _audioService.PlaySfx2DAudio(EAudioType.Ui, EAudioSubType.Ui_Start));
             _countdownSequence.AppendCallback(() => _localWindowsService.CloseWindow());
         }
 
