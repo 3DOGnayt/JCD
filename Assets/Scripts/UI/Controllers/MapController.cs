@@ -1,7 +1,9 @@
 using Configs.Impl;
+using Data.Enums;
 using DG.Tweening;
 using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
+using Services;
 using Tools;
 using UI.Views;
 using UI.Window;
@@ -16,6 +18,11 @@ namespace UI.Controllers
         private const int LEFT_SLIDE_600 = -600;
         
         private readonly ILocalWindowsService _localWindowsService;
+        private readonly IAudioService _audioService;
+
+        private MapCatalogParameters _mapCatalogParameters;
+        private GameSelectionParameters _gameSelectionParameters;
+
         private Tween _presentationTween;
         private Tween _delayTween;
 
@@ -24,13 +31,21 @@ namespace UI.Controllers
         private int _pendingMapIndex = -1;
         private bool _isReady;
         private float _delaySlideAnimationOnView = 0.2f;
-
-        [Inject] private MapCatalogParameters _mapCatalogParameters;
-        [Inject] private GameSelectionParameters _gameSelectionParameters;
-
-        public MapController(ILocalWindowsService localWindowsService)
+        
+        [Inject]
+        public void Construct(
+            MapCatalogParameters mapCatalogParameters,
+            GameSelectionParameters gameSelectionParameters
+        )
+        {
+            _mapCatalogParameters = mapCatalogParameters;
+            _gameSelectionParameters = gameSelectionParameters;
+        }
+        
+        public MapController(ILocalWindowsService localWindowsService, IAudioService audioService)
         {
             _localWindowsService = localWindowsService;
+            _audioService = audioService;
         }
 
         public override void Initialize()
@@ -145,6 +160,8 @@ namespace UI.Controllers
             if (index < 0 || index >= _mapCatalogParameters.Maps.Count)
                 return;
 
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_1);
+            
             ApplyPendingMap(index);
             RefreshMapButtons();
         }
@@ -154,6 +171,8 @@ namespace UI.Controllers
             if (_pendingMapIndex < 0)
                 return;
 
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_2);
+            
             var entry = _mapCatalogParameters.Maps[_pendingMapIndex];
             _gameSelectionParameters.SetSelectedMap(
                 _pendingMapPrefab, _pendingMapIndex, entry.EMap, entry.SelectionCount, entry.LapCount);
@@ -178,6 +197,11 @@ namespace UI.Controllers
             View.MapPresentation.gameObject.SetActive(isActive);
         }
 
-        private void OnBackButtonClick() => _localWindowsService.CloseWindow();
+        private void OnBackButtonClick()
+        {
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_5);
+            
+            _localWindowsService.CloseWindow();
+        }
     }
 }

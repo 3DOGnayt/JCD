@@ -1,3 +1,4 @@
+using Data.Enums;
 using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
 using DG.Tweening;
@@ -14,19 +15,23 @@ namespace UI.Controllers
         private readonly ILoadingService _loadingService;
         private readonly IRaceTimerService _raceTimerService;
         private readonly ILocalWindowsService _localWindowsService;
-        
+        private readonly IAudioService _audioService;
+
         private Sequence _countdownSequence;
         private Tween _winTween;
         private Sequence _resultSequence;
-
+        
         public GameStartEndController(
             ILoadingService loadingService,
             IRaceTimerService raceTimerService,
-            ILocalWindowsService localWindowsService)
+            ILocalWindowsService localWindowsService,
+            IAudioService audioService
+        )
         {
             _loadingService = loadingService;
             _raceTimerService = raceTimerService;
             _localWindowsService = localWindowsService;
+            _audioService = audioService;
         }
 
         public override void Initialize() { }
@@ -85,6 +90,8 @@ namespace UI.Controllers
             var fadeIn = View.CountdownFadeInSeconds;
             var fadeOut = View.CountdownFadeOutSeconds;
 
+            _audioService.PlaySfx2DAudio(EAudioType.Sfx, EAudioSubType.Sfx_1);
+            
             for (var i = 0; i < View.СountdownList.Count; i++)
             {
                 var viewСountdown = View.СountdownList[i];
@@ -116,6 +123,7 @@ namespace UI.Controllers
 
             _countdownSequence.AppendCallback(PublishCountdownFinished);
             _countdownSequence.AppendCallback(() => _loadingService?.PublishInputEnabled(true));
+            _countdownSequence.AppendCallback(() => _audioService.PlaySfx2DAudio(EAudioType.Sfx, EAudioSubType.Sfx_2));
             _countdownSequence.AppendCallback(() => _localWindowsService.CloseWindow());
         }
 

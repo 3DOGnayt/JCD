@@ -18,11 +18,6 @@ MonoBehaviour:
       AudioSubType: 1
       AudioClip: {fileID: 8300000, guid: 25fb40b44558c404f95e9f88d507c45c, type: 3}
       Volume: 0.3
-  - AudioType: 2
-    AudioSettings:
-      AudioSubType: 300
-      AudioClip: {fileID: 8300000, guid: d0544735e0a3875489de25d24334cb54, type: 3}
-      Volume: 0.3
   - AudioType: 4
     AudioSettings:
       AudioSubType: 2

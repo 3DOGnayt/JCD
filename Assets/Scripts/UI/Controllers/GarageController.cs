@@ -1,6 +1,8 @@
 using Configs.Impl;
+using Data.Enums;
 using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
+using Services;
 using TMPro;
 using UI.Views;
 using UI.Window;
@@ -13,6 +15,10 @@ namespace UI.Controllers
     public class GarageController : AUiController<GarageView>
     {
         private readonly ILocalWindowsService _localWindowsService;
+        private readonly IAudioService _audioService;
+        
+        private CarCatalogParameters _carCatalogParameters;
+        private GameSelectionParameters _gameSelectionParameters;
 
         private CarPresetParameters _pendingCarPreset;
         private CarParameters _pendingCarParameters;
@@ -20,13 +26,24 @@ namespace UI.Controllers
         private Sprite _pendingCarPreview;
         private int _pendingCarIndex = -1;
         private bool _isReady;
-        
-        [Inject] private CarCatalogParameters _carCatalogParameters;
-        [Inject] private GameSelectionParameters _gameSelectionParameters;
 
-        public GarageController(ILocalWindowsService localWindowsService)
+        [Inject]
+        public void Construct(
+            CarCatalogParameters carCatalogParameters,
+            GameSelectionParameters gameSelectionParameters
+        )
+        {
+            _carCatalogParameters = carCatalogParameters;
+            _gameSelectionParameters = gameSelectionParameters;
+        }
+
+        public GarageController(
+            ILocalWindowsService localWindowsService,
+            IAudioService audioService
+        )
         {
             _localWindowsService = localWindowsService;
+            _audioService = audioService;
         }
 
         public override void Initialize()
@@ -140,6 +157,8 @@ namespace UI.Controllers
             if (index < 0 || index >= _carCatalogParameters.Cars.Count)
                 return;
 
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_1);
+            
             ApplyPendingCar(index);
             RefreshCarButtons();
         }
@@ -149,11 +168,18 @@ namespace UI.Controllers
             if (_pendingCarIndex < 0)
                 return;
 
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_2);
+            
             _gameSelectionParameters.SetSelectedCar(_pendingCarPreset, _pendingCarParameters, _pendingCarIndex);
             RefreshCarButtons();
             _localWindowsService.OpenWindow<MainMenuWindow>();
         }
 
-        private void OnBackButtonClick() => _localWindowsService.OpenWindow<MainMenuWindow>();
+        private void OnBackButtonClick()
+        {
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_5);
+            
+            _localWindowsService.OpenWindow<MainMenuWindow>();
+        }
     }
 }

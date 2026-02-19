@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dcf4be53e454bb1820ce355f319e880, type: 3}
+  m_Name: MEM_AudioCatalogParameters
+  m_EditorClassIdentifier: 
+  _setups:
+  - AudioType: 2
+    AudioSettings:
+      AudioSubType: 1
+      AudioClip: {fileID: 8300000, guid: 25fb40b44558c404f95e9f88d507c45c, type: 3}
+      Volume: 0.3
+  - AudioType: 4
+    AudioSettings:
+      AudioSubType: 100
+      AudioClip: {fileID: 8300000, guid: 47e88d3f94d20804c824237a95c13a72, type: 3}
+      Volume: 1
+  - AudioType: 4
+    AudioSettings:
+      AudioSubType: 101
+      AudioClip: {fileID: 8300000, guid: 253a0dcec9047ca49833041cccca44a7, type: 3}
+      Volume: 1
+  - AudioType: 4
+    AudioSettings:
+      AudioSubType: 102
+      AudioClip: {fileID: 8300000, guid: d97e8cc58487d354d9949d30251deca5, type: 3}
+      Volume: 1
+  - AudioType: 4
+    AudioSettings:
+      AudioSubType: 103
+      AudioClip: {fileID: 8300000, guid: 7b7c43b55b756cd4b98614d24357d5a1, type: 3}
+      Volume: 1
+  - AudioType: 4
+    AudioSettings:
+      AudioSubType: 104
+      AudioClip: {fileID: 8300000, guid: 3fef4685889f8d54695bc4f91718c4cd, type: 3}
+      Volume: 1
+  - AudioType: 3
+    AudioSettings:
+      AudioSubType: 200
+      AudioClip: {fileID: 8300000, guid: 82710f3554754e04a808dfc43d595e4a, type: 3}
+      Volume: 1
+  - AudioType: 3
+    AudioSettings:
+      AudioSubType: 201
+      AudioClip: {fileID: 8300000, guid: 3e33fad8a7fe17a4ca0e478c7bf620ff, type: 3}
+      Volume: 1
+  - AudioType: 3
+    AudioSettings:
+      AudioSubType: 202
+      AudioClip: {fileID: 8300000, guid: e6b4f48f5767ac94f918d1bf4c268edf, type: 3}
+      Volume: 1
+  - AudioType: 3
+    AudioSettings:
+      AudioSubType: 203
+      AudioClip: {fileID: 8300000, guid: 31376612dc760f4459cd4bb5fe396eea, type: 3}
+      Volume: 1
+  - AudioType: 3
+    AudioSettings:
+      AudioSubType: 204
+      AudioClip: {fileID: 8300000, guid: 76b2d853ea4c7954890422235cb9b123, type: 3}
+      Volume: 1
+  - AudioType: 1
+    AudioSettings:
+      AudioSubType: 2
+      AudioClip: {fileID: 8300000, guid: 6855d98f9ba38b7458f3f8ab79bd652b, type: 3}
+      Volume: 1

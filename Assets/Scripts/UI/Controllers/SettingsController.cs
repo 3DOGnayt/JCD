@@ -42,6 +42,11 @@ namespace UI.Controllers
             _audioService.SetAudioVolume(type, slider.value);
         }
 
-        private void OnCloseButtonClick() => _localWindowsService.OpenWindow<MainMenuWindow>();
+        private void OnCloseButtonClick()
+        {
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_5);
+            
+            _localWindowsService.OpenWindow<MainMenuWindow>();
+        }
     }
 }

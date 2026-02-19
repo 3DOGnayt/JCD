@@ -268,7 +268,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _audioCatalogParameters
       value: 
-      objectReference: {fileID: 11400000, guid: 95cc23c9a6244fa4ab22f27ef26c73a8,
+      objectReference: {fileID: 11400000, guid: b49af3d5cb2455e46b61b215738c5c0a,
         type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

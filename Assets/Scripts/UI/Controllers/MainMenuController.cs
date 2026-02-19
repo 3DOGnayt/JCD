@@ -1,4 +1,3 @@
-using Configs.Impl;
 using Data.Enums;
 using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
@@ -7,7 +6,6 @@ using UI.Views;
 using UI.Window;
 using UniRx;
 using UnityEngine;
-using Zenject;
 
 namespace UI.Controllers
 {
@@ -15,15 +13,7 @@ namespace UI.Controllers
     {
         private readonly ILocalWindowsService _localWindowsService;
         private readonly IAudioService _audioService;
-
-        private AudioCatalogParameters _audioCatalogParameters;
-
-        [Inject]
-        public void Construct(AudioCatalogParameters audioCatalogParameters)
-        {
-            _audioCatalogParameters = audioCatalogParameters;
-        }
-
+        
         public MainMenuController(
             ILocalWindowsService localWindowsService,
             IAudioService audioService
@@ -43,23 +33,35 @@ namespace UI.Controllers
 
         protected override void OnOpen()
         {
-            var audioSettings = _audioCatalogParameters.AudioSetups;
-            for (var i = 0; i < audioSettings.Count; i++)
-            {
-                if (audioSettings[i].AudioType == EAudioType.Music)
-                {
-                    _audioService.PlaySfx2D(
-                        audioSettings[i].AudioSettings.AudioClip,
-                        audioSettings[i].AudioSettings.Volume);
-                    
-                    return;
-                }
-            }
+            _audioService.PlayMusicAudio(EAudioType.Music, EAudioSubType.MenuBack);
         }
 
-        private void OnStartButtonClick() => _localWindowsService.OpenWindow<MapWindow>();
-        private void OnGarageButtonClick()=> _localWindowsService.OpenWindow<GarageWindow>();
-        private void OnSettingsButtonClick() => _localWindowsService.OpenWindow<SettingsWindow>();
-        private void OnExitButtonClick() => Application.Quit();
+        private void OnStartButtonClick()
+        {
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_3);
+            
+            _localWindowsService.OpenWindow<MapWindow>();
+        }
+
+        private void OnGarageButtonClick()
+        {
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_3);
+
+            _localWindowsService.OpenWindow<GarageWindow>();
+        }
+
+        private void OnSettingsButtonClick()
+        {
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_3);
+            
+            _localWindowsService.OpenWindow<SettingsWindow>();
+        }
+
+        private void OnExitButtonClick()
+        {
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_4);
+            
+            Application.Quit();
+        }
     }
 }

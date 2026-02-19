@@ -21,16 +21,29 @@ namespace UI.Controllers
         
         private readonly ILocalWindowsService _localWindowsService;
         private readonly IGameSessionService _gameSessionService;
+        private readonly IAudioService _audioService;
+        
+        private GameSelectionParameters _gameSelectionParameters;
+        
         private Tween _presentationTween;
         private Tween _delayTween;
         private float _delaySlideAnimationOnView = 0.2f;
 
-        [Inject] private GameSelectionParameters _gameSelectionParameters;
+        [Inject]
+        public void Construct(GameSelectionParameters gameSelectionParameters)
+        {
+            _gameSelectionParameters = gameSelectionParameters;
+        }
 
-        public GameModController(ILocalWindowsService localWindowsService, IGameSessionService gameSessionService)
+        public GameModController(
+            ILocalWindowsService localWindowsService,
+            IGameSessionService gameSessionService,
+            IAudioService audioService
+        )
         {
             _localWindowsService = localWindowsService;
             _gameSessionService = gameSessionService;
+            _audioService = audioService;
         }
 
         public override void Initialize()
@@ -55,12 +68,16 @@ namespace UI.Controllers
 
         private void OnTrainingButtonClick()
         {
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_1);
+            
             SetInteractableButtons(false);
             _gameSelectionParameters.SetSelectedGameMode(EGameMod.Training);
         }
 
         private void OnStoryButtonClick()
         {
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_1);
+            
             SetInteractableButtons(true);
             _gameSelectionParameters.SetSelectedGameMode(EGameMod.Story);
         }
@@ -80,6 +97,8 @@ namespace UI.Controllers
 
         private void OnConfirmButtonClick()
         {
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_2);
+            
             switch (_gameSelectionParameters.GameMod)
             {
                 case EGameMod.Training:
@@ -106,6 +125,8 @@ namespace UI.Controllers
 
         private void OnBackButtonClick()
         {
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_5);
+            
             _localWindowsService.AnimateWindow<MainMenuWindow>(Vector2.zero);
             _localWindowsService.AnimateWindow<MapWindow>(Vector2.zero);
             

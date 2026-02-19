@@ -6,7 +6,7 @@ using UnityEngine.Audio;
 
 namespace Services.Impl
 {
-    public class AudioService : IAudioService
+    public partial class AudioService : IAudioService
     {
         private const float MinDb = -80f;
         private const string MasterVolumeParam = "MasterVolume";
@@ -50,6 +50,35 @@ namespace Services.Impl
             WarmupPool();
         }
 
+        public void StopMusic()
+        {
+            if (_musicSource.isPlaying) 
+                _musicSource.Stop();
+        }
+
+        public void StopUi()
+        {
+            if (_uiSource.isPlaying)
+                _uiSource.Stop();
+        }
+
+        public void StopAllSfx()
+        {
+            for (var i = 0; i < _sfxPool.Count; i++)
+            {
+                var pooled = _sfxPool[i];
+                if (pooled != null && pooled.gameObject.activeSelf)
+                    pooled.StopAndRelease();
+            }
+        }
+
+        public void StopAllAudio()
+        {
+            StopMusic();
+            StopUi();
+            StopAllSfx();
+        }
+
         public AudioSource PlayMusic(AudioClip clip, float volume = 1f, bool loop = true)
         {
             if (clip == null)
@@ -63,12 +92,6 @@ namespace Services.Impl
             _musicSource.loop = loop;
             _musicSource.Play();
             return _musicSource;
-        }
-
-        public void StopMusic()
-        {
-            if (_musicSource.isPlaying) 
-                _musicSource.Stop();
         }
 
         public void PlayUi(AudioClip clip, float volume = 1f, float pitch = 1f)

@@ -4,6 +4,7 @@ using Data.Enums;
 using Data.HelperClass;
 using Helpers.CarView;
 using Scellecs.Morpeh;
+using Services;
 using UnityEngine;
 using Zenject;
 
@@ -13,6 +14,7 @@ namespace Systems.Car
     {
         [Inject] public World World { get; set; }
         [Inject] private CarLightsParameters _lightsParams;
+        [Inject] private IAudioService _audioService;
 
         private Filter _cars;
         private Stash<CarViewComponent> _carViewStash;
@@ -60,7 +62,10 @@ namespace Systems.Car
 
                 ref var headlights = ref _headlightsStash.Get(car);
                 if (togglePressed)
+                {
+                    _audioService.PlaySfx2DAudio(EAudioType.Sfx, EAudioSubType.Sfx_5);
                     headlights.Value = NextMode(headlights.Value);
+                }
 
                 var isBraking = _brakeStash.Get(car).Value || _handbrakeStash.Get(car).Value;
 
@@ -133,7 +138,7 @@ namespace Systems.Car
             if (backRight != null)
                 backRight.enabled = isBraking;
         }
-
+        
         public void Dispose() { }
     }
 }
