@@ -12,7 +12,7 @@ namespace Helpers.Race
         [SerializeField] private List<RaceLapTrigger> _checkpoints = new();
         
         private IRaceTimerService _raceTimerService;
-        private GameSelectionParameters _gameSelectionParameters;
+        private MapSelectionParameters _mapSelectionParameters;
         
         private int _selectionCount = 1;
         private int _lapCount = 1;
@@ -26,10 +26,10 @@ namespace Helpers.Race
         public void Construct(
             IRaceTimerService raceTimerService,
             ILoadingService loadingService,
-            GameSelectionParameters gameSelectionParameters)
+            MapSelectionParameters mapSelectionParameters)
         {
             _raceTimerService = raceTimerService;
-            _gameSelectionParameters = gameSelectionParameters;
+            _mapSelectionParameters = mapSelectionParameters;
             loadingService.StartRaceStream.Subscribe(_ => ResetProgress()).AddTo(this);
         }
 
@@ -44,12 +44,12 @@ namespace Helpers.Race
                 checkpoint.Configure(this, i);
             }
 
-            if (_gameSelectionParameters != null)
+            if (_mapSelectionParameters != null)
             {
-                if (_gameSelectionParameters.SelectedMapSelectionCount > 0)
-                    _selectionCount = _gameSelectionParameters.SelectedMapSelectionCount;
-                if (_gameSelectionParameters.SelectedMapLapCount > 0)
-                    _lapCount = _gameSelectionParameters.SelectedMapLapCount;
+                if (_mapSelectionParameters.SelectedMapSelectionCount > 0)
+                    _selectionCount = _mapSelectionParameters.SelectedMapSelectionCount;
+                if (_mapSelectionParameters.SelectedMapLapCount > 0)
+                    _lapCount = _mapSelectionParameters.SelectedMapLapCount;
             }
         }
 

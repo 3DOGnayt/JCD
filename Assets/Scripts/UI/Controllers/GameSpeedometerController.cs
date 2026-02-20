@@ -14,7 +14,7 @@ namespace UI.Controllers
     {
         private readonly ILoadingService _loadingService;
         private readonly CarUISmoothingParameters _carUISmoothingParameters;
-        private readonly GameSelectionParameters _gameSelectionParameters;
+        private readonly CarSelectionParameters _carSelectionParameters;
         
         private float _uiSpeed;
         private float _uiBackSpeed;
@@ -26,11 +26,11 @@ namespace UI.Controllers
         public GameSpeedometerController(
             ILoadingService loadingService,
             CarUISmoothingParameters carUISmoothingParameters,
-            GameSelectionParameters gameSelectionParameters)
+            CarSelectionParameters carSelectionParameters)
         {
             _loadingService = loadingService;
             _carUISmoothingParameters = carUISmoothingParameters;
-            _gameSelectionParameters = gameSelectionParameters;
+            _carSelectionParameters = carSelectionParameters;
         }
 
         public override void Initialize()
@@ -44,10 +44,10 @@ namespace UI.Controllers
 
         private void CacheCarLimits()
         {
-            if (_gameSelectionParameters == null)
+            if (_carSelectionParameters == null)
                 return;
 
-            var selectedCar = _gameSelectionParameters.SelectedCar;
+            var selectedCar = _carSelectionParameters.SelectedCar;
             if (selectedCar == null)
                 return;
 

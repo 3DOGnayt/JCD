@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Configs.Impl
 {
-    [CreateAssetMenu(menuName = "Game/" + nameof(AudioCatalogParameters), fileName = nameof(AudioCatalogParameters))]
+    [CreateAssetMenu(menuName = "Game/" + nameof(AudioCatalogParameters), fileName = nameof(AudioCatalogParameters), order = 2)]
     public class AudioCatalogParameters : ScriptableObject
     {
         [SerializeField] private List<AudioSettingsSetup> _setups = new();

@@ -23,16 +23,16 @@ namespace UI.Controllers
         private readonly IGameSessionService _gameSessionService;
         private readonly IAudioService _audioService;
         
-        private GameSelectionParameters _gameSelectionParameters;
+        private GameModeSelectionParameters _gameModeSelectionParameters;
         
         private Tween _presentationTween;
         private Tween _delayTween;
         private float _delaySlideAnimationOnView = 0.2f;
 
         [Inject]
-        public void Construct(GameSelectionParameters gameSelectionParameters)
+        public void Construct(GameModeSelectionParameters gameModeSelectionParameters)
         {
-            _gameSelectionParameters = gameSelectionParameters;
+            _gameModeSelectionParameters = gameModeSelectionParameters;
         }
 
         public GameModController(
@@ -51,7 +51,7 @@ namespace UI.Controllers
             if (View.TrainingButton.interactable && View.StoryButton.interactable)
             {
                 SetInteractableButtons(false);
-                _gameSelectionParameters.SetSelectedGameMode(EGameMod.Training);
+                _gameModeSelectionParameters.SetSelectedGameMode(EGameMod.Training);
             }
 
             View.TrainingButton.OnClickAsObservable().Subscribe(_ => OnTrainingButtonClick()).AddTo(View);
@@ -74,7 +74,7 @@ namespace UI.Controllers
             _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonSelect);
             
             SetInteractableButtons(false);
-            _gameSelectionParameters.SetSelectedGameMode(EGameMod.Training);
+            _gameModeSelectionParameters.SetSelectedGameMode(EGameMod.Training);
         }
 
         private void OnStoryButtonClick()
@@ -82,7 +82,7 @@ namespace UI.Controllers
             _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonSelect);
             
             SetInteractableButtons(true);
-            _gameSelectionParameters.SetSelectedGameMode(EGameMod.Story);
+            _gameModeSelectionParameters.SetSelectedGameMode(EGameMod.Story);
         }
 
         private void SetInteractableButtons(bool isActive)
@@ -102,7 +102,7 @@ namespace UI.Controllers
         {
             _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonConfirm);
             
-            switch (_gameSelectionParameters.GameMod)
+            switch (_gameModeSelectionParameters.GameMod)
             {
                 case EGameMod.Training:
                     _localWindowsService.CloseToWindow<MainMenuWindow>();

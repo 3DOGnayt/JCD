@@ -11,16 +11,16 @@ namespace UI.Controllers
     {
         private readonly ILoadingService _loadingService;
         private readonly MapCatalogParameters _mapCatalogParameters;
-        private readonly GameSelectionParameters _gameSelectionParameters;
+        private readonly MapSelectionParameters _mapSelectionParameters;
 
         public GameMapController(
             ILoadingService loadingService,
             MapCatalogParameters mapCatalogParameters,
-            GameSelectionParameters gameSelectionParameters)
+            MapSelectionParameters mapSelectionParameters)
         {
             _loadingService = loadingService;
             _mapCatalogParameters = mapCatalogParameters;
-            _gameSelectionParameters = gameSelectionParameters;
+            _mapSelectionParameters = mapSelectionParameters;
         }
 
         public override void Initialize()
@@ -52,10 +52,10 @@ namespace UI.Controllers
 
         private void ApplySelectedMapSettings()
         {
-            if (_mapCatalogParameters == null || _gameSelectionParameters == null)
+            if (_mapCatalogParameters == null || _mapSelectionParameters == null)
                 return;
 
-            var index = _gameSelectionParameters.SelectedMapIndex;
+            var index = _mapSelectionParameters.SelectedMapIndex;
             if (index < 0 || index >= _mapCatalogParameters.Maps.Count)
                 return;
 

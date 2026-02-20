@@ -17,7 +17,7 @@ namespace Helpers
 
         private ILoadingService _loadingService;
         private CarUISmoothingParameters _carUISmoothingParameters;
-        private GameSelectionParameters _gameSelectionParameters;
+        private CarSelectionParameters _carSelectionParameters;
         private IDisposable _carSetupChangedDisposable;
 
         private float _uiSpeed;
@@ -32,11 +32,11 @@ namespace Helpers
         public void Construct(
             ILoadingService loadingService,
             CarUISmoothingParameters carUISmoothingParameters,
-            GameSelectionParameters gameSelectionParameters)
+            CarSelectionParameters carSelectionParameters)
         {
             _loadingService = loadingService;
             _carUISmoothingParameters = carUISmoothingParameters;
-            _gameSelectionParameters = gameSelectionParameters;
+            _carSelectionParameters = carSelectionParameters;
         }
 
         private void OnEnable()
@@ -94,10 +94,10 @@ namespace Helpers
 
         private void CacheCarLimits()
         {
-            if (_gameSelectionParameters == null)
+            if (_carSelectionParameters == null)
                 return;
 
-            var selectedCar = _gameSelectionParameters.SelectedCar;
+            var selectedCar = _carSelectionParameters.SelectedCar;
             if (selectedCar == null)
                 return;
 

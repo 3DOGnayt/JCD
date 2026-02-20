@@ -18,7 +18,7 @@ namespace UI.Controllers
         private readonly IAudioService _audioService;
         
         private CarCatalogParameters _carCatalogParameters;
-        private GameSelectionParameters _gameSelectionParameters;
+        private CarSelectionParameters _carSelectionParameters;
 
         private CarPresetParameters _pendingCarPreset;
         private CarParameters _pendingCarParameters;
@@ -30,11 +30,11 @@ namespace UI.Controllers
         [Inject]
         public void Construct(
             CarCatalogParameters carCatalogParameters,
-            GameSelectionParameters gameSelectionParameters
+            CarSelectionParameters carSelectionParameters
         )
         {
             _carCatalogParameters = carCatalogParameters;
-            _gameSelectionParameters = gameSelectionParameters;
+            _carSelectionParameters = carSelectionParameters;
         }
 
         public GarageController(
@@ -48,7 +48,7 @@ namespace UI.Controllers
 
         public override void Initialize()
         {
-            _isReady = _carCatalogParameters != null && _gameSelectionParameters != null;
+            _isReady = _carCatalogParameters != null && _carSelectionParameters != null;
             if (!_isReady)
                 return;
 
@@ -88,11 +88,11 @@ namespace UI.Controllers
 
         private void EnsureDefaultSelection()
         {
-            if (_gameSelectionParameters.SelectedCar != null || _carCatalogParameters.Cars.Count <= 0)
+            if (_carSelectionParameters.SelectedCar != null || _carCatalogParameters.Cars.Count <= 0)
                 return;
             
             var entry = _carCatalogParameters.Cars[0];
-            _gameSelectionParameters.SetSelectedCar(entry.Preset, entry.Parameters, 0);
+            _carSelectionParameters.SetSelectedCar(entry.Preset, entry.Parameters, 0);
         }
 
         private void PreparePendingCarSelection()
@@ -101,7 +101,7 @@ namespace UI.Controllers
                 return;
 
             var clamped = Mathf.Clamp(
-                _gameSelectionParameters.SelectedCarIndex, 0, _carCatalogParameters.Cars.Count - 1);
+                _carSelectionParameters.SelectedCarIndex, 0, _carCatalogParameters.Cars.Count - 1);
             
             ApplyPendingCar(clamped);
         }
@@ -130,7 +130,7 @@ namespace UI.Controllers
             if (_pendingCarIndex >= 0)
                 return _pendingCarIndex;
 
-            return _gameSelectionParameters != null ? _gameSelectionParameters.SelectedCarIndex : -1;
+            return _carSelectionParameters != null ? _carSelectionParameters.SelectedCarIndex : -1;
         }
 
         private void ApplyPendingCar(int index)
@@ -170,7 +170,7 @@ namespace UI.Controllers
 
             _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonConfirm);
             
-            _gameSelectionParameters.SetSelectedCar(_pendingCarPreset, _pendingCarParameters, _pendingCarIndex);
+            _carSelectionParameters.SetSelectedCar(_pendingCarPreset, _pendingCarParameters, _pendingCarIndex);
             RefreshCarButtons();
             _localWindowsService.OpenWindow<MainMenuWindow>();
         }

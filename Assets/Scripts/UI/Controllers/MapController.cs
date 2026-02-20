@@ -24,7 +24,8 @@ namespace UI.Controllers
 
         private MapCatalogParameters _mapCatalogParameters;
         private AudioCatalogParameters _audioCatalogParameters;
-        private GameSelectionParameters _gameSelectionParameters;
+        private MapSelectionParameters _mapSelectionParameters;
+        private AudioSelectionParameters _audioSelectionParameters;
 
         private Tween _presentationTween;
         private Tween _delayTween;
@@ -40,12 +41,14 @@ namespace UI.Controllers
         public void Construct(
             MapCatalogParameters mapCatalogParameters,
             AudioCatalogParameters audioCatalogParameters,
-            GameSelectionParameters gameSelectionParameters
+            MapSelectionParameters mapSelectionParameters,
+            AudioSelectionParameters audioSelectionParameters
         )
         {
             _mapCatalogParameters = mapCatalogParameters;
             _audioCatalogParameters = audioCatalogParameters;
-            _gameSelectionParameters = gameSelectionParameters;
+            _mapSelectionParameters = mapSelectionParameters;
+            _audioSelectionParameters = audioSelectionParameters;
         }
         
         public MapController(ILocalWindowsService localWindowsService, IAudioService audioService)
@@ -56,7 +59,7 @@ namespace UI.Controllers
 
         public override void Initialize()
         {
-            _isReady = _mapCatalogParameters != null && _gameSelectionParameters != null;
+            _isReady = _mapCatalogParameters != null && _mapSelectionParameters != null;
             if (!_isReady)
                 return;
 
@@ -103,11 +106,11 @@ namespace UI.Controllers
 
         private void EnsureDefaultSelection()
         {
-            if (_gameSelectionParameters.SelectedMapPrefab != null || _mapCatalogParameters.Maps.Count <= 0)
+            if (_mapSelectionParameters.SelectedMapPrefab != null || _mapCatalogParameters.Maps.Count <= 0)
                 return;
 
             var entry = _mapCatalogParameters.Maps[0];
-            _gameSelectionParameters.SetSelectedMap(entry.Prefab, 0, entry.EMap, entry.SelectionCount, entry.LapCount);
+            _mapSelectionParameters.SetSelectedMap(entry.Prefab, 0, entry.EMap, entry.SelectionCount, entry.LapCount);
         }
 
         private void PreparePendingMapSelection()
@@ -115,7 +118,7 @@ namespace UI.Controllers
             if (_mapCatalogParameters.Maps.Count == 0)
                 return;
 
-            var clamped = Mathf.Clamp(_gameSelectionParameters.SelectedMapIndex, 0, _mapCatalogParameters.Maps.Count - 1);
+            var clamped = Mathf.Clamp(_mapSelectionParameters.SelectedMapIndex, 0, _mapCatalogParameters.Maps.Count - 1);
             ApplyPendingMap(clamped);
         }
 
@@ -143,7 +146,7 @@ namespace UI.Controllers
             if (_pendingMapIndex >= 0)
                 return _pendingMapIndex;
 
-            return _gameSelectionParameters != null ? _gameSelectionParameters.SelectedMapIndex : -1;
+            return _mapSelectionParameters != null ? _mapSelectionParameters.SelectedMapIndex : -1;
         }
 
         private void ApplyPendingMap(int index)
@@ -183,7 +186,7 @@ namespace UI.Controllers
             _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonConfirm);
             
             var entry = _mapCatalogParameters.Maps[_pendingMapIndex];
-            _gameSelectionParameters.SetSelectedMap(
+            _mapSelectionParameters.SetSelectedMap(
                 _pendingMapPrefab, _pendingMapIndex, entry.EMap, entry.SelectionCount, entry.LapCount);
             
             RefreshMapButtons();
@@ -231,7 +234,7 @@ namespace UI.Controllers
 
             View.MusicList.onValueChanged.AsObservable()
                 .Subscribe(OnMusicDropdownChanged).AddTo(View);
-        }
+        } //TODO: replace in audio controller
 
         private void BuildMusicOptions()
         {
@@ -263,23 +266,23 @@ namespace UI.Controllers
 
         private void EnsureDefaultMusicSelection()
         {
-            if (_musicOptions.Count == 0 || _gameSelectionParameters == null)
+            if (_musicOptions.Count == 0 || _audioSelectionParameters == null)
                 return;
 
-            var selectedSubType = _gameSelectionParameters.SelectedMusicSubType;
+            var selectedSubType = _audioSelectionParameters.SelectedMusicSubType;
             if (selectedSubType != EAudioSubType.None && _musicOptions.Contains(selectedSubType))
                 return;
 
-            _gameSelectionParameters.SetSelectedMusic(_musicOptions[0], 0);
+            _audioSelectionParameters.SetSelectedMusic(_musicOptions[0], 0);
         }
 
         private int GetMusicSelectionIndex()
         {
-            if (_gameSelectionParameters == null || _musicOptions.Count == 0)
+            if (_audioSelectionParameters == null || _musicOptions.Count == 0)
                 return 0;
 
-            var index = _gameSelectionParameters.SelectedMusicIndex;
-            var selectedSubType = _gameSelectionParameters.SelectedMusicSubType;
+            var index = _audioSelectionParameters.SelectedMusicIndex;
+            var selectedSubType = _audioSelectionParameters.SelectedMusicSubType;
             if (index >= 0 && index < _musicOptions.Count && _musicOptions[index] == selectedSubType)
                 return index;
 
@@ -298,10 +301,10 @@ namespace UI.Controllers
 
         private void OnMusicDropdownChanged(int index)
         {
-            if (index < 0 || index >= _musicOptions.Count || _gameSelectionParameters == null)
+            if (index < 0 || index >= _musicOptions.Count || _audioSelectionParameters == null)
                 return;
 
-            _gameSelectionParameters.SetSelectedMusic(_musicOptions[index], index);
+            _audioSelectionParameters.SetSelectedMusic(_musicOptions[index], index);
             _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonSelect);
         }
     }

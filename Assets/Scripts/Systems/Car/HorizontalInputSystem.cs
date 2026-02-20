@@ -12,9 +12,10 @@ namespace Systems.Car
     public class HorizontalInputSystem : IFixedSystem
     {
         [Inject] public World World { get; set;}
-        [Inject] private ILoadingService _loadingService;
-        [Inject] private IInputService _inputService;
-        [Inject] private GameSelectionParameters _gameSelectionParameters;
+        
+        private ILoadingService _loadingService;
+        private IInputService _inputService;
+        private CarSelectionParameters _carSelectionParameters;
 
         private Filter _cars;
         private AspectFactory<CarSetupAspect> _carSetupAspect;
@@ -30,6 +31,18 @@ namespace Systems.Car
         private bool _hasCache;
         private bool _inputEnabled = true;
         private IDisposable _inputEnabledSubscription;
+        
+        [Inject]
+        public void Construct(
+            ILoadingService loadingService,
+            IInputService inputService,
+            CarSelectionParameters carSelectionParameters
+        )
+        {
+            _loadingService = loadingService;
+            _inputService = inputService;
+            _carSelectionParameters = carSelectionParameters;
+        }
 
         private struct MovementCache
         {
@@ -110,10 +123,10 @@ namespace Systems.Car
 
         private void TryCacheMovementParameters()
         {
-            if (_gameSelectionParameters == null)
+            if (_carSelectionParameters == null)
                 return;
 
-            var carParameters = _gameSelectionParameters.SelectedCarParameters;
+            var carParameters = _carSelectionParameters.SelectedCarParameters;
             if (carParameters == null)
                 return;
 

@@ -23,7 +23,7 @@ namespace UI.Controllers
         private Tween _winTween;
         private Sequence _resultSequence;
         
-        [Inject] private GameSelectionParameters _gameSelectionParameters;
+        [Inject] private AudioSelectionParameters _audioSelectionParameters;
         
         public GameStartEndController(
             ILoadingService loadingService,
@@ -94,7 +94,7 @@ namespace UI.Controllers
             var fadeIn = View.CountdownFadeInSeconds;
             var fadeOut = View.CountdownFadeOutSeconds;
 
-            _audioService.PlayMusicAudio(EAudioType.Music, _gameSelectionParameters.SelectedMusicSubType, 0.05f); // TODO: SOUND
+            _audioService.PlayMusicAudio(EAudioType.Music, _audioSelectionParameters.SelectedMusicSubType, 0.05f); // TODO: SOUND
             _audioService.PlaySfx2DAudio(EAudioType.Ui, EAudioSubType.Ui_3); // TODO: SOUND
             
             for (var i = 0; i < View.СountdownList.Count; i++)

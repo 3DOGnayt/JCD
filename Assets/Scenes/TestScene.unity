@@ -416,6 +416,36 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: b49af3d5cb2455e46b61b215738c5c0a,
         type: 2}
+    - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
+      propertyPath: _carSelectionParameters
+      value: 
+      objectReference: {fileID: 11400000, guid: b519aba20fe9d0a4884aa5fabbe1ba1d,
+        type: 2}
+    - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
+      propertyPath: _mapSelectionParameters
+      value: 
+      objectReference: {fileID: 11400000, guid: a524c532506eed3489411cc16c168cb0,
+        type: 2}
+    - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
+      propertyPath: _audioSelectionParameters
+      value: 
+      objectReference: {fileID: 11400000, guid: 547e1ddb2b6995b4889d00c1f5717e57,
+        type: 2}
+    - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
+      propertyPath: _gameModeSelectionParameters
+      value: 
+      objectReference: {fileID: 11400000, guid: ad005461ccfad1f4192c2498feb1f60b,
+        type: 2}
+    - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
+      propertyPath: _opponentSelectionParameters
+      value: 
+      objectReference: {fileID: 11400000, guid: 416ff5813ef98aa46a20f627b7301bce,
+        type: 2}
     - target: {fileID: 9192021760181561633, guid: f75ea5e5a3aab134184c4fbe7349d11d,
         type: 3}
       propertyPath: m_IsActive

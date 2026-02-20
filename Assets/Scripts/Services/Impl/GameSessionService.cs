@@ -166,6 +166,7 @@ namespace Services.Impl
                 _gameSessionSnapshot.SelectedMapLapCount);
 
             _selectionParameters.SetSelectedGameMode(_gameSessionSnapshot.GameMod);
+            
             _selectionParameters.SetSelectedOpponent(
                 _gameSessionSnapshot.SelectedOpponentName,
                 _gameSessionSnapshot.SelectedOpponentDifficulty,
