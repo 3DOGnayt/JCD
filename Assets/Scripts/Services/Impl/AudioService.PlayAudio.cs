@@ -9,17 +9,24 @@ namespace Services.Impl
     public partial class AudioService
     {
         private AudioCatalogParameters _audioCatalogParameters;
+        private AudioSelectionParameters _audioSelectionParameters;
 
         [Inject]
-        public void Construct(AudioCatalogParameters audioCatalogParameters)
+        public void Construct(
+            AudioCatalogParameters audioCatalogParameters,
+            AudioSelectionParameters audioSelectionParameters
+        )
         {
             _audioCatalogParameters = audioCatalogParameters;
+            _audioSelectionParameters = audioSelectionParameters;
         }
         
         private float _uiVolume;
         private float _uiPitch;
         private float _musicVolume;
         private bool _musicLoop;
+        private float _musicBaseVolume;
+        private float _musicCatalogVolume = 1f;
         private float _sfx2DVolume;
         private float _sfx2DPitch;
         private float _sfx3DVolume;
@@ -28,6 +35,7 @@ namespace Services.Impl
 
         public void PlayMusicAudio(EAudioType type, EAudioSubType subType, float volume = 1f, bool loop = true)
         {
+            _musicBaseVolume = volume;
             _musicVolume = volume;
             _musicLoop = loop;
             PlayAudio(type, subType, PlayMusicClip);
@@ -62,7 +70,12 @@ namespace Services.Impl
 
         private void PlayAudio(EAudioType audioType, EAudioSubType audioSubType, Action<AudioClip> play)
         {
+            if (_audioCatalogParameters == null)
+                return;
+
             var setups = _audioCatalogParameters.AudioSetups;
+            if (setups == null)
+                return;
 
             for (var i = 0; i < setups.Count; i++)
             {
@@ -75,11 +88,56 @@ namespace Services.Impl
                     var settingsEntry = setup.AudioSettingsEntry[k];
                     if (settingsEntry.AudioSubType != audioSubType) 
                         continue;
-                    
+
+                    ApplyVolumeFromCatalog(audioType, settingsEntry.Volume);
                     play(settingsEntry.AudioClip);
                     return;
                 }
             }
+        }
+
+        private void ApplyVolumeFromCatalog(EAudioType audioType, float volume)
+        {
+            switch (audioType)
+            {
+                case EAudioType.Music:
+                    _musicCatalogVolume = volume;
+                    _musicVolume = _musicBaseVolume * _musicCatalogVolume * GetUserVolume(EAudioType.Music);
+                    UpdateMusicVolume();
+                    break;
+                case EAudioType.Ui:
+                    _uiVolume *= volume * GetUserVolume(EAudioType.Ui);
+                    break;
+                case EAudioType.Sfx:
+                    var sfxMultiplier = volume * GetUserVolume(EAudioType.Sfx);
+                    _sfx2DVolume *= sfxMultiplier;
+                    _sfx3DVolume *= sfxMultiplier;
+                    break;
+            }
+        }
+
+        private float GetUserVolume(EAudioType audioType)
+        {
+            if (_audioSelectionParameters == null || _audioSelectionParameters.VolumeSetup == null)
+                return 1f;
+
+            var settings = _audioSelectionParameters.VolumeSetup;
+            return audioType switch
+            {
+                EAudioType.Music => settings.Music,
+                EAudioType.Sfx => settings.Sfx,
+                EAudioType.Ui => settings.Ui,
+                _ => 1f
+            };
+        }
+
+        private void UpdateMusicVolume()
+        {
+            if (_musicSource == null || !_musicSource.isPlaying)
+                return;
+
+            _musicVolume = _musicBaseVolume * _musicCatalogVolume * GetUserVolume(EAudioType.Music);
+            _musicSource.volume = _musicVolume;
         }
     }
 }

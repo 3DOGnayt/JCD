@@ -2,10 +2,12 @@ using Data.Enums;
 using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
 using Services;
+using Configs.Impl;
 using UI.Views;
 using UI.Window;
 using UniRx;
 using UnityEngine.UI;
+using Zenject;
 
 namespace UI.Controllers
 {
@@ -13,6 +15,8 @@ namespace UI.Controllers
     {
         private readonly ILocalWindowsService _localWindowsService;
         private readonly IAudioService _audioService;
+        
+        [Inject] private AudioSelectionParameters _audioSelectionParameters;
 
         public SettingsController(ILocalWindowsService localWindowsService, IAudioService audioService)
         {
@@ -22,6 +26,7 @@ namespace UI.Controllers
 
         public override void Initialize()
         {
+            ApplySavedVolumes();
             BindVolumeSlider(View.MasterVolume, EAudioType.Master);
             BindVolumeSlider(View.SfxVolume, EAudioType.Sfx);
             BindVolumeSlider(View.MusicVolume, EAudioType.Music);
@@ -40,6 +45,22 @@ namespace UI.Controllers
                 .AddTo(View);
 
             _audioService.SetAudioVolume(type, slider.value);
+        }
+
+        private void ApplySavedVolumes()
+        {
+            if (_audioSelectionParameters == null || _audioSelectionParameters.VolumeSetup == null)
+                return;
+
+            var settings = _audioSelectionParameters.VolumeSetup;
+            if (View.MasterVolume != null)
+                View.MasterVolume.SetValueWithoutNotify(settings.Master);
+            if (View.SfxVolume != null)
+                View.SfxVolume.SetValueWithoutNotify(settings.Sfx);
+            if (View.MusicVolume != null)
+                View.MusicVolume.SetValueWithoutNotify(settings.Music);
+            if (View.UiVolume != null)
+                View.UiVolume.SetValueWithoutNotify(settings.Ui);
         }
 
         private void OnCloseButtonClick()

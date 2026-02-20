@@ -33,7 +33,7 @@ namespace UI.Controllers
 
         protected override void OnOpen()
         {
-            _audioService.PlayMusicAudio(EAudioType.Music, EAudioSubType.MenuBack, 0.3f);// need audio catalog parameters
+            _audioService.PlayMusicAudio(EAudioType.Music, EAudioSubType.MenuBack);
         }
 
         private void OnStartButtonClick()

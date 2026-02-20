@@ -14,7 +14,6 @@ namespace Installers
         [SerializeField] private MapSelectionParameters _mapSelectionParameters;
         [SerializeField] private GameModeSelectionParameters _gameModeSelectionParameters;
         [SerializeField] private OpponentSelectionParameters _opponentSelectionParameters;
-        [SerializeField] private AudioSelectionParameters _audioSelectionParameters;
         [Space]
         [SerializeField] private CarCatalogParameters _carCatalogParameters;
         [SerializeField] private MapCatalogParameters _mapCatalogParameters;
@@ -31,12 +30,12 @@ namespace Installers
             Container.Bind<MapSelectionParameters>().FromInstance(_mapSelectionParameters).AsSingle();
             Container.Bind<GameModeSelectionParameters>().FromInstance(_gameModeSelectionParameters).AsSingle();
             Container.Bind<OpponentSelectionParameters>().FromInstance(_opponentSelectionParameters).AsSingle();
-            Container.Bind<AudioSelectionParameters>().FromInstance(_audioSelectionParameters).AsSingle();
-
+            
+            var audioSelectionParameters = Container.Resolve<AudioSelectionParameters>();
             var gameSelectionParameters = ScriptableObject.CreateInstance<GameSelectionParameters>();
             
             gameSelectionParameters.SetSources(_carSelectionParameters, _mapSelectionParameters,
-                _gameModeSelectionParameters, _opponentSelectionParameters, _audioSelectionParameters);
+                _gameModeSelectionParameters, _opponentSelectionParameters, audioSelectionParameters);
             
             Container.Bind<GameSelectionParameters>().FromInstance(gameSelectionParameters).AsSingle();
             

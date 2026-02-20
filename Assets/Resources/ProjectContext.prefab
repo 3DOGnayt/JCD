@@ -100,6 +100,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _audioCatalogParameters: {fileID: 11400000, guid: b49af3d5cb2455e46b61b215738c5c0a,
     type: 2}
+  _audioSelectionParameters: {fileID: 11400000, guid: 547e1ddb2b6995b4889d00c1f5717e57,
+    type: 2}
 --- !u!1 &7647141377136366438
 GameObject:
   m_ObjectHideFlags: 0

@@ -119,6 +119,32 @@ namespace Services.Impl
 
         public void SetAudioVolume(EAudioType type, float value)
         {
+            if (_audioSelectionParameters != null && _audioSelectionParameters.VolumeSetup != null)
+            {
+                switch (type)
+                {
+                    case EAudioType.Master:
+                        _audioSelectionParameters.SetMasterVolume(value);
+                        break;
+                    case EAudioType.Music:
+                        _audioSelectionParameters.SetMusicVolume(value);
+                        break;
+                    case EAudioType.Sfx:
+                        _audioSelectionParameters.SetSfxVolume(value);
+                        break;
+                    case EAudioType.Ui:
+                        _audioSelectionParameters.SetUiVolume(value);
+                        break;
+                }
+            }
+
+            if (type != EAudioType.Master)
+            {
+                if (type == EAudioType.Music)
+                    UpdateMusicVolume();
+                return;
+            }
+
             if (_audioMixer == null)
                 return;
 
