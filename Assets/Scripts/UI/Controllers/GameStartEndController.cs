@@ -1,3 +1,4 @@
+using Configs.Impl;
 using Data.Enums;
 using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
@@ -7,6 +8,7 @@ using UI.Window;
 using Services;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace UI.Controllers
 {
@@ -20,6 +22,8 @@ namespace UI.Controllers
         private Sequence _countdownSequence;
         private Tween _winTween;
         private Sequence _resultSequence;
+        
+        [Inject] private GameSelectionParameters _gameSelectionParameters;
         
         public GameStartEndController(
             ILoadingService loadingService,
@@ -90,7 +94,8 @@ namespace UI.Controllers
             var fadeIn = View.CountdownFadeInSeconds;
             var fadeOut = View.CountdownFadeOutSeconds;
 
-            _audioService.PlaySfx2DAudio(EAudioType.Ui, EAudioSubType.Ui_3);
+            _audioService.PlayMusicAudio(EAudioType.Music, _gameSelectionParameters.SelectedMusicSubType, 0.05f); // TODO: SOUND
+            _audioService.PlaySfx2DAudio(EAudioType.Ui, EAudioSubType.Ui_3); // TODO: SOUND
             
             for (var i = 0; i < View.СountdownList.Count; i++)
             {
@@ -157,6 +162,8 @@ namespace UI.Controllers
             //
             //     ShowResultImage(View.Lose, View.WinFadeInSeconds);
             // }
+            
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_Win); // TODO: SOUND
             
             View.Win.gameObject.SetActive(true);
             ShowResultImage(View.Win, View.WinFadeInSeconds);

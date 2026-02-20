@@ -11,6 +11,7 @@ namespace UI.Views
         public List<Button> MapButtons;
         public List<TMP_Text> MapButtonsText;
         public Image MapPresentation;
+        public TMP_Dropdown MusicList;
         [Space]
         public Button ConfirmButton;
         public Button BackButton;

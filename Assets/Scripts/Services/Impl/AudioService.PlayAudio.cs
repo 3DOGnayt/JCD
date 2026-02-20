@@ -80,17 +80,6 @@ namespace Services.Impl
                     return;
                 }
             }
-
-            // for (var i = 0; i < setups.Count; i++) // ne po tomy
-            // {
-            //     var setup = setups[i];
-            //
-            //     if (setup.AudioType == audioType && setup.AudioSettingsEntry[i].AudioSubType == audioSubType) // nepravilno
-            //     {
-            //         play(setup.AudioSettingsEntry[i].AudioClip);
-            //         return;
-            //     }
-            // }
         }
     }
 }

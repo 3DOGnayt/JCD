@@ -1,4 +1,5 @@
 using System;
+using Data.Enums;
 using DG.Tweening;
 using KoboldUi.Element.Controller;
 using Services;
@@ -13,6 +14,7 @@ namespace UI.Controllers
         private readonly ILoadingService _loadingService;
         private readonly IRaceTimerService _raceTimerService;
         private readonly IGameSessionService _gameSessionService;
+        private readonly IAudioService _audioService;
         
         private IDisposable _resultSubscription;
         private Sequence _winMoveSequence;
@@ -24,12 +26,14 @@ namespace UI.Controllers
         public GameResultController(
             ILoadingService loadingService,
             IRaceTimerService raceTimerService,
-            IGameSessionService gameSessionService
+            IGameSessionService gameSessionService,
+            IAudioService audioService
         )
         {
             _loadingService = loadingService;
             _raceTimerService = raceTimerService;
             _gameSessionService = gameSessionService;
+            _audioService = audioService;
         }
 
         public override void Initialize()
@@ -63,6 +67,8 @@ namespace UI.Controllers
 
         private void SetWinResult(bool resultGame)
         {
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_Win);
+            
             View.Win.gameObject.SetActive(resultGame);
             View.Lose.gameObject.SetActive(!resultGame);
         }
@@ -129,11 +135,15 @@ namespace UI.Controllers
 
         private void OnRetryClick()
         {
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonSelect);
+            
             _gameSessionService?.RestartGame();
         }
 
         private void OnMainMenuClick()
         {
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonBack);
+            
             _gameSessionService?.ExitToMenu();
         }
 

@@ -25,6 +25,10 @@ namespace Configs.Impl
         [SerializeField] private string _selectedOpponentName;
         [SerializeField] private float _selectedOpponentDifficulty;
         [SerializeField] private int _selectedOpponentIndex;
+        [Space]
+        [Header("Selected Music")]
+        [SerializeField] private EAudioSubType _selectedMusicSubType;
+        [SerializeField] private int _selectedMusicIndex;
 
         public CarPresetParameters SelectedCar => _selectedCar;
         public CarParameters SelectedCarParameters => _selectedCarParameters;
@@ -41,6 +45,9 @@ namespace Configs.Impl
         public string SelectedOpponentName => _selectedOpponentName;
         public float SelectedOpponentDifficulty => _selectedOpponentDifficulty;
         public int SelectedOpponentIndex => _selectedOpponentIndex;
+
+        public EAudioSubType SelectedMusicSubType => _selectedMusicSubType;
+        public int SelectedMusicIndex => _selectedMusicIndex;
 
         public void SetSelectedCar(CarPresetParameters car, CarParameters parameters, int index)
         {
@@ -68,6 +75,12 @@ namespace Configs.Impl
             _selectedOpponentName = opponentName;
             _selectedOpponentDifficulty = difficulty;
             _selectedOpponentIndex = index;
+        }
+
+        public void SetSelectedMusic(EAudioSubType subType, int index)
+        {
+            _selectedMusicSubType = subType;
+            _selectedMusicIndex = index;
         }
     }
 }

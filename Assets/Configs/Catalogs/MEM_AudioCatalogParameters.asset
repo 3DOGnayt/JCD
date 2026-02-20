@@ -55,3 +55,18 @@ MonoBehaviour:
     - AudioSubType: 1
       AudioClip: {fileID: 8300000, guid: 25fb40b44558c404f95e9f88d507c45c, type: 3}
       Volume: 0.5
+    - AudioSubType: 300
+      AudioClip: {fileID: 8300000, guid: 1f7078c458570fd4db4d895857f57ea3, type: 3}
+      Volume: 0.1
+    - AudioSubType: 301
+      AudioClip: {fileID: 8300000, guid: f154b215c132c414992004fb8bbcb276, type: 3}
+      Volume: 0.1
+    - AudioSubType: 203
+      AudioClip: {fileID: 8300000, guid: f154b215c132c414992004fb8bbcb276, type: 3}
+      Volume: 0.1
+    - AudioSubType: 204
+      AudioClip: {fileID: 8300000, guid: f154b215c132c414992004fb8bbcb276, type: 3}
+      Volume: 0.1
+    - AudioSubType: 200
+      AudioClip: {fileID: 8300000, guid: f154b215c132c414992004fb8bbcb276, type: 3}
+      Volume: 0.1
