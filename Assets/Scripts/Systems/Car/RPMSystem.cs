@@ -53,6 +53,7 @@ namespace Systems.Car
             _verticalInputStash = World.GetStash<VerticalInputComponent>();
 
             var carParameters = _carSelectionParameters != null ? _carSelectionParameters.SelectedCarParameters : null;
+            
             BuildRpmBandsFromPreset(carParameters);
         }
 
@@ -234,10 +235,10 @@ namespace Systems.Car
 
             var band = _forwardBands[bandIndex];
 
-            var v = Mathf.Clamp(forwardSpeedKmh, band.SpeedMinKmh, band.SpeedMaxKmh);
+            var speedValue = Mathf.Clamp(forwardSpeedKmh, band.SpeedMinKmh, band.SpeedMaxKmh);
 
-            var t = band.SpeedMaxKmh > band.SpeedMinKmh
-                ? Mathf.InverseLerp(band.SpeedMinKmh, band.SpeedMaxKmh, v)
+            var time = band.SpeedMaxKmh > band.SpeedMinKmh
+                ? Mathf.InverseLerp(band.SpeedMinKmh, band.SpeedMaxKmh, speedValue)
                 : 1f;
 
             var systemHelpers = carParameters.MovementParameters.HelpersSetup;
@@ -245,7 +246,7 @@ namespace Systems.Car
                 ? idleRpm
                 : rpmMax * systemHelpers.UpshiftRpmDropFactor;
 
-            return Mathf.Lerp(gearMinRpm, rpmMax, t);
+            return Mathf.Lerp(gearMinRpm, rpmMax, time);
         }
 
         private int GetForwardBandIndex(int gearValue)

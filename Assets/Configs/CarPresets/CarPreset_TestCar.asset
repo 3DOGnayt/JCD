@@ -13,12 +13,22 @@ MonoBehaviour:
   m_Name: CarPreset_TestCar
   m_EditorClassIdentifier: 
   _car: {fileID: 218439364246442853, guid: 675f296c2d9409c4db2c433c2c10ae2a, type: 3}
-  _carParameters:
+  _carSetup:
+    SpeedMax: 90
+    BackSpeedMax: 60
+    GearCount: 3
+    EngineRpmMax: 4000
+    SteeringAngleMax: 30
+    SteeringSpeed: 100
+    BrakeInput: 0
+    HandbrakeInput: 0
+    DriftMultiplier: 0
+  carMassSetup:
     Mass: 900
     AutomaticCenterOfMass: 1
     CenterOfMass: {x: 0, y: 0, z: 0}
-  _frontWheelParameters:
-    MainWheelParameters:
+  frontWheelSetup:
+    mainWheelSetup:
       Mass: 20
       Radius: 0.5
       DampingRate: 0.25
@@ -41,8 +51,8 @@ MonoBehaviour:
       AsymptoteSlip: 0.5
       AsymptoteValue: 0.75
       Stiffness: 2
-  _backWheelParameters:
-    MainWheelParameters:
+  backWheelSetup:
+    mainWheelSetup:
       Mass: 20
       Radius: 0.5
       DampingRate: 0.25
