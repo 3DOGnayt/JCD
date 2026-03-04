@@ -35,21 +35,21 @@ MonoBehaviour:
     SpeedDecelerationBrake: 1800
   - EGear: 3
     SpeedLimit: 165
-    SpeedAcceleration: 1200
+    SpeedAcceleration: 2400
     SpeedDecelerationNoGas: 900
     SpeedDecelerationBrake: 1400
   - EGear: 4
     SpeedLimit: 212
-    SpeedAcceleration: 900
+    SpeedAcceleration: 2000
     SpeedDecelerationNoGas: 700
     SpeedDecelerationBrake: 1100
   - EGear: 5
     SpeedLimit: 278
-    SpeedAcceleration: 650
+    SpeedAcceleration: 1800
     SpeedDecelerationNoGas: 550
     SpeedDecelerationBrake: 950
   - EGear: 6
     SpeedLimit: 350
-    SpeedAcceleration: 450
+    SpeedAcceleration: 1500
     SpeedDecelerationNoGas: 450
     SpeedDecelerationBrake: 700

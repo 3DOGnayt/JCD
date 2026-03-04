@@ -1,4 +1,5 @@
 using Scellecs.Morpeh;
+using Services;
 using UnityEngine;
 using Zenject;
 
@@ -7,22 +8,11 @@ namespace Core
     public class Startup : MonoBehaviour
     {
         [Inject] public World _world;
-        [Inject] private ISystem[] _systems;
-        [Inject] private IFixedSystem[] _fixedSystems;
+        [Inject] private ISystemService _systemService;
 
         private void Start()
         {
-            var systemsGroup = _world.CreateSystemsGroup();
-            var fixedSystemsGroup = _world.CreateSystemsGroup();
-
-            foreach (var system in _systems) 
-                systemsGroup.AddSystem(system);
-
-            foreach (var fixedSystem in _fixedSystems) 
-                fixedSystemsGroup.AddSystem(fixedSystem);
-
-            _world.AddSystemsGroup(order: 0, systemsGroup);
-            _world.AddSystemsGroup(order: 1, fixedSystemsGroup);
+            _systemService?.RegisterInitialSystems();
         }
 
         public void Update()

@@ -1,5 +1,7 @@
+using Data.Enums;
 using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
+using Services;
 using UI.Views;
 using UI.Window;
 using UniRx;
@@ -10,10 +12,15 @@ namespace UI.Controllers
     public class MainMenuController : AUiController<MainMenuView>
     {
         private readonly ILocalWindowsService _localWindowsService;
-
-        public MainMenuController(ILocalWindowsService localWindowsService)
+        private readonly IAudioService _audioService;
+        
+        public MainMenuController(
+            ILocalWindowsService localWindowsService,
+            IAudioService audioService
+        )
         {
             _localWindowsService = localWindowsService;
+            _audioService = audioService;
         }
 
         public override void Initialize()
@@ -24,9 +31,37 @@ namespace UI.Controllers
             View.ExitButton.OnClickAsObservable().Subscribe(_ => OnExitButtonClick()).AddTo(View);
         }
 
-        private void OnStartButtonClick() => _localWindowsService.OpenWindow<MapWindow>();
-        private void OnGarageButtonClick()=> _localWindowsService.OpenWindow<GarageWindow>();
-        private void OnSettingsButtonClick() => _localWindowsService.OpenWindow<SettingsWindow>();
-        private void OnExitButtonClick() => Application.Quit();
+        protected override void OnOpen()
+        {
+            _audioService.PlayMusicAudio(EAudioType.Music, EAudioSubType.MenuBack);
+        }
+
+        private void OnStartButtonClick()
+        {
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonSelect);
+            
+            _localWindowsService.OpenWindow<MapWindow>();
+        }
+
+        private void OnGarageButtonClick()
+        {
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonSelect);
+
+            _localWindowsService.OpenWindow<GarageWindow>();
+        }
+
+        private void OnSettingsButtonClick()
+        {
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonSelect);
+            
+            _localWindowsService.OpenWindow<SettingsWindow>();
+        }
+
+        private void OnExitButtonClick()
+        {
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonBack);
+            
+            Application.Quit();
+        }
     }
 }

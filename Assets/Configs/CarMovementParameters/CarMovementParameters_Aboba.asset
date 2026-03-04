@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4fe4eb4722648b186c05f041ff9b466, type: 3}
+  m_Name: CarMovementParameters_Aboba
+  m_EditorClassIdentifier: 
+  _speedMultiplierMax: 1
+  _speedMultiplierMin: 0.3
+  _carMassStandard: 900
+  _steeringSpeedMultiplierMax: 1
+  _steeringSpeedMultiplierMin: 0.1
+  _handbrakeTorque: 800
+  _brakeTorque: 500
+  _accelerationRate: 1200
+  _decelerationRate: 1500
+  _maxRpm: 4000
+  _idleRpm: 1400
+  _systemHelpersSetup:
+    StopThresholdKmh: 0.5
+    InputDeadZone: 0.05
+    UpshiftRpmDropFactor: 0.6
+    NeutralInputDeadZone: 0.05
+    SleepSpeedThresholdMps: 0.05
+    SleepAngularSpeedThreshold: 0.05
+    MinDriftSpeedKmh: 20
+    MinBrakeSkidSpeedKmh: 5
+    SlipAngleThresholdDeg: 20
+    DriftVisualThresh: 0.05
+  _useArcadeAssist: 1
+  _arcadeAssistMinSpeedKmh: 0
+  _arcadeAssistLerpSpeed: 1

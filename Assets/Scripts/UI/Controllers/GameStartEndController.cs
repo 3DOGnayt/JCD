@@ -1,11 +1,15 @@
+using Configs.Impl;
+using Data.Enums;
 using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
 using DG.Tweening;
 using UI.Views;
 using UI.Window;
 using Services;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace UI.Controllers
 {
@@ -14,19 +18,25 @@ namespace UI.Controllers
         private readonly ILoadingService _loadingService;
         private readonly IRaceTimerService _raceTimerService;
         private readonly ILocalWindowsService _localWindowsService;
-        
+        private readonly IAudioService _audioService;
+
         private Sequence _countdownSequence;
         private Tween _winTween;
         private Sequence _resultSequence;
-
+        
+        [Inject] private AudioSelectionParameters _audioSelectionParameters;
+        
         public GameStartEndController(
             ILoadingService loadingService,
             IRaceTimerService raceTimerService,
-            ILocalWindowsService localWindowsService)
+            ILocalWindowsService localWindowsService,
+            IAudioService audioService
+        )
         {
             _loadingService = loadingService;
             _raceTimerService = raceTimerService;
             _localWindowsService = localWindowsService;
+            _audioService = audioService;
         }
 
         public override void Initialize() { }
@@ -50,11 +60,8 @@ namespace UI.Controllers
             if (View.СountdownList == null)
                 return;
             
-            View.Win.gameObject.SetActive(false);
-            SetImageAlpha(View.Win, 0f);
-            
-            View.Lose.gameObject.SetActive(false);
-            SetImageAlpha(View.Lose, 0f);
+            View.Finish.gameObject.SetActive(false);
+            SetImageAlpha(View.Finish, 0f);
             
             for (var i = 0; i < View.СountdownList.Count; i++)
             {
@@ -85,6 +92,9 @@ namespace UI.Controllers
             var fadeIn = View.CountdownFadeInSeconds;
             var fadeOut = View.CountdownFadeOutSeconds;
 
+            _audioService.PlayMusicAudio(EAudioType.Music, _audioSelectionParameters.SelectedMusicSubType, 0.05f); // TODO: SOUND
+            _audioService.PlaySfx2DAudio(EAudioType.Ui, EAudioSubType.Ui_3); // TODO: SOUND
+            
             for (var i = 0; i < View.СountdownList.Count; i++)
             {
                 var viewСountdown = View.СountdownList[i];
@@ -116,6 +126,7 @@ namespace UI.Controllers
 
             _countdownSequence.AppendCallback(PublishCountdownFinished);
             _countdownSequence.AppendCallback(() => _loadingService?.PublishInputEnabled(true));
+            _countdownSequence.AppendCallback(() => _audioService.PlaySfx2DAudio(EAudioType.Ui, EAudioSubType.Ui_Start));
             _countdownSequence.AppendCallback(() => _localWindowsService.CloseWindow());
         }
 
@@ -134,24 +145,12 @@ namespace UI.Controllers
             _resultSequence?.Kill();
 
             HideCountdownImages();
-
-            //todo: game result
-            // var result = _gameResultParameters.Result;
-            // if (result == EGameResult.Win)
-            // {
-            //     View.Lose.gameObject.SetActive(false);
-            //
-            //     ShowResultImage(View.Win, View.WinFadeInSeconds);
-            // }
-            // else if (result == EGameResult.Lose)
-            // {
-            //     View.Win.gameObject.SetActive(false);
-            //
-            //     ShowResultImage(View.Lose, View.WinFadeInSeconds);
-            // }
             
-            View.Win.gameObject.SetActive(true);
-            ShowResultImage(View.Win, View.WinFadeInSeconds);
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_Win); // TODO: SOUND
+            
+            View.Finish.gameObject.SetActive(true);
+            ShowResultImage(View.Finish, View.WinFadeInSeconds);
+            
             _loadingService.PublishInputEnabled(false);
             _loadingService.PublishWinResultChanged(true);
             
@@ -173,14 +172,14 @@ namespace UI.Controllers
             }
         }
 
-        private static void SetImageAlpha(Image image, float alpha)
+        private static void SetImageAlpha(Image finish, float alpha)
         {
-            if (image == null)
+            if (finish == null)
                 return;
 
-            var color = image.color;
+            var color = finish.color;
             color.a = alpha;
-            image.color = color;
+            finish.color = color;
         }
 
         private void PublishCountdownFinished()
@@ -191,21 +190,21 @@ namespace UI.Controllers
             _loadingService.PublishCountdownFinished();
         }
 
-        private void ShowResultImage(Image image, float fadeInSeconds)
+        private void ShowResultImage(Image finish, float fadeInSeconds)
         {
-            if (image == null)
+            if (finish == null)
                 return;
 
-            image.gameObject.SetActive(true);
+            finish.gameObject.SetActive(true);
             var fadeIn = Mathf.Max(0f, fadeInSeconds);
             if (fadeIn <= 0f)
             {
-                SetImageAlpha(image, 1f);
+                SetImageAlpha(finish, 1f);
                 return;
             }
 
-            SetImageAlpha(image, 0f);
-            _winTween = image.DOFade(1f, fadeIn).SetLink(image.gameObject);
+            SetImageAlpha(finish, 0f);
+            _winTween = finish.DOFade(1f, fadeIn).SetLink(finish.gameObject);
         }
 
         private void StartResultFlow()

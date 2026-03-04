@@ -8,19 +8,19 @@ namespace UI.Controllers
 {
     public class GameStoryController : AUiController<GameStoryView>
     {
-        private readonly GameSelectionParameters _gameSelectionParameters;
+        private readonly GameModeSelectionParameters _gameModeSelectionParameters;
         private IDisposable _totalTimeDisposable;
 
-        public GameStoryController(GameSelectionParameters gameSelectionParameters)
+        public GameStoryController(GameModeSelectionParameters gameModeSelectionParameters)
         {
-            _gameSelectionParameters = gameSelectionParameters;
+            _gameModeSelectionParameters = gameModeSelectionParameters;
         }
 
         public override void Initialize() { }
 
         protected override void OnOpen()
         {
-            if (_gameSelectionParameters.GameMod == EGameMod.Training) 
+            if (_gameModeSelectionParameters.GameMod == EGameMod.Training) 
                 View.gameObject.SetActive(false);
         }
     }

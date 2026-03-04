@@ -18,17 +18,21 @@ namespace UI.Controllers
         private readonly ILocalWindowsService _localWindowsService;
         private readonly ILoadingService _loadingService;
         private readonly IGameSessionService _gameSessionService;
+        private readonly IAudioService _audioService;
+        
         private IDisposable _loadingDisposable;
 
         public LoadingController(
             ILocalWindowsService localWindowsService,
             ILoadingService loadingService,
-            IGameSessionService gameSessionService
+            IGameSessionService gameSessionService,
+            IAudioService audioService
         )
         {
             _localWindowsService = localWindowsService;
             _loadingService = loadingService;
             _gameSessionService = gameSessionService;
+            _audioService = audioService;
         }
 
         public override void Initialize() { }
@@ -46,6 +50,8 @@ namespace UI.Controllers
             if (View.LoadingText == null)
                 return;
 
+            _audioService.StopAllAudio();
+            
             _loadingService.IsLoadingCompleted.Value = false;
             _loadingService.LoadingProgress.Value = 0f;
             View.LoadingText.text = FormatProgress(0);

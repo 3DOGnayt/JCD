@@ -14,13 +14,26 @@ namespace Systems.Spawn
     public sealed class PlayerSpawnSystem : ISystem 
     {
         [Inject] public World World { get; set;}
-        [Inject] private GameSelectionParameters _gameSelectionParameters;
         [Inject] private DiContainer _container;
-        [Inject] private ILoadingService _loadingService;
-        [Inject] private IGameSessionService _gameSessionService;
-        
+
+        private ILoadingService _loadingService;
+        private IGameSessionService _gameSessionService;
+        private CarSelectionParameters _carSelectionParameters;
+
         private Transform _playerGroup;
         private IDisposable _startRaceDisposable;
+        
+        [Inject]
+        public void Construct(
+            ILoadingService loadingService,
+            IGameSessionService gameSessionService,
+            CarSelectionParameters carSelectionParameters
+        )
+        {
+            _loadingService = loadingService;
+            _gameSessionService = gameSessionService;
+            _carSelectionParameters = carSelectionParameters;
+        }
         
         public void OnAwake()
         {
@@ -38,8 +51,8 @@ namespace Systems.Spawn
 
         private void SpawnPlayer()
         {
-            var selectedPreset = _gameSelectionParameters != null
-                ? _gameSelectionParameters.SelectedCar
+            var selectedPreset = _carSelectionParameters != null
+                ? _carSelectionParameters.SelectedCar
                 : null;
 
             var player = selectedPreset != null ? selectedPreset.Car : null;

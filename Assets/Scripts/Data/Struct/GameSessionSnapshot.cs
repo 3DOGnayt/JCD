@@ -21,5 +21,8 @@ namespace Data.Struct
         public string SelectedOpponentName;
         public float SelectedOpponentDifficulty;
         public int SelectedOpponentIndex;
+
+        public EAudioSubType SelectedMusicSubType;
+        public int SelectedMusicIndex;
     }
 }

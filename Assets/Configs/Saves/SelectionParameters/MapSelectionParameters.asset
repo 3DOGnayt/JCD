@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3219c6cdfb5fadd4086bb57ff75f295e, type: 3}
+  m_Name: MapSelectionParameters
+  m_EditorClassIdentifier: 
+  _selectedMapPrefab: {fileID: 966750755263835405, guid: 54b7aefa62b14644a8ba472887801c8a,
+    type: 3}
+  _selectedMapIndex: 0
+  _selectedMapSelectionCount: 0
+  _selectedMapLapCount: 0
+  _selectedMap: 1

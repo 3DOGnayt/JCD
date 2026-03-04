@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2f35a93dc8a4071bd95531184b97706, type: 3}
   m_Name: GameSelectionParameters
   m_EditorClassIdentifier: 
-  _selectedCar: {fileID: 11400000, guid: 5c594316e21a99541926ca2e21cac6b9, type: 2}
-  _selectedCarParameters: {fileID: 11400000, guid: 861d21277b11455459aba137c7957d16,
+  _carSelectionParameters: {fileID: 11400000, guid: b519aba20fe9d0a4884aa5fabbe1ba1d,
     type: 2}
-  _selectedCarIndex: 0
-  _selectedMapPrefab: {fileID: 966750755263835405, guid: 54b7aefa62b14644a8ba472887801c8a,
-    type: 3}
-  _selectedMapIndex: 0
-  _selectedOpponentName: loh
-  _selectedOpponentDifficulty: 0
-  _selectedOpponentIndex: 0
+  _mapSelectionParameters: {fileID: 11400000, guid: a524c532506eed3489411cc16c168cb0,
+    type: 2}
+  _gameModeSelectionParameters: {fileID: 11400000, guid: ad005461ccfad1f4192c2498feb1f60b,
+    type: 2}
+  _opponentSelectionParameters: {fileID: 11400000, guid: 416ff5813ef98aa46a20f627b7301bce,
+    type: 2}
+  _audioSelectionParameters: {fileID: 11400000, guid: 547e1ddb2b6995b4889d00c1f5717e57,
+    type: 2}

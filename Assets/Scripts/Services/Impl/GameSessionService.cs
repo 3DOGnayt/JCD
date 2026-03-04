@@ -140,7 +140,9 @@ namespace Services.Impl
                 GameMod = _selectionParameters.GameMod,
                 SelectedOpponentName = _selectionParameters.SelectedOpponentName,
                 SelectedOpponentDifficulty = _selectionParameters.SelectedOpponentDifficulty,
-                SelectedOpponentIndex = _selectionParameters.SelectedOpponentIndex
+                SelectedOpponentIndex = _selectionParameters.SelectedOpponentIndex,
+                SelectedMusicSubType = _selectionParameters.SelectedMusicSubType,
+                SelectedMusicIndex = _selectionParameters.SelectedMusicIndex
             };
 
             _hasSnapshot = true;
@@ -164,10 +166,15 @@ namespace Services.Impl
                 _gameSessionSnapshot.SelectedMapLapCount);
 
             _selectionParameters.SetSelectedGameMode(_gameSessionSnapshot.GameMod);
+            
             _selectionParameters.SetSelectedOpponent(
                 _gameSessionSnapshot.SelectedOpponentName,
                 _gameSessionSnapshot.SelectedOpponentDifficulty,
                 _gameSessionSnapshot.SelectedOpponentIndex);
+
+            _selectionParameters.SetSelectedMusic(
+                _gameSessionSnapshot.SelectedMusicSubType,
+                _gameSessionSnapshot.SelectedMusicIndex);
         }
     }
 }
