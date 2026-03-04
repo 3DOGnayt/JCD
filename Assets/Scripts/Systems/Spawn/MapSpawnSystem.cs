@@ -11,13 +11,26 @@ namespace Systems.Spawn
     public sealed class MapSpawnSystem : ISystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private GameSelectionParameters _gameSelectionParameters;
         [Inject] private DiContainer _container;
-        [Inject] private ILoadingService _loadingService;
-        [Inject] private IGameSessionService _gameSessionService;
+
+        private ILoadingService _loadingService;
+        private IGameSessionService _gameSessionService;
+        private MapSelectionParameters _mapSelectionParameters;
 
         private Transform _mapRoot;
         private IDisposable _startRaceDisposable;
+        
+        [Inject]
+        public void Construct(
+            ILoadingService loadingService,
+            IGameSessionService gameSessionService,
+            MapSelectionParameters mapSelectionParameters
+        )
+        {
+            _loadingService = loadingService;
+            _gameSessionService = gameSessionService;
+            _mapSelectionParameters = mapSelectionParameters;
+        }
 
         public void OnAwake()
         {
@@ -27,7 +40,7 @@ namespace Systems.Spawn
 
         private void OnStartRace()
         {
-            var prefab = _gameSelectionParameters != null ? _gameSelectionParameters.SelectedMapPrefab : null;
+            var prefab = _mapSelectionParameters != null ? _mapSelectionParameters.SelectedMapPrefab : null;
             if (prefab == null)
                 return;
 

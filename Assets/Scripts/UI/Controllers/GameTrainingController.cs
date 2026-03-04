@@ -17,21 +17,25 @@ namespace UI.Controllers
         private readonly IRaceTimerService _raceTimerService;
         private readonly ILoadingService _loadingService;
         
-        private readonly GameSelectionParameters _gameSelectionParameters;
+        private readonly MapSelectionParameters _mapSelectionParameters;
+        private readonly GameModeSelectionParameters _gameModeSelectionParameters;
         private readonly TrainingTimeScoreParameters _trainingTimeScoreParameters;
+        
         private readonly List<float> _currentSegmentTimes = new();
         private TrainingTimeScoreSetup _currentSetup;
         private int _segmentCount;
 
         public GameTrainingController(
             IRaceTimerService raceTimerService,
-            GameSelectionParameters gameSelectionParameters,
+            MapSelectionParameters mapSelectionParameters,
+            GameModeSelectionParameters gameModeSelectionParameters,
             TrainingTimeScoreParameters trainingTimeScoreParameters,
             ILoadingService loadingService
         )
         {
             _raceTimerService = raceTimerService;
-            _gameSelectionParameters = gameSelectionParameters;
+            _mapSelectionParameters = mapSelectionParameters;
+            _gameModeSelectionParameters = gameModeSelectionParameters;
             _trainingTimeScoreParameters = trainingTimeScoreParameters;
             _loadingService = loadingService;
         }
@@ -47,7 +51,7 @@ namespace UI.Controllers
 
         protected override void OnOpen()
         {
-            if (_gameSelectionParameters.GameMod == EGameMod.Story) 
+            if (_gameModeSelectionParameters.GameMod == EGameMod.Story) 
                 View.gameObject.SetActive(false);
 
             if (_loadingService.IsTimersRefreshed.Value)
@@ -63,11 +67,11 @@ namespace UI.Controllers
 
         private void InitializeSegmentCount()
         {
-            var selectionCount = _gameSelectionParameters != null
-                ? Mathf.Max(1, _gameSelectionParameters.SelectedMapSelectionCount)
+            var selectionCount = _mapSelectionParameters != null
+                ? Mathf.Max(1, _mapSelectionParameters.SelectedMapSelectionCount)
                 : 1;
-            var lapCount = _gameSelectionParameters != null
-                ? Mathf.Max(1, _gameSelectionParameters.SelectedMapLapCount)
+            var lapCount = _mapSelectionParameters != null
+                ? Mathf.Max(1, _mapSelectionParameters.SelectedMapLapCount)
                 : 1;
 
             _segmentCount = selectionCount * lapCount;
@@ -83,8 +87,8 @@ namespace UI.Controllers
             if (_trainingTimeScoreParameters == null)
                 return;
 
-            var mapId = _gameSelectionParameters != null
-                ? _gameSelectionParameters.SelectedMap
+            var mapId = _mapSelectionParameters != null
+                ? _mapSelectionParameters.SelectedMap
                 : EMap.None;
 
             if (mapId == EMap.None)

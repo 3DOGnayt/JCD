@@ -13,9 +13,10 @@ namespace Systems.Car
     public sealed class WheelDriveSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private ILoadingService _loadingService;
-        [Inject] private IInputService _inputService;
-        [Inject] private GameSelectionParameters _gameSelectionParameters;
+        
+        private ILoadingService _loadingService;
+        private IInputService _inputService;
+        private CarSelectionParameters _carSelectionParameters;
 
         private Filter _cars;
         private AspectFactory<CarSetupAspect> _carAspectFactory;
@@ -25,7 +26,20 @@ namespace Systems.Car
         private Dictionary<int, float> _forwardGearTorque;
         private float _reverseGearTorque;
         private bool _inputEnabled = true;
+
         private IDisposable _inputEnabledSubscription;
+
+        [Inject]
+        public void Construct(
+            ILoadingService loadingService,
+            IInputService inputService,
+            CarSelectionParameters carSelectionParameters
+        )
+        {
+            _loadingService = loadingService;
+            _inputService = inputService;
+            _carSelectionParameters = carSelectionParameters;
+        }
 
         public void OnAwake()
         {
@@ -39,7 +53,7 @@ namespace Systems.Car
             _wheelInfoStash = World.GetStash<WheelInfoComponent>();
             _verticalInputStash = World.GetStash<VerticalInputComponent>();
 
-            var carParameters = _gameSelectionParameters != null ? _gameSelectionParameters.SelectedCarParameters : null;
+            var carParameters = _carSelectionParameters != null ? _carSelectionParameters.SelectedCarParameters : null;
             BuildGearTorqueFromPreset(carParameters);
 
             _inputEnabledSubscription = _loadingService.InputEnabledStream.Subscribe(SetInputEnabled);
@@ -104,7 +118,7 @@ namespace Systems.Car
 
         public void OnUpdate(float deltaTime)
         {
-            var carParameters = _gameSelectionParameters != null ? _gameSelectionParameters.SelectedCarParameters : null;
+            var carParameters = _carSelectionParameters != null ? _carSelectionParameters.SelectedCarParameters : null;
             if (carParameters == null)
                 return;
 

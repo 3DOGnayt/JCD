@@ -9,7 +9,7 @@ namespace Systems.Car
     public sealed class PhysicsSpeedSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private GameSelectionParameters _gameSelectionParameters;
+        [Inject] private CarSelectionParameters _carSelectionParameters;
 
         private Filter _cars;
         private AspectFactory<CarSetupAspect> _carAspectFactory;
@@ -38,7 +38,7 @@ namespace Systems.Car
 
         public void OnUpdate(float deltaTime)
         {
-            var carParameters = _gameSelectionParameters != null ? _gameSelectionParameters.SelectedCarParameters : null;
+            var carParameters = _carSelectionParameters != null ? _carSelectionParameters.SelectedCarParameters : null;
             if (carParameters == null)
                 return;
 

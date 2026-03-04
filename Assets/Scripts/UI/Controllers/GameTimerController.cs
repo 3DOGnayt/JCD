@@ -12,15 +12,15 @@ namespace UI.Controllers
     public class GameTimerController : AUiController<GameTimerView>
     {
         private readonly IRaceTimerService _raceTimerService;
-        private readonly GameSelectionParameters _gameSelectionParameters;
+        private readonly MapSelectionParameters _mapSelectionParameters;
         private IDisposable _totalTimeDisposable;
 
         public GameTimerController(
             IRaceTimerService raceTimerService,
-            GameSelectionParameters gameSelectionParameters)
+            MapSelectionParameters mapSelectionParameters)
         {
             _raceTimerService = raceTimerService;
-            _gameSelectionParameters = gameSelectionParameters;
+            _mapSelectionParameters = mapSelectionParameters;
         }
 
         public override void Initialize()
@@ -42,11 +42,11 @@ namespace UI.Controllers
             if (View.SelectionTimeTextList == null)
                 return;
 
-            var configuredSelectionCount = _gameSelectionParameters != null
-                ? _gameSelectionParameters.SelectedMapSelectionCount
+            var configuredSelectionCount = _mapSelectionParameters != null
+                ? _mapSelectionParameters.SelectedMapSelectionCount
                 : 0;
-            var configuredLapCount = _gameSelectionParameters != null
-                ? _gameSelectionParameters.SelectedMapLapCount
+            var configuredLapCount = _mapSelectionParameters != null
+                ? _mapSelectionParameters.SelectedMapLapCount
                 : 0;
             var useSelectionCount = View.SelectionTimeTextList.Count;
             if (configuredSelectionCount > 1)

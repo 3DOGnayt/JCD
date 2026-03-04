@@ -10,7 +10,7 @@ namespace Systems.Car
     public sealed class RPMSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private GameSelectionParameters _gameSelectionParameters;
+        [Inject] private CarSelectionParameters _carSelectionParameters;
 
         private Filter _cars;
 
@@ -52,7 +52,8 @@ namespace Systems.Car
             _gearStash = World.GetStash<GearComponent>();
             _verticalInputStash = World.GetStash<VerticalInputComponent>();
 
-            var carParameters = _gameSelectionParameters != null ? _gameSelectionParameters.SelectedCarParameters : null;
+            var carParameters = _carSelectionParameters != null ? _carSelectionParameters.SelectedCarParameters : null;
+            
             BuildRpmBandsFromPreset(carParameters);
         }
 
@@ -127,7 +128,7 @@ namespace Systems.Car
 
         public void OnUpdate(float deltaTime)
         {
-            var carParameters = _gameSelectionParameters != null ? _gameSelectionParameters.SelectedCarParameters : null;
+            var carParameters = _carSelectionParameters != null ? _carSelectionParameters.SelectedCarParameters : null;
             if (carParameters == null)
                 return;
 
@@ -234,10 +235,10 @@ namespace Systems.Car
 
             var band = _forwardBands[bandIndex];
 
-            var v = Mathf.Clamp(forwardSpeedKmh, band.SpeedMinKmh, band.SpeedMaxKmh);
+            var speedValue = Mathf.Clamp(forwardSpeedKmh, band.SpeedMinKmh, band.SpeedMaxKmh);
 
-            var t = band.SpeedMaxKmh > band.SpeedMinKmh
-                ? Mathf.InverseLerp(band.SpeedMinKmh, band.SpeedMaxKmh, v)
+            var time = band.SpeedMaxKmh > band.SpeedMinKmh
+                ? Mathf.InverseLerp(band.SpeedMinKmh, band.SpeedMaxKmh, speedValue)
                 : 1f;
 
             var systemHelpers = carParameters.MovementParameters.HelpersSetup;
@@ -245,7 +246,7 @@ namespace Systems.Car
                 ? idleRpm
                 : rpmMax * systemHelpers.UpshiftRpmDropFactor;
 
-            return Mathf.Lerp(gearMinRpm, rpmMax, t);
+            return Mathf.Lerp(gearMinRpm, rpmMax, time);
         }
 
         private int GetForwardBandIndex(int gearValue)

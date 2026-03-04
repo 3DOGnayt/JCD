@@ -10,7 +10,7 @@ namespace Systems.Car
     public sealed class GearShiftSystem : IFixedSystem
     {
         [Inject] public World World { get; set; }
-        [Inject] private GameSelectionParameters _gameSelectionParameters;
+        [Inject] private CarSelectionParameters _carSelectionParameters;
 
         private Filter _cars;
         private Stash<GearComponent> _gearStash;
@@ -43,7 +43,7 @@ namespace Systems.Car
             _backSpeedStash = World.GetStash<BackSpeedComponent>();
             _verticalInputStash = World.GetStash<VerticalInputComponent>();
 
-            var carParameters = _gameSelectionParameters != null ? _gameSelectionParameters.SelectedCarParameters : null;
+            var carParameters = _carSelectionParameters != null ? _carSelectionParameters.SelectedCarParameters : null;
             BuildGearDataFromPreset(carParameters);
         }
 
@@ -103,7 +103,7 @@ namespace Systems.Car
 
         public void OnUpdate(float deltaTime)
         {
-            var carParameters = _gameSelectionParameters != null ? _gameSelectionParameters.SelectedCarParameters : null;
+            var carParameters = _carSelectionParameters != null ? _carSelectionParameters.SelectedCarParameters : null;
             if (carParameters == null)
                 return;
 
