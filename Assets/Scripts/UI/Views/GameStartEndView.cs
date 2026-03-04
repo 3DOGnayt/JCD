@@ -17,7 +17,6 @@ namespace UI.Views
         public float WinFadeInSeconds = 0.2f;
         public float ResultHoldSeconds = 1.2f;
         [Space]
-        public Image Win;
-        public Image Lose;
+        public Image Finish;
     }
 }
