@@ -6,7 +6,6 @@ using DG.Tweening;
 using UI.Views;
 using UI.Window;
 using Services;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;

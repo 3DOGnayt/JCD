@@ -1,6 +1,9 @@
+using System;
 using Components;
 using Configs.Impl;
 using Scellecs.Morpeh;
+using Services;
+using UniRx;
 using UnityEngine;
 using Zenject;
 
@@ -10,6 +13,7 @@ namespace Systems.Car
     {
         [Inject] public World World { get; set; }
         [Inject] private CarSelectionParameters _carSelectionParameters;
+        [Inject] private ILoadingService _loadingService;
 
         private Filter _cars;
         private AspectFactory<CarSetupAspect> _carAspectFactory;
@@ -19,6 +23,8 @@ namespace Systems.Car
         private Stash<HandbrakeInputComponent> _handbrakeStash;
 
         private float _assistForwardSpeedMps;
+        private bool _inputEnabled = true;
+        private IDisposable _inputEnabledSubscription;
 
         public void OnAwake()
         {
@@ -34,6 +40,9 @@ namespace Systems.Car
             _transformStash = World.GetStash<TransformComponent>();
             _vertStash = World.GetStash<VerticalInputComponent>();
             _handbrakeStash = World.GetStash<HandbrakeInputComponent>();
+
+            if (_loadingService != null)
+                _inputEnabledSubscription = _loadingService.InputEnabledStream.Subscribe(isEnabled => _inputEnabled = isEnabled);
         }
 
         public void OnUpdate(float deltaTime)
@@ -138,6 +147,9 @@ namespace Systems.Car
         
         private void ApplySleepIfStopped(Rigidbody rb, float verticalInput, bool handbrake, CarParameters carParameters)
         {
+            if (!_inputEnabled)
+                return;
+
             if (Mathf.Abs(verticalInput) > 0.01f && !handbrake)
                 return;
 
@@ -161,6 +173,9 @@ namespace Systems.Car
             }
         }
 
-        public void Dispose() { }
+        public void Dispose()
+        {
+            _inputEnabledSubscription?.Dispose();
+        }
     }
 }
