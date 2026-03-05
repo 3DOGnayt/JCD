@@ -18,7 +18,9 @@ namespace Systems.Spawn
         private MapSelectionParameters _mapSelectionParameters;
 
         private Transform _mapRoot;
-        private IDisposable _startRaceDisposable;
+        private IDisposable _spawnDisposable;
+        private const float SpawnProgressThreshold = 0.2f;
+        private bool _hasSpawnedThisLoad;
         
         [Inject]
         public void Construct(
@@ -35,7 +37,22 @@ namespace Systems.Spawn
         public void OnAwake()
         {
             _mapRoot = new GameObject("Map").transform;
-            _startRaceDisposable = _loadingService.StartRaceStream.Subscribe(_ => OnStartRace());
+            if (_loadingService != null)
+            {
+                _spawnDisposable = _loadingService.LoadingProgress.Subscribe(OnLoadingProgress);
+            }
+        }
+
+        private void OnLoadingProgress(float progress)
+        {
+            if (progress <= 0f)
+                _hasSpawnedThisLoad = false;
+
+            if (_hasSpawnedThisLoad || progress < SpawnProgressThreshold)
+                return;
+
+            _hasSpawnedThisLoad = true;
+            OnStartRace();
         }
 
         private void OnStartRace()
@@ -52,7 +69,7 @@ namespace Systems.Spawn
 
         public void Dispose()
         {
-            _startRaceDisposable?.Dispose();
+            _spawnDisposable?.Dispose();
         }
     }
 }
