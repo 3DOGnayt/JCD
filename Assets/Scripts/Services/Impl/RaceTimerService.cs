@@ -33,6 +33,7 @@ namespace Services.Impl
         public bool IsRunning => _isRunning;
         public bool IsFinished => _isFinished;
         public float CurrentRaceTime => _isRunning ? Time.time - _raceStartTime : _totalRaceTime;
+        public float CurrentLapTime => _isRunning ? Time.time - _lastLapStartTime : 0f;
         public float TotalRaceTime => _totalRaceTime;
 
         public void StartRace()

@@ -13,6 +13,7 @@ namespace Services
         bool IsRunning { get; }
         bool IsFinished { get; }
         float CurrentRaceTime { get; }
+        float CurrentLapTime { get; }
         float TotalRaceTime { get; }
 
         void StartRace();

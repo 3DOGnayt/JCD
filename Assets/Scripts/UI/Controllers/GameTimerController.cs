@@ -3,6 +3,7 @@ using Configs.Impl;
 using Data.Struct;
 using KoboldUi.Element.Controller;
 using Services;
+using TMPro;
 using UI.Views;
 using UniRx;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace UI.Controllers
         private readonly IRaceTimerService _raceTimerService;
         private readonly MapSelectionParameters _mapSelectionParameters;
         private IDisposable _totalTimeDisposable;
+        private IDisposable _selectionTimeDisposable;
 
         public GameTimerController(
             IRaceTimerService raceTimerService,
@@ -30,11 +32,12 @@ namespace UI.Controllers
 
             _raceTimerService.LapCompletedStream.Subscribe(UpdateLapTime).AddTo(View);
         }
-
+        
         protected override void OnOpen()
         {
             InitializeSelectionTimes();
             StartTotalTimeUpdates();
+            StartSelectionTimeUpdates();
         }
 
         private void InitializeSelectionTimes()
@@ -84,6 +87,38 @@ namespace UI.Controllers
             _totalTimeDisposable = Observable.EveryUpdate()
                 .Subscribe(_ => View.TotalTimeText.text = FormatTime(_raceTimerService.CurrentRaceTime));
             _totalTimeDisposable.AddTo(View);
+        }
+
+        private void StartSelectionTimeUpdates()
+        {
+            if (View.SelectionTimeTextList == null || _raceTimerService == null)
+                return;
+
+            _selectionTimeDisposable?.Dispose();
+            _selectionTimeDisposable = Observable.EveryUpdate()
+                .Subscribe(_ =>
+                {
+                    if (!TryGetActiveSelectionText(out var text))
+                        return;
+
+                    text.text = FormatTime(_raceTimerService.CurrentLapTime);
+                });
+            _selectionTimeDisposable.AddTo(View);
+        }
+
+        private bool TryGetActiveSelectionText(out TMP_Text text)
+        {
+            text = null;
+
+            if (!_raceTimerService.IsRunning || _raceTimerService.IsFinished)
+                return false;
+
+            var index = _raceTimerService.Laps.Count;
+            if (index < 0 || index >= View.SelectionTimeTextList.Count)
+                return false;
+
+            text = View.SelectionTimeTextList[index];
+            return text != null && text.gameObject.activeSelf;
         }
 
         private void UpdateLapTime(RaceLapRecord record)
