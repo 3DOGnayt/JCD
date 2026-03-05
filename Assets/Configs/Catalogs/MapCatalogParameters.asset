@@ -29,7 +29,7 @@ MonoBehaviour:
     Prefab: {fileID: 1152416296702166899, guid: 94a1ee1fbdf00bc48ad16d755c5552e2,
       type: 3}
     Preview: {fileID: 21300000, guid: edbaf6c42922cfd4b9a18ac1ea8d85c7, type: 3}
-    SelectionCount: 6
+    SelectionCount: 4
     LapCount: 1
     MiniMap:
       MiniMapTexture: {fileID: 2800000, guid: a7673afe36c96194998eb2871db33af4, type: 3}
@@ -41,7 +41,7 @@ MonoBehaviour:
   - EMap: 3
     Prefab: {fileID: 966750755263835405, guid: 7749a079e98a97740b392b8617a321d2, type: 3}
     Preview: {fileID: 21300000, guid: 3b8ee1ee740f3804897f556ebc633c05, type: 3}
-    SelectionCount: 6
+    SelectionCount: 4
     LapCount: 1
     MiniMap:
       MiniMapTexture: {fileID: 2800000, guid: 28bbb7bf9d967244d854609077754f0d, type: 3}
