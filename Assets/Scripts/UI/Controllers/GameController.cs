@@ -62,7 +62,10 @@ namespace UI.Controllers
         {
             if (!_isInputUnlocked)
                 return;
-            
+
+            if (_localWindowsService.IsOpened<SettingsWindow>())
+                return;
+
             _localWindowsService.OpenWindow<GamePauseWindow>();
         }
     }
