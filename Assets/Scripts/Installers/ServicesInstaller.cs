@@ -18,6 +18,7 @@ namespace Installers
 
         private void Services()
         {
+            Container.BindInterfacesAndSelfTo<DataService>().AsSingle();
             Container.BindInterfacesAndSelfTo<LoadingService>().AsSingle();
             Container.BindInterfacesAndSelfTo<RaceTimerService>().AsSingle();
             Container.BindInterfacesAndSelfTo<InputService>().AsSingle();
