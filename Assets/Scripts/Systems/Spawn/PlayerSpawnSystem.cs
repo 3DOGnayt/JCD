@@ -52,6 +52,9 @@ namespace Systems.Spawn
             if (progress <= 0f)
                 _hasSpawnedThisLoad = false;
 
+            if (_gameSessionService != null && _gameSessionService.Target != EGameSessionTarget.Game)
+                return;
+
             if (_hasSpawnedThisLoad || progress < SpawnProgressThreshold)
                 return;
 
