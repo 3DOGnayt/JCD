@@ -27,6 +27,7 @@ namespace UI.Controllers
             View.Continue.OnClickAsObservable().Subscribe(_ => OnContinueClick()).AddTo(View);
             View.Retry.OnClickAsObservable().Subscribe(_ => OnRetryClick()).AddTo(View);
             View.Menu.OnClickAsObservable().Subscribe(_ => OnMainMenuClick()).AddTo(View);
+            View.Settings.OnClickAsObservable().Subscribe(_ => OnSettingsClick()).AddTo(View);
         }
 
         protected override void OnOpen()
@@ -50,6 +51,11 @@ namespace UI.Controllers
         {
             Time.timeScale = 1f;
             _gameSessionService?.ExitToMenu();
+        }
+
+        private void OnSettingsClick()
+        {
+            _localWindowsService.OpenWindow<SettingsWindow>();
         }
     }
 }

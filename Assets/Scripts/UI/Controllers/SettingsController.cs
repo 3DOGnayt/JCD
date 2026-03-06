@@ -67,7 +67,7 @@ namespace UI.Controllers
         {
             _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonBack);
             
-            _localWindowsService.OpenWindow<MainMenuWindow>();
+            _localWindowsService.CloseWindow();
         }
     }
 }

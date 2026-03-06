@@ -8,5 +8,6 @@ namespace UI.Views
         public Button Continue;
         public Button Retry;
         public Button Menu;
+        public Button Settings;
     }
 }
