@@ -13,7 +13,7 @@ namespace Systems.Car
     {
         [Inject] public World World { get; set; }
         [Inject] private CarSelectionParameters _carSelectionParameters;
-        [Inject] private ILoadingService _loadingService;
+        [Inject] private IEventService _eventService;
 
         private Filter _cars;
         private AspectFactory<CarSetupAspect> _carAspectFactory;
@@ -41,8 +41,8 @@ namespace Systems.Car
             _vertStash = World.GetStash<VerticalInputComponent>();
             _handbrakeStash = World.GetStash<HandbrakeInputComponent>();
 
-            if (_loadingService != null)
-                _inputEnabledSubscription = _loadingService.InputEnabledStream.Subscribe(isEnabled => _inputEnabled = isEnabled);
+            if (_eventService != null)
+                _inputEnabledSubscription = _eventService.InputEnabledStream.Subscribe(isEnabled => _inputEnabled = isEnabled);
         }
 
         public void OnUpdate(float deltaTime)

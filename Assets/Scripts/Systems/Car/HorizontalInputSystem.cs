@@ -13,7 +13,7 @@ namespace Systems.Car
     {
         [Inject] public World World { get; set;}
         
-        private ILoadingService _loadingService;
+        private IEventService _eventService;
         private IInputService _inputService;
         private CarSelectionParameters _carSelectionParameters;
 
@@ -34,12 +34,12 @@ namespace Systems.Car
         
         [Inject]
         public void Construct(
-            ILoadingService loadingService,
+            IEventService eventService,
             IInputService inputService,
             CarSelectionParameters carSelectionParameters
         )
         {
-            _loadingService = loadingService;
+            _eventService = eventService;
             _inputService = inputService;
             _carSelectionParameters = carSelectionParameters;
         }
@@ -76,7 +76,7 @@ namespace Systems.Car
             _speedMaxStash = World.GetStash<SpeedMaxComponent>();
 
             TryCacheMovementParameters();
-            _inputEnabledSubscription = _loadingService.InputEnabledStream.Subscribe(SetInputEnabled);
+            _inputEnabledSubscription = _eventService.InputEnabledStream.Subscribe(SetInputEnabled);
         }
 
         public void OnUpdate(float deltaTime)
@@ -117,7 +117,7 @@ namespace Systems.Car
                     _inputService.ApplyHorizontalMove(targetAngle, dynamicSteeringSpeed, wheelInfo.WheelInfo);
                 }
                 
-                _loadingService.PublishCarSetupChanged(carSetupAspect);  //TODO: replace
+                _eventService.PublishCarSetupChanged(carSetupAspect);  //TODO: replace
             }
         }
 

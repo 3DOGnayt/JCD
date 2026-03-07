@@ -34,9 +34,9 @@ namespace Helpers
         private Quaternion _initialRotation;
 
         [Inject]
-        public void Construct(ILoadingService loadingService)
+        public void Construct(IEventService eventService)
         {
-            loadingService.PlayerSpawnedStream.Subscribe(OnPlayerSpawned).AddTo(this);
+            eventService.PlayerSpawnedStream.Subscribe(OnPlayerSpawned).AddTo(this);
         }
 
         private void Awake()

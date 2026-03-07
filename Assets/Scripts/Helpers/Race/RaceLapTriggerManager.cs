@@ -25,12 +25,12 @@ namespace Helpers.Race
         [Inject]
         public void Construct(
             IRaceTimerService raceTimerService,
-            ILoadingService loadingService,
+            IEventService eventService,
             MapSelectionParameters mapSelectionParameters)
         {
             _raceTimerService = raceTimerService;
             _mapSelectionParameters = mapSelectionParameters;
-            loadingService.StartRaceStream.Subscribe(_ => ResetProgress()).AddTo(this);
+            eventService.StartRaceStream.Subscribe(_ => ResetProgress()).AddTo(this);
         }
 
         private void Awake()

@@ -9,24 +9,24 @@ namespace UI.Controllers
 {
     public class GameMapController : AUiController<GameMapView>
     {
-        private readonly ILoadingService _loadingService;
+        private readonly IEventService _eventService;
         private readonly MinimapSpawner _minimapSpawner;
         private MinimapCameraController _minimapCameraInstance;
 
         public GameMapController(
-            ILoadingService loadingService,
+            IEventService eventService,
             MinimapSpawner minimapSpawner)
         {
-            _loadingService = loadingService;
+            _eventService = eventService;
             _minimapSpawner = minimapSpawner;
         }
 
         public override void Initialize()
         {
-            if (_loadingService == null)
+            if (_eventService == null)
                 return;
 
-            _loadingService.PlayerSpawnedStream.Subscribe(OnPlayerSpawned).AddTo(View);
+            _eventService.PlayerSpawnedStream.Subscribe(OnPlayerSpawned).AddTo(View);
         }
 
         private void OnPlayerSpawned(ICarView carView)

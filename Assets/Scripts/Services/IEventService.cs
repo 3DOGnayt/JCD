@@ -5,7 +5,7 @@ using Helpers.CarView;
 
 namespace Services
 {
-    public interface ILoadingService
+    public interface IEventService
     {
         IReactiveProperty<float> LoadingProgress { get; }
         IReactiveProperty<bool> IsLoadingCompleted { get; }

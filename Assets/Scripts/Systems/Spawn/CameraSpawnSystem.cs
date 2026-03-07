@@ -15,7 +15,7 @@ namespace Systems.Spawn
         [Inject] private FollowingCamera _cameraPrefab;
         [Inject] private CinemachineFreeLook _cinemachineFreeLookPrefab;
         [Inject] private DiContainer _container;
-        [Inject] private ILoadingService _loadingService;
+        [Inject] private IEventService _eventService;
 
         private Transform _cameraGroup;
         
@@ -69,10 +69,10 @@ namespace Systems.Spawn
 
         private void SubscribeToRaceStart()
         {
-            if (_loadingService == null)
+            if (_eventService == null)
                 return;
 
-            _startRaceDisposable = _loadingService.StartRaceStream.Subscribe(_ => ResetCameraPositions());
+            _startRaceDisposable = _eventService.StartRaceStream.Subscribe(_ => ResetCameraPositions());
         }
 
         private void ResetCameraPositions()

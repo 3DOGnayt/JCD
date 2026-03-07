@@ -15,7 +15,7 @@ namespace Helpers
         [SerializeField] private TMP_Text _parametersText;
         [SerializeField] private TMP_Text _parametersValue;
 
-        private ILoadingService _loadingService;
+        private IEventService _eventService;
         private CarUISmoothingParameters _carUISmoothingParameters;
         private CarSelectionParameters _carSelectionParameters;
         private IDisposable _carSetupChangedDisposable;
@@ -30,21 +30,21 @@ namespace Helpers
 
         [Inject]
         public void Construct(
-            ILoadingService loadingService,
+            IEventService eventService,
             CarUISmoothingParameters carUISmoothingParameters,
             CarSelectionParameters carSelectionParameters)
         {
-            _loadingService = loadingService;
+            _eventService = eventService;
             _carUISmoothingParameters = carUISmoothingParameters;
             _carSelectionParameters = carSelectionParameters;
         }
 
         private void OnEnable()
         {
-            if (_loadingService == null)
+            if (_eventService == null)
                 return;
 
-            _carSetupChangedDisposable = _loadingService.CarSetupChangedStream.Subscribe(OnCarSetupAspectChanged);
+            _carSetupChangedDisposable = _eventService.CarSetupChangedStream.Subscribe(OnCarSetupAspectChanged);
             CacheCarLimits();
         }
 

@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ee56a9ddec868e4c96d7446f22cfec2, type: 3}
   m_Name: CarSelectionParameters
   m_EditorClassIdentifier: 
-  _selectedCar: {fileID: 11400000, guid: 5c594316e21a99541926ca2e21cac6b9, type: 2}
-  _selectedCarParameters: {fileID: 11400000, guid: 861d21277b11455459aba137c7957d16,
-    type: 2}
-  _selectedCarIndex: 0
+  _selectedCar: {fileID: 0}
+  _selectedCarParameters: {fileID: 0}
+  _selectedCarIndex: -1

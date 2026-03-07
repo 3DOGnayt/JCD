@@ -16,7 +16,7 @@ namespace UI.Controllers
         private const int MAX_PROGRESS = 100;
         
         private readonly ILocalWindowsService _localWindowsService;
-        private readonly ILoadingService _loadingService;
+        private readonly IEventService _eventService;
         private readonly IGameSessionService _gameSessionService;
         private readonly IAudioService _audioService;
         
@@ -24,13 +24,13 @@ namespace UI.Controllers
 
         public LoadingController(
             ILocalWindowsService localWindowsService,
-            ILoadingService loadingService,
+            IEventService eventService,
             IGameSessionService gameSessionService,
             IAudioService audioService
         )
         {
             _localWindowsService = localWindowsService;
-            _loadingService = loadingService;
+            _eventService = eventService;
             _gameSessionService = gameSessionService;
             _audioService = audioService;
         }
@@ -39,7 +39,7 @@ namespace UI.Controllers
 
         protected override void OnOpen()
         {
-            if (_loadingService.IsGameStarted.Value)
+            if (_eventService.IsGameStarted.Value)
                 return;
 
             StartFakeLoading();
@@ -52,8 +52,8 @@ namespace UI.Controllers
 
             _audioService.StopAllAudio();
             
-            _loadingService.IsLoadingCompleted.Value = false;
-            _loadingService.LoadingProgress.Value = 0f;
+            _eventService.IsLoadingCompleted.Value = false;
+            _eventService.LoadingProgress.Value = 0f;
             View.LoadingText.text = FormatProgress(0);
 
             _loadingDisposable?.Dispose();
@@ -73,11 +73,11 @@ namespace UI.Controllers
 
         private void UpdateProgress(int progress)
         {
-            if (_loadingService.IsLoadingCompleted.Value)
+            if (_eventService.IsLoadingCompleted.Value)
                 return;
 
             var clamped = progress > MAX_PROGRESS ? MAX_PROGRESS : progress;
-            _loadingService.LoadingProgress.Value = clamped / (float)MAX_PROGRESS;
+            _eventService.LoadingProgress.Value = clamped / (float)MAX_PROGRESS;
             View.LoadingText.text = FormatProgress(clamped);
 
             if (clamped >= MAX_PROGRESS)
@@ -91,7 +91,7 @@ namespace UI.Controllers
 
         private void OnLoadCompleted()
         {
-            _loadingService.IsLoadingCompleted.Value = true;
+            _eventService.IsLoadingCompleted.Value = true;
 
             _loadingDisposable?.Dispose();
             _loadingDisposable = null;
@@ -99,7 +99,7 @@ namespace UI.Controllers
             var target = _gameSessionService != null ? _gameSessionService.Target : EGameSessionTarget.Game;
             if (target == EGameSessionTarget.Game)
             {
-                _loadingService.PublishStartRace();
+                _eventService.PublishStartRace();
                 _localWindowsService.OpenWindow<GameWindow>();
                 return;
             }

@@ -14,7 +14,7 @@ namespace Systems.Car
     {
         [Inject] public World World { get; set; }
         
-        private ILoadingService _loadingService;
+        private IEventService _eventService;
         private IInputService _inputService;
         private CarSelectionParameters _carSelectionParameters;
 
@@ -31,12 +31,12 @@ namespace Systems.Car
 
         [Inject]
         public void Construct(
-            ILoadingService loadingService,
+            IEventService eventService,
             IInputService inputService,
             CarSelectionParameters carSelectionParameters
         )
         {
-            _loadingService = loadingService;
+            _eventService = eventService;
             _inputService = inputService;
             _carSelectionParameters = carSelectionParameters;
         }
@@ -56,7 +56,7 @@ namespace Systems.Car
             var carParameters = _carSelectionParameters != null ? _carSelectionParameters.SelectedCarParameters : null;
             BuildGearTorqueFromPreset(carParameters);
 
-            _inputEnabledSubscription = _loadingService.InputEnabledStream.Subscribe(SetInputEnabled);
+            _inputEnabledSubscription = _eventService.InputEnabledStream.Subscribe(SetInputEnabled);
         }
 
         private void BuildGearTorqueFromPreset(CarParameters carParameters)

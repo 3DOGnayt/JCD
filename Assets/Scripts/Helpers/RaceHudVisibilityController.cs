@@ -11,9 +11,9 @@ namespace Helpers
         [SerializeField] private GameObject _parametersContainer;
         
         [Inject]
-        public void Construct(ILoadingService loadingService)
+        public void Construct(IEventService eventService)
         {
-            loadingService.IsLoadingCompleted.Subscribe(OnPlayerSpawned).AddTo(this);
+            eventService.IsLoadingCompleted.Subscribe(OnPlayerSpawned).AddTo(this);
         }
 
         private void OnPlayerSpawned(bool isActive)

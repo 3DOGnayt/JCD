@@ -12,19 +12,19 @@ namespace UI.Controllers
     {
         private readonly ILocalWindowsService _localWindowsService;
         private readonly IRaceTimerService _raceTimerService;
-        private readonly ILoadingService _loadingService;
+        private readonly IEventService _eventService;
         
         private bool _isInputUnlocked;
 
         public GameController(
             ILocalWindowsService localWindowsService,
             IRaceTimerService raceTimerService,
-            ILoadingService loadingService
+            IEventService eventService
         )
         {
             _localWindowsService = localWindowsService;
             _raceTimerService = raceTimerService;
-            _loadingService = loadingService;
+            _eventService = eventService;
         }
 
         public override void Initialize()
@@ -34,15 +34,15 @@ namespace UI.Controllers
                 .Subscribe(_ => OnPauseClick())
                 .AddTo(View);
 
-            _loadingService.InputEnabledStream.Subscribe(value => _isInputUnlocked = value).AddTo(View);
-            _loadingService.IsGameStarted.Subscribe(OnStartGame).AddTo(View);
+            _eventService.InputEnabledStream.Subscribe(value => _isInputUnlocked = value).AddTo(View);
+            _eventService.IsGameStarted.Subscribe(OnStartGame).AddTo(View);
 
             _raceTimerService.RaceFinishedStream.Subscribe(_ => ShowResult()).AddTo(View);
         }
 
         protected override void OnOpen()
         {
-            _loadingService.PublishGameStarted(true);
+            _eventService.PublishGameStarted(true);
         }
 
         private void OnStartGame(bool value)

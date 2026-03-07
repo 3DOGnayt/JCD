@@ -11,7 +11,7 @@ namespace UI.Controllers
 {
     public class GameResultController : AUiController<GameResultView>, IDisposable
     {
-        private readonly ILoadingService _loadingService;
+        private readonly IEventService _eventService;
         private readonly IRaceTimerService _raceTimerService;
         private readonly IGameSessionService _gameSessionService;
         private readonly IAudioService _audioService;
@@ -24,13 +24,13 @@ namespace UI.Controllers
         private bool _resultGame;
 
         public GameResultController(
-            ILoadingService loadingService,
+            IEventService eventService,
             IRaceTimerService raceTimerService,
             IGameSessionService gameSessionService,
             IAudioService audioService
         )
         {
-            _loadingService = loadingService;
+            _eventService = eventService;
             _raceTimerService = raceTimerService;
             _gameSessionService = gameSessionService;
             _audioService = audioService;
@@ -46,12 +46,12 @@ namespace UI.Controllers
             View.Retry.OnClickAsObservable().Subscribe(_ => OnRetryClick()).AddTo(View);
             View.MainMenu.OnClickAsObservable().Subscribe(_ => OnMainMenuClick()).AddTo(View);
             
-            _resultSubscription = _loadingService.ResultSubject.Subscribe(SetResult);
+            _resultSubscription = _eventService.ResultSubject.Subscribe(SetResult);
         }
 
         protected override void OnOpen()
         {
-            _loadingService?.PublishInputEnabled(false);
+            _eventService?.PublishInputEnabled(false);
             
             SetWinResult(_resultGame);
             View.TimePanel.SetActive(false);

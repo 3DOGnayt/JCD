@@ -14,7 +14,7 @@ namespace Systems.Spawn
         [Inject] public World World { get; set; }
         [Inject] private DiContainer _container;
 
-        private ILoadingService _loadingService;
+        private IEventService _eventService;
         private IGameSessionService _gameSessionService;
         private MapSelectionParameters _mapSelectionParameters;
 
@@ -25,12 +25,12 @@ namespace Systems.Spawn
         
         [Inject]
         public void Construct(
-            ILoadingService loadingService,
+            IEventService eventService,
             IGameSessionService gameSessionService,
             MapSelectionParameters mapSelectionParameters
         )
         {
-            _loadingService = loadingService;
+            _eventService = eventService;
             _gameSessionService = gameSessionService;
             _mapSelectionParameters = mapSelectionParameters;
         }
@@ -38,9 +38,9 @@ namespace Systems.Spawn
         public void OnAwake()
         {
             _mapRoot = new GameObject("Map").transform;
-            if (_loadingService != null)
+            if (_eventService != null)
             {
-                _spawnDisposable = _loadingService.LoadingProgress.Subscribe(OnLoadingProgress);
+                _spawnDisposable = _eventService.LoadingProgress.Subscribe(OnLoadingProgress);
             }
         }
 

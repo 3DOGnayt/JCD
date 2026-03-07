@@ -16,7 +16,7 @@ namespace Systems.Spawn
         [Inject] public World World { get; set;}
         [Inject] private DiContainer _container;
 
-        private ILoadingService _loadingService;
+        private IEventService _eventService;
         private IGameSessionService _gameSessionService;
         private CarSelectionParameters _carSelectionParameters;
 
@@ -27,12 +27,12 @@ namespace Systems.Spawn
         
         [Inject]
         public void Construct(
-            ILoadingService loadingService,
+            IEventService eventService,
             IGameSessionService gameSessionService,
             CarSelectionParameters carSelectionParameters
         )
         {
-            _loadingService = loadingService;
+            _eventService = eventService;
             _gameSessionService = gameSessionService;
             _carSelectionParameters = carSelectionParameters;
         }
@@ -41,9 +41,9 @@ namespace Systems.Spawn
         {
             SetSpawnRoot();
             
-            if (_loadingService != null)
+            if (_eventService != null)
             {
-                _spawnDisposable = _loadingService.LoadingProgress.Subscribe(OnLoadingProgress);
+                _spawnDisposable = _eventService.LoadingProgress.Subscribe(OnLoadingProgress);
             }
         }
 
@@ -86,7 +86,7 @@ namespace Systems.Spawn
             AddInternalComponents(entity, instance);
             
             _gameSessionService?.RegisterRuntimeEntity(entity);
-            _loadingService.PublishPlayerSpawned(instance);
+            _eventService.PublishPlayerSpawned(instance);
             
             _gameSessionService?.RegisterRuntimeRoot(instance.CarTransform.gameObject);
         }

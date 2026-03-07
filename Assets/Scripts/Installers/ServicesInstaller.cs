@@ -19,7 +19,7 @@ namespace Installers
         private void Services()
         {
             Container.BindInterfacesAndSelfTo<DataService>().AsSingle();
-            Container.BindInterfacesAndSelfTo<LoadingService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<EventService>().AsSingle();
             Container.BindInterfacesAndSelfTo<RaceTimerService>().AsSingle();
             Container.BindInterfacesAndSelfTo<InputService>().AsSingle();
             Container.BindInterfacesAndSelfTo<SkidmarksService>().AsSingle().WithArguments(_carSkidmarksParameters);

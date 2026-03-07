@@ -5,7 +5,7 @@ using UniRx;
 
 namespace Services.Impl
 {
-    public class LoadingService : ILoadingService, IDisposable
+    public class EventService : IEventService, IDisposable
     {
         private readonly ReactiveProperty<float> _loadingProgress = new();
         private readonly ReactiveProperty<bool> _isLoadingCompleted = new();

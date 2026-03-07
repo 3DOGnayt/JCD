@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 321b6d1295e9e3c43afcb5a935c95a01, type: 3}
   m_Name: OpponentSelectionParameters
   m_EditorClassIdentifier: 
-  _selectedOpponentName: Aboba
+  _selectedOpponentName: 
   _selectedOpponentDifficulty: 0
-  _selectedOpponentIndex: 0
+  _selectedOpponentIndex: -1

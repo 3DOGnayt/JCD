@@ -14,7 +14,7 @@ namespace UI.Controllers
 {
     public class GameStartEndController : AUiController<GameStartEndView>
     {
-        private readonly ILoadingService _loadingService;
+        private readonly IEventService _eventService;
         private readonly IRaceTimerService _raceTimerService;
         private readonly ILocalWindowsService _localWindowsService;
         private readonly IAudioService _audioService;
@@ -26,13 +26,13 @@ namespace UI.Controllers
         [Inject] private AudioSelectionParameters _audioSelectionParameters;
         
         public GameStartEndController(
-            ILoadingService loadingService,
+            IEventService eventService,
             IRaceTimerService raceTimerService,
             ILocalWindowsService localWindowsService,
             IAudioService audioService
         )
         {
-            _loadingService = loadingService;
+            _eventService = eventService;
             _raceTimerService = raceTimerService;
             _localWindowsService = localWindowsService;
             _audioService = audioService;
@@ -42,7 +42,7 @@ namespace UI.Controllers
 
         protected override void OnOpen()
         {
-            _loadingService?.PublishInputEnabled(false);
+            _eventService?.PublishInputEnabled(false);
             
             if (_raceTimerService.IsFinished)
             {
@@ -124,7 +124,7 @@ namespace UI.Controllers
             }
 
             _countdownSequence.AppendCallback(PublishCountdownFinished);
-            _countdownSequence.AppendCallback(() => _loadingService?.PublishInputEnabled(true));
+            _countdownSequence.AppendCallback(() => _eventService?.PublishInputEnabled(true));
             _countdownSequence.AppendCallback(() => _audioService.PlaySfx2DAudio(EAudioType.Ui, EAudioSubType.Ui_Start));
             _countdownSequence.AppendCallback(() => _localWindowsService.CloseWindow());
         }
@@ -150,8 +150,8 @@ namespace UI.Controllers
             View.Finish.gameObject.SetActive(true);
             ShowResultImage(View.Finish, View.WinFadeInSeconds);
             
-            _loadingService.PublishInputEnabled(false);
-            _loadingService.PublishWinResultChanged(true);
+            _eventService.PublishInputEnabled(false);
+            _eventService.PublishWinResultChanged(true);
             
             StartResultFlow();
         }
@@ -183,10 +183,10 @@ namespace UI.Controllers
 
         private void PublishCountdownFinished()
         {
-            if (_loadingService == null)
+            if (_eventService == null)
                 return;
 
-            _loadingService.PublishCountdownFinished();
+            _eventService.PublishCountdownFinished();
         }
 
         private void ShowResultImage(Image finish, float fadeInSeconds)

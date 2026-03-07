@@ -31,15 +31,15 @@ namespace Services.Impl
             World world,
             ISystem[] systems,
             IFixedSystem[] fixedSystems,
-            ILoadingService loadingService
+            IEventService eventService
         )
         {
             _world = world;
             _systems = systems;
             _fixedSystems = fixedSystems;
 
-            if (loadingService != null)
-                _playerSpawnedSubscription = loadingService.PlayerSpawnedStream.Subscribe(_ => RegisterDelayedSystems());
+            if (eventService != null)
+                _playerSpawnedSubscription = eventService.PlayerSpawnedStream.Subscribe(_ => RegisterDelayedSystems());
         }
 
         public void RegisterInitialSystems()

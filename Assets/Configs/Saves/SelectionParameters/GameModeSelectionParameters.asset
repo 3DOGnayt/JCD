@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ac7fd27b7c42e74fa54fb14542030b6, type: 3}
   m_Name: GameModeSelectionParameters
   m_EditorClassIdentifier: 
-  _gameMod: 1
+  _gameMod: 0

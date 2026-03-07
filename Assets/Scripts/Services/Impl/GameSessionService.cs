@@ -13,7 +13,7 @@ namespace Services.Impl
     {
         private readonly ILocalWindowsService _localWindowsService;
         private readonly IRaceTimerService _raceTimerService;
-        private readonly ILoadingService _loadingService;
+        private readonly IEventService _eventService;
         private readonly ISkidSmokeService _skidSmokeService;
         private readonly ICrashEffectService _crashEffectService;
         private readonly ISkidmarksService _skidmarksService;
@@ -29,7 +29,7 @@ namespace Services.Impl
         public GameSessionService(
             ILocalWindowsService localWindowsService,
             IRaceTimerService raceTimerService,
-            ILoadingService loadingService,
+            IEventService eventService,
             ISkidSmokeService skidSmokeService,
             ICrashEffectService crashEffectService,
             ISkidmarksService skidmarksService,
@@ -39,7 +39,7 @@ namespace Services.Impl
         {
             _localWindowsService = localWindowsService;
             _raceTimerService = raceTimerService;
-            _loadingService = loadingService;
+            _eventService = eventService;
             _skidSmokeService = skidSmokeService;
             _crashEffectService = crashEffectService;
             _skidmarksService = skidmarksService;
@@ -86,7 +86,7 @@ namespace Services.Impl
 
         private void OpenLoading()
         {
-            _loadingService?.PublishInputEnabled(false);
+            _eventService?.PublishInputEnabled(false);
             _localWindowsService?.CloseAllWindows();
             _localWindowsService?.OpenWindow<LoadingWindow>();
         }
@@ -114,7 +114,7 @@ namespace Services.Impl
 
             _runtimeInstances.Clear();
 
-            _loadingService?.ResetEvents();
+            _eventService?.ResetEvents();
             _raceTimerService?.ResetRace();
             _skidSmokeService?.ResetPool();
             _crashEffectService?.ResetPool();

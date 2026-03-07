@@ -8,7 +8,7 @@ namespace Services.Impl
 {
     public class RaceTimerService : IRaceTimerService, IDisposable
     {
-        private readonly ILoadingService _loadingService;
+        private readonly IEventService _eventService;
         private readonly Subject<RaceLapRecord> _lapCompletedSubject = new();
         private readonly Subject<Unit> _raceFinishedSubject = new();
         private readonly List<RaceLapRecord> _laps = new();
@@ -21,10 +21,10 @@ namespace Services.Impl
         private bool _isRunning;
         private bool _isFinished;
 
-        public RaceTimerService(ILoadingService loadingService)
+        public RaceTimerService(IEventService eventService)
         {
-            _loadingService = loadingService;
-            _startRaceDisposable = _loadingService.CountdownFinishedStream.Subscribe(_ => StartRace());
+            _eventService = eventService;
+            _startRaceDisposable = _eventService.CountdownFinishedStream.Subscribe(_ => StartRace());
         }
 
         public IObservable<RaceLapRecord> LapCompletedStream => _lapCompletedSubject;
