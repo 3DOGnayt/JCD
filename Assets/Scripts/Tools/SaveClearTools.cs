@@ -24,6 +24,7 @@ namespace Tools
             ResetSelectionAssets();
             ResetTrainingAssets();
             ResetAudioSelectionAssets();
+            ResetAudioVolumeAssets();
         }
 
         [MenuItem(MenuRoot + "Clear Selection Save")]
@@ -113,6 +114,7 @@ namespace Tools
 
             var dataService = new DataService();
             dataService.DeleteAudioVolumes();
+            ResetAudioVolumeAssets();
         }
 
         private static bool Confirm(string message)
@@ -176,6 +178,20 @@ namespace Tools
                 asset.SetSelectedMusic(EAudioSubType.None, -1);
                 EditorUtility.SetDirty(asset);
             }
+        }
+
+        private static void ResetAudioVolumeAssets()
+        {
+            foreach (var asset in FindAssets<AudioSelectionParameters>())
+            {
+                asset.SetMasterVolume(0.7f);
+                asset.SetMusicVolume(0.7f);
+                asset.SetSfxVolume(0.7f);
+                asset.SetUiVolume(0.7f);
+                EditorUtility.SetDirty(asset);
+            }
+
+            AssetDatabase.SaveAssets();
         }
 
         private static void ResetTrainingAssets()
