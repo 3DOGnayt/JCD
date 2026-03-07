@@ -12,6 +12,5 @@ namespace Data.Struct
         public Sprite Preview;
         public int SelectionCount;
         public int LapCount;
-        public MapMiniMapSettings MiniMap;
     }
 }

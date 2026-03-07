@@ -136,7 +136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.6320754, g: 0.6320754, b: 0.6320754, a: 0.27058825}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -224,13 +224,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 0}
+  m_Texture: {fileID: 8400000, guid: 191300b01fd218b468136c2248aca31a, type: 2}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -330,8 +330,3 @@ MonoBehaviour:
   _openAnimation: {fileID: 0}
   _closeAnimation: {fileID: 0}
   _mapImage: {fileID: 1073461728178228893}
-  _mapWorldSize: {x: 0, y: 0}
-  _mapWorldCenter: {x: 0, y: 0}
-  _viewRadiusMeters: 0
-  _rotateWithPlayer: 0
-  _clampToMapBounds: 0
