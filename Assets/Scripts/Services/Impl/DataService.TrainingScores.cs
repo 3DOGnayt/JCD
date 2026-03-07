@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using Data.HelperClass;
 using Data.Struct;
 
@@ -31,6 +32,13 @@ namespace Services.Impl
             }
 
             SaveJson(TrainingScoresFileName, data);
+        }
+
+        public void DeleteTrainingTimeScores()
+        {
+            var path = GetJsonPath(TrainingScoresFileName);
+            if (File.Exists(path))
+                File.Delete(path);
         }
     }
 }

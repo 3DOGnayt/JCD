@@ -44,6 +44,24 @@ namespace Services.Impl
             SaveFloat(key, value);
         }
 
+        public void DeleteAudioVolume(EAudioType type)
+        {
+            var key = GetVolumeKey(type);
+            if (string.IsNullOrEmpty(key))
+                return;
+
+            UnityEngine.PlayerPrefs.DeleteKey(key);
+            UnityEngine.PlayerPrefs.Save();
+        }
+
+        public void DeleteAudioVolumes()
+        {
+            DeleteAudioVolume(EAudioType.Master);
+            DeleteAudioVolume(EAudioType.Sfx);
+            DeleteAudioVolume(EAudioType.Music);
+            DeleteAudioVolume(EAudioType.Ui);
+        }
+
         private static string GetVolumeKey(EAudioType type)
         {
             switch (type)
