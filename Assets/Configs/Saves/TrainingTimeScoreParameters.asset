@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _entries:
   - Map: 1
-    BestTotalTime: 0
+    BestTotalTime: 92.89408
     BestSegmentTimes:
-    - 0
-    - 0
+    - 50.054085
+    - 42.839996
   - Map: 2
     BestTotalTime: 0
     BestSegmentTimes:
@@ -25,13 +25,9 @@ MonoBehaviour:
     - 0
     - 0
     - 0
-    - 0
-    - 0
   - Map: 3
     BestTotalTime: 0
     BestSegmentTimes:
-    - 0
-    - 0
     - 0
     - 0
     - 0

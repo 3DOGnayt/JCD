@@ -16,6 +16,7 @@ namespace UI.Controllers
     {
         private readonly IRaceTimerService _raceTimerService;
         private readonly ILoadingService _loadingService;
+        private readonly IDataService _dataService;
         
         private readonly MapSelectionParameters _mapSelectionParameters;
         private readonly GameModeSelectionParameters _gameModeSelectionParameters;
@@ -30,7 +31,8 @@ namespace UI.Controllers
             MapSelectionParameters mapSelectionParameters,
             GameModeSelectionParameters gameModeSelectionParameters,
             TrainingTimeScoreParameters trainingTimeScoreParameters,
-            ILoadingService loadingService
+            ILoadingService loadingService,
+            IDataService dataService
         )
         {
             _raceTimerService = raceTimerService;
@@ -38,6 +40,7 @@ namespace UI.Controllers
             _gameModeSelectionParameters = gameModeSelectionParameters;
             _trainingTimeScoreParameters = trainingTimeScoreParameters;
             _loadingService = loadingService;
+            _dataService = dataService;
         }
 
         public override void Initialize()
@@ -181,6 +184,7 @@ namespace UI.Controllers
                 _currentSetup.BestSegmentTimes.Add(_currentSegmentTimes[i]);
 
             RefreshBestTime();
+            _dataService?.SaveTrainingTimeScores(_trainingTimeScoreParameters.Entries);
         }
 
         private void EnsureSegmentTimeCache()

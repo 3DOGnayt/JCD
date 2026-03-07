@@ -17,14 +17,12 @@ namespace Services.Impl
         private readonly ISkidSmokeService _skidSmokeService;
         private readonly ICrashEffectService _crashEffectService;
         private readonly ISkidmarksService _skidmarksService;
+        private readonly IDataService _dataService;
         private readonly GameSelectionParameters _selectionParameters;
         private readonly World _world;
 
         private readonly List<GameObject> _runtimeInstances = new();
         private readonly List<Entity> _runtimeEntities = new();
-
-        private bool _hasSnapshot;
-        private GameSessionSnapshot _gameSessionSnapshot;
 
         public EGameSessionTarget Target { get; private set; } = EGameSessionTarget.Menu;
 
@@ -35,6 +33,7 @@ namespace Services.Impl
             ISkidSmokeService skidSmokeService,
             ICrashEffectService crashEffectService,
             ISkidmarksService skidmarksService,
+            IDataService dataService,
             GameSelectionParameters selectionParameters,
             World world)
         {
@@ -44,13 +43,14 @@ namespace Services.Impl
             _skidSmokeService = skidSmokeService;
             _crashEffectService = crashEffectService;
             _skidmarksService = skidmarksService;
+            _dataService = dataService;
             _selectionParameters = selectionParameters;
             _world = world;
         }
 
         public void BeginGame()
         {
-            CaptureSnapshot();
+            SaveSelection();
             Target = EGameSessionTarget.Game;
             CleanupRuntime();
             OpenLoading();
@@ -58,7 +58,6 @@ namespace Services.Impl
 
         public void RestartGame()
         {
-            RestoreSnapshot();
             Target = EGameSessionTarget.Game;
             CleanupRuntime();
             OpenLoading();
@@ -122,59 +121,23 @@ namespace Services.Impl
             _skidmarksService?.ResetMesh();
         }
 
-        private void CaptureSnapshot()
+        private void SaveSelection()
         {
-            if (_selectionParameters == null)
+            if (_dataService == null || _selectionParameters == null)
                 return;
 
-            _gameSessionSnapshot = new GameSessionSnapshot
+            var data = new GameSelectionSaveData
             {
-                SelectedCar = _selectionParameters.SelectedCar,
-                SelectedCarParameters = _selectionParameters.SelectedCarParameters,
-                SelectedCarIndex = _selectionParameters.SelectedCarIndex,
-                SelectedMapPrefab = _selectionParameters.SelectedMapPrefab,
-                SelectedMapIndex = _selectionParameters.SelectedMapIndex,
-                SelectedMapSelectionCount = _selectionParameters.SelectedMapSelectionCount,
-                SelectedMapLapCount = _selectionParameters.SelectedMapLapCount,
-                SelectedMap = _selectionParameters.SelectedMap,
-                GameMod = _selectionParameters.GameMod,
-                SelectedOpponentName = _selectionParameters.SelectedOpponentName,
-                SelectedOpponentDifficulty = _selectionParameters.SelectedOpponentDifficulty,
-                SelectedOpponentIndex = _selectionParameters.SelectedOpponentIndex,
-                SelectedMusicSubType = _selectionParameters.SelectedMusicSubType,
-                SelectedMusicIndex = _selectionParameters.SelectedMusicIndex
+                CarIndex = _selectionParameters.SelectedCarIndex,
+                MapIndex = _selectionParameters.SelectedMapIndex,
+                Map = _selectionParameters.SelectedMap,
+                GameMode = _selectionParameters.GameMod,
+                OpponentIndex = _selectionParameters.SelectedOpponentIndex,
+                MusicSubType = _selectionParameters.SelectedMusicSubType,
+                MusicIndex = _selectionParameters.SelectedMusicIndex
             };
 
-            _hasSnapshot = true;
-        }
-
-        private void RestoreSnapshot()
-        {
-            if (!_hasSnapshot || _selectionParameters == null)
-                return;
-
-            _selectionParameters.SetSelectedCar(
-                _gameSessionSnapshot.SelectedCar,
-                _gameSessionSnapshot.SelectedCarParameters,
-                _gameSessionSnapshot.SelectedCarIndex);
-
-            _selectionParameters.SetSelectedMap(
-                _gameSessionSnapshot.SelectedMapPrefab,
-                _gameSessionSnapshot.SelectedMapIndex,
-                _gameSessionSnapshot.SelectedMap,
-                _gameSessionSnapshot.SelectedMapSelectionCount,
-                _gameSessionSnapshot.SelectedMapLapCount);
-
-            _selectionParameters.SetSelectedGameMode(_gameSessionSnapshot.GameMod);
-            
-            _selectionParameters.SetSelectedOpponent(
-                _gameSessionSnapshot.SelectedOpponentName,
-                _gameSessionSnapshot.SelectedOpponentDifficulty,
-                _gameSessionSnapshot.SelectedOpponentIndex);
-
-            _selectionParameters.SetSelectedMusic(
-                _gameSessionSnapshot.SelectedMusicSubType,
-                _gameSessionSnapshot.SelectedMusicIndex);
+            _dataService.SaveGameSelection(data);
         }
     }
 }

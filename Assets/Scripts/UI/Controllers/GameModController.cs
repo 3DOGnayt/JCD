@@ -49,15 +49,30 @@ namespace UI.Controllers
         public override void Initialize()
         {
             if (View.TrainingButton.interactable && View.StoryButton.interactable)
-            {
-                SetInteractableButtons(false);
-                _gameModeSelectionParameters.SetSelectedGameMode(EGameMod.Training);
-            }
+                ApplySavedSelection();
 
             View.TrainingButton.OnClickAsObservable().Subscribe(_ => OnTrainingButtonClick()).AddTo(View);
             View.StoryButton.OnClickAsObservable().Subscribe(_ => OnStoryButtonClick()).AddTo(View);
             View.ConfirmButton.OnClickAsObservable().Subscribe(_ => OnConfirmButtonClick()).AddTo(View);
             View.BackButton.OnClickAsObservable().Subscribe(_ => OnBackButtonClick()).AddTo(View);
+        }
+        
+        private void ApplySavedSelection()
+        {
+            switch (_gameModeSelectionParameters.GameMod)
+            {
+                case EGameMod.Story:
+                    SetInteractableButtons(true);
+                    break;
+                case EGameMod.Training:
+                    SetInteractableButtons(false);
+                    break;
+                case EGameMod.None:
+                default:
+                    SetInteractableButtons(false);
+                    _gameModeSelectionParameters.SetSelectedGameMode(EGameMod.Training);
+                    break;
+            }
         }
 
         protected override void OnOpen()
