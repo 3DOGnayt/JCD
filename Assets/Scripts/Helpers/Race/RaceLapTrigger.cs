@@ -1,30 +1,33 @@
+using Components;
+using Scellecs.Morpeh;
 using UnityEngine;
+using Zenject;
 
 namespace Helpers.Race
 {
     [RequireComponent(typeof(Collider))]
     public class RaceLapTrigger : MonoBehaviour
     {
-        [SerializeField] private RaceLapTriggerManager _manager;
+        [Inject] private World _world;
 
         private int _checkpointIndex = -1;
 
-        public void Configure(RaceLapTriggerManager manager, int checkpointIndex)
+        public void Configure(int checkpointIndex)
         {
-            _manager = manager;
             _checkpointIndex = checkpointIndex;
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (_manager == null || _checkpointIndex < 0 || other == null)
+            if (_world == null || _checkpointIndex < 0 || other == null)
                 return;
 
             var carView = other.GetComponentInParent<CarView.Impl.CarView>();
             if (carView == null)
                 return;
 
-            _manager.RegisterCheckpoint(_checkpointIndex);
+            var entity = _world.CreateEntity();
+            entity.SetComponent(new RaceLapTriggerEventComponent { CheckpointIndex = _checkpointIndex });
         }
     }
 }

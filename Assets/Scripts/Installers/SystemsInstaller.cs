@@ -1,5 +1,6 @@
 using Scellecs.Morpeh;
 using Systems.Car;
+using Systems.Race;
 using Systems.Spawn;
 using Zenject;
 
@@ -17,6 +18,7 @@ namespace Installers
             Container.Bind<ISystem>().To<CameraSpawnSystem>().AsSingle();
             Container.Bind<ISystem>().To<MapSpawnSystem>().AsSingle();
             Container.Bind<ISystem>().To<PlayerSpawnSystem>().AsSingle();
+            Container.Bind<ISystem>().To<RaceLapSystem>().AsSingle();
             
             Container.Bind<ISystem>().To<InputSystem>().AsSingle();
             Container.Bind<IFixedSystem>().To<HorizontalInputSystem>().AsSingle();
