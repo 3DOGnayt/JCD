@@ -230,6 +230,8 @@ MonoBehaviour:
     type: 3}
   _freeLookCamera: {fileID: 2417838431813415939, guid: 58ac8e3a4b7cd7a47aa0a766a90b2a7e,
     type: 3}
+  _minimapCameraPrefab: {fileID: 1919919919919919919, guid: fece8056949c49548bfc4b376fdcda86,
+    type: 3}
 --- !u!1 &5194650387233552706
 GameObject:
   m_ObjectHideFlags: 0
