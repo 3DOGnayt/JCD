@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Cameras
 {
-    public sealed class MinimapCameraController : MonoBehaviour
+    public sealed class MinimapCameraHolder : MonoBehaviour
     {
         [SerializeField] private Camera _camera;
 

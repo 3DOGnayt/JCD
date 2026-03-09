@@ -1,6 +1,6 @@
 using Cameras;
-using KoboldUi.Element.Controller;
 using Helpers.CarView;
+using KoboldUi.Element.Controller;
 using Services;
 using UI.Views;
 using UniRx;
@@ -10,15 +10,15 @@ namespace UI.Controllers
     public class GameMapController : AUiController<GameMapView>
     {
         private readonly IEventService _eventService;
-        private readonly MinimapSpawner _minimapSpawner;
-        private MinimapCameraController _minimapCameraInstance;
+        
+        private ICarView _carView;
+        private MinimapCameraHolder _minimapCamera;
 
         public GameMapController(
-            IEventService eventService,
-            MinimapSpawner minimapSpawner)
+            IEventService eventService
+        )
         {
             _eventService = eventService;
-            _minimapSpawner = minimapSpawner;
         }
 
         public override void Initialize()
@@ -27,6 +27,7 @@ namespace UI.Controllers
                 return;
 
             _eventService.PlayerSpawnedStream.Subscribe(OnPlayerSpawned).AddTo(View);
+            _eventService.MinimapSpawnedStream.Subscribe(OnMinimapSpawned).AddTo(View);
         }
 
         private void OnPlayerSpawned(ICarView carView)
@@ -34,11 +35,25 @@ namespace UI.Controllers
             if (carView == null)
                 return;
 
-            if (_minimapCameraInstance == null && _minimapSpawner != null)
-                _minimapCameraInstance = _minimapSpawner.SpawnAttached(carView.CarTransform);
+            _carView = carView;
+        }
 
-            if (_minimapCameraInstance != null)
-                View.SetMinimapCamera(_minimapCameraInstance);
+        private void OnMinimapSpawned(MinimapCameraHolder minimapCamera)
+        {
+            if (minimapCamera == null)
+                return;
+
+            _minimapCamera = minimapCamera;
+            
+            TryBindMinimap();
+        }
+
+        private void TryBindMinimap()
+        {
+            if (_minimapCamera == null || _carView == null)
+                return;
+
+            View.SetMinimapCamera(_minimapCamera);
         }
     }
 }

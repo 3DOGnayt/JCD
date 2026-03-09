@@ -10,14 +10,14 @@ namespace UI.Views
         [Header("References")]
         [SerializeField] private RawImage _mapImage;
 
-        private MinimapCameraController _minimapCameraInstance;
+        private MinimapCameraHolder _minimapCamera;
 
-        public void SetMinimapCamera(MinimapCameraController minimapCameraInstance)
+        public void SetMinimapCamera(MinimapCameraHolder minimapCameraInstance)
         {
-            _minimapCameraInstance = minimapCameraInstance;
+            _minimapCamera = minimapCameraInstance;
             
-            if (_mapImage != null && _minimapCameraInstance != null && _minimapCameraInstance.Camera != null)
-                _mapImage.texture = _minimapCameraInstance.Camera.targetTexture;
+            if (_mapImage != null && _minimapCamera != null && _minimapCamera.Camera != null)
+                _mapImage.texture = _minimapCamera.Camera.targetTexture;
         }
     }
 }

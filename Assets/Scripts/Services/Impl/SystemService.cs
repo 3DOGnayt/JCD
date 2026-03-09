@@ -2,12 +2,19 @@ using System;
 using System.Collections.Generic;
 using Scellecs.Morpeh;
 using Systems.Car;
+using Systems.Spawn;
 using UniRx;
 
 namespace Services.Impl
 {
     public class SystemService : ISystemService, IDisposable
     {
+        private static readonly HashSet<Type> DelayedUpdateSystemTypes = new()
+        {
+            typeof(MinimapSpawnSystem),
+            typeof(MinimapFollowSystem)
+        };
+        
         private static readonly HashSet<Type> DelayedFixedSystemTypes = new()
         {
             typeof(GearShiftSystem),
@@ -23,9 +30,11 @@ namespace Services.Impl
         private SystemsGroup _systemsGroup;
         private SystemsGroup _fixedSystemsGroup;
         private IDisposable _playerSpawnedSubscription;
+        private IDisposable _isLoadingCompletedSubscription;
 
         private bool _initialRegistered;
         private bool _delayedRegistered;
+        private bool _delayedUpdateRegistered;
 
         public SystemService(
             World world,
@@ -38,8 +47,13 @@ namespace Services.Impl
             _systems = systems;
             _fixedSystems = fixedSystems;
 
-            if (eventService != null)
-                _playerSpawnedSubscription = eventService.PlayerSpawnedStream.Subscribe(_ => RegisterDelayedSystems());
+            if (eventService == null)
+                return;
+            
+            _playerSpawnedSubscription = eventService.PlayerSpawnedStream.Subscribe(_ => RegisterDelayedFixedSystems());
+            _isLoadingCompletedSubscription = eventService.IsLoadingCompleted
+                .Where(isCompleted => isCompleted)
+                .Subscribe(_ => RegisterDelayedUpdateSystems());
         }
 
         public void RegisterInitialSystems()
@@ -50,7 +64,10 @@ namespace Services.Impl
             _systemsGroup = _world.CreateSystemsGroup();
 
             foreach (var system in _systems)
-                _systemsGroup.AddSystem(system);
+            {
+                if (!IsDelayedUpdateSystem(system)) 
+                    _systemsGroup.AddSystem(system);
+            }
 
             _fixedSystemsGroup = _world.CreateSystemsGroup();
             foreach (var fixedSystem in _fixedSystems)
@@ -64,7 +81,23 @@ namespace Services.Impl
             _initialRegistered = true;
         }
 
-        public void RegisterDelayedSystems()
+        private void RegisterDelayedUpdateSystems()
+        {
+            if (_delayedUpdateRegistered)
+                return;
+
+            var delayedUpdateSystemsGroup = _world.CreateSystemsGroup();
+            foreach (var updateSystem in _systems)
+            {
+                if (IsDelayedUpdateSystem(updateSystem))
+                    delayedUpdateSystemsGroup.AddSystem(updateSystem);
+            }
+
+            _world.AddSystemsGroup(order: 2, delayedUpdateSystemsGroup);
+            _delayedUpdateRegistered = true;
+        }
+
+        private void RegisterDelayedFixedSystems()
         {
             if (_delayedRegistered)
                 return;
@@ -76,7 +109,7 @@ namespace Services.Impl
                     delayedFixedSystemsGroup.AddSystem(fixedSystem);
             }
 
-            _world.AddSystemsGroup(order: 2, delayedFixedSystemsGroup);
+            _world.AddSystemsGroup(order: 3, delayedFixedSystemsGroup);
             _delayedRegistered = true;
         }
 
@@ -84,10 +117,16 @@ namespace Services.Impl
         {
             return system != null && DelayedFixedSystemTypes.Contains(system.GetType());
         }
+        
+        private static bool IsDelayedUpdateSystem(ISystem system)
+        {
+            return system != null && DelayedUpdateSystemTypes.Contains(system.GetType());
+        }
 
         public void Dispose()
         {
             _playerSpawnedSubscription?.Dispose();
+            _isLoadingCompletedSubscription?.Dispose();
         }
     }
 }

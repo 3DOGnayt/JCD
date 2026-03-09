@@ -13,6 +13,7 @@ namespace Components
     
     //Tags
     public struct PlayerTagComponent : IComponent { }
+    public struct MiniMapTagComponent : IComponent { }
     
     //Car sub components
     public struct VerticalInputComponent : IComponent { public float Value; }

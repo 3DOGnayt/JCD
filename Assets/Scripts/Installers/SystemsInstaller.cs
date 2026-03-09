@@ -21,8 +21,11 @@ namespace Installers
             Container.Bind<ISystem>().To<RaceLapSystem>().AsSingle();
             
             Container.Bind<ISystem>().To<InputSystem>().AsSingle();
-            Container.Bind<IFixedSystem>().To<HorizontalInputSystem>().AsSingle();
+            Container.Bind<ISystem>().To<MinimapSpawnSystem>().AsSingle();
+            Container.Bind<ISystem>().To<MinimapFollowSystem>().AsSingle();
             
+            Container.Bind<IFixedSystem>().To<HorizontalInputSystem>().AsSingle();
+
             // base
             Container.Bind<IFixedSystem>().To<WheelDriveSystem>().AsSingle();
             Container.Bind<IFixedSystem>().To<PhysicsSpeedSystem>().AsSingle();
