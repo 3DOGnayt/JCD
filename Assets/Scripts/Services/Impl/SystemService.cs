@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Scellecs.Morpeh;
 using Systems.Car;
+using Systems.MiniMapCamera;
 using Systems.Spawn;
 using UniRx;
 

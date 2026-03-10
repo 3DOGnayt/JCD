@@ -1,5 +1,6 @@
 using Scellecs.Morpeh;
 using Systems.Car;
+using Systems.MiniMapCamera;
 using Systems.Race;
 using Systems.Spawn;
 using Zenject;

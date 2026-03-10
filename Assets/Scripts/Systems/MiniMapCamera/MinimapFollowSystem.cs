@@ -3,7 +3,7 @@ using Scellecs.Morpeh;
 using UnityEngine;
 using Zenject;
 
-namespace Systems.Spawn
+namespace Systems.MiniMapCamera
 {
     public sealed class MinimapFollowSystem : ISystem
     {

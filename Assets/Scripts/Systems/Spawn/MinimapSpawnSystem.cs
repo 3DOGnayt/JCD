@@ -1,7 +1,10 @@
 using Cameras;
 using Components;
+using Data.Enums;
 using Scellecs.Morpeh;
 using Services;
+using System;
+using UniRx;
 using Zenject;
 
 namespace Systems.Spawn
@@ -12,17 +15,30 @@ namespace Systems.Spawn
         [Inject] private MinimapCameraHolder _minimapCameraPrefab;
         [Inject] private DiContainer _container;
         [Inject] private IEventService _eventService;
+        [Inject] private IGameSessionService _gameSessionService;
 
+        private IDisposable _spawnDisposable;
+        
         private bool _hasSpawned;
+        private const float SpawnProgressThreshold = 0.2f;
 
         public void OnAwake()
         {
-            TrySpawn();
+            if (_eventService != null)
+                _spawnDisposable = _eventService.LoadingProgress.Subscribe(OnLoadingProgress);
         }
 
-        public void OnUpdate(float deltaTime)
+        public void OnUpdate(float deltaTime) { }
+
+        private void OnLoadingProgress(float progress)
         {
-            if (_hasSpawned)
+            if (progress <= 0f)
+                _hasSpawned = false;
+
+            if (_gameSessionService != null && _gameSessionService.Target != EGameSessionTarget.Game)
+                return;
+
+            if (_hasSpawned || progress < SpawnProgressThreshold)
                 return;
 
             TrySpawn();
@@ -31,6 +47,8 @@ namespace Systems.Spawn
         private void TrySpawn()
         {
             if (_hasSpawned || _minimapCameraPrefab == null || _container == null)
+                return;
+            if (_gameSessionService != null && _gameSessionService.Target != EGameSessionTarget.Game)
                 return;
 
             var prefabTransform = _minimapCameraPrefab.transform;
@@ -49,10 +67,15 @@ namespace Systems.Spawn
             cameraEntity.SetComponent(new MiniMapTagComponent());
             cameraEntity.SetComponent(new TransformComponent { Value = followPivot});
 
+            _gameSessionService?.RegisterRuntimeEntity(cameraEntity);
+            _gameSessionService?.RegisterRuntimeRoot(instance.gameObject);
             _eventService?.PublishMinimapSpawned(instance);
             _hasSpawned = true;
         }
 
-        public void Dispose() { }
+        public void Dispose()
+        {
+            _spawnDisposable?.Dispose();
+        }
     }
 }
