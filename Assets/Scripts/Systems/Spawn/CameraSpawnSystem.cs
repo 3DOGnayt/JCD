@@ -13,7 +13,6 @@ namespace Systems.Spawn
     {
         [Inject] public World World { get; set; }
         [Inject] private FollowingCamera _cameraPrefab;
-        [Inject] private CinemachineFreeLook _cinemachineFreeLookPrefab;
         [Inject] private DiContainer _container;
         [Inject] private IEventService _eventService;
 
@@ -22,18 +21,17 @@ namespace Systems.Spawn
         private FollowingCamera _followingCameraInstance;
         private Vector3 _followingInitialPosition;
         private Quaternion _followingInitialRotation;
-        
-        private CinemachineFreeLook _cinemachineFreeLookInstance;
-        private Vector3 _cinemachineInitialPosition;
-        private Quaternion _cinemachineInitialRotation;
+        private CinemachineVirtualCamera _virtualCamera;
         
         private IDisposable _startRaceDisposable;
+        private IDisposable _playerSpawnedDisposable;
 
         public void OnAwake()
         {
             SetSpawnRoot();
             SpawnCamera();
             SubscribeToRaceStart();
+            SubscribeToPlayerSpawned();
         }
 
         private void SetSpawnRoot() => _cameraGroup = new GameObject("Cameras").transform;
@@ -41,9 +39,6 @@ namespace Systems.Spawn
         private void SpawnCamera()
         {
             if (_cameraPrefab == null)
-                return;
-            
-            if (_cinemachineFreeLookPrefab == null)
                 return;
 
             var cameraTransform = _cameraPrefab.transform;
@@ -55,16 +50,7 @@ namespace Systems.Spawn
             
             _followingInitialPosition = _followingCameraInstance.transform.position;
             _followingInitialRotation = _followingCameraInstance.transform.rotation;
-            
-            var cinemachineTransform = _cinemachineFreeLookPrefab.transform;
-            _cinemachineFreeLookInstance = _container.InstantiatePrefabForComponent<CinemachineFreeLook>(
-                _cinemachineFreeLookPrefab.gameObject,
-                cinemachineTransform.position,
-                cinemachineTransform.rotation,
-                _cameraGroup);
-            
-            _cinemachineInitialPosition = _cinemachineFreeLookInstance.transform.position;
-            _cinemachineInitialRotation = _cinemachineFreeLookInstance.transform.rotation;
+            _virtualCamera = _followingCameraInstance.GetComponent<CinemachineVirtualCamera>();
         }
 
         private void SubscribeToRaceStart()
@@ -75,18 +61,30 @@ namespace Systems.Spawn
             _startRaceDisposable = _eventService.StartRaceStream.Subscribe(_ => ResetCameraPositions());
         }
 
+        private void SubscribeToPlayerSpawned()
+        {
+            if (_eventService == null)
+                return;
+
+            _playerSpawnedDisposable = _eventService.PlayerSpawnedStream.Subscribe(OnPlayerSpawned);
+        }
+
+        private void OnPlayerSpawned(Helpers.CarView.ICarView carView)
+        {
+            if (_virtualCamera == null || carView == null)
+                return;
+
+            var target = carView.CarTransform;
+            _virtualCamera.Follow = target;
+            _virtualCamera.LookAt = target;
+        }
+
         private void ResetCameraPositions()
         {
-            if (_followingCameraInstance != null)
+            if (_followingCameraInstance != null && _followingCameraInstance.enabled)
             {
                 _followingCameraInstance.transform.position = _followingInitialPosition;
                 _followingCameraInstance.transform.rotation = _followingInitialRotation;
-            }
-
-            if (_cinemachineFreeLookInstance != null)
-            {
-                _cinemachineFreeLookInstance.transform.position = _cinemachineInitialPosition;
-                _cinemachineFreeLookInstance.transform.rotation = _cinemachineInitialRotation;
             }
         }
 
@@ -95,6 +93,7 @@ namespace Systems.Spawn
         public void Dispose()
         {
             _startRaceDisposable?.Dispose();
+            _playerSpawnedDisposable?.Dispose();
         }
     }
 }
