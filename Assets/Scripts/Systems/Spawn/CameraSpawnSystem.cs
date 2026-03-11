@@ -25,12 +25,12 @@ namespace Systems.Spawn
         
         private IDisposable _startRaceDisposable;
         private IDisposable _playerSpawnedDisposable;
+        private readonly SerialDisposable _followDelayDisposable = new();
 
         public void OnAwake()
         {
             SetSpawnRoot();
             SpawnCamera();
-            SubscribeToRaceStart();
             SubscribeToPlayerSpawned();
         }
 
@@ -53,14 +53,6 @@ namespace Systems.Spawn
             _virtualCamera = _followingCameraInstance.GetComponent<CinemachineVirtualCamera>();
         }
 
-        private void SubscribeToRaceStart()
-        {
-            if (_eventService == null)
-                return;
-
-            _startRaceDisposable = _eventService.StartRaceStream.Subscribe(_ => ResetCameraPositions());
-        }
-
         private void SubscribeToPlayerSpawned()
         {
             if (_eventService == null)
@@ -75,17 +67,23 @@ namespace Systems.Spawn
                 return;
 
             var target = carView.CarTransform;
-            _virtualCamera.Follow = target;
-            _virtualCamera.LookAt = target;
+            ResetVirtualCameraTarget(target);
         }
 
-        private void ResetCameraPositions()
+        private void ResetVirtualCameraTarget(Transform target)
         {
-            if (_followingCameraInstance != null && _followingCameraInstance.enabled)
-            {
-                _followingCameraInstance.transform.position = _followingInitialPosition;
-                _followingCameraInstance.transform.rotation = _followingInitialRotation;
-            }
+            _virtualCamera.Follow = null;
+            _virtualCamera.LookAt = null;
+
+            _followingCameraInstance.transform.position = _followingInitialPosition;
+            _followingCameraInstance.transform.rotation = _followingInitialRotation;
+            
+            _followDelayDisposable.Disposable = Observable.NextFrame()
+                .Subscribe(_ =>
+                {
+                    _virtualCamera.Follow = target;
+                    _virtualCamera.LookAt = target;
+                });
         }
 
         public void OnUpdate(float deltaTime) { }
@@ -94,6 +92,7 @@ namespace Systems.Spawn
         {
             _startRaceDisposable?.Dispose();
             _playerSpawnedDisposable?.Dispose();
+            _followDelayDisposable.Dispose();
         }
     }
 }

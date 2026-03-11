@@ -84,7 +84,7 @@ namespace UI.Controllers
 
             if (View.СountdownList == null || View.СountdownList.Count == 0)
             {
-                _countdownSequence.AppendCallback(PublishCountdownFinished);
+                FinishCountdown();
                 return;
             }
 
@@ -123,6 +123,11 @@ namespace UI.Controllers
                     _countdownSequence.AppendCallback(() => { viewСountdown.gameObject.SetActive(false); });
             }
 
+            FinishCountdown();
+        }
+
+        private void FinishCountdown()
+        {
             _countdownSequence.AppendCallback(PublishCountdownFinished);
             _countdownSequence.AppendCallback(() => _eventService?.PublishInputEnabled(true));
             _countdownSequence.AppendCallback(() => _audioService.PlaySfx2DAudio(EAudioType.Ui, EAudioSubType.Ui_Start));
