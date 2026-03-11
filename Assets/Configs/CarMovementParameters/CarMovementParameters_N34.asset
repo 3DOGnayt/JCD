@@ -37,3 +37,4 @@ MonoBehaviour:
   _useArcadeAssist: 1
   _arcadeAssistMinSpeedKmh: 0
   _arcadeAssistLerpSpeed: 1
+  _driftAssistForwardSpeedMultiplier: 1.5

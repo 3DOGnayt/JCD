@@ -132,11 +132,7 @@ namespace Systems.Car
             foreach (var car in _cars)
             {
                 var aspect = _carAspectFactory.Get(car);
-
-                ref var speedValue = ref aspect.Speed.Value;
-                ref var backSpeedValue = ref aspect.BackSpeed.Value;
-                ref var brakeInputFlag = ref aspect.BrakeInput.Value;
-                ref var handbrakePressed = ref aspect.HandbrakeInput.Value;
+                var brakeInputFlag = aspect.BrakeInput.Value;
                 ref var currentGear = ref aspect.Gear.Value;
 
                 if (!_inputEnabled)
@@ -146,120 +142,58 @@ namespace Systems.Car
                 }
 
                 var verticalInput = Mathf.Clamp(_verticalInputStash.Get(car).Value, -1f, 1f);
-
-                var forwardSpeedKmh = Mathf.Max(0f, speedValue);
-                var backwardSpeedKmh = Mathf.Max(0f, Mathf.Abs(backSpeedValue));
-                var scalarSpeedKmh = Mathf.Max(forwardSpeedKmh, backwardSpeedKmh);
-
-                var isMovingForward = forwardSpeedKmh >= backwardSpeedKmh;
-                var systemHelpers = carParameters.MovementParameters.HelpersSetup;
-                var isAlmostStopped = scalarSpeedKmh < systemHelpers.StopThresholdKmh;
-
                 var wheelInfoComponent = _wheelInfoStash.Get(car);
 
                 float maxMotorTorque;
                 float driveInput;
-                float brakeForce;
 
-                ResolveDriveAndBrake(
-                    verticalInput,
-                    currentGear,
-                    isMovingForward,
-                    isAlmostStopped,
-                    handbrakePressed,
-                    carParameters,
-                    out maxMotorTorque,
-                    out driveInput,
-                    out brakeForce,
-                    out brakeInputFlag
-                );
-
+                ResolveDrive(verticalInput, currentGear, brakeInputFlag, carParameters, out maxMotorTorque, out driveInput);
+                
                 _inputService.ApplyVerticalMove(maxMotorTorque, driveInput, wheelInfoComponent.WheelInfo);
-                ApplyBrakes(wheelInfoComponent, brakeForce, handbrakePressed, carParameters);
             }
         }
 
-        private void ResolveDriveAndBrake(
+        private void ResolveDrive(
             float verticalInput,
             int currentGear,
-            bool isMovingForward,
-            bool isAlmostStopped,
-            bool handbrakePressed,
+            bool brakeInputPressed,
             CarParameters carParameters,
             out float maxMotorTorque,
-            out float driveInput,
-            out float brakeForce,
-            out bool brakeInputFlag)
+            out float driveInput
+        )
         {
             maxMotorTorque = 0f;
             driveInput = 0f;
-            brakeForce = 0f;
-            brakeInputFlag = false;
 
             var systemHelpers = carParameters.MovementParameters.HelpersSetup;
             if (Mathf.Abs(verticalInput) < systemHelpers.InputDeadZone)
+                return;
+
+            if (brakeInputPressed)
                 return;
 
             var wantsForward = verticalInput > 0f;
             var wantsBackward = verticalInput < 0f;
 
             if (currentGear == 0)
-            {
-                if (!isAlmostStopped)
-                    SetBrakeMode(verticalInput, out maxMotorTorque, out driveInput, out brakeForce, out brakeInputFlag);
-
-                if (handbrakePressed)
-                {
-                    maxMotorTorque = 0f;
-                    driveInput = 0f;
-                }
-
                 return;
-            }
 
             if (wantsForward)
             {
-                if (!isMovingForward && !isAlmostStopped)
-                    SetBrakeMode(verticalInput, out maxMotorTorque, out driveInput, out brakeForce, out brakeInputFlag);
-                else if (currentGear > 0)
+                if (currentGear > 0)
                 {
                     maxMotorTorque = GetForwardGearTorque(currentGear);
                     driveInput = verticalInput;
                 }
-                else
-                    return;
             }
             else if (wantsBackward)
             {
-                if (isMovingForward && !isAlmostStopped)
-                    SetBrakeMode(verticalInput, out maxMotorTorque, out driveInput, out brakeForce, out brakeInputFlag);
-                else if (currentGear < 0)
+                if (currentGear < 0)
                 {
                     maxMotorTorque = _reverseGearTorque;
                     driveInput = verticalInput;
                 }
-                else
-                    return;
             }
-
-            if (handbrakePressed)
-            {
-                maxMotorTorque = 0f;
-                driveInput = 0f;
-            }
-        }
-
-        private void SetBrakeMode(
-            float verticalInput,
-            out float maxMotorTorque,
-            out float driveInput,
-            out float brakeForce,
-            out bool brakeInputFlag)
-        {
-            maxMotorTorque = 0f;
-            driveInput = 0f;
-            brakeForce = Mathf.Abs(verticalInput);
-            brakeInputFlag = true;
         }
 
         private float GetForwardGearTorque(int gearValue)
@@ -271,26 +205,6 @@ namespace Systems.Car
             return 0f;
         }
 
-        private void ApplyBrakes(WheelInfoComponent wheelInfoComponent, float brakeForce, bool handbrakePressed, CarParameters carParameters)
-        {
-            var parameters = carParameters.MovementParameters;
-            var pedalBrakeTorque = parameters.BrakeTorque * Mathf.Max(0f, brakeForce);
-            var handbrakeTorque = handbrakePressed ? parameters.HandbrakeTorque : 0f;
-
-            foreach (var info in wheelInfoComponent.WheelInfo)
-            {
-                var totalBrakeTorque = pedalBrakeTorque;
-
-                if (handbrakePressed && info.Motor)
-                    totalBrakeTorque += handbrakeTorque;
-
-                if (info.LeftWheel != null)
-                    info.LeftWheel.brakeTorque = totalBrakeTorque;
-
-                if (info.RightWheel != null)
-                    info.RightWheel.brakeTorque = totalBrakeTorque;
-            }
-        }
 
         private void SetInputEnabled(bool isEnabled)
         {

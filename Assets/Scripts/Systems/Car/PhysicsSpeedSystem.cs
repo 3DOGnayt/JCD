@@ -73,7 +73,7 @@ namespace Systems.Car
                 var velocity = rb.velocity;
 
                 velocity = ApplyArcadeAssist(velocity, input, forward, deltaTime, carParameters);
-
+                
                 rb.velocity = velocity;
 
                 ApplySleepIfStopped(rb, input, handbrake, carParameters);
@@ -82,7 +82,7 @@ namespace Systems.Car
 
                 var forwardSpeedMps = Vector3.Dot(velocity, forward);
                 var forwardKmh = Mathf.Abs(forwardSpeedMps) * 3.6f;
-
+                
                 if (forwardSpeedMps >= 0f)
                 {
                     speed.Value = forwardKmh;
@@ -116,6 +116,8 @@ namespace Systems.Car
 
             var wantForward = verticalInput > 0.01f;
             var movingForward = forwardSpeed > 0.01f;
+            var driftAssistMultiplier = Mathf.Max(1f, movementParameters.DriftAssistForwardSpeedMultiplier);
+            var isDrifting = IsDrifting(velocity, forward, carParameters);
 
             if (!wantForward || !movingForward || absForward < minSpeedMps)
             {
@@ -129,7 +131,10 @@ namespace Systems.Car
             if (forwardSpeed < _assistForwardSpeedMps)
             {
                 var t = 1f - Mathf.Exp(-movementParameters.ArcadeAssistLerpSpeed * deltaTime);
-                var targetForward = Mathf.Lerp(forwardSpeed, _assistForwardSpeedMps, t);
+                var targetForward = Mathf.Lerp(
+                    forwardSpeed,
+                    _assistForwardSpeedMps * (isDrifting ? driftAssistMultiplier : 1f),
+                    t);
 
                 var forwardComponent = forward * forwardSpeed;
                 var otherComponent = velocity - forwardComponent;
@@ -143,6 +148,20 @@ namespace Systems.Car
             }
 
             return velocity;
+        }
+
+        private bool IsDrifting(Vector3 velocity, Vector3 forward, CarParameters carParameters)
+        {
+            var helpers = carParameters.MovementParameters.HelpersSetup;
+            if (helpers == null)
+                return false;
+
+            var speedKmh = velocity.magnitude * 3.6f;
+            if (speedKmh < helpers.MinDriftSpeedKmh)
+                return false;
+
+            var slipAngle = Vector3.Angle(forward, velocity);
+            return slipAngle > helpers.SlipAngleThresholdDeg;
         }
         
         private void ApplySleepIfStopped(Rigidbody rb, float verticalInput, bool handbrake, CarParameters carParameters)

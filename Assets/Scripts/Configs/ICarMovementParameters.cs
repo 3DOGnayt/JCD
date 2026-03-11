@@ -5,6 +5,7 @@ namespace Configs
         bool UseArcadeAssist { get; }
         float ArcadeAssistMinSpeedKmh { get; }
         float ArcadeAssistLerpSpeed  { get; }
+        float DriftAssistForwardSpeedMultiplier { get; }
         
         float SpeedMultiplierMax { get; }
         float SpeedMultiplierMin { get; }

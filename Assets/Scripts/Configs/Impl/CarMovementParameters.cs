@@ -31,6 +31,7 @@ namespace Configs.Impl
         [SerializeField] private bool _useArcadeAssist = true;
         [SerializeField] private float _arcadeAssistMinSpeedKmh;
         [SerializeField] private float _arcadeAssistLerpSpeed = 1f;
+        [SerializeField] private float _driftAssistForwardSpeedMultiplier = 1f;
         
         public float SpeedMultiplierMax => _speedMultiplierMax;
         public float SpeedMultiplierMin => _speedMultiplierMin;
@@ -52,5 +53,6 @@ namespace Configs.Impl
         public bool UseArcadeAssist => _useArcadeAssist;
         public float ArcadeAssistMinSpeedKmh => _arcadeAssistMinSpeedKmh;
         public float ArcadeAssistLerpSpeed => _arcadeAssistLerpSpeed;
+        public float DriftAssistForwardSpeedMultiplier => _driftAssistForwardSpeedMultiplier;
     }
 }
