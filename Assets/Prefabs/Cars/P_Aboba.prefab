@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1954019103673437991}
   - component: {fileID: -4530983478616957614}
   m_Layer: 0
-  m_Name: CarRoot
+  m_Name: P_Aboba
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: CarCatalogParameters
   m_EditorClassIdentifier: 
   _cars:
+  - DisplayName: Aboba
+    Preset: {fileID: 11400000, guid: ebec29c619f1cba4f90bf5ff5a996e21, type: 2}
+    Parameters: {fileID: 11400000, guid: 447861bc52b683f4a9e72756e8fa1c3e, type: 2}
+    Preview: {fileID: 21300000, guid: 7cff4090d7d1da44c859d19e9240b40f, type: 3}
   - DisplayName: N34
     Preset: {fileID: 11400000, guid: 5c594316e21a99541926ca2e21cac6b9, type: 2}
     Parameters: {fileID: 11400000, guid: 861d21277b11455459aba137c7957d16, type: 2}
@@ -21,7 +25,7 @@ MonoBehaviour:
     Preset: {fileID: 11400000, guid: 314cb5b109249c24f9b0ab884476da62, type: 2}
     Parameters: {fileID: 11400000, guid: f8480b7e0f4acd04e81c153a8015aa14, type: 2}
     Preview: {fileID: 21300000, guid: 1e63b594891ad3647b87fdd536a935e0, type: 3}
-  - DisplayName: Aboba
-    Preset: {fileID: 11400000, guid: ebec29c619f1cba4f90bf5ff5a996e21, type: 2}
-    Parameters: {fileID: 11400000, guid: 447861bc52b683f4a9e72756e8fa1c3e, type: 2}
-    Preview: {fileID: 21300000, guid: 7cff4090d7d1da44c859d19e9240b40f, type: 3}
+  - DisplayName: Mustang
+    Preset: {fileID: 11400000, guid: 24e7060ee156d9446903d0d168ad946f, type: 2}
+    Parameters: {fileID: 11400000, guid: c65097f3864f07846a28f4c0bbbeed79, type: 2}
+    Preview: {fileID: 21300000, guid: 63a0215da5b615f4b9f7eb1d09301c52, type: 3}
