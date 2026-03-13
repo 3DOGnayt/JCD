@@ -119,6 +119,12 @@ namespace Systems.Car
             var driftAssistMultiplier = Mathf.Max(1f, movementParameters.DriftAssistForwardSpeedMultiplier);
             var isDrifting = IsDrifting(velocity, forward, carParameters);
 
+            if (isDrifting && !movementParameters.UseArcadeAssistInDrift)
+            {
+                _assistForwardSpeedMps = forwardSpeed;
+                return velocity;
+            }
+
             if (!wantForward || !movingForward || absForward < minSpeedMps)
             {
                 _assistForwardSpeedMps = forwardSpeed;

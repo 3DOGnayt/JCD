@@ -35,11 +35,10 @@ MonoBehaviour:
     SlipAngleThresholdDeg: 20
     DriftVisualThresh: 0.05
   _useArcadeAssist: 1
+  _useArcadeAssistInDrift: 1
   _arcadeAssistMinSpeedKmh: 0
   _arcadeAssistLerpSpeed: 1
-  _driftAssistForwardSpeedMultiplier: 2
-  _useManualDriftBoost: 1
-  _driftBoostMotorTorqueAdd: 2000
+  _driftAssistForwardSpeedMultiplier: 1.5
   _maxAirborneHeight: 0.3
   _uprightStartAngleDeg: 10
   _uprightTorque: 8
@@ -47,3 +46,9 @@ MonoBehaviour:
   _groundMask:
     serializedVersion: 2
     m_Bits: 256
+  _useVelocityAlign: 1
+  _velocityAlignRequireCounterSteer: 1
+  _velocityAlignTorque: 10
+  _velocityAlignDamping: 2
+  _velocityAlignMinSpeedKmh: 0
+  _velocityAlignMinSlipAngleDeg: 10

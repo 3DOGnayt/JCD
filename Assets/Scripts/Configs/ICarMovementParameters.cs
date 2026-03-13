@@ -5,11 +5,10 @@ namespace Configs
     public interface ICarMovementParameters
     {
         bool UseArcadeAssist { get; }
+        bool UseArcadeAssistInDrift { get; }
         float ArcadeAssistMinSpeedKmh { get; }
         float ArcadeAssistLerpSpeed  { get; }
         float DriftAssistForwardSpeedMultiplier { get; }
-        bool UseManualDriftBoost { get; }
-        float DriftBoostMotorTorqueAdd { get; }
         
         float SpeedMultiplierMax { get; }
         float SpeedMultiplierMin { get; }
@@ -27,6 +26,13 @@ namespace Configs
         float UprightStartAngleDeg { get; }
         float UprightTorque { get; }
         float UprightDamping { get; }
-        UnityEngine.LayerMask GroundMask { get; }
+        LayerMask GroundMask { get; }
+        
+        bool UseVelocityAlign { get; }
+        bool VelocityAlignRequireCounterSteer { get; }
+        float VelocityAlignTorque { get; }
+        float VelocityAlignDamping { get; }
+        float VelocityAlignMinSpeedKmh { get; }
+        float VelocityAlignMinSlipAngleDeg { get; }
     }
 }

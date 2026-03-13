@@ -29,6 +29,7 @@ namespace Configs.Impl
         [Header("Arcade Assist")] 
         [Space]
         [SerializeField] private bool _useArcadeAssist = true;
+        [SerializeField] private bool _useArcadeAssistInDrift = true;
         [SerializeField] private float _arcadeAssistMinSpeedKmh;
         [SerializeField] private float _arcadeAssistLerpSpeed = 1f;
         [SerializeField] private float _driftAssistForwardSpeedMultiplier = 1f;
@@ -39,6 +40,14 @@ namespace Configs.Impl
         [SerializeField] private float _uprightTorque = 8f;
         [SerializeField] private float _uprightDamping = 1.5f;
         [SerializeField] private LayerMask _groundMask = ~0;
+        [Header("Velocity Align")]
+        [Space]
+        [SerializeField] private bool _useVelocityAlign = true;
+        [SerializeField] private bool _velocityAlignRequireCounterSteer = true;
+        [SerializeField] private float _velocityAlignTorque = 10f;
+        [SerializeField] private float _velocityAlignDamping = 2f;
+        [SerializeField] private float _velocityAlignMinSpeedKmh = 10f;
+        [SerializeField] private float _velocityAlignMinSlipAngleDeg = 10f;
         
         public float SpeedMultiplierMax => _speedMultiplierMax;
         public float SpeedMultiplierMin => _speedMultiplierMin;
@@ -58,13 +67,22 @@ namespace Configs.Impl
         public SystemHelpersSetup HelpersSetup => _systemHelpersSetup;
         
         public bool UseArcadeAssist => _useArcadeAssist;
+        public bool UseArcadeAssistInDrift => _useArcadeAssistInDrift;
         public float ArcadeAssistMinSpeedKmh => _arcadeAssistMinSpeedKmh;
         public float ArcadeAssistLerpSpeed => _arcadeAssistLerpSpeed;
         public float DriftAssistForwardSpeedMultiplier => _driftAssistForwardSpeedMultiplier;
+        
         public float MaxAirborneHeight => _maxAirborneHeight;
         public float UprightStartAngleDeg => _uprightStartAngleDeg;
         public float UprightTorque => _uprightTorque;
         public float UprightDamping => _uprightDamping;
         public LayerMask GroundMask => _groundMask;
+        
+        public bool UseVelocityAlign => _useVelocityAlign;
+        public bool VelocityAlignRequireCounterSteer => _velocityAlignRequireCounterSteer;
+        public float VelocityAlignTorque => _velocityAlignTorque;
+        public float VelocityAlignDamping => _velocityAlignDamping;
+        public float VelocityAlignMinSpeedKmh => _velocityAlignMinSpeedKmh;
+        public float VelocityAlignMinSlipAngleDeg => _velocityAlignMinSlipAngleDeg;
     }
 }
