@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CarMovementParameters_N34
   m_EditorClassIdentifier: 
   _speedMultiplierMax: 1
-  _speedMultiplierMin: 0.3
+  _speedMultiplierMin: 0.1
   _carMassStandard: 2000
   _steeringSpeedMultiplierMax: 1
   _steeringSpeedMultiplierMin: 0.1
@@ -37,4 +37,13 @@ MonoBehaviour:
   _useArcadeAssist: 1
   _arcadeAssistMinSpeedKmh: 0
   _arcadeAssistLerpSpeed: 1
-  _driftAssistForwardSpeedMultiplier: 1.5
+  _driftAssistForwardSpeedMultiplier: 2
+  _useManualDriftBoost: 1
+  _driftBoostMotorTorqueAdd: 2000
+  _maxAirborneHeight: 0.3
+  _uprightStartAngleDeg: 10
+  _uprightTorque: 8
+  _uprightDamping: 1.2
+  _groundMask:
+    serializedVersion: 2
+    m_Bits: 256

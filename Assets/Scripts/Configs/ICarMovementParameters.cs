@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Configs
 {
     public interface ICarMovementParameters
@@ -6,6 +8,8 @@ namespace Configs
         float ArcadeAssistMinSpeedKmh { get; }
         float ArcadeAssistLerpSpeed  { get; }
         float DriftAssistForwardSpeedMultiplier { get; }
+        bool UseManualDriftBoost { get; }
+        float DriftBoostMotorTorqueAdd { get; }
         
         float SpeedMultiplierMax { get; }
         float SpeedMultiplierMin { get; }
@@ -18,5 +22,11 @@ namespace Configs
         float DecelerationRate { get; }
         float MaxRpm { get; }
         float IdleRpm { get; }
+
+        float MaxAirborneHeight { get; }
+        float UprightStartAngleDeg { get; }
+        float UprightTorque { get; }
+        float UprightDamping { get; }
+        UnityEngine.LayerMask GroundMask { get; }
     }
 }

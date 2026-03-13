@@ -19,7 +19,7 @@ namespace Configs.Impl
         [SerializeField] private float _handbrakeTorque;
         [SerializeField] private float _brakeTorque;
         [Space]
-        [SerializeField] private float _accelerationRate;
+        [SerializeField] private float _accelerationRate; // for rpm
         [SerializeField] private float _decelerationRate;
         [Space]
         [SerializeField] private float _maxRpm;
@@ -32,6 +32,13 @@ namespace Configs.Impl
         [SerializeField] private float _arcadeAssistMinSpeedKmh;
         [SerializeField] private float _arcadeAssistLerpSpeed = 1f;
         [SerializeField] private float _driftAssistForwardSpeedMultiplier = 1f;
+        [Header("Air Control")]
+        [Space]
+        [SerializeField] private float _maxAirborneHeight = 0.5f;
+        [SerializeField] private float _uprightStartAngleDeg = 10f;
+        [SerializeField] private float _uprightTorque = 8f;
+        [SerializeField] private float _uprightDamping = 1.5f;
+        [SerializeField] private LayerMask _groundMask = ~0;
         
         public float SpeedMultiplierMax => _speedMultiplierMax;
         public float SpeedMultiplierMin => _speedMultiplierMin;
@@ -54,5 +61,10 @@ namespace Configs.Impl
         public float ArcadeAssistMinSpeedKmh => _arcadeAssistMinSpeedKmh;
         public float ArcadeAssistLerpSpeed => _arcadeAssistLerpSpeed;
         public float DriftAssistForwardSpeedMultiplier => _driftAssistForwardSpeedMultiplier;
+        public float MaxAirborneHeight => _maxAirborneHeight;
+        public float UprightStartAngleDeg => _uprightStartAngleDeg;
+        public float UprightTorque => _uprightTorque;
+        public float UprightDamping => _uprightDamping;
+        public LayerMask GroundMask => _groundMask;
     }
 }

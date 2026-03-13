@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95aa6b2ad9cd4031b58c6e454a134124, type: 3}
   m_Name: CarSlipParameters_N34
   m_EditorClassIdentifier: 
-  _handbrakeSidewaysBackMultiplier: 0.4
+  _handbrakeSidewaysBackMultiplier: 0.7
   _backStiffnessEnterSpeed: 5
   _BackStiffnessReturnSpeed: 1.5
   _handbrakeSidewaysForwardMultiplier: 0.95

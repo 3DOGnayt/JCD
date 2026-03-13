@@ -18,8 +18,8 @@ MonoBehaviour:
     BackSpeedMax: 60
     GearCount: 5
     EngineRpmMax: 11000
-    SteeringAngleMax: 35
-    SteeringSpeed: 100
+    SteeringAngleMax: 20
+    SteeringSpeed: 80
     BrakeInput: 0
     HandbrakeInput: 0
     DriftMultiplier: 0

@@ -24,32 +24,32 @@ MonoBehaviour:
     SpeedDecelerationNoGas: 0
     SpeedDecelerationBrake: 0
   - EGear: 1
-    SpeedLimit: 73
-    SpeedAcceleration: 3200
+    SpeedLimit: 42
+    SpeedAcceleration: 3400
     SpeedDecelerationNoGas: 1600
     SpeedDecelerationBrake: 2200
   - EGear: 2
-    SpeedLimit: 118
-    SpeedAcceleration: 2700
+    SpeedLimit: 64
+    SpeedAcceleration: 2600
     SpeedDecelerationNoGas: 1200
     SpeedDecelerationBrake: 1800
   - EGear: 3
-    SpeedLimit: 165
-    SpeedAcceleration: 2400
+    SpeedLimit: 94
+    SpeedAcceleration: 2100
     SpeedDecelerationNoGas: 900
     SpeedDecelerationBrake: 1400
   - EGear: 4
-    SpeedLimit: 212
-    SpeedAcceleration: 2000
+    SpeedLimit: 125
+    SpeedAcceleration: 1500
     SpeedDecelerationNoGas: 700
     SpeedDecelerationBrake: 1100
   - EGear: 5
-    SpeedLimit: 278
-    SpeedAcceleration: 1800
+    SpeedLimit: 155
+    SpeedAcceleration: 1200
     SpeedDecelerationNoGas: 550
     SpeedDecelerationBrake: 950
   - EGear: 6
-    SpeedLimit: 350
-    SpeedAcceleration: 1500
+    SpeedLimit: 200
+    SpeedAcceleration: 900
     SpeedDecelerationNoGas: 450
     SpeedDecelerationBrake: 700

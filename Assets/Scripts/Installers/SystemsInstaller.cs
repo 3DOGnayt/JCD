@@ -31,6 +31,7 @@ namespace Installers
             Container.Bind<IFixedSystem>().To<BrakeSystem>().AsSingle();
             Container.Bind<IFixedSystem>().To<WheelDriveSystem>().AsSingle();
             Container.Bind<IFixedSystem>().To<PhysicsSpeedSystem>().AsSingle();
+            Container.Bind<IFixedSystem>().To<CarAirControlSystem>().AsSingle();
             Container.Bind<IFixedSystem>().To<GearShiftSystem>().AsSingle();
             Container.Bind<IFixedSystem>().To<RPMSystem>().AsSingle();
             
