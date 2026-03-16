@@ -16,40 +16,40 @@ MonoBehaviour:
   - EGear: -1
     SpeedLimit: 80
     SpeedAcceleration: 2400
-    SpeedDecelerationNoGas: 1600
-    SpeedDecelerationBrake: 2200
+    RpmMin: 1800
+    RpmMax: 6000
   - EGear: 0
     SpeedLimit: 0
     SpeedAcceleration: 0
-    SpeedDecelerationNoGas: 0
-    SpeedDecelerationBrake: 0
+    RpmMin: 0
+    RpmMax: 0
   - EGear: 1
     SpeedLimit: 42
     SpeedAcceleration: 3400
-    SpeedDecelerationNoGas: 1600
-    SpeedDecelerationBrake: 2200
+    RpmMin: 1800
+    RpmMax: 5000
   - EGear: 2
     SpeedLimit: 64
     SpeedAcceleration: 2800
-    SpeedDecelerationNoGas: 1200
-    SpeedDecelerationBrake: 1800
+    RpmMin: 4700
+    RpmMax: 6000
   - EGear: 3
     SpeedLimit: 94
     SpeedAcceleration: 2200
-    SpeedDecelerationNoGas: 900
-    SpeedDecelerationBrake: 1400
+    RpmMin: 5000
+    RpmMax: 6800
   - EGear: 4
     SpeedLimit: 125
     SpeedAcceleration: 1600
-    SpeedDecelerationNoGas: 700
-    SpeedDecelerationBrake: 1100
+    RpmMin: 5500
+    RpmMax: 7800
   - EGear: 5
     SpeedLimit: 155
-    SpeedAcceleration: 1400
-    SpeedDecelerationNoGas: 550
-    SpeedDecelerationBrake: 950
+    SpeedAcceleration: 1500
+    RpmMin: 6000
+    RpmMax: 7800
   - EGear: 6
     SpeedLimit: 200
-    SpeedAcceleration: 900
-    SpeedDecelerationNoGas: 450
-    SpeedDecelerationBrake: 700
+    SpeedAcceleration: 1400
+    RpmMin: 6600
+    RpmMax: 9000

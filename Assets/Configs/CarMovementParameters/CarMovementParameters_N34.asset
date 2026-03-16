@@ -21,7 +21,7 @@ MonoBehaviour:
   _brakeTorque: 500
   _accelerationRate: 2500
   _decelerationRate: 3000
-  _maxRpm: 11000
+  _maxRpm: 9000
   _idleRpm: 1800
   _systemHelpersSetup:
     StopThresholdKmh: 0.5

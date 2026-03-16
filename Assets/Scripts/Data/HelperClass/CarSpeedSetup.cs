@@ -1,5 +1,6 @@
 using System;
 using Data.Enums;
+using UnityEngine;
 
 namespace Data.HelperClass
 {
@@ -9,7 +10,8 @@ namespace Data.HelperClass
         public EGear EGear;
         public int SpeedLimit;
         public int SpeedAcceleration;
-        public int SpeedDecelerationNoGas; // TODO: CHANGE OR DELETE
-        public int SpeedDecelerationBrake; // TODO: CHANGE OR DELETE
+        [Space]
+        public int RpmMin;
+        public int RpmMax;
     }
 }

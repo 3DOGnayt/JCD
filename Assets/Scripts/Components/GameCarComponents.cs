@@ -24,6 +24,15 @@ namespace Components
     public struct CarViewComponent : IComponent { public ICarView Value; }
     public struct SkidmarksComponent : IComponent { public bool Value; }
     public struct SkidAudioComponent : IComponent { public AudioSource Source; public float CurrentVolume; }
+    public struct EngineAudioComponent : IComponent
+    {
+        public AudioSource LowSource;
+        public AudioSource MedSource;
+        public AudioSource HighSource;
+        public float LowVolume;
+        public float MedVolume;
+        public float HighVolume;
+    }
     public struct SkidSmokeHandleComponent : IComponent { public int Value; }
     public struct HeadlightsComponent : IComponent { public EHeadlightsMode Value; }
 }

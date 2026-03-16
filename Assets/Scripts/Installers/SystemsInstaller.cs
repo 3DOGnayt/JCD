@@ -43,6 +43,7 @@ namespace Installers
             Container.Bind<IFixedSystem>().To<SkidmarksSystem>().AsSingle();
             Container.Bind<IFixedSystem>().To<SkidAudioSystem>().AsSingle();
             Container.Bind<IFixedSystem>().To<SkidSmokeSystem>().AsSingle();
+            Container.Bind<IFixedSystem>().To<EngineAudioSystem>().AsSingle();
             
             Container.Bind<IFixedSystem>().To<CrashEffectSystem>().AsSingle();
             Container.Bind<IFixedSystem>().To<CarLightsSystem>().AsSingle();

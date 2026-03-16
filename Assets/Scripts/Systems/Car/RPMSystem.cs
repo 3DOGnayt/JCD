@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Components;
 using Configs.Impl;
+using Data.HelperClass;
 using Scellecs.Morpeh;
 using UnityEngine;
 using Zenject;
@@ -26,6 +27,8 @@ namespace Systems.Car
             public int GearValue;
             public float SpeedMinKmh;
             public float SpeedMaxKmh;
+            public float RpmMin;
+            public float RpmMax;
         }
 
         private List<ForwardRpmBand> _forwardBands;
@@ -59,38 +62,19 @@ namespace Systems.Car
 
         private void BuildRpmBandsFromPreset(CarParameters carParameters)
         {
-            _forwardBands = null;
-            _forwardBandIndexByGear = null;
-            _reverseMaxSpeedKmh = 0f;
-            _hasReverseBand = false;
+            ResetRpmBands();
 
-            if (carParameters == null)
+            if (!TryGetSpeedSettings(carParameters, out var carSpeedSettings))
                 return;
 
-            var speedsPreset = carParameters.CarSpeedsPresetParameters;
-            if (speedsPreset == null)
-            {
-                Debug.LogError("RPMSystem_A: SpeedsPreset is null in CarParameters.");
-                return;
-            }
-
-            var carSpeedSettings = speedsPreset.CarSpeedSettings;
-            if (carSpeedSettings == null || carSpeedSettings.Count == 0)
-            {
-                Debug.LogError("RPMSystem_A: CarSpeedSettings is null or empty in SpeedsPreset.");
-                return;
-            }
-
-            var forwardTemp = new List<(int gear, float limit)>();
+            var forwardSettings = new List<CarSpeedSetup>();
 
             foreach (var setting in carSpeedSettings)
             {
                 var gearValue = (int)setting.EGear;
 
                 if (gearValue > 0)
-                {
-                    forwardTemp.Add((gearValue, setting.SpeedLimit));
-                }
+                    forwardSettings.Add(setting);
                 else if (gearValue < 0)
                 {
                     _reverseMaxSpeedKmh = Mathf.Max(_reverseMaxSpeedKmh, setting.SpeedLimit);
@@ -98,27 +82,66 @@ namespace Systems.Car
                 }
             }
 
-            if (forwardTemp.Count == 0)
+            if (forwardSettings.Count == 0)
             {
                 Debug.LogError("RPMSystem_A: no forward gears in SpeedsPreset.");
                 return;
             }
 
-            forwardTemp.Sort((a, b) => a.limit.CompareTo(b.limit));
+            BuildForwardBands(forwardSettings);
+        }
 
-            _forwardBands = new List<ForwardRpmBand>(forwardTemp.Count);
+        private void ResetRpmBands()
+        {
+            _forwardBands = null;
+            _forwardBandIndexByGear = null;
+            _reverseMaxSpeedKmh = 0f;
+            _hasReverseBand = false;
+        }
+
+        private bool TryGetSpeedSettings(CarParameters carParameters, out List<CarSpeedSetup> carSpeedSettings)
+        {
+            carSpeedSettings = null;
+
+            if (carParameters == null)
+                return false;
+
+            var speedsPreset = carParameters.CarSpeedsPresetParameters;
+            if (speedsPreset == null)
+            {
+                Debug.LogError("RPMSystem_A: SpeedsPreset is null in CarParameters.");
+                return false;
+            }
+
+            carSpeedSettings = speedsPreset.CarSpeedSettings;
+            if (carSpeedSettings == null || carSpeedSettings.Count == 0)
+            {
+                Debug.LogError("RPMSystem_A: CarSpeedSettings is null or empty in SpeedsPreset.");
+                return false;
+            }
+
+            return true;
+        }
+
+        private void BuildForwardBands(List<CarSpeedSetup> forwardSettings)
+        {
+            forwardSettings.Sort((a, b) => a.SpeedLimit.CompareTo(b.SpeedLimit));
+
+            _forwardBands = new List<ForwardRpmBand>(forwardSettings.Count);
             _forwardBandIndexByGear = new Dictionary<int, int>();
 
-            for (var i = 0; i < forwardTemp.Count; i++)
+            for (var i = 0; i < forwardSettings.Count; i++)
             {
-                var prevLimit = i == 0 ? 0f : forwardTemp[i - 1].limit;
-                var currLimit = forwardTemp[i].limit;
+                var prevLimit = i == 0 ? 0f : forwardSettings[i - 1].SpeedLimit;
+                var currLimit = forwardSettings[i].SpeedLimit;
 
                 var band = new ForwardRpmBand
                 {
-                    GearValue = forwardTemp[i].gear,
+                    GearValue = (int)forwardSettings[i].EGear,
                     SpeedMinKmh = prevLimit,
-                    SpeedMaxKmh = currLimit
+                    SpeedMaxKmh = currLimit,
+                    RpmMin = forwardSettings[i].RpmMin,
+                    RpmMax = forwardSettings[i].RpmMax
                 };
 
                 _forwardBands.Add(band);
@@ -167,9 +190,7 @@ namespace Systems.Car
                 float targetRpm;
 
                 if (gear == 0)
-                {
                     targetRpm = CalculateNeutralRpm(idleRpm, neutralMaxRpm, verticalInput, carParameters);
-                }
                 else if (gear < 0)
                 {
                     var reverseSpeedKmh = Mathf.Max(0f, backSpeedComponent.Value);
@@ -178,7 +199,7 @@ namespace Systems.Car
                 else
                 {
                     var forwardSpeedKmh = Mathf.Max(0f, speedComponent.Value);
-                    targetRpm = CalculateForwardRpm(gear, forwardSpeedKmh, idleRpm, rpmMax, carParameters);
+                    targetRpm = CalculateForwardRpm(gear, forwardSpeedKmh, idleRpm, rpmMax);
                 }
 
                 var changeSpeed = targetRpm > currentRpm
@@ -194,11 +215,7 @@ namespace Systems.Car
             }
         }
 
-        private float CalculateNeutralRpm(
-            float idleRpm,
-            float neutralMaxRpm,
-            float verticalInput,
-            CarParameters carParameters)
+        private float CalculateNeutralRpm(float idleRpm, float neutralMaxRpm, float verticalInput, CarParameters carParameters)
         {
             var absInput = Mathf.Abs(verticalInput);
 
@@ -210,10 +227,7 @@ namespace Systems.Car
             return Mathf.Lerp(idleRpm, neutralMaxRpm, t);
         }
 
-        private float CalculateReverseRpm(
-            float reverseSpeedKmh,
-            float idleRpm,
-            float rpmMax)
+        private float CalculateReverseRpm(float reverseSpeedKmh, float idleRpm, float rpmMax)
         {
             if (!_hasReverseBand || _reverseMaxSpeedKmh <= 0f)
                 return idleRpm;
@@ -222,12 +236,7 @@ namespace Systems.Car
             return Mathf.Lerp(idleRpm, rpmMax, t);
         }
 
-        private float CalculateForwardRpm(
-            int gear,
-            float forwardSpeedKmh,
-            float idleRpm,
-            float rpmMax,
-            CarParameters carParameters)
+        private float CalculateForwardRpm(int gear, float forwardSpeedKmh, float idleRpm, float rpmMax)
         {
             var bandIndex = GetForwardBandIndex(gear);
             if (bandIndex < 0)
@@ -241,12 +250,23 @@ namespace Systems.Car
                 ? Mathf.InverseLerp(band.SpeedMinKmh, band.SpeedMaxKmh, speedValue)
                 : 1f;
 
-            var systemHelpers = carParameters.MovementParameters.HelpersSetup;
-            var gearMinRpm = bandIndex == 0
-                ? idleRpm
-                : rpmMax * systemHelpers.UpshiftRpmDropFactor;
+            GetForwardRpmRange(idleRpm, rpmMax, band.RpmMin, band.RpmMax, out var gearMinRpm, out var gearMaxRpm);
+            return Mathf.Lerp(gearMinRpm, gearMaxRpm, time);
+        }
 
-            return Mathf.Lerp(gearMinRpm, rpmMax, time);
+        private static void GetForwardRpmRange(float idleRpm, float rpmMax, float presetMin, float presetMax,
+            out float gearMinRpm, out float gearMaxRpm)
+        {
+            gearMinRpm = idleRpm;
+            gearMaxRpm = rpmMax;
+
+            if (rpmMax <= 0f)
+                return;
+
+            gearMinRpm = presetMin > 0f ? presetMin : idleRpm;
+            gearMaxRpm = presetMax > 0f ? presetMax : rpmMax;
+            if (gearMaxRpm < gearMinRpm)
+                gearMaxRpm = gearMinRpm;
         }
 
         private int GetForwardBandIndex(int gearValue)

@@ -22,6 +22,10 @@ namespace Data.Enums
         Sfx_3 = 202,
         Sfx_Motor_1 = 203,
         Sfx_Motor_2 = 204,
+        Sfx_Motor_3 = 205,
+        Sfx_Motor_4 = 206,
+        Sfx_Motor_5 = 207,
+        Sfx_Motor_6 = 208,
         
         Music_1 = 300,
         Music_2 = 301,

@@ -127,6 +127,7 @@ namespace Systems.Spawn
             AddFrontWheelComponents(entity, carView);
             AddBackWheelComponents(entity, carView);
             AddSkidAudioComponent(entity, carView);
+            AddEngineAudioComponent(entity, carView);
         }
 
         private void AddSkidAudioComponent(Entity entity, ICarView carView)
@@ -135,6 +136,22 @@ namespace Systems.Spawn
                 return;
 
             entity.SetComponent(new SkidAudioComponent { Source = null, CurrentVolume = 0f });
+        }
+
+        private void AddEngineAudioComponent(Entity entity, ICarView carView)
+        {
+            if (carView == null)
+                return;
+
+            entity.SetComponent(new EngineAudioComponent
+            {
+                LowSource = null,
+                MedSource = null,
+                HighSource = null,
+                LowVolume = 0f,
+                MedVolume = 0f,
+                HighVolume = 0f
+            });
         }
 
         private void AddCommonComponents(Entity entity, ICarView carView)
