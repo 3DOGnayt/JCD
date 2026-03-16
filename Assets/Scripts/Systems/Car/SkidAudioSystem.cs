@@ -21,19 +21,31 @@ namespace Systems.Car
         private Filter _cars;
         private Stash<SkidmarksComponent> _skidmarksStash;
         private Stash<SkidAudioComponent> _skidAudioStash;
+        private Stash<SpeedComponent> _speedStash;
+        private Stash<BackSpeedComponent> _backSpeedStash;
+        private Stash<SpeedMaxComponent> _speedMaxStash;
 
         private AudioClip _skidClip;
         private float _catalogVolume = 1f;
+        private float _fadeIn = 8f;
+        private float _fadeOut = 6f;
+        private float _userSfx = 1f;
 
         public void OnAwake()
         {
             _cars = World.Filter
                 .With<SkidmarksComponent>()
                 .With<SkidAudioComponent>()
+                .With<SpeedComponent>()
+                .With<BackSpeedComponent>()
+                .With<SpeedMaxComponent>()
                 .Build();
             
             _skidmarksStash = World.GetStash<SkidmarksComponent>();
             _skidAudioStash = World.GetStash<SkidAudioComponent>();
+            _speedStash = World.GetStash<SpeedComponent>();
+            _backSpeedStash = World.GetStash<BackSpeedComponent>();
+            _speedMaxStash = World.GetStash<SpeedMaxComponent>();
 
             LoadSkidClip();
         }
@@ -43,12 +55,10 @@ namespace Systems.Car
             if (_skidClip == null)
                 return;
 
-            var fadeIn = _skidmarksParameters != null ? _skidmarksParameters.FadeInSpeed : 8f;
-            var fadeOut = _skidmarksParameters != null ? _skidmarksParameters.FadeOutSpeed : 6f;
-            var userSfx = GetUserSfxVolume();
+            UpdateSettingsCacheIfNeeded();
 
             foreach (var car in _cars)
-                UpdateCarAudio(car, fadeIn, fadeOut, userSfx, deltaTime);
+                UpdateCarAudio(car, deltaTime);
         }
 
         public void Dispose() { }
@@ -61,17 +71,19 @@ namespace Systems.Car
             return _audioSelectionParameters.VolumeSetup.Sfx;
         }
 
-        private void UpdateCarAudio(Entity car, float fadeIn, float fadeOut, float userSfx, float deltaTime)
+        private void UpdateCarAudio(Entity car, float deltaTime)
         {
             var skidNow = _skidmarksStash.Get(car).Value;
             ref var audioComp = ref _skidAudioStash.Get(car);
 
-            UpdateVolume(ref audioComp, skidNow, fadeIn, fadeOut, userSfx, deltaTime);
+            UpdateVolume(ref audioComp, skidNow, deltaTime);
+            var speed01 = GetSpeed01(car);
+            var pitch = GetSkidPitch(car, speed01);
 
             if (audioComp.CurrentVolume > 0f)
             {
-                EnsureLoopSource(ref audioComp);
-                ApplySourceVolume(audioComp);
+                EnsureLoopSource(ref audioComp, pitch);
+                ApplySourceVolume(audioComp, pitch);
             }
             else if (audioComp.Source != null)
             {
@@ -79,20 +91,20 @@ namespace Systems.Car
             }
         }
 
-        private void UpdateVolume(ref SkidAudioComponent audioComp, bool skidNow, float fadeIn, float fadeOut, float userSfx, float deltaTime)
+        private void UpdateVolume(ref SkidAudioComponent audioComp, bool skidNow, float deltaTime)
         {
-            var target = skidNow ? _catalogVolume * userSfx : 0f;
-            var speed = skidNow ? fadeIn : fadeOut;
+            var target = skidNow ? _catalogVolume * _userSfx : 0f;
+            var speed = skidNow ? _fadeIn : _fadeOut;
             audioComp.CurrentVolume = Mathf.MoveTowards(audioComp.CurrentVolume, target, speed * deltaTime);
         }
 
-        private void EnsureLoopSource(ref SkidAudioComponent audioComp)
+        private void EnsureLoopSource(ref SkidAudioComponent audioComp, float pitch)
         {
             if (audioComp.Source == null && _audioService != null)
-                audioComp.Source = _audioService.PlaySfx2DAudio(EAudioType.Sfx, EAudioSubType.Sfx_Tire, 1f, 1f, true);
+                audioComp.Source = _audioService.PlaySfx2DAudio(EAudioType.Sfx, EAudioSubType.Sfx_Tire, 1f, pitch, true);
         }
 
-        private static void ApplySourceVolume(SkidAudioComponent audioComp)
+        private static void ApplySourceVolume(SkidAudioComponent audioComp, float pitch)
         {
             var source = audioComp.Source;
             if (source == null)
@@ -102,6 +114,7 @@ namespace Systems.Car
                 source.Play();
 
             source.volume = audioComp.CurrentVolume;
+            source.pitch = pitch;
         }
 
         private static void StopLoopSource(ref SkidAudioComponent audioComp)
@@ -113,6 +126,41 @@ namespace Systems.Car
                 audioComp.Source.Stop();
 
             audioComp.Source = null;
+        }
+
+        private void UpdateSettingsCacheIfNeeded()
+        {
+            var fadeIn = _skidmarksParameters != null ? _skidmarksParameters.FadeInSpeed : 8f;
+            var fadeOut = _skidmarksParameters != null ? _skidmarksParameters.FadeOutSpeed : 6f;
+            var userSfx = GetUserSfxVolume();
+
+            if (!Mathf.Approximately(_fadeIn, fadeIn))
+                _fadeIn = fadeIn;
+
+            if (!Mathf.Approximately(_fadeOut, fadeOut))
+                _fadeOut = fadeOut;
+
+            if (!Mathf.Approximately(_userSfx, userSfx))
+                _userSfx = userSfx;
+        }
+
+        private float GetSpeed01(Entity car)
+        {
+            var forwardSpeed = Mathf.Max(0f, _speedStash.Get(car).Value);
+            var backwardSpeed = Mathf.Max(0f, _backSpeedStash.Get(car).Value);
+            var speed = Mathf.Max(forwardSpeed, backwardSpeed);
+            var maxSpeed = _speedMaxStash.Get(car).Value;
+            if (maxSpeed <= 0f)
+                return 0f;
+
+            return Mathf.Clamp01(speed / maxSpeed);
+        }
+
+        private static float GetSkidPitch(Entity car, float speed01)
+        {
+            var basePitch = Mathf.Lerp(1f, 1.5f, speed01);
+            var noise = (Mathf.PerlinNoise(Time.time * 0.5f, car.GetHashCode() * 0.01f) - 0.5f) * 0.04f;
+            return Mathf.Clamp(basePitch + noise, 1f, 1.5f);
         }
 
         private void LoadSkidClip()
