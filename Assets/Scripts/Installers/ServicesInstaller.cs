@@ -18,6 +18,8 @@ namespace Installers
 
         private void Services()
         {
+            Container.Bind<CarSkidmarksParameters>().FromInstance(_carSkidmarksParameters).AsSingle();
+            
             Container.BindInterfacesAndSelfTo<DataService>().AsSingle();
             Container.BindInterfacesAndSelfTo<EventService>().AsSingle();
             Container.BindInterfacesAndSelfTo<RaceTimerService>().AsSingle();

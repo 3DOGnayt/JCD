@@ -9,7 +9,7 @@ namespace Data.Enums
         MenuButtonBack = 3,
         MenuButtonSelect = 4,
         
-        Ui_1 = 100,
+        Ui_Countdown = 100,
         Ui_2 = 101,
         Ui_3 = 102,
         Ui_Start = 103,

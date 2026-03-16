@@ -103,11 +103,12 @@ namespace Services.Impl
             _uiSource.PlayOneShot(clip, volume);
         }
 
-        public void PlaySfx2D(AudioClip clip, float volume = 1f, float pitch = 1f)
+        public AudioSource PlaySfx2D(AudioClip clip, float volume = 1f, float pitch = 1f, bool loop = false)
         {
             var pooled = GetPooled();
             pooled.transform.position = _audioRoot.position;
-            pooled.Play(clip, _sfxGroup, volume, pitch, 0f, false, ReleaseToPool);
+            pooled.Play(clip, _sfxGroup, volume, pitch, 0f, loop, ReleaseToPool);
+            return pooled.GetComponent<AudioSource>();
         }
 
         public void PlaySfx3D(AudioClip clip, Vector3 position, float volume = 1f, float pitch = 1f)

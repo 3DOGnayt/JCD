@@ -117,7 +117,6 @@ namespace Systems.Spawn
             entity.SetComponent(new SkidmarksComponent{ Value = false });
             entity.SetComponent(new SkidSmokeHandleComponent{ Value = -1 });
             entity.SetComponent(new HeadlightsComponent { Value = EHeadlightsMode.Off });
-            
         }
 
         private void AddInternalComponents(Entity entity, ICarView carView)
@@ -127,6 +126,15 @@ namespace Systems.Spawn
             AddWheelInfoComponents(entity, carView);
             AddFrontWheelComponents(entity, carView);
             AddBackWheelComponents(entity, carView);
+            AddSkidAudioComponent(entity, carView);
+        }
+
+        private void AddSkidAudioComponent(Entity entity, ICarView carView)
+        {
+            if (carView == null)
+                return;
+
+            entity.SetComponent(new SkidAudioComponent { Source = null, CurrentVolume = 0f });
         }
 
         private void AddCommonComponents(Entity entity, ICarView carView)

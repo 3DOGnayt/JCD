@@ -18,6 +18,7 @@ namespace Services.Impl
         
         private static readonly HashSet<Type> DelayedFixedSystemTypes = new()
         {
+            typeof(SkidAudioSystem),
             typeof(GearShiftSystem),
             typeof(SlipSystem),
             typeof(RPMSystem),
