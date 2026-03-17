@@ -12,18 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4fe4eb4722648b186c05f041ff9b466, type: 3}
   m_Name: CarMovementParameters_N34
   m_EditorClassIdentifier: 
-  _speedMultiplierMax: 1
-  _speedMultiplierMin: 0.1
-  _carMassStandard: 2000
-  _steeringSpeedMultiplierMax: 1
-  _steeringSpeedMultiplierMin: 0.1
-  _handbrakeTorque: 800
-  _brakeTorque: 500
-  _accelerationRate: 2500
-  _decelerationRate: 3000
-  _maxRpm: 9000
-  _idleRpm: 1800
-  _systemHelpersSetup:
+  _horizontal:
+    SpeedMultiplierMax: 1
+    SpeedMultiplierMin: 0.1
+    CarMassStandard: 2000
+    SteeringSpeedMultiplierMax: 1
+    SteeringSpeedMultiplierMin: 0.1
+  _vertical:
+    HandbrakeTorque: 800
+    BrakeTorque: 500
+    AccelerationRate: 2500
+    DecelerationRate: 3000
+    MaxRpm: 9000
+    IdleRpm: 1800
+  _arcadeAssist:
+    UseArcadeAssist: 1
+    UseArcadeAssistInDrift: 1
+    ArcadeAssistMinSpeedKmh: 0
+    ArcadeAssistLerpSpeed: 1
+    DriftAssistForwardSpeedMultiplier: 1.5
+  _helpersSetup:
     StopThresholdKmh: 0.5
     InputDeadZone: 0.05
     UpshiftRpmDropFactor: 0.6
@@ -34,21 +42,18 @@ MonoBehaviour:
     MinBrakeSkidSpeedKmh: 5
     SlipAngleThresholdDeg: 20
     DriftVisualThresh: 0.05
-  _useArcadeAssist: 1
-  _useArcadeAssistInDrift: 1
-  _arcadeAssistMinSpeedKmh: 0
-  _arcadeAssistLerpSpeed: 1
-  _driftAssistForwardSpeedMultiplier: 1.5
-  _maxAirborneHeight: 0.3
-  _uprightStartAngleDeg: 10
-  _uprightTorque: 8
-  _uprightDamping: 1.2
-  _groundMask:
-    serializedVersion: 2
-    m_Bits: 256
-  _useVelocityAlign: 1
-  _velocityAlignRequireCounterSteer: 1
-  _velocityAlignTorque: 10
-  _velocityAlignDamping: 2
-  _velocityAlignMinSpeedKmh: 0
-  _velocityAlignMinSlipAngleDeg: 10
+  _airControl:
+    MaxAirborneHeight: 0.3
+    UprightStartAngleDeg: 10
+    UprightTorque: 8
+    UprightDamping: 1.2
+    GroundMask:
+      serializedVersion: 2
+      m_Bits: 256
+  _velocityAlign:
+    UseVelocityAlign: 1
+    VelocityAlignRequireCounterSteer: 1
+    VelocityAlignTorque: 10
+    VelocityAlignDamping: 2
+    VelocityAlignMinSpeedKmh: 0
+    VelocityAlignMinSlipAngleDeg: 10

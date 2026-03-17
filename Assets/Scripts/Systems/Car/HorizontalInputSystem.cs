@@ -55,11 +55,12 @@ namespace Systems.Car
             public void ApplyFrom(CarParameters carParameters)
             {
                 var movementParameters = carParameters.MovementParameters;
-                SpeedMultiplierMax = movementParameters.SpeedMultiplierMax;
-                SpeedMultiplierMin = movementParameters.SpeedMultiplierMin;
-                CarMassStandard = movementParameters.CarMassStandard;
-                SteeringSpeedMultiplierMax = movementParameters.SteeringSpeedMultiplierMax;
-                SteeringSpeedMultiplierMin = movementParameters.SteeringSpeedMultiplierMin;
+                var horizontal = movementParameters.Horizontal;
+                SpeedMultiplierMax = horizontal.SpeedMultiplierMax;
+                SpeedMultiplierMin = horizontal.SpeedMultiplierMin;
+                CarMassStandard = horizontal.CarMassStandard;
+                SteeringSpeedMultiplierMax = horizontal.SteeringSpeedMultiplierMax;
+                SteeringSpeedMultiplierMin = horizontal.SteeringSpeedMultiplierMin;
             }
         }
         

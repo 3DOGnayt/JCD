@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Components;
 using Configs.Impl;
+using Data.HelperClass;
 using Scellecs.Morpeh;
 using UnityEngine;
 using Zenject;
@@ -42,6 +43,8 @@ namespace Systems.Car
             if (movement == null)
                 return;
 
+            var airControl = movement.AirControl;
+
             foreach (var car in _cars)
             {
                 var carRigidbody = _rigidbodyStash.Get(car).Value;
@@ -65,22 +68,22 @@ namespace Systems.Car
                 }
 
                 var tryGetGroundDistance = TryGetGroundDistance(
-                    carRigidbody, carTransform, movement.GroundMask, movement.MaxAirborneHeight,
+                    carRigidbody, carTransform, airControl.GroundMask, airControl.MaxAirborneHeight,
                     out var groundPoint, out var distance);
                 
-                if (movement.MaxAirborneHeight > 0f && tryGetGroundDistance && distance > movement.MaxAirborneHeight)
+                if (airControl.MaxAirborneHeight > 0f && tryGetGroundDistance && distance > airControl.MaxAirborneHeight)
                 {
                     var pos = carRigidbody.position;
-                    pos.y = groundPoint.y + movement.MaxAirborneHeight;
+                    pos.y = groundPoint.y + airControl.MaxAirborneHeight;
                     carRigidbody.position = pos;
                 }
 
-                ApplyUprightStabilization(carRigidbody, carTransform, movement);
+                ApplyUprightStabilization(carRigidbody, carTransform, airControl);
             }
         }
 
         private static void GetWheelGroundStats(
-            List<Data.HelperClass.WheelInfoSetup> wheelInfo,
+            List<WheelInfoSetup> wheelInfo,
             out int totalWheels,
             out int groundedWheels)
         {
@@ -121,11 +124,14 @@ namespace Systems.Car
 
             var origin = tr.position;
             var rayDistance = Mathf.Max(1f, maxAirborneHeight + 5f);
-            var size = Physics.RaycastNonAlloc(origin, Vector3.down, _raycastHits, rayDistance, groundMask, QueryTriggerInteraction.Ignore);
+            var size = Physics.RaycastNonAlloc(
+                origin, Vector3.down, _raycastHits, rayDistance, groundMask, QueryTriggerInteraction.Ignore);
+            
             while (size == _raycastHits.Length)
             {
                 _raycastHits = new RaycastHit[_raycastHits.Length * 2];
-                size = Physics.RaycastNonAlloc(origin, Vector3.down, _raycastHits, rayDistance, groundMask, QueryTriggerInteraction.Ignore);
+                size = Physics.RaycastNonAlloc(
+                    origin, Vector3.down, _raycastHits, rayDistance, groundMask, QueryTriggerInteraction.Ignore);
             }
 
             if (size == 0)
@@ -159,20 +165,20 @@ namespace Systems.Car
             return true;
         }
 
-        private static void ApplyUprightStabilization(Rigidbody rb, Transform tr, CarMovementParameters movement)
+        private static void ApplyUprightStabilization(Rigidbody rb, Transform tr, CarMovementAirControlSetup airControl)
         {
-            if (movement.UprightTorque <= 0f)
+            if (airControl.UprightTorque <= 0f)
                 return;
 
             var angle = Vector3.Angle(tr.up, Vector3.up);
-            if (angle < movement.UprightStartAngleDeg)
+            if (angle < airControl.UprightStartAngleDeg)
                 return;
 
             var torqueAxis = Vector3.Cross(tr.up, Vector3.up);
-            rb.AddTorque(torqueAxis * movement.UprightTorque, ForceMode.Acceleration);
+            rb.AddTorque(torqueAxis * airControl.UprightTorque, ForceMode.Acceleration);
 
-            if (movement.UprightDamping > 0f)
-                rb.AddTorque(-rb.angularVelocity * movement.UprightDamping, ForceMode.Acceleration);
+            if (airControl.UprightDamping > 0f)
+                rb.AddTorque(-rb.angularVelocity * airControl.UprightDamping, ForceMode.Acceleration);
         }
 
         public void Dispose() { }

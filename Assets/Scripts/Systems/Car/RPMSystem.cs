@@ -164,10 +164,11 @@ namespace Systems.Car
 
             //TODO: Refactoring
             var movement = carParameters.MovementParameters;
-            var idleRpm = movement.IdleRpm;
-            var accelRpmPerSec = movement.AccelerationRate;
-            var decelRpmPerSec = movement.DecelerationRate;
-            var neutralMaxRpm = movement.IdleRpm;
+            var vertical = movement.Vertical;
+            var idleRpm = vertical.IdleRpm;
+            var accelRpmPerSec = vertical.AccelerationRate;
+            var decelRpmPerSec = vertical.DecelerationRate;
+            var neutralMaxRpm = vertical.IdleRpm;
 
             foreach (var car in _cars)
             {
@@ -183,7 +184,7 @@ namespace Systems.Car
 
                 var rpmMax = rpmMaxComponent.Value;
                 if (rpmMax <= 0f)
-                    rpmMax = movement.MaxRpm;
+                    rpmMax = vertical.MaxRpm;
 
                 var gear = gearComponent.Value;
 

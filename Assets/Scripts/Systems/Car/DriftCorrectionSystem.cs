@@ -57,23 +57,24 @@ namespace Systems.Car
                 return false;
 
             var movement = carParameters.MovementParameters;
-            if (movement == null || !movement.UseVelocityAlign)
+            var velocityAlign = movement.VelocityAlign;
+            if (!velocityAlign.UseVelocityAlign)
                 return false;
 
             var helpers = movement.HelpersSetup;
             if (helpers == null)
                 return false;
 
-            var alignTorque = movement.VelocityAlignTorque;
+            var alignTorque = velocityAlign.VelocityAlignTorque;
             if (alignTorque <= 0f)
                 return false;
 
-            settings.MinSpeedKmh = movement.VelocityAlignMinSpeedKmh;
-            settings.MinSlipAngleDeg = movement.VelocityAlignMinSlipAngleDeg;
+            settings.MinSpeedKmh = velocityAlign.VelocityAlignMinSpeedKmh;
+            settings.MinSlipAngleDeg = velocityAlign.VelocityAlignMinSlipAngleDeg;
             settings.AlignTorque = alignTorque;
-            settings.AlignDamping = movement.VelocityAlignDamping;
+            settings.AlignDamping = velocityAlign.VelocityAlignDamping;
             settings.InputDeadZone = helpers.InputDeadZone;
-            settings.RequireCounterSteer = movement.VelocityAlignRequireCounterSteer;
+            settings.RequireCounterSteer = velocityAlign.VelocityAlignRequireCounterSteer;
             return true;
         }
 

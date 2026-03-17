@@ -158,7 +158,7 @@ namespace Systems.Car
             bool handbrakePressed,
             CarParameters carParameters)
         {
-            var parameters = carParameters.MovementParameters;
+            var parameters = carParameters.MovementParameters.Vertical;
             var pedalBrakeTorque = parameters.BrakeTorque * Mathf.Max(0f, brakeForce);
             var handbrakeTorque = handbrakePressed ? parameters.HandbrakeTorque : 0f;
 

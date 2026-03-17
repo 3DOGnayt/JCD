@@ -104,7 +104,8 @@ namespace Systems.Car
             CarParameters carParameters)
         {
             var movementParameters = carParameters.MovementParameters;
-            if (!movementParameters.UseArcadeAssist)
+            var arcadeAssist = movementParameters.ArcadeAssist;
+            if (!arcadeAssist.UseArcadeAssist)
             {
                 _assistForwardSpeedMps = Vector3.Dot(velocity, forward);
                 return velocity;
@@ -112,14 +113,14 @@ namespace Systems.Car
 
             var forwardSpeed = Vector3.Dot(velocity, forward);
             var absForward = Mathf.Abs(forwardSpeed);
-            var minSpeedMps = movementParameters.ArcadeAssistMinSpeedKmh / 3.6f;
+            var minSpeedMps = arcadeAssist.ArcadeAssistMinSpeedKmh / 3.6f;
 
             var wantForward = verticalInput > 0.01f;
             var movingForward = forwardSpeed > 0.01f;
-            var driftAssistMultiplier = Mathf.Max(1f, movementParameters.DriftAssistForwardSpeedMultiplier);
+            var driftAssistMultiplier = Mathf.Max(1f, arcadeAssist.DriftAssistForwardSpeedMultiplier);
             var isDrifting = IsDrifting(velocity, forward, carParameters);
 
-            if (isDrifting && !movementParameters.UseArcadeAssistInDrift)
+            if (isDrifting && !arcadeAssist.UseArcadeAssistInDrift)
             {
                 _assistForwardSpeedMps = forwardSpeed;
                 return velocity;
@@ -136,7 +137,7 @@ namespace Systems.Car
 
             if (forwardSpeed < _assistForwardSpeedMps)
             {
-                var t = 1f - Mathf.Exp(-movementParameters.ArcadeAssistLerpSpeed * deltaTime);
+                var t = 1f - Mathf.Exp(-arcadeAssist.ArcadeAssistLerpSpeed * deltaTime);
                 var targetForward = Mathf.Lerp(
                     forwardSpeed,
                     _assistForwardSpeedMps * (isDrifting ? driftAssistMultiplier : 1f),
