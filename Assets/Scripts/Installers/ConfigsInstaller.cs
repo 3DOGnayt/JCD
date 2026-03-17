@@ -9,7 +9,6 @@ namespace Installers
         [SerializeField] private CarUISmoothingParameters _carUISmoothingParameters;
         [SerializeField] private CarSkidSmokeParameters _carCarSkidSmokeParameters;
         [SerializeField] private CarLightsParameters _carLightsParameters;
-        [SerializeField] private CarEngineAudioParameters _carEngineAudioParameters;
         [Space]
         [SerializeField] private CarSelectionParameters _carSelectionParameters;
         [SerializeField] private MapSelectionParameters _mapSelectionParameters;
@@ -26,8 +25,6 @@ namespace Installers
             Container.Bind<CarUISmoothingParameters>().FromInstance(_carUISmoothingParameters).AsSingle();
             Container.Bind<CarSkidSmokeParameters>().FromInstance(_carCarSkidSmokeParameters).AsSingle();
             Container.Bind<CarLightsParameters>().FromInstance(_carLightsParameters).AsSingle();
-            
-            Container.Bind<CarEngineAudioParameters>().FromInstance(_carEngineAudioParameters).AsSingle();
             
             Container.Bind<CarSelectionParameters>().FromInstance(_carSelectionParameters).AsSingle();
             Container.Bind<MapSelectionParameters>().FromInstance(_mapSelectionParameters).AsSingle();

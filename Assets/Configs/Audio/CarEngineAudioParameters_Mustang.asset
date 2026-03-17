@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8dc5e82ad6e1db6429b3ec603d4fbe0b, type: 3}
-  m_Name: CarEngineAudioParameters
+  m_Name: CarEngineAudioParameters_Mustang
   m_EditorClassIdentifier: 
   _lowPitchMin: 1
   _lowPitchMax: 1.8
   _medPitchMin: 0.4
   _medPitchMax: 1.6
-  _highPitchMin: -1.6
-  _highPitchMax: 1.5
+  _highPitchMin: -3
+  _highPitchMax: 1.6
   _fadeSpeed: 6
   _lowVolumeScale: 0.8
-  _bandLowMax: 0.4
-  _bandMedMax: 0.75
+  _bandLowMax: 0.3
+  _bandMedMax: 0.8
   _defaultMaxSpeedKmh: 200

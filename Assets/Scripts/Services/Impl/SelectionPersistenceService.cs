@@ -74,7 +74,11 @@ namespace Services.Impl
             if (entry.Preset == null || entry.Parameters == null)
                 return;
 
-            _carSelectionParameters.SetSelectedCar(entry.Preset, entry.Parameters, saved.CarIndex);
+            _carSelectionParameters.SetSelectedCar(
+                entry.Preset,
+                entry.Parameters,
+                entry.EngineAudioParameters,
+                saved.CarIndex);
         }
 
         private void ApplyMapSelection(GameSelectionSaveData saved)

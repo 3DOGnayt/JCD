@@ -139,7 +139,7 @@ namespace Tools
         {
             foreach (var asset in FindAssets<CarSelectionParameters>())
             {
-                asset.SetSelectedCar(null, null, -1);
+                asset.SetSelectedCar(null, null, null, -1);
                 EditorUtility.SetDirty(asset);
             }
         }

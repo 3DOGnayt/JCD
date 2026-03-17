@@ -22,6 +22,7 @@ namespace UI.Controllers
 
         private CarPresetParameters _pendingCarPreset;
         private CarParameters _pendingCarParameters;
+        private CarEngineAudioParameters _pendingCarEngineAudioParameters;
         
         private Sprite _pendingCarPreview;
         private int _pendingCarIndex = -1;
@@ -92,7 +93,7 @@ namespace UI.Controllers
                 return;
             
             var entry = _carCatalogParameters.Cars[0];
-            _carSelectionParameters.SetSelectedCar(entry.Preset, entry.Parameters, 0);
+            _carSelectionParameters.SetSelectedCar(entry.Preset, entry.Parameters, entry.EngineAudioParameters, 0);
         }
 
         private void PreparePendingCarSelection()
@@ -139,6 +140,7 @@ namespace UI.Controllers
             _pendingCarIndex = index;
             _pendingCarPreset = entry.Preset;
             _pendingCarParameters = entry.Parameters;
+            _pendingCarEngineAudioParameters = entry.EngineAudioParameters;
             _pendingCarPreview = entry.Preview;
             UpdateCarPresentation();
         }
@@ -170,7 +172,11 @@ namespace UI.Controllers
 
             _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonConfirm);
             
-            _carSelectionParameters.SetSelectedCar(_pendingCarPreset, _pendingCarParameters, _pendingCarIndex);
+            _carSelectionParameters.SetSelectedCar(
+                _pendingCarPreset,
+                _pendingCarParameters,
+                _pendingCarEngineAudioParameters,
+                _pendingCarIndex);
             RefreshCarButtons();
             _localWindowsService.OpenWindow<MainMenuWindow>();
         }

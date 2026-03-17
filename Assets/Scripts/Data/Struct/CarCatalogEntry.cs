@@ -10,6 +10,7 @@ namespace Data.Struct
         public string DisplayName;
         public CarPresetParameters Preset;
         public CarParameters Parameters;
+        public CarEngineAudioParameters EngineAudioParameters;
         public Sprite Preview;
     }
 }

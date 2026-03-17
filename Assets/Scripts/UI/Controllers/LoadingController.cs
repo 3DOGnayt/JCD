@@ -50,7 +50,8 @@ namespace UI.Controllers
             if (View.LoadingText == null)
                 return;
 
-            _audioService.StopAllAudio();
+            _audioService.StopMusic();
+            _audioService.StopAllSfx();
             
             _eventService.IsLoadingCompleted.Value = false;
             _eventService.LoadingProgress.Value = 0f;
