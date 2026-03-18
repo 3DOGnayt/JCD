@@ -11,6 +11,7 @@ namespace UI.Views
     {
         public Image Win;
         public Image Lose;
+        public Image Complite;
         [Space] 
         public GameObject ResultButtons;
         public Button Retry;
