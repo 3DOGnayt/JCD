@@ -2,6 +2,7 @@ using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
 using Services;
 using Data.Enums;
+using Tools;
 using UI.Views;
 using UI.Window;
 using UniRx;
@@ -14,6 +15,8 @@ namespace UI.Controllers
         private readonly ILocalWindowsService _localWindowsService;
         private readonly IGameSessionService _gameSessionService;
         private readonly IAudioService _audioService;
+        
+        private const int UP_SLIDE_1100 = 1100;
 
         public GamePauseController(
             ILocalWindowsService localWindowsService,
@@ -44,6 +47,8 @@ namespace UI.Controllers
         private void OnContinueClick()
         {
             Time.timeScale = 1f;
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonSelect);
+            
             _audioService?.ResumeAudio(EAudioType.Music);
             _audioService?.ResumeAudio(EAudioType.Sfx);
             _localWindowsService.CloseToWindow<GameWindow>();
@@ -52,6 +57,8 @@ namespace UI.Controllers
         private void OnRetryClick()
         {
             Time.timeScale = 1f;
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonSelect);
+            
             _audioService?.ResumeAudio(EAudioType.Music);
             _audioService?.ResumeAudio(EAudioType.Sfx);
             _gameSessionService?.RestartGame();
@@ -60,6 +67,8 @@ namespace UI.Controllers
         private void OnMainMenuClick()
         {
             Time.timeScale = 1f;
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonSelect);
+            
             _audioService?.ResumeAudio(EAudioType.Music);
             _audioService?.ResumeAudio(EAudioType.Sfx);
             _gameSessionService?.ExitToMenu();
@@ -67,6 +76,9 @@ namespace UI.Controllers
 
         private void OnSettingsClick()
         {
+            _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonSelect);
+            
+            _localWindowsService.AnimateWindow<GamePauseWindow>(Vector2.up * UP_SLIDE_1100);
             _localWindowsService.OpenWindow<SettingsWindow>();
         }
     }

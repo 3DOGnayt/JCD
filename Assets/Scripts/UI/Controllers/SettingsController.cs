@@ -3,8 +3,11 @@ using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
 using Services;
 using Configs.Impl;
+using Tools;
+using UI.Window;
 using UI.Views;
 using UniRx;
+using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
@@ -15,18 +18,21 @@ namespace UI.Controllers
         private readonly ILocalWindowsService _localWindowsService;
         private readonly IAudioService _audioService;
         private readonly IDataService _dataService;
+        private readonly IGameSessionService _gameSessionService;
         
         [Inject] private AudioSelectionParameters _audioSelectionParameters;
 
         public SettingsController(
             ILocalWindowsService localWindowsService,
             IAudioService audioService,
-            IDataService dataService
+            IDataService dataService,
+            IGameSessionService gameSessionService
         )
         {
             _localWindowsService = localWindowsService;
             _audioService = audioService;
             _dataService = dataService;
+            _gameSessionService = gameSessionService;
         }
 
         public override void Initialize()
@@ -107,7 +113,14 @@ namespace UI.Controllers
         private void OnCloseButtonClick()
         {
             _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonBack);
-            
+
+            if (_gameSessionService != null && _gameSessionService.Target == EGameSessionTarget.Game)
+            {
+                _localWindowsService.CloseWindow();
+                _localWindowsService.AnimateWindow<GamePauseWindow>(Vector2.zero);
+                return;
+            }
+
             _localWindowsService.CloseWindow();
         }
     }
