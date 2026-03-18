@@ -14,6 +14,17 @@ namespace Helpers.Audio
         private CancellationTokenSource _сancellationTokenSource;
         private Action<PooledAudioSource> _onRelease;
 
+        public AudioSource AudioSource
+        {
+            get
+            {
+                if (_audioSource == null)
+                    _audioSource = GetComponent<AudioSource>();
+
+                return _audioSource;
+            }
+        }
+
         public void Play(
             AudioClip clip,
             AudioMixerGroup outputGroup,
@@ -26,9 +37,6 @@ namespace Helpers.Audio
             if (!gameObject.activeSelf) 
                 gameObject.SetActive(true);
 
-            if (_audioSource == null) 
-                _audioSource = GetComponent<AudioSource>();
-
             _onRelease = onRelease;
 
             if (clip == null)
@@ -39,14 +47,14 @@ namespace Helpers.Audio
 
             CancelReleaseTask();
 
-            _audioSource.outputAudioMixerGroup = outputGroup;
-            _audioSource.clip = clip;
-            _audioSource.volume = volume;
-            _audioSource.pitch = pitch;
-            _audioSource.spatialBlend = spatialBlend;
-            _audioSource.loop = loop;
+            AudioSource.outputAudioMixerGroup = outputGroup;
+            AudioSource.clip = clip;
+            AudioSource.volume = volume;
+            AudioSource.pitch = pitch;
+            AudioSource.spatialBlend = spatialBlend;
+            AudioSource.loop = loop;
 
-            _audioSource.Play();
+            AudioSource.Play();
 
             if (!loop)
             {

@@ -144,7 +144,7 @@ namespace Services.Impl
 
         private void UpdateMusicVolume()
         {
-            if (_musicSource == null || !_musicSource.isPlaying)
+            if (_musicSource == null)
                 return;
 
             _musicVolume = _musicBaseVolume * _musicCatalogVolume * GetUserVolume(EAudioType.Music);

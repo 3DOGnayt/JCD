@@ -91,7 +91,7 @@ namespace UI.Controllers
             var fadeIn = View.CountdownFadeInSeconds;
             var fadeOut = View.CountdownFadeOutSeconds;
 
-            _audioService.PlayMusicAudio(EAudioType.Music, _audioSelectionParameters.SelectedMusicSubType, 0.05f); // TODO: SOUND
+            _audioService.PlayMusicAudio(EAudioType.Music, _audioSelectionParameters.SelectedMusicSubType); // TODO: SOUND
             _audioService.PlaySfx2DAudio(EAudioType.Ui, EAudioSubType.Ui_3); // TODO: SOUND
             
             for (var i = 0; i < View.СountdownList.Count; i++)

@@ -14,8 +14,10 @@ namespace Systems.Car
         [Inject] public World World { get; set; }
         [Inject] private AudioCatalogParameters _audioCatalogParameters;
         [Inject] private AudioSelectionParameters _audioSelectionParameters;
-        [Inject] private CarEngineAudioParameters _carEngineAudioParameters;
+        [Inject] private CarSelectionParameters _carSelectionParameters;
         [Inject] private IAudioService _audioService;
+        [Inject] private IEventService _eventService;
+        [Inject] private IGameSessionService _gameSessionService;
 
         private Filter _cars;
         private Stash<EngineAudioComponent> _engineAudioStash;
@@ -31,20 +33,7 @@ namespace Systems.Car
         private float _highOnCatalogVolume = 1f;
         
         private float _userSfx = 1f;
-        
-        private float _lowPitchMin;
-        private float _lowPitchMax;
-        private float _medPitchMin;
-        private float _medPitchMax;
-        private float _highPitchMin;
-        private float _highPitchMax;
-        
-        private float _fadeSpeed;
-        private float _lowVolumeScale;
-        private float _bandLowMax;
-        private float _bandMedMax;
-        private float _defaultMaxSpeedKmh;
-        private bool _hasParameters;
+        private CarEngineAudioParameters _engineAudioParameters;
 
         public void OnAwake()
         {
@@ -58,7 +47,6 @@ namespace Systems.Car
             _speedStash = World.GetStash<SpeedComponent>();
             _speedMaxStash = World.GetStash<SpeedMaxComponent>();
 
-            ApplyParameters();
             LoadMotorEntries();
         }
 
@@ -67,7 +55,14 @@ namespace Systems.Car
             if (!_hasLowOn && !_hasMedOn && !_hasHighOn)
                 return;
 
-            if (!_hasParameters)
+            if (!IsAudioAllowed())
+                return;
+
+            _engineAudioParameters = _carSelectionParameters != null
+                ? _carSelectionParameters.SelectedCarEngineAudioParameters
+                : null;
+
+            if (_engineAudioParameters == null)
                 return;
 
             _userSfx = GetUserSfxVolume();
@@ -83,9 +78,9 @@ namespace Systems.Car
             ref var audioComp = ref _engineAudioStash.Get(car);
 
             var speed01 = GetSpeed01(car);
-            var lowPitch = Mathf.Lerp(_lowPitchMin, _lowPitchMax, speed01);
-            var medPitch = Mathf.Lerp(_medPitchMin, _medPitchMax, speed01);
-            var highPitch = Mathf.Lerp(_highPitchMin, _highPitchMax, speed01);
+            var lowPitch = Mathf.Lerp(_engineAudioParameters.LowPitchMin, _engineAudioParameters.LowPitchMax, speed01);
+            var medPitch = Mathf.Lerp(_engineAudioParameters.MedPitchMin, _engineAudioParameters.MedPitchMax, speed01);
+            var highPitch = Mathf.Lerp(_engineAudioParameters.HighPitchMin, _engineAudioParameters.HighPitchMax, speed01);
             var band = GetBand(speed01);
 
             EnsureLoopSources(ref audioComp, medPitch);
@@ -109,15 +104,29 @@ namespace Systems.Car
                 audioComp.HighSource = _audioService.PlaySfx2DAudio(EAudioType.Sfx, EAudioSubType.Sfx_Motor_4, 1f, pitch, true);
         }
 
+        private bool IsAudioAllowed()
+        {
+            if (_gameSessionService != null && _gameSessionService.Target != EGameSessionTarget.Game)
+                return false;
+
+            if (_eventService != null && !_eventService.IsLoadingCompleted.Value)
+                return false;
+
+            return true;
+        }
+
         private void UpdateLoopVolumes(ref EngineAudioComponent audioComp, EngineBand band, float deltaTime)
         {
-            var lowTarget = band == EngineBand.Low ? _lowOnCatalogVolume * _userSfx * _lowVolumeScale : 0f;
+            var lowTarget = band == EngineBand.Low
+                ? _lowOnCatalogVolume * _userSfx * _engineAudioParameters.LowVolumeScale
+                : 0f;
             var medTarget = band == EngineBand.Med ? _medOnCatalogVolume * _userSfx : 0f;
             var highTarget = band == EngineBand.High ? _highOnCatalogVolume * _userSfx : 0f;
 
-            audioComp.LowVolume = Mathf.MoveTowards(audioComp.LowVolume, lowTarget, _fadeSpeed * deltaTime);
-            audioComp.MedVolume = Mathf.MoveTowards(audioComp.MedVolume, medTarget, _fadeSpeed * deltaTime);
-            audioComp.HighVolume = Mathf.MoveTowards(audioComp.HighVolume, highTarget, _fadeSpeed * deltaTime);
+            var fadeSpeed = _engineAudioParameters.FadeSpeed;
+            audioComp.LowVolume = Mathf.MoveTowards(audioComp.LowVolume, lowTarget, fadeSpeed * deltaTime);
+            audioComp.MedVolume = Mathf.MoveTowards(audioComp.MedVolume, medTarget, fadeSpeed * deltaTime);
+            audioComp.HighVolume = Mathf.MoveTowards(audioComp.HighVolume, highTarget, fadeSpeed * deltaTime);
         }
 
         private static void ApplyLoopSettings(EngineAudioComponent audioComp, float lowPitch, float medPitch, float highPitch)
@@ -143,7 +152,7 @@ namespace Systems.Car
         {
             var maxSpeed = _speedMaxStash.Get(car).Value;
             if (maxSpeed <= 0f)
-                maxSpeed = _defaultMaxSpeedKmh;
+                maxSpeed = _engineAudioParameters.DefaultMaxSpeedKmh;
 
             var speed = Mathf.Max(0f, _speedStash.Get(car).Value);
             return Mathf.Clamp01(speed / maxSpeed);
@@ -155,29 +164,6 @@ namespace Systems.Car
                 return 1f;
 
             return _audioSelectionParameters.VolumeSetup.Sfx;
-        }
-
-        private void ApplyParameters()
-        {
-            if (_carEngineAudioParameters == null)
-            {
-                Debug.LogError($"{nameof(EngineAudioSystem)}: CarEngineAudioParameters is null.");
-                _hasParameters = false;
-                return;
-            }
-
-            _lowPitchMin = _carEngineAudioParameters.LowPitchMin;
-            _lowPitchMax = _carEngineAudioParameters.LowPitchMax;
-            _medPitchMin = _carEngineAudioParameters.MedPitchMin;
-            _medPitchMax = _carEngineAudioParameters.MedPitchMax;
-            _highPitchMin = _carEngineAudioParameters.HighPitchMin;
-            _highPitchMax = _carEngineAudioParameters.HighPitchMax;
-            _fadeSpeed = _carEngineAudioParameters.FadeSpeed;
-            _lowVolumeScale = _carEngineAudioParameters.LowVolumeScale;
-            _bandLowMax = _carEngineAudioParameters.BandLowMax;
-            _bandMedMax = _carEngineAudioParameters.BandMedMax;
-            _defaultMaxSpeedKmh = _carEngineAudioParameters.DefaultMaxSpeedKmh;
-            _hasParameters = true;
         }
 
         private void LoadMotorEntries()
@@ -228,10 +214,10 @@ namespace Systems.Car
 
         private EngineBand GetBand(float rpm01)
         {
-            if (rpm01 <= _bandLowMax)
+            if (rpm01 <= _engineAudioParameters.BandLowMax)
                 return EngineBand.Low;
 
-            if (rpm01 <= _bandMedMax)
+            if (rpm01 <= _engineAudioParameters.BandMedMax)
                 return EngineBand.Med;
 
             return EngineBand.High;

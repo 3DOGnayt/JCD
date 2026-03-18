@@ -9,6 +9,8 @@ namespace Services
         void StopUi();
         void StopAllSfx();
         void StopAllAudio();
+        void PauseAudio(EAudioType type);
+        void ResumeAudio(EAudioType type);
 
         AudioSource PlayMusic(AudioClip clip, float volume = 1f, bool loop = true);
         void PlayUi(AudioClip clip, float volume = 1f, float pitch = 1f);
