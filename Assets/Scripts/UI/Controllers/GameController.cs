@@ -13,18 +13,21 @@ namespace UI.Controllers
         private readonly ILocalWindowsService _localWindowsService;
         private readonly IRaceTimerService _raceTimerService;
         private readonly IEventService _eventService;
+        private readonly IAudioService _audioService;
         
         private bool _isInputUnlocked;
 
         public GameController(
             ILocalWindowsService localWindowsService,
             IRaceTimerService raceTimerService,
-            IEventService eventService
+            IEventService eventService,
+            IAudioService audioService
         )
         {
             _localWindowsService = localWindowsService;
             _raceTimerService = raceTimerService;
             _eventService = eventService;
+            _audioService = audioService;
         }
 
         public override void Initialize()
@@ -37,7 +40,7 @@ namespace UI.Controllers
             _eventService.InputEnabledStream.Subscribe(value => _isInputUnlocked = value).AddTo(View);
             _eventService.IsGameStarted.Subscribe(OnStartGame).AddTo(View);
 
-            _raceTimerService.RaceFinishedStream.Subscribe(_ => ShowResult()).AddTo(View);
+            _raceTimerService.RaceFinishedStream.Subscribe(_ => OnRaceFinished()).AddTo(View);
         }
 
         protected override void OnOpen()
@@ -56,6 +59,13 @@ namespace UI.Controllers
         private void ShowResult()
         {
             _localWindowsService.OpenWindow<GameStartEndWindow>();
+        }
+
+        private void OnRaceFinished()
+        {
+            _audioService?.StopMusic();
+            _audioService?.StopAllSfx();
+            ShowResult();
         }
 
         private void OnPauseClick()

@@ -17,6 +17,7 @@ namespace UI.Controllers
         private readonly IRaceTimerService _raceTimerService;
         private readonly IEventService _eventService;
         private readonly IDataService _dataService;
+        private readonly IAudioService _audioService;
         
         private readonly MapSelectionParameters _mapSelectionParameters;
         private readonly GameModeSelectionParameters _gameModeSelectionParameters;
@@ -32,7 +33,8 @@ namespace UI.Controllers
             GameModeSelectionParameters gameModeSelectionParameters,
             TrainingTimeScoreParameters trainingTimeScoreParameters,
             IEventService eventService,
-            IDataService dataService
+            IDataService dataService,
+            IAudioService audioService
         )
         {
             _raceTimerService = raceTimerService;
@@ -41,6 +43,7 @@ namespace UI.Controllers
             _trainingTimeScoreParameters = trainingTimeScoreParameters;
             _eventService = eventService;
             _dataService = dataService;
+            _audioService = audioService;
         }
 
         public override void Initialize()
@@ -164,6 +167,9 @@ namespace UI.Controllers
 
         private void OnRaceFinished()
         {
+            _audioService?.StopMusic();
+            _audioService?.StopAllSfx();
+
             if (_raceTimerService == null || _trainingTimeScoreParameters == null)
                 return;
 
