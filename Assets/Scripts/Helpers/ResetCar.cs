@@ -9,10 +9,10 @@ namespace Helpers
 {
     public class ResetCar : MonoBehaviour
     {
-        public Button ResetButton;
+        [SerializeField] private Button _resetButton;
+        [SerializeField] private float _forceToUpCar;
 
-        public GameObject _car;
-        public float ForceToUpCar;
+        private GameObject _car;
 
         [Inject]
         public void Construct(IEventService eventService)
@@ -27,7 +27,7 @@ namespace Helpers
 
         private void Awake()
         {
-            ResetButton.onClick.AddListener(Reset);
+            _resetButton.onClick.AddListener(Reset);
         }
 
         private void Reset()
@@ -45,7 +45,7 @@ namespace Helpers
 
         private void UpCar()
         {
-            _car.transform.position += Vector3.up * ForceToUpCar;
+            _car.transform.position += Vector3.up * _forceToUpCar;
         }
     }
 }

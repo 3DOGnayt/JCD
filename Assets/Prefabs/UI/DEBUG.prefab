@@ -211,7 +211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83a2284340154a25bac0a32564bae0f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RestartButton: {fileID: 5229280880568167545}
+  _restartButton: {fileID: 5229280880568167545}
 --- !u!114 &3737491396411180073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,9 +224,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9946dc2347834c0188338377aabe029a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ResetButton: {fileID: 3442596678150559617}
-  _car: {fileID: 0}
-  ForceToUpCar: 2
+  _resetButton: {fileID: 3442596678150559617}
+  _forceToUpCar: 2
 --- !u!114 &508427390228125058
 MonoBehaviour:
   m_ObjectHideFlags: 0

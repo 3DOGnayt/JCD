@@ -6,11 +6,11 @@ namespace Helpers
 {
     public class RestartLevel : MonoBehaviour
     {
-        public Button RestartButton;
+        [SerializeField] private Button _restartButton;
 
         private void Awake()
         {
-            RestartButton.onClick.AddListener(Restart);
+            _restartButton.onClick.AddListener(Restart);
         }
 
         private void Restart()
