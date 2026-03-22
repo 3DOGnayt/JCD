@@ -25,6 +25,7 @@ namespace UI.Controllers
         private readonly Dictionary<Image, Vector2> _resultStartPositions = new();
 
         private bool _resultGame;
+        private Tween _background;
 
         public GameResultController(
             IEventService eventService,
@@ -46,6 +47,8 @@ namespace UI.Controllers
             View.Win.gameObject.SetActive(false);
             View.Lose.gameObject.SetActive(false);
             View.Complite.gameObject.SetActive(false);
+            View.Background.gameObject.SetActive(false);
+            
             View.TimePanel.SetActive(false);
             View.ResultButtons.SetActive(false);
             
@@ -58,6 +61,7 @@ namespace UI.Controllers
         protected override void OnOpen()
         {
             _eventService?.PublishInputEnabled(false);
+            _background?.Kill();
             
             SetWinResult(_resultGame);
             View.TimePanel.SetActive(false);
@@ -74,6 +78,8 @@ namespace UI.Controllers
         private void SetWinResult(bool resultGame)
         {
             _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_Win);
+            
+            ChangeBackgroundAlpha();
 
             var gameMod = _gameModeSelectionParameters != null ? _gameModeSelectionParameters.GameMod : EGameMod.None;
             if (gameMod == EGameMod.Training)
@@ -95,6 +101,17 @@ namespace UI.Controllers
 
             View.Win.gameObject.SetActive(resultGame);
             View.Lose.gameObject.SetActive(!resultGame);
+        }
+        
+        private void ChangeBackgroundAlpha()
+        {
+            View.Background.gameObject.SetActive(true);
+            
+            var color = View.Background.color;
+            color.a = 0;
+            View.Background.color = color;
+            
+            _background = View.Background.DOFade(1f, View.FadeInDelay);
         }
 
         private void PlayWinMoveSequence()

@@ -205,7 +205,6 @@ namespace Systems.Car
             return 0f;
         }
 
-
         private void SetInputEnabled(bool isEnabled)
         {
             _inputEnabled = isEnabled;
