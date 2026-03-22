@@ -38,6 +38,7 @@ namespace Installers
             // feature
             Container.Bind<IFixedSystem>().To<SlipSystem>().AsSingle();
             Container.Bind<IFixedSystem>().To<DriftCorrectionSystem>().AsSingle();
+            Container.Bind<IFixedSystem>().To<CarStopOnFinishSystem>().AsSingle();
             
             //Container.Bind<IFixedSystem>().To<EffectSystem>().AsSingle(); // TODO: plan B
             Container.Bind<IFixedSystem>().To<SkidmarksSystem>().AsSingle();

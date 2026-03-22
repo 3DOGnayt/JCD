@@ -58,6 +58,7 @@ namespace UI.Controllers
 
         private void ShowResult()
         {
+            _localWindowsService.CloseAllWindows();
             _localWindowsService.OpenWindow<GameStartEndWindow>();
         }
 
