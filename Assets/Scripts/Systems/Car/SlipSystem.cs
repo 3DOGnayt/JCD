@@ -50,11 +50,12 @@ namespace Systems.Car
         // TODO: Refactoring
         public void OnUpdate(float deltaTime)
         {
-            var carParameters = _carSelectionParameters != null ? _carSelectionParameters.SelectedCarParameters : null;
-            if (carParameters == null)
+            var slipParameters = _carSelectionParameters != null ? _carSelectionParameters.SlipParameters : null;
+            var movementParameters = _carSelectionParameters != null ? _carSelectionParameters.MovementParameters : null;
+            
+            if (slipParameters == null || movementParameters == null)
                 return;
-
-            var slipParameters = carParameters.SlipParameters;
+            
             if (slipParameters == null)
                 return;
 
@@ -101,7 +102,7 @@ namespace Systems.Car
                 var backwardSpeedKmh = Mathf.Max(0f, Mathf.Abs(backSpeedValue));
                 var scalarSpeedKmh = Mathf.Max(forwardSpeedKmh, backwardSpeedKmh);
 
-                var helpersSetup = carParameters.MovementParameters.HelpersSetup;
+                var helpersSetup = movementParameters.HelpersSetup;
                 var canDriftNow = handbrakePressed && scalarSpeedKmh > helpersSetup.MinDriftSpeedKmh;
 
                 bool applyBack;

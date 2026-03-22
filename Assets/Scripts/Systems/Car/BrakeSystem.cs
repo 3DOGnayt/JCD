@@ -1,5 +1,6 @@
 using System;
 using Components;
+using Configs;
 using Configs.Impl;
 using Scellecs.Morpeh;
 using Services;
@@ -62,8 +63,9 @@ namespace Systems.Car
 
         public void OnUpdate(float deltaTime)
         {
-            var carParameters = _carSelectionParameters != null ? _carSelectionParameters.SelectedCarParameters : null;
-            if (carParameters == null)
+            var movementParameters = _carSelectionParameters != null ? _carSelectionParameters.MovementParameters : null;
+            
+            if (movementParameters == null)
                 return;
 
             foreach (var car in _cars)
@@ -80,7 +82,7 @@ namespace Systems.Car
 
                 var isMovingForward = forwardSpeedKmh >= backwardSpeedKmh;
                 var scalarSpeedKmh = Mathf.Max(forwardSpeedKmh, backwardSpeedKmh);
-                var systemHelpers = carParameters.MovementParameters.HelpersSetup;
+                var systemHelpers = movementParameters.HelpersSetup;
                 var isAlmostStopped = scalarSpeedKmh < systemHelpers.StopThresholdKmh;
 
                 var wheelInfoComponent = _wheelInfoStash.Get(car);
@@ -95,12 +97,12 @@ namespace Systems.Car
                     currentGear,
                     isMovingForward,
                     isAlmostStopped,
-                    carParameters,
+                    movementParameters,
                     out brakeForce,
                     out brakeInputFlag);
 
                 _brakeInputStash.Get(car).Value = brakeInputFlag;
-                ApplyBrakes(wheelInfoComponent, brakeForce, handbrakePressed, carParameters);
+                ApplyBrakes(wheelInfoComponent, brakeForce, handbrakePressed, movementParameters);
             }
         }
 
@@ -109,14 +111,15 @@ namespace Systems.Car
             int currentGear,
             bool isMovingForward,
             bool isAlmostStopped,
-            CarParameters carParameters,
+            ICarMovementParameters movementParameters,
             out float brakeForce,
-            out bool brakeInputFlag)
+            out bool brakeInputFlag
+        )
         {
             brakeForce = 0f;
             brakeInputFlag = false;
 
-            var systemHelpers = carParameters.MovementParameters.HelpersSetup;
+            var systemHelpers = movementParameters.HelpersSetup;
             if (Mathf.Abs(verticalInput) < systemHelpers.InputDeadZone)
                 return;
 
@@ -143,10 +146,7 @@ namespace Systems.Car
             }
         }
 
-        private void SetBrakeMode(
-            float verticalInput,
-            out float brakeForce,
-            out bool brakeInputFlag)
+        private void SetBrakeMode(float verticalInput, out float brakeForce, out bool brakeInputFlag)
         {
             brakeForce = Mathf.Abs(verticalInput);
             brakeInputFlag = true;
@@ -156,9 +156,10 @@ namespace Systems.Car
             WheelInfoComponent wheelInfoComponent,
             float brakeForce,
             bool handbrakePressed,
-            CarParameters carParameters)
+            ICarMovementParameters movementParameters
+        )
         {
-            var parameters = carParameters.MovementParameters.Vertical;
+            var parameters = movementParameters.Vertical;
             var pedalBrakeTorque = parameters.BrakeTorque * Mathf.Max(0f, brakeForce);
             var handbrakeTorque = handbrakePressed ? parameters.HandbrakeTorque : 0f;
 

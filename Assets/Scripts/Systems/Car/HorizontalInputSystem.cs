@@ -1,5 +1,6 @@
 using System;
 using Components;
+using Configs;
 using Configs.Impl;
 using Scellecs.Morpeh;
 using Services;
@@ -52,9 +53,8 @@ namespace Systems.Car
             public float SpeedMultiplierMax;
             public float SpeedMultiplierMin;
 
-            public void ApplyFrom(CarParameters carParameters)
+            public void ApplyFrom(ICarMovementParameters movementParameters)
             {
-                var movementParameters = carParameters.MovementParameters;
                 var horizontal = movementParameters.Horizontal;
                 SpeedMultiplierMax = horizontal.SpeedMultiplierMax;
                 SpeedMultiplierMin = horizontal.SpeedMultiplierMin;
@@ -127,11 +127,11 @@ namespace Systems.Car
             if (_carSelectionParameters == null)
                 return;
 
-            var carParameters = _carSelectionParameters.SelectedCarParameters;
-            if (carParameters == null)
+            var movementParameters = _carSelectionParameters.MovementParameters;
+            if (movementParameters == null)
                 return;
 
-            _movementCache.ApplyFrom(carParameters);
+            _movementCache.ApplyFrom(movementParameters);
             _hasCache = true;
         }
 

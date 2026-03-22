@@ -1,5 +1,6 @@
 using System;
 using Components;
+using Configs;
 using Configs.Impl;
 using Scellecs.Morpeh;
 using Services;
@@ -47,8 +48,9 @@ namespace Systems.Car
 
         public void OnUpdate(float deltaTime)
         {
-            var carParameters = _carSelectionParameters != null ? _carSelectionParameters.SelectedCarParameters : null;
-            if (carParameters == null)
+            var movementParameters = _carSelectionParameters != null ? _carSelectionParameters.MovementParameters : null;
+            
+            if (movementParameters == null)
                 return;
 
             foreach (var car in _cars)
@@ -72,11 +74,11 @@ namespace Systems.Car
 
                 var velocity = rb.velocity;
 
-                velocity = ApplyArcadeAssist(velocity, input, forward, deltaTime, carParameters);
+                velocity = ApplyArcadeAssist(velocity, input, forward, deltaTime, movementParameters);
                 
                 rb.velocity = velocity;
 
-                ApplySleepIfStopped(rb, input, handbrake, carParameters);
+                ApplySleepIfStopped(rb, input, handbrake, movementParameters);
 
                 velocity = rb.velocity;
 
@@ -101,9 +103,9 @@ namespace Systems.Car
             float verticalInput,
             Vector3 forward,
             float deltaTime,
-            CarParameters carParameters)
+            ICarMovementParameters movementParameters
+        )
         {
-            var movementParameters = carParameters.MovementParameters;
             var arcadeAssist = movementParameters.ArcadeAssist;
             if (!arcadeAssist.UseArcadeAssist)
             {
@@ -118,7 +120,7 @@ namespace Systems.Car
             var wantForward = verticalInput > 0.01f;
             var movingForward = forwardSpeed > 0.01f;
             var driftAssistMultiplier = Mathf.Max(1f, arcadeAssist.DriftAssistForwardSpeedMultiplier);
-            var isDrifting = IsDrifting(velocity, forward, carParameters);
+            var isDrifting = IsDrifting(velocity, forward, movementParameters);
 
             if (isDrifting && !arcadeAssist.UseArcadeAssistInDrift)
             {
@@ -137,11 +139,11 @@ namespace Systems.Car
 
             if (forwardSpeed < _assistForwardSpeedMps)
             {
-                var t = 1f - Mathf.Exp(-arcadeAssist.ArcadeAssistLerpSpeed * deltaTime);
+                var time = 1f - Mathf.Exp(-arcadeAssist.ArcadeAssistLerpSpeed * deltaTime);
                 var targetForward = Mathf.Lerp(
                     forwardSpeed,
                     _assistForwardSpeedMps * (isDrifting ? driftAssistMultiplier : 1f),
-                    t);
+                    time);
 
                 var forwardComponent = forward * forwardSpeed;
                 var otherComponent = velocity - forwardComponent;
@@ -157,9 +159,9 @@ namespace Systems.Car
             return velocity;
         }
 
-        private bool IsDrifting(Vector3 velocity, Vector3 forward, CarParameters carParameters)
+        private bool IsDrifting(Vector3 velocity, Vector3 forward, ICarMovementParameters movementParameters)
         {
-            var helpers = carParameters.MovementParameters.HelpersSetup;
+            var helpers = movementParameters.HelpersSetup;
             if (helpers == null)
                 return false;
 
@@ -171,7 +173,7 @@ namespace Systems.Car
             return slipAngle > helpers.SlipAngleThresholdDeg;
         }
         
-        private void ApplySleepIfStopped(Rigidbody rb, float verticalInput, bool handbrake, CarParameters carParameters)
+        private void ApplySleepIfStopped(Rigidbody rb, float verticalInput, bool handbrake, ICarMovementParameters movementParameters)
         {
             if (!_inputEnabled)
                 return;
@@ -182,7 +184,7 @@ namespace Systems.Car
             var v = rb.velocity;
             var av = rb.angularVelocity;
 
-            var systemHelpers = carParameters.MovementParameters.HelpersSetup;
+            var systemHelpers = movementParameters.HelpersSetup;
             var sleepSpeedThresholdMps = systemHelpers.SleepSpeedThresholdMps * systemHelpers.SleepSpeedThresholdMps;
             var sleepAngularSpeedThreshold = systemHelpers.SleepAngularSpeedThreshold * systemHelpers.SleepAngularSpeedThreshold;
             

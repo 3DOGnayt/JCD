@@ -9,7 +9,9 @@ namespace Data.Struct
     {
         public string DisplayName;
         public CarPresetParameters Preset;
-        public CarParameters Parameters;
+        public CarMovementParameters MovementParameters;
+        public CarSpeedsPresetParameters SpeedsPresetParameters;
+        public CarSlipParameters SlipParameters;
         public CarEngineAudioParameters EngineAudioParameters;
         public Sprite Preview;
     }

@@ -9,7 +9,6 @@ namespace Helpers.CarView
     {
         CarPresetParameters CarPresetParameters { get; }
         Rigidbody CarRigidbody { get; }
-        CarSetup CarSetup { get; }
         Transform CarTransform { get; }
         List<WheelInfoSetup> CarWheelInfos { get; }
     }

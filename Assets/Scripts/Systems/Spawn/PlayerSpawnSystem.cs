@@ -41,10 +41,8 @@ namespace Systems.Spawn
         {
             SetSpawnRoot();
             
-            if (_eventService != null)
-            {
+            if (_eventService != null) 
                 _spawnDisposable = _eventService.LoadingProgress.Subscribe(OnLoadingProgress);
-            }
         }
 
         private void OnLoadingProgress(float progress)
@@ -71,11 +69,9 @@ namespace Systems.Spawn
 
         private void SpawnPlayer()
         {
-            var selectedPreset = _carSelectionParameters != null
-                ? _carSelectionParameters.SelectedCar
-                : null;
-
+            var selectedPreset = _carSelectionParameters != null ? _carSelectionParameters.SelectedCar : null;
             var player = selectedPreset != null ? selectedPreset.Car : null;
+            
             if (player == null)
                 return;
 
@@ -93,24 +89,34 @@ namespace Systems.Spawn
 
         private void AddGameComponents(Entity entity, ICarView carView)
         {
-            var carSetup = carView.CarPresetParameters.CarSetup;
+            var movementParameters = _carSelectionParameters != null ? _carSelectionParameters.MovementParameters : null;
+            var horizontal = movementParameters != null ? movementParameters.Horizontal : null;
+            var vertical = movementParameters != null ? movementParameters.Vertical : null;
+            
+            var speedMax = _carSelectionParameters != null ? _carSelectionParameters.GetSpeedMaxKmh() : 0f;
+            var backSpeedMax = _carSelectionParameters != null ? _carSelectionParameters.GetBackSpeedMaxKmh() : 0f;
+            var gearCount = _carSelectionParameters != null ? _carSelectionParameters.GetGearCount() : 0;
+
+            var steeringAngleMax = horizontal?.SteeringAngleMax ?? 0f;
+            var steeringSpeed = horizontal?.SteeringSpeed ?? 0f;
+            var engineRpmMax = vertical?.MaxRpm ?? 0f;
             
             entity.SetComponent(new SpeedComponent { Value = 0 });
             entity.SetComponent(new BackSpeedComponent { Value = 0 });
             entity.SetComponent(new GearComponent { Value = 0 });
             entity.SetComponent(new EngineRpmComponent { Value = 0 });
-            entity.SetComponent(new SteeringAngleComponent { Value = carSetup.SteeringAngleMax });
-            entity.SetComponent(new SteeringSpeedComponent { Value = carSetup.SteeringSpeed });
+            entity.SetComponent(new SteeringAngleComponent { Value = steeringAngleMax });
+            entity.SetComponent(new SteeringSpeedComponent { Value = steeringSpeed });
             entity.SetComponent(new BrakeInputComponent { Value = false });
             entity.SetComponent(new HandbrakeInputComponent { Value = false });
-            entity.SetComponent(new DriftMultiplierComponent { Value = carSetup.DriftMultiplier });
+            entity.SetComponent(new DriftMultiplierComponent { Value = 0f });
 
-            var maxSpeedComponent = new SpeedMaxComponent { Value = carSetup.SpeedMax };
-            var maxRpmComponent = new EngineRpmMaxComponent { Value = carSetup.EngineRpmMax };
+            var maxSpeedComponent = new SpeedMaxComponent { Value = speedMax };
+            var maxRpmComponent = new EngineRpmMaxComponent { Value = engineRpmMax };
 
             entity.SetComponent(maxSpeedComponent);
-            entity.SetComponent(new BackSpeedMaxComponent { Value = carSetup.BackSpeedMax });
-            entity.SetComponent(new GearCountComponent { Value = carSetup.GearCount });
+            entity.SetComponent(new BackSpeedMaxComponent { Value = backSpeedMax });
+            entity.SetComponent(new GearCountComponent { Value = gearCount });
             entity.SetComponent(maxRpmComponent);
             
             entity.SetComponent(new CarViewComponent{ Value = carView });

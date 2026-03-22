@@ -21,7 +21,9 @@ namespace UI.Controllers
         private CarSelectionParameters _carSelectionParameters;
 
         private CarPresetParameters _pendingCarPreset;
-        private CarParameters _pendingCarParameters;
+        private CarMovementParameters _pendingMovementParameters;
+        private CarSpeedsPresetParameters _pendingSpeedsPresetParameters;
+        private CarSlipParameters _pendingSlipParameters;
         private CarEngineAudioParameters _pendingCarEngineAudioParameters;
         
         private Sprite _pendingCarPreview;
@@ -93,7 +95,13 @@ namespace UI.Controllers
                 return;
             
             var entry = _carCatalogParameters.Cars[0];
-            _carSelectionParameters.SetSelectedCar(entry.Preset, entry.Parameters, entry.EngineAudioParameters, 0);
+            _carSelectionParameters.SetSelectedCar(
+                entry.Preset,
+                entry.MovementParameters,
+                entry.SpeedsPresetParameters,
+                entry.SlipParameters,
+                entry.EngineAudioParameters,
+                0);
         }
 
         private void PreparePendingCarSelection()
@@ -139,7 +147,9 @@ namespace UI.Controllers
             var entry = _carCatalogParameters.Cars[index];
             _pendingCarIndex = index;
             _pendingCarPreset = entry.Preset;
-            _pendingCarParameters = entry.Parameters;
+            _pendingMovementParameters = entry.MovementParameters;
+            _pendingSpeedsPresetParameters = entry.SpeedsPresetParameters;
+            _pendingSlipParameters = entry.SlipParameters;
             _pendingCarEngineAudioParameters = entry.EngineAudioParameters;
             _pendingCarPreview = entry.Preview;
             UpdateCarPresentation();
@@ -174,7 +184,9 @@ namespace UI.Controllers
             
             _carSelectionParameters.SetSelectedCar(
                 _pendingCarPreset,
-                _pendingCarParameters,
+                _pendingMovementParameters,
+                _pendingSpeedsPresetParameters,
+                _pendingSlipParameters,
                 _pendingCarEngineAudioParameters,
                 _pendingCarIndex);
             RefreshCarButtons();

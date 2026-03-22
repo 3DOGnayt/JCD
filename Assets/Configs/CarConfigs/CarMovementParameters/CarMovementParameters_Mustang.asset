@@ -10,14 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4fe4eb4722648b186c05f041ff9b466, type: 3}
-  m_Name: CarMovementParameters_N34
+  m_Name: CarMovementParameters_Mustang
   m_EditorClassIdentifier: 
   _horizontal:
+    CarMassStandard: 1500
     SpeedMultiplierMax: 1
     SpeedMultiplierMin: 0.1
-    CarMassStandard: 2000
     SteeringSpeedMultiplierMax: 1
     SteeringSpeedMultiplierMin: 0.1
+    SteeringAngleMax: 35
+    SteeringSpeed: 100
   _vertical:
     HandbrakeTorque: 800
     BrakeTorque: 500

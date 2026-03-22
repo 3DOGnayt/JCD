@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4fe4eb4722648b186c05f041ff9b466, type: 3}
+  m_Name: CarMovementParameters_N34
+  m_EditorClassIdentifier: 
+  _horizontal:
+    CarMassStandard: 1500
+    SpeedMultiplierMax: 1
+    SpeedMultiplierMin: 0.1
+    SteeringSpeedMultiplierMax: 1
+    SteeringSpeedMultiplierMin: 0.1
+    SteeringAngleMax: 20
+    SteeringSpeed: 80
+  _vertical:
+    HandbrakeTorque: 800
+    BrakeTorque: 500
+    AccelerationRate: 2500
+    DecelerationRate: 3000
+    MaxRpm: 9000
+    IdleRpm: 1800
+  _arcadeAssist:
+    UseArcadeAssist: 1
+    UseArcadeAssistInDrift: 1
+    ArcadeAssistMinSpeedKmh: 0
+    ArcadeAssistLerpSpeed: 1
+    DriftAssistForwardSpeedMultiplier: 1.5
+  _helpersSetup:
+    StopThresholdKmh: 0.5
+    InputDeadZone: 0.05
+    UpshiftRpmDropFactor: 0.6
+    NeutralInputDeadZone: 0.05
+    SleepSpeedThresholdMps: 0.05
+    SleepAngularSpeedThreshold: 0.05
+    MinDriftSpeedKmh: 20
+    MinBrakeSkidSpeedKmh: 5
+    SlipAngleThresholdDeg: 20
+    DriftVisualThresh: 0.05
+  _airControl:
+    MaxAirborneHeight: 0.3
+    UprightStartAngleDeg: 10
+    UprightTorque: 8
+    UprightDamping: 1.2
+    GroundMask:
+      serializedVersion: 2
+      m_Bits: 256
+  _velocityAlign:
+    UseVelocityAlign: 1
+    VelocityAlignRequireCounterSteer: 1
+    VelocityAlignTorque: 10
+    VelocityAlignDamping: 2
+    VelocityAlignMinSpeedKmh: 0
+    VelocityAlignMinSlipAngleDeg: 10

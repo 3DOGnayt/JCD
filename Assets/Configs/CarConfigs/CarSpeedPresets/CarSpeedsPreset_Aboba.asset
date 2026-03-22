@@ -16,20 +16,20 @@ MonoBehaviour:
   - EGear: -1
     SpeedLimit: 80
     SpeedAcceleration: 2400
-    SpeedDecelerationNoGas: 1600
-    SpeedDecelerationBrake: 2200
+    RpmMin: 1800
+    RpmMax: 2000
   - EGear: 0
     SpeedLimit: 0
     SpeedAcceleration: 0
-    SpeedDecelerationNoGas: 0
-    SpeedDecelerationBrake: 0
+    RpmMin: 0
+    RpmMax: 0
   - EGear: 1
     SpeedLimit: 30
-    SpeedAcceleration: 3000
-    SpeedDecelerationNoGas: 1600
-    SpeedDecelerationBrake: 2200
+    SpeedAcceleration: 2000
+    RpmMin: 1200
+    RpmMax: 3000
   - EGear: 2
     SpeedLimit: 60
-    SpeedAcceleration: 2000
-    SpeedDecelerationNoGas: 1200
-    SpeedDecelerationBrake: 1800
+    SpeedAcceleration: 1800
+    RpmMin: 3500
+    RpmMax: 4000

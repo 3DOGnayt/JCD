@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Components;
+using Configs;
 using Configs.Impl;
 using Data.HelperClass;
 using Scellecs.Morpeh;
@@ -55,16 +56,16 @@ namespace Systems.Car
             _gearStash = World.GetStash<GearComponent>();
             _verticalInputStash = World.GetStash<VerticalInputComponent>();
 
-            var carParameters = _carSelectionParameters != null ? _carSelectionParameters.SelectedCarParameters : null;
+            var speedsPreset = _carSelectionParameters != null ? _carSelectionParameters.CarSpeedsPresetParameters : null;
             
-            BuildRpmBandsFromPreset(carParameters);
+            BuildRpmBandsFromPreset(speedsPreset);
         }
 
-        private void BuildRpmBandsFromPreset(CarParameters carParameters)
+        private void BuildRpmBandsFromPreset(CarSpeedsPresetParameters speedsPreset)
         {
             ResetRpmBands();
 
-            if (!TryGetSpeedSettings(carParameters, out var carSpeedSettings))
+            if (!TryGetSpeedSettings(speedsPreset, out var carSpeedSettings))
                 return;
 
             var forwardSettings = new List<CarSpeedSetup>();
@@ -99,17 +100,13 @@ namespace Systems.Car
             _hasReverseBand = false;
         }
 
-        private bool TryGetSpeedSettings(CarParameters carParameters, out List<CarSpeedSetup> carSpeedSettings)
+        private bool TryGetSpeedSettings(CarSpeedsPresetParameters speedsPreset, out List<CarSpeedSetup> carSpeedSettings)
         {
             carSpeedSettings = null;
 
-            if (carParameters == null)
-                return false;
-
-            var speedsPreset = carParameters.CarSpeedsPresetParameters;
             if (speedsPreset == null)
             {
-                Debug.LogError("RPMSystem_A: SpeedsPreset is null in CarParameters.");
+                Debug.LogError("RPMSystem_A: SpeedsPreset is null in selection parameters.");
                 return false;
             }
 
@@ -151,20 +148,24 @@ namespace Systems.Car
 
         public void OnUpdate(float deltaTime)
         {
-            var carParameters = _carSelectionParameters != null ? _carSelectionParameters.SelectedCarParameters : null;
-            if (carParameters == null)
+            var speedsPreset = _carSelectionParameters != null
+                ? _carSelectionParameters.CarSpeedsPresetParameters
+                : null;
+            var movementParameters = _carSelectionParameters != null
+                ? _carSelectionParameters.MovementParameters
+                : null;
+            if (speedsPreset == null || movementParameters == null)
                 return;
 
             if (_forwardBands == null || _forwardBands.Count == 0)
             {
-                BuildRpmBandsFromPreset(carParameters);
+                BuildRpmBandsFromPreset(speedsPreset);
                 if (_forwardBands == null || _forwardBands.Count == 0)
                     return;
             }
 
             //TODO: Refactoring
-            var movement = carParameters.MovementParameters;
-            var vertical = movement.Vertical;
+            var vertical = movementParameters.Vertical;
             var idleRpm = vertical.IdleRpm;
             var accelRpmPerSec = vertical.AccelerationRate;
             var decelRpmPerSec = vertical.DecelerationRate;
@@ -191,7 +192,7 @@ namespace Systems.Car
                 float targetRpm;
 
                 if (gear == 0)
-                    targetRpm = CalculateNeutralRpm(idleRpm, neutralMaxRpm, verticalInput, carParameters);
+                    targetRpm = CalculateNeutralRpm(idleRpm, neutralMaxRpm, verticalInput, movementParameters);
                 else if (gear < 0)
                 {
                     var reverseSpeedKmh = Mathf.Max(0f, backSpeedComponent.Value);
@@ -216,16 +217,16 @@ namespace Systems.Car
             }
         }
 
-        private float CalculateNeutralRpm(float idleRpm, float neutralMaxRpm, float verticalInput, CarParameters carParameters)
+        private float CalculateNeutralRpm(float idleRpm, float neutralMaxRpm, float verticalInput, ICarMovementParameters movementParameters)
         {
             var absInput = Mathf.Abs(verticalInput);
 
-            var systemHelpers = carParameters.MovementParameters.HelpersSetup;
+            var systemHelpers = movementParameters.HelpersSetup;
             if (absInput < systemHelpers.NeutralInputDeadZone)
                 return idleRpm;
 
-            var t = Mathf.Clamp01(absInput);
-            return Mathf.Lerp(idleRpm, neutralMaxRpm, t);
+            var time = Mathf.Clamp01(absInput);
+            return Mathf.Lerp(idleRpm, neutralMaxRpm, time);
         }
 
         private float CalculateReverseRpm(float reverseSpeedKmh, float idleRpm, float rpmMax)

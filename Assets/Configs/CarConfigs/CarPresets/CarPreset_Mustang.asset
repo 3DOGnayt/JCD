@@ -13,16 +13,6 @@ MonoBehaviour:
   m_Name: CarPreset_Mustang
   m_EditorClassIdentifier: 
   _car: {fileID: 9039642172116725141, guid: e2deea54592629b48943974f82b6b2d2, type: 3}
-  _carSetup:
-    SpeedMax: 200
-    BackSpeedMax: 60
-    GearCount: 5
-    EngineRpmMax: 11000
-    SteeringAngleMax: 35
-    SteeringSpeed: 100
-    BrakeInput: 0
-    HandbrakeInput: 0
-    DriftMultiplier: 0
   carMassSetup:
     Mass: 1500
     AutomaticCenterOfMass: 0

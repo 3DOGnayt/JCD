@@ -71,12 +71,17 @@ namespace Services.Impl
                 return;
 
             var entry = cars[saved.CarIndex];
-            if (entry.Preset == null || entry.Parameters == null)
+            if (entry.Preset == null ||
+                entry.MovementParameters == null ||
+                entry.SpeedsPresetParameters == null ||
+                entry.SlipParameters == null)
                 return;
 
             _carSelectionParameters.SetSelectedCar(
                 entry.Preset,
-                entry.Parameters,
+                entry.MovementParameters,
+                entry.SpeedsPresetParameters,
+                entry.SlipParameters,
                 entry.EngineAudioParameters,
                 saved.CarIndex);
         }

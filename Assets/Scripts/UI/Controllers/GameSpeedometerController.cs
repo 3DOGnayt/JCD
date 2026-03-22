@@ -47,16 +47,12 @@ namespace UI.Controllers
             if (_carSelectionParameters == null)
                 return;
 
-            var selectedCar = _carSelectionParameters.SelectedCar;
-            if (selectedCar == null)
-                return;
+            if (_carSelectionParameters != null)
+                _maxSpeed = _carSelectionParameters.GetSpeedMaxKmh();
 
-            var carSetup = selectedCar.CarSetup;
-            if (carSetup == null)
-                return;
-
-            _maxSpeed = carSetup.SpeedMax;
-            _maxRpm = carSetup.EngineRpmMax;
+            var movementParameters = _carSelectionParameters.MovementParameters;
+            if (movementParameters != null && movementParameters.Vertical != null)
+                _maxRpm = movementParameters.Vertical.MaxRpm;
         }
 
         private void OnCarSetupAspectChanged(CarSetupAspect aspect)

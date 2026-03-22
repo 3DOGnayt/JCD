@@ -52,16 +52,15 @@ namespace Systems.Car
         {
             settings = default;
 
-            var carParameters = _carSelectionParameters != null ? _carSelectionParameters.SelectedCarParameters : null;
-            if (carParameters == null)
+            var movementParameters = _carSelectionParameters != null ? _carSelectionParameters.MovementParameters : null;
+            if (movementParameters == null)
                 return false;
 
-            var movement = carParameters.MovementParameters;
-            var velocityAlign = movement.VelocityAlign;
+            var velocityAlign = movementParameters.VelocityAlign;
             if (!velocityAlign.UseVelocityAlign)
                 return false;
 
-            var helpers = movement.HelpersSetup;
+            var helpers = movementParameters.HelpersSetup;
             if (helpers == null)
                 return false;
 
@@ -160,7 +159,8 @@ namespace Systems.Car
             Vector3 forwardDirection,
             Vector3 velocityDirection,
             float alignTorque,
-            float alignDamping)
+            float alignDamping
+        )
         {
             var axis = Vector3.Cross(forwardDirection, velocityDirection);
             if (axis.sqrMagnitude < 0.0001f)

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Components;
+using Configs;
 using Configs.Impl;
 using Scellecs.Morpeh;
 using UnityEngine;
@@ -43,26 +44,22 @@ namespace Systems.Car
             _backSpeedStash = World.GetStash<BackSpeedComponent>();
             _verticalInputStash = World.GetStash<VerticalInputComponent>();
 
-            var carParameters = _carSelectionParameters != null ? _carSelectionParameters.SelectedCarParameters : null;
-            BuildGearDataFromPreset(carParameters);
+            var speedsPreset = _carSelectionParameters != null
+                ? _carSelectionParameters.CarSpeedsPresetParameters
+                : null;
+            
+            BuildGearDataFromPreset(speedsPreset);
         }
 
-        private void BuildGearDataFromPreset(CarParameters carParameters)
+        private void BuildGearDataFromPreset(CarSpeedsPresetParameters speedsPreset)
         {
             _forwardGears = new List<ForwardGearInfo>();
             _forwardIndexByGearValue = new Dictionary<int, int>();
             _reverseGearValue = -1;
             _neutralGearValue = 0;
 
-            if (carParameters == null)
-                return;
-
-            var speedsPreset = carParameters.CarSpeedsPresetParameters;
             if (speedsPreset == null)
-            {
-                Debug.LogError("GearShiftSystem_A: SpeedPreset is null in CarParameters.");
                 return;
-            }
 
             var carSpeedSettings = speedsPreset.CarSpeedSettings;
             if (carSpeedSettings == null || carSpeedSettings.Count == 0)
@@ -103,13 +100,15 @@ namespace Systems.Car
 
         public void OnUpdate(float deltaTime)
         {
-            var carParameters = _carSelectionParameters != null ? _carSelectionParameters.SelectedCarParameters : null;
-            if (carParameters == null)
+            var speedsPreset = _carSelectionParameters != null ? _carSelectionParameters.CarSpeedsPresetParameters : null;
+            var movementParameters = _carSelectionParameters != null ? _carSelectionParameters.MovementParameters : null;
+            
+            if (speedsPreset == null || movementParameters == null)
                 return;
 
             if (_forwardGears == null || _forwardGears.Count == 0)
             {
-                BuildGearDataFromPreset(carParameters);
+                BuildGearDataFromPreset(speedsPreset);
                 if (_forwardGears == null || _forwardGears.Count == 0)
                     return;
             }
@@ -125,7 +124,7 @@ namespace Systems.Car
                 var forwardSpeedKmh = Mathf.Max(0.0f, speedComponent.Value);
                 var backwardSpeedKmh = Mathf.Max(0.0f, backSpeedComponent.Value);
 
-                UpdateGear(ref currentGear, forwardSpeedKmh, backwardSpeedKmh, verticalInput, carParameters);
+                UpdateGear(ref currentGear, forwardSpeedKmh, backwardSpeedKmh, verticalInput, movementParameters);
 
                 gearComponent.Value = currentGear;
             }
@@ -136,15 +135,16 @@ namespace Systems.Car
             float forwardSpeedKmh,
             float backwardSpeedKmh,
             float verticalInput,
-            CarParameters carParameters)
+            ICarMovementParameters movementParameters
+        )
         {
             var absoluteSpeedKmh = Mathf.Max(forwardSpeedKmh, backwardSpeedKmh);
 
-            var movementParameters = carParameters.MovementParameters.HelpersSetup;
-            var wantForward = verticalInput > movementParameters.InputDeadZone;
-            var wantBackward = verticalInput < -movementParameters.InputDeadZone;
+            var helpersSetup = movementParameters.HelpersSetup;
+            var wantForward = verticalInput > helpersSetup.InputDeadZone;
+            var wantBackward = verticalInput < -helpersSetup.InputDeadZone;
 
-            if (absoluteSpeedKmh < movementParameters.StopThresholdKmh)
+            if (absoluteSpeedKmh < helpersSetup.StopThresholdKmh)
             {
                 if (wantForward)
                     currentGear = GetFirstForwardGear();

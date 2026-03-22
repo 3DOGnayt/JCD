@@ -10,8 +10,6 @@ namespace Helpers.CarView.Impl
         [SerializeField] private CarPresetParameters _carPresetParameters;
         [SerializeField] private Rigidbody _carRigidbody;
         [Space]
-        [SerializeField] private CarSetup _carSetup;
-        [Space]
         [SerializeField] private CarEffectsSetup _carEffectsSetup;
         [Space]
         [SerializeField] private CarCollisionListener _carCollisionListener;
@@ -20,7 +18,6 @@ namespace Helpers.CarView.Impl
 
         public CarPresetParameters CarPresetParameters => _carPresetParameters;
         public Rigidbody CarRigidbody => _carRigidbody;
-        public CarSetup CarSetup => _carSetup;
         public Transform CarTransform => transform;
         public List<WheelInfoSetup> CarWheelInfos { get => _wheelInfos; set => _wheelInfos = value; }
         

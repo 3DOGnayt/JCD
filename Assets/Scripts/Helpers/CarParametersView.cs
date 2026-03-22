@@ -97,15 +97,8 @@ namespace Helpers
             if (_carSelectionParameters == null)
                 return;
 
-            var selectedCar = _carSelectionParameters.SelectedCar;
-            if (selectedCar == null)
-                return;
-
-            var carSetup = selectedCar.CarSetup;
-            if (carSetup == null)
-                return;
-
-            _maxSpeed = carSetup.SpeedMax;
+            if (_carSelectionParameters != null)
+                _maxSpeed = _carSelectionParameters.GetSpeedMaxKmh();
         }
 
         private float Smooth(float current, float target, float smoothing)

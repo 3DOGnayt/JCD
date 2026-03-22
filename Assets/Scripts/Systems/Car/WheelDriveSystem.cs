@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Components;
+using Configs;
 using Configs.Impl;
 using Scellecs.Morpeh;
 using Services;
@@ -53,26 +54,19 @@ namespace Systems.Car
             _wheelInfoStash = World.GetStash<WheelInfoComponent>();
             _verticalInputStash = World.GetStash<VerticalInputComponent>();
 
-            var carParameters = _carSelectionParameters != null ? _carSelectionParameters.SelectedCarParameters : null;
-            BuildGearTorqueFromPreset(carParameters);
+            var speedsPreset = _carSelectionParameters != null ? _carSelectionParameters.CarSpeedsPresetParameters : null;
+            BuildGearTorqueFromPreset(speedsPreset);
 
             _inputEnabledSubscription = _eventService.InputEnabledStream.Subscribe(SetInputEnabled);
         }
 
-        private void BuildGearTorqueFromPreset(CarParameters carParameters)
+        private void BuildGearTorqueFromPreset(CarSpeedsPresetParameters speedsPreset)
         {
             _forwardGearTorque = new Dictionary<int, float>();
             _reverseGearTorque = 0f;
 
-            if (carParameters == null)
-                return;
-
-            var speedsPreset = carParameters.CarSpeedsPresetParameters;
             if (speedsPreset == null)
-            {
-                Debug.LogError("WheelDriveSystem_A: SpeedsPreset is null in CarParameters.");
                 return;
-            }
 
             var carSpeedSettings = speedsPreset.CarSpeedSettings;
             if (carSpeedSettings == null || carSpeedSettings.Count == 0)
@@ -118,13 +112,15 @@ namespace Systems.Car
 
         public void OnUpdate(float deltaTime)
         {
-            var carParameters = _carSelectionParameters != null ? _carSelectionParameters.SelectedCarParameters : null;
-            if (carParameters == null)
+            var speedsPreset = _carSelectionParameters != null ? _carSelectionParameters.CarSpeedsPresetParameters : null;
+            var movementParameters = _carSelectionParameters != null ? _carSelectionParameters.MovementParameters : null;
+            
+            if (speedsPreset == null || movementParameters == null)
                 return;
 
             if (_forwardGearTorque == null || _forwardGearTorque.Count == 0)
             {
-                BuildGearTorqueFromPreset(carParameters);
+                BuildGearTorqueFromPreset(speedsPreset);
                 if (_forwardGearTorque == null || _forwardGearTorque.Count == 0)
                     return;
             }
@@ -147,7 +143,7 @@ namespace Systems.Car
                 float maxMotorTorque;
                 float driveInput;
 
-                ResolveDrive(verticalInput, currentGear, brakeInputFlag, carParameters, out maxMotorTorque, out driveInput);
+                ResolveDrive(verticalInput, currentGear, brakeInputFlag, movementParameters, out maxMotorTorque, out driveInput);
                 
                 _inputService.ApplyVerticalMove(maxMotorTorque, driveInput, wheelInfoComponent.WheelInfo);
             }
@@ -157,7 +153,7 @@ namespace Systems.Car
             float verticalInput,
             int currentGear,
             bool brakeInputPressed,
-            CarParameters carParameters,
+            ICarMovementParameters movementParameters,
             out float maxMotorTorque,
             out float driveInput
         )
@@ -165,7 +161,7 @@ namespace Systems.Car
             maxMotorTorque = 0f;
             driveInput = 0f;
 
-            var systemHelpers = carParameters.MovementParameters.HelpersSetup;
+            var systemHelpers = movementParameters.HelpersSetup;
             if (Mathf.Abs(verticalInput) < systemHelpers.InputDeadZone)
                 return;
 

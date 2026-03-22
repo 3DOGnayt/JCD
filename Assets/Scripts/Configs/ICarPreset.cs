@@ -7,7 +7,6 @@ namespace Configs
     public interface ICarPreset
     {
         GameObject Car { get; }
-        CarSetup CarSetup { get; }
         CarMassSetup CarMassSetup { get; }
         WheelSetup FrontWheelSetup { get; }
         WheelSetup BackWheelSetup { get; }

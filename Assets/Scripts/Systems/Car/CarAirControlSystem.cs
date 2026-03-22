@@ -35,15 +35,12 @@ namespace Systems.Car
 
         public void OnUpdate(float deltaTime)
         {
-            var carParameters = _carSelectionParameters != null ? _carSelectionParameters.SelectedCarParameters : null;
-            if (carParameters == null)
+            var movementParameters = _carSelectionParameters != null ? _carSelectionParameters.MovementParameters : null;
+            
+            if (movementParameters == null)
                 return;
 
-            var movement = carParameters.MovementParameters;
-            if (movement == null)
-                return;
-
-            var airControl = movement.AirControl;
+            var airControl = movementParameters.AirControl;
 
             foreach (var car in _cars)
             {
@@ -83,9 +80,10 @@ namespace Systems.Car
         }
 
         private static void GetWheelGroundStats(
-            List<WheelInfoSetup> wheelInfo,
+            IReadOnlyList<WheelInfoSetup> wheelInfo,
             out int totalWheels,
-            out int groundedWheels)
+            out int groundedWheels
+        )
         {
             totalWheels = 0;
             groundedWheels = 0;
@@ -112,21 +110,22 @@ namespace Systems.Car
         }
 
         private static bool TryGetGroundDistance(
-            Rigidbody rb,
-            Transform tr,
+            Rigidbody rigidbody,
+            Transform transform,
             LayerMask groundMask,
             float maxAirborneHeight,
             out Vector3 groundPoint,
-            out float distance)
+            out float distance
+        )
         {
             groundPoint = Vector3.zero;
             distance = 0f;
 
-            var origin = tr.position;
+            var origin = transform.position;
             var rayDistance = Mathf.Max(1f, maxAirborneHeight + 5f);
             var size = Physics.RaycastNonAlloc(
                 origin, Vector3.down, _raycastHits, rayDistance, groundMask, QueryTriggerInteraction.Ignore);
-            
+
             while (size == _raycastHits.Length)
             {
                 _raycastHits = new RaycastHit[_raycastHits.Length * 2];
@@ -147,7 +146,7 @@ namespace Systems.Car
                 if (hitCollider == null)
                     continue;
 
-                if (hit.rigidbody == rb || hitCollider.transform.IsChildOf(tr))
+                if (hit.rigidbody == rigidbody || hitCollider.transform.IsChildOf(transform))
                     continue;
 
                 if (hit.distance < bestDistance)
@@ -165,20 +164,20 @@ namespace Systems.Car
             return true;
         }
 
-        private static void ApplyUprightStabilization(Rigidbody rb, Transform tr, CarMovementAirControlSetup airControl)
+        private static void ApplyUprightStabilization(Rigidbody rigidbody, Transform transform, CarMovementAirControlSetup airControl)
         {
             if (airControl.UprightTorque <= 0f)
                 return;
 
-            var angle = Vector3.Angle(tr.up, Vector3.up);
+            var angle = Vector3.Angle(transform.up, Vector3.up);
             if (angle < airControl.UprightStartAngleDeg)
                 return;
 
-            var torqueAxis = Vector3.Cross(tr.up, Vector3.up);
-            rb.AddTorque(torqueAxis * airControl.UprightTorque, ForceMode.Acceleration);
+            var torqueAxis = Vector3.Cross(transform.up, Vector3.up);
+            rigidbody.AddTorque(torqueAxis * airControl.UprightTorque, ForceMode.Acceleration);
 
             if (airControl.UprightDamping > 0f)
-                rb.AddTorque(-rb.angularVelocity * airControl.UprightDamping, ForceMode.Acceleration);
+                rigidbody.AddTorque(-rigidbody.angularVelocity * airControl.UprightDamping, ForceMode.Acceleration);
         }
 
         public void Dispose() { }

@@ -13,5 +13,8 @@ MonoBehaviour:
   m_Name: CarSelectionParameters
   m_EditorClassIdentifier: 
   _selectedCar: {fileID: 0}
-  _selectedCarParameters: {fileID: 0}
+  _selectedCarMovementParameters: {fileID: 0}
+  _selectedCarSpeedsPresetParameters: {fileID: 0}
+  _selectedCarSlipParameters: {fileID: 0}
+  _selectedCarEngineAudioParameters: {fileID: 0}
   _selectedCarIndex: -1
