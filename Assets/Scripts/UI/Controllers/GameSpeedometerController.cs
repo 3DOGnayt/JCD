@@ -39,6 +39,7 @@ namespace UI.Controllers
                 return;
 
             _eventService.CarSetupChangedStream.Subscribe(OnCarSetupAspectChanged).AddTo(View);
+            _eventService.CarSelectionChangedStream.Subscribe(_ => OnCarSelectionChanged()).AddTo(View);
             CacheCarLimits();
         }
 
@@ -53,6 +54,16 @@ namespace UI.Controllers
             var movementParameters = _carSelectionParameters.MovementParameters;
             if (movementParameters != null && movementParameters.Vertical != null)
                 _maxRpm = movementParameters.Vertical.MaxRpm;
+        }
+
+        private void OnCarSelectionChanged()
+        {
+            CacheCarLimits();
+            _uiSpeed = 0f;
+            _uiBackSpeed = 0f;
+            _uiGear = 0f;
+            _uiRpm = 0f;
+            UpdateSpeedometer();
         }
 
         private void OnCarSetupAspectChanged(CarSetupAspect aspect)

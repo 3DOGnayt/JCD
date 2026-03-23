@@ -32,6 +32,7 @@ namespace Systems.Car
         private bool _hasCache;
         private bool _inputEnabled = true;
         private IDisposable _inputEnabledSubscription;
+        private IDisposable _carSelectionSubscription;
         
         [Inject]
         public void Construct(
@@ -78,6 +79,7 @@ namespace Systems.Car
 
             TryCacheMovementParameters();
             _inputEnabledSubscription = _eventService.InputEnabledStream.Subscribe(SetInputEnabled);
+            _carSelectionSubscription = _eventService.CarSelectionChangedStream.Subscribe(_ => OnCarSelectionChanged());
         }
 
         public void OnUpdate(float deltaTime)
@@ -140,9 +142,16 @@ namespace Systems.Car
             _inputEnabled = isEnabled;
         }
 
+        private void OnCarSelectionChanged()
+        {
+            _hasCache = false;
+            TryCacheMovementParameters();
+        }
+
         public void Dispose()
         {
             _inputEnabledSubscription?.Dispose();
+            _carSelectionSubscription?.Dispose();
         }
     }
 }

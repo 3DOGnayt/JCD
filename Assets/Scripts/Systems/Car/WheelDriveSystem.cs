@@ -29,6 +29,7 @@ namespace Systems.Car
         private bool _inputEnabled = true;
 
         private IDisposable _inputEnabledSubscription;
+        private IDisposable _carSelectionSubscription;
 
         [Inject]
         public void Construct(
@@ -58,6 +59,7 @@ namespace Systems.Car
             BuildGearTorqueFromPreset(speedsPreset);
 
             _inputEnabledSubscription = _eventService.InputEnabledStream.Subscribe(SetInputEnabled);
+            _carSelectionSubscription = _eventService.CarSelectionChangedStream.Subscribe(_ => OnCarSelectionChanged());
         }
 
         private void BuildGearTorqueFromPreset(CarSpeedsPresetParameters speedsPreset)
@@ -206,9 +208,16 @@ namespace Systems.Car
             _inputEnabled = isEnabled;
         }
 
+        private void OnCarSelectionChanged()
+        {
+            var speedsPreset = _carSelectionParameters != null ? _carSelectionParameters.CarSpeedsPresetParameters : null;
+            BuildGearTorqueFromPreset(speedsPreset);
+        }
+
         public void Dispose()
         {
             _inputEnabledSubscription?.Dispose();
+            _carSelectionSubscription?.Dispose();
         }
     }
 }

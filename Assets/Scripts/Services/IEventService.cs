@@ -19,6 +19,7 @@ namespace Services
         IObservable<ICarView> PlayerSpawnedStream { get; }
         IObservable<MinimapCameraHolder> MinimapSpawnedStream { get; }
         IObservable<CarSetupAspect> CarSetupChangedStream { get; }
+        IObservable<Unit> CarSelectionChangedStream { get; }
         IObservable<bool> InputEnabledStream { get; }
         IObservable<bool> ResultSubject { get; }
 
@@ -27,6 +28,7 @@ namespace Services
         void PublishPlayerSpawned(ICarView carView);
         void PublishMinimapSpawned(MinimapCameraHolder minimapCamera);
         void PublishCarSetupChanged(CarSetupAspect carSetupAspect);
+        void PublishCarSelectionChanged();
         void PublishInputEnabled(bool isEnabled);
         void PublishWinResultChanged(bool isEnabled);
         void PublishGameStarted(bool isEnabled);

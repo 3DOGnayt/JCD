@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
 using Components;
 using Configs;
 using Configs.Impl;
 using Data.HelperClass;
 using Scellecs.Morpeh;
+using Services;
+using UniRx;
 using UnityEngine;
 using Zenject;
 
@@ -13,6 +16,7 @@ namespace Systems.Car
     {
         [Inject] public World World { get; set; }
         [Inject] private CarSelectionParameters _carSelectionParameters;
+        [Inject] private IEventService _eventService;
 
         private Filter _cars;
 
@@ -37,6 +41,7 @@ namespace Systems.Car
 
         private float _reverseMaxSpeedKmh;
         private bool _hasReverseBand;
+        private IDisposable _carSelectionSubscription;
 
         public void OnAwake()
         {
@@ -59,6 +64,8 @@ namespace Systems.Car
             var speedsPreset = _carSelectionParameters != null ? _carSelectionParameters.CarSpeedsPresetParameters : null;
             
             BuildRpmBandsFromPreset(speedsPreset);
+            if (_eventService != null)
+                _carSelectionSubscription = _eventService.CarSelectionChangedStream.Subscribe(_ => OnCarSelectionChanged());
         }
 
         private void BuildRpmBandsFromPreset(CarSpeedsPresetParameters speedsPreset)
@@ -282,6 +289,15 @@ namespace Systems.Car
             return -1;
         }
 
-        public void Dispose() { }
+        private void OnCarSelectionChanged()
+        {
+            var speedsPreset = _carSelectionParameters != null ? _carSelectionParameters.CarSpeedsPresetParameters : null;
+            BuildRpmBandsFromPreset(speedsPreset);
+        }
+
+        public void Dispose()
+        {
+            _carSelectionSubscription?.Dispose();
+        }
     }
 }

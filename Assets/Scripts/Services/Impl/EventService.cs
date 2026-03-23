@@ -18,6 +18,7 @@ namespace Services.Impl
         private readonly Subject<ICarView> _playerSpawnedSubject = new();
         private readonly Subject<MinimapCameraHolder> _minimapSpawnedSubject = new();
         private readonly Subject<CarSetupAspect> _carSetupChangedSubject = new();
+        private readonly Subject<Unit> _carSelectionChangedSubject = new();
         private readonly Subject<bool> _inputEnabledSubject = new();
         private readonly Subject<bool> _resultSubject = new();
 
@@ -32,6 +33,7 @@ namespace Services.Impl
         public IObservable<ICarView> PlayerSpawnedStream => _playerSpawnedSubject;
         public IObservable<MinimapCameraHolder> MinimapSpawnedStream => _minimapSpawnedSubject;
         public IObservable<CarSetupAspect> CarSetupChangedStream => _carSetupChangedSubject;
+        public IObservable<Unit> CarSelectionChangedStream => _carSelectionChangedSubject;
         public IObservable<bool> InputEnabledStream => _inputEnabledSubject;
         public IObservable<bool> ResultSubject => _resultSubject;
 
@@ -42,6 +44,7 @@ namespace Services.Impl
         public void PublishMinimapSpawned(MinimapCameraHolder minimapCamera) => _minimapSpawnedSubject.OnNext(minimapCamera);
 
         public void PublishCarSetupChanged(CarSetupAspect carSetupAspect) => _carSetupChangedSubject.OnNext(carSetupAspect);
+        public void PublishCarSelectionChanged() => _carSelectionChangedSubject.OnNext(Unit.Default);
         public void PublishInputEnabled(bool isEnabled) => _inputEnabledSubject.OnNext(isEnabled);
         public void PublishWinResultChanged(bool isEnabled) => _resultSubject.OnNext(isEnabled);
         public void PublishGameStarted(bool isEnabled) => _isGameStarted.Value = isEnabled;
@@ -60,6 +63,7 @@ namespace Services.Impl
             _playerSpawnedSubject?.OnCompleted();
             _minimapSpawnedSubject?.OnCompleted();
             _carSetupChangedSubject?.OnCompleted();
+            _carSelectionChangedSubject?.OnCompleted();
             _inputEnabledSubject?.OnCompleted();
 
             _startRaceSubject?.Dispose();
@@ -67,6 +71,7 @@ namespace Services.Impl
             _playerSpawnedSubject?.Dispose();
             _minimapSpawnedSubject?.Dispose();
             _carSetupChangedSubject?.Dispose();
+            _carSelectionChangedSubject?.Dispose();
             _inputEnabledSubject?.Dispose();
         }
     }

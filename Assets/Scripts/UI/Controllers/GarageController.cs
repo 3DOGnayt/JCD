@@ -19,6 +19,7 @@ namespace UI.Controllers
         
         private CarCatalogParameters _carCatalogParameters;
         private CarSelectionParameters _carSelectionParameters;
+        private IEventService _eventService;
 
         private CarPresetParameters _pendingCarPreset;
         private CarMovementParameters _pendingMovementParameters;
@@ -33,11 +34,13 @@ namespace UI.Controllers
         [Inject]
         public void Construct(
             CarCatalogParameters carCatalogParameters,
-            CarSelectionParameters carSelectionParameters
+            CarSelectionParameters carSelectionParameters,
+            IEventService eventService
         )
         {
             _carCatalogParameters = carCatalogParameters;
             _carSelectionParameters = carSelectionParameters;
+            _eventService = eventService;
         }
 
         public GarageController(
@@ -189,6 +192,7 @@ namespace UI.Controllers
                 _pendingSlipParameters,
                 _pendingCarEngineAudioParameters,
                 _pendingCarIndex);
+            _eventService?.PublishCarSelectionChanged();
             RefreshCarButtons();
             _localWindowsService.OpenWindow<MainMenuWindow>();
         }

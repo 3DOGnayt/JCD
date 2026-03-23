@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using Components;
 using Configs;
 using Configs.Impl;
 using Scellecs.Morpeh;
+using Services;
+using UniRx;
 using UnityEngine;
 using Zenject;
 
@@ -12,6 +15,7 @@ namespace Systems.Car
     {
         [Inject] public World World { get; set; }
         [Inject] private CarSelectionParameters _carSelectionParameters;
+        [Inject] private IEventService _eventService;
 
         private Filter _cars;
         private Stash<GearComponent> _gearStash;
@@ -29,6 +33,7 @@ namespace Systems.Car
         private Dictionary<int, int> _forwardIndexByGearValue;
         private int _reverseGearValue;
         private int _neutralGearValue;
+        private IDisposable _carSelectionSubscription;
 
         public void OnAwake()
         {
@@ -49,6 +54,8 @@ namespace Systems.Car
                 : null;
             
             BuildGearDataFromPreset(speedsPreset);
+            if (_eventService != null)
+                _carSelectionSubscription = _eventService.CarSelectionChangedStream.Subscribe(_ => OnCarSelectionChanged());
         }
 
         private void BuildGearDataFromPreset(CarSpeedsPresetParameters speedsPreset)
@@ -218,6 +225,15 @@ namespace Systems.Car
             return 1;
         }
 
-        public void Dispose() { }
+        private void OnCarSelectionChanged()
+        {
+            var speedsPreset = _carSelectionParameters != null ? _carSelectionParameters.CarSpeedsPresetParameters : null;
+            BuildGearDataFromPreset(speedsPreset);
+        }
+
+        public void Dispose()
+        {
+            _carSelectionSubscription?.Dispose();
+        }
     }
 }
