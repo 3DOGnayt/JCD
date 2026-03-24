@@ -25,31 +25,32 @@ MonoBehaviour:
     RpmMax: 0
   - EGear: 1
     SpeedLimit: 42
-    SpeedAcceleration: 3400
+    SpeedAcceleration: 3000
     RpmMin: 1800
     RpmMax: 5000
   - EGear: 2
     SpeedLimit: 64
-    SpeedAcceleration: 2800
+    SpeedAcceleration: 2600
     RpmMin: 4700
     RpmMax: 6000
   - EGear: 3
-    SpeedLimit: 94
+    SpeedLimit: 102
     SpeedAcceleration: 2200
     RpmMin: 5000
     RpmMax: 6800
   - EGear: 4
-    SpeedLimit: 125
+    SpeedLimit: 144
     SpeedAcceleration: 1600
     RpmMin: 5500
     RpmMax: 7800
   - EGear: 5
-    SpeedLimit: 155
-    SpeedAcceleration: 1500
+    SpeedLimit: 172
+    SpeedAcceleration: 1600
     RpmMin: 6000
     RpmMax: 7800
   - EGear: 6
     SpeedLimit: 200
-    SpeedAcceleration: 1400
+    SpeedAcceleration: 1600
     RpmMin: 6600
-    RpmMax: 9000
+    RpmMax: 12000
+  _version: 22

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _car: {fileID: 9039642172116725141, guid: b7c0b1388cca16d489435512d00fe83c, type: 3}
   carMassSetup:
-    Mass: 1500
+    Mass: 1200
     AutomaticCenterOfMass: 0
     CenterOfMass: {x: 0, y: 0, z: 0}
   frontWheelSetup:

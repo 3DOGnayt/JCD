@@ -16,10 +16,10 @@ MonoBehaviour:
   _lowPitchMax: 1.8
   _medPitchMin: 0.4
   _medPitchMax: 1.6
-  _highPitchMin: -3
-  _highPitchMax: 1.6
+  _highPitchMin: -1.4
+  _highPitchMax: 1.2
   _fadeSpeed: 6
   _lowVolumeScale: 0.8
-  _bandLowMax: 0.3
+  _bandLowMax: 0.34
   _bandMedMax: 0.8
-  _defaultMaxSpeedKmh: 200
+  _defaultMaxSpeedKmh: 210

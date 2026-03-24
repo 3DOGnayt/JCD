@@ -25,7 +25,7 @@ MonoBehaviour:
     BrakeTorque: 500
     AccelerationRate: 2500
     DecelerationRate: 3000
-    MaxRpm: 9000
+    MaxRpm: 10000
     IdleRpm: 1800
   _arcadeAssist:
     UseArcadeAssist: 1
@@ -55,7 +55,7 @@ MonoBehaviour:
   _velocityAlign:
     UseVelocityAlign: 1
     VelocityAlignRequireCounterSteer: 1
-    VelocityAlignTorque: 10
-    VelocityAlignDamping: 2
+    VelocityAlignTorque: 5
+    VelocityAlignDamping: 0.5
     VelocityAlignMinSpeedKmh: 0
     VelocityAlignMinSlipAngleDeg: 10
