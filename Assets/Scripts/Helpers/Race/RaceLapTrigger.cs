@@ -1,4 +1,5 @@
 using Components;
+using Helpers.Car.Impl;
 using Scellecs.Morpeh;
 using UnityEngine;
 using Zenject;
@@ -22,7 +23,7 @@ namespace Helpers.Race
             if (_world == null || _checkpointIndex < 0 || other == null)
                 return;
 
-            var carView = other.GetComponentInParent<CarView.Impl.CarView>();
+            var carView = other.GetComponentInParent<CarView>();
             if (carView == null)
                 return;
 

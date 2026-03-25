@@ -1,6 +1,7 @@
 using System;
 using Cinemachine;
 using Helpers;
+using Helpers.Car;
 using Scellecs.Morpeh;
 using Services;
 using UniRx;
@@ -61,7 +62,7 @@ namespace Systems.Spawn
             _playerSpawnedDisposable = _eventService.PlayerSpawnedStream.Subscribe(OnPlayerSpawned);
         }
 
-        private void OnPlayerSpawned(Helpers.CarView.ICarView carView)
+        private void OnPlayerSpawned(ICarView carView)
         {
             if (_virtualCamera == null || carView == null)
                 return;

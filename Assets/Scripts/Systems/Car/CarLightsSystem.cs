@@ -2,7 +2,7 @@ using Components;
 using Configs.Impl;
 using Data.Enums;
 using Data.HelperClass;
-using Helpers.CarView;
+using Helpers.Car;
 using Scellecs.Morpeh;
 using Services;
 using UnityEngine;

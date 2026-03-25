@@ -3,7 +3,7 @@ using Configs.Impl;
 using Data.HelperClass;
 using UnityEngine;
 
-namespace Helpers.CarView
+namespace Helpers.Car
 {
     public interface ICarView
     {

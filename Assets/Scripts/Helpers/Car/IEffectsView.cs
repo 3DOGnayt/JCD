@@ -1,6 +1,6 @@
 using Data.HelperClass;
 
-namespace Helpers.CarView
+namespace Helpers.Car
 {
     public interface IEffectsView
     {

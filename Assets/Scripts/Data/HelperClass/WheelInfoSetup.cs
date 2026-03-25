@@ -1,5 +1,5 @@
 using System;
-using Helpers.CarView.Impl;
+using Helpers.Car.Impl;
 using UnityEngine;
 
 namespace Data.HelperClass

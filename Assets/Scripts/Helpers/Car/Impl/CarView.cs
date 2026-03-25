@@ -3,7 +3,7 @@ using Configs.Impl;
 using Data.HelperClass;
 using UnityEngine;
 
-namespace Helpers.CarView.Impl
+namespace Helpers.Car.Impl
 {
     public class CarView : MonoBehaviour, ICarView, IEffectsView
     {
