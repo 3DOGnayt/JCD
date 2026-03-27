@@ -16,12 +16,16 @@ MonoBehaviour:
   - DisplayName: izi
     Preview: {fileID: 21300000, guid: 63bdc25a69d52a44681a563fbf7310be, type: 3}
     Difficulty: 0.1
+    CarIndex: 0
   - DisplayName: hy tak
     Preview: {fileID: 21300000, guid: 1e63b594891ad3647b87fdd536a935e0, type: 3}
     Difficulty: 0.2
+    CarIndex: 1
   - DisplayName: mmmgmmm
     Preview: {fileID: 21300000, guid: 789b892102b05534b825aab711d4c708, type: 3}
     Difficulty: 0.3
+    CarIndex: 2
   - DisplayName: bliat
     Preview: {fileID: 21300000, guid: 7cff4090d7d1da44c859d19e9240b40f, type: 3}
     Difficulty: 0.4
+    CarIndex: 3

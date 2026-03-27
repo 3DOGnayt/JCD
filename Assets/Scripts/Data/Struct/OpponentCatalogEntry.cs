@@ -9,5 +9,6 @@ namespace Data.Struct
         public string DisplayName;
         public Sprite Preview;
         public float Difficulty;
+        public int CarIndex;
     }
 }

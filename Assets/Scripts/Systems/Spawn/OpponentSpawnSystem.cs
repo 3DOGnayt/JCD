@@ -1,6 +1,7 @@
 using Components;
 using Configs.Impl;
 using Data.Enums;
+using Data.Struct;
 using Helpers.Car;
 using Scellecs.Morpeh;
 using Services;
@@ -22,10 +23,13 @@ namespace Systems.Spawn
         private CarSelectionParameters _carSelectionParameters;
         private GameSelectionParameters _gameSelectionParameters;
         private GameModeSelectionParameters _gameModeSelectionParameters;
+        private OpponentCatalogParameters _opponentCatalogParameters;
+        private CarCatalogParameters _carCatalogParameters;
 
         private Transform _opponentGroup;
         private IDisposable _spawnDisposable;
         private const float SpawnProgressThreshold = 0.2f;
+        private const float OpponentSideOffset = 5f;
         private bool _hasSpawnedThisLoad;
 
         private SplineContainer _splineContainer;
@@ -36,20 +40,24 @@ namespace Systems.Spawn
             IGameSessionService gameSessionService,
             CarSelectionParameters carSelectionParameters,
             GameSelectionParameters gameSelectionParameters,
-            GameModeSelectionParameters gameModeSelectionParameters)
+            GameModeSelectionParameters gameModeSelectionParameters,
+            OpponentCatalogParameters opponentCatalogParameters,
+            CarCatalogParameters carCatalogParameters)
         {
             _eventService = eventService;
             _gameSessionService = gameSessionService;
             _carSelectionParameters = carSelectionParameters;
             _gameSelectionParameters = gameSelectionParameters;
             _gameModeSelectionParameters = gameModeSelectionParameters;
+            _opponentCatalogParameters = opponentCatalogParameters;
+            _carCatalogParameters = carCatalogParameters;
         }
 
         public void OnAwake()
         {
             EnsureSpawnRoot();
 
-            if (_eventService != null)
+            if (_eventService != null) 
                 _spawnDisposable = _eventService.LoadingProgress.Subscribe(OnLoadingProgress);
         }
 
@@ -88,31 +96,21 @@ namespace Systems.Spawn
 
         private void SpawnOpponent()
         {
-            var selectedPreset = _carSelectionParameters != null ? _carSelectionParameters.SelectedCar : null;
-            var opponentPrefab = selectedPreset != null ? selectedPreset.Car : null;
+            if (!TryGetOpponentCarEntry(out var opponentCarEntry))
+                return;
+
+            var opponentPrefab = opponentCarEntry.Preset != null ? opponentCarEntry.Preset.Car : null;
             if (opponentPrefab == null)
                 return;
 
-            var spawnPosition = Vector3.zero;
             var spawnRotation = Quaternion.identity;
-
-            if (TryResolveSpline())
-            {
-                var pos = _splineContainer.EvaluatePosition(0f);
-                var tangent = _splineContainer.EvaluateTangent(0f);
-
-                spawnPosition = (Vector3)pos;
-
-                var forward = (Vector3)tangent;
-                if (forward.sqrMagnitude > 0.001f)
-                    spawnRotation = Quaternion.LookRotation(forward.normalized, Vector3.up);
-            }
+            var spawnPosition = Vector3.right * OpponentSideOffset;
 
             var instance = _container.InstantiatePrefabForComponent<ICarView>(
                 opponentPrefab, spawnPosition, spawnRotation, _opponentGroup);
 
             var entity = World.CreateEntity();
-            AddGameComponents(entity, instance);
+            AddGameComponents(entity, instance, opponentCarEntry);
             AddInternalComponents(entity, instance);
             AddOpponentComponents(entity);
 
@@ -131,15 +129,16 @@ namespace Systems.Spawn
             });
         }
 
-        private void AddGameComponents(Entity entity, ICarView carView)
+        private void AddGameComponents(Entity entity, ICarView carView, CarCatalogEntry opponentCarEntry)
         {
-            var movementParameters = _carSelectionParameters != null ? _carSelectionParameters.MovementParameters : null;
+            var movementParameters = opponentCarEntry.MovementParameters;
             var horizontal = movementParameters != null ? movementParameters.Horizontal : null;
             var vertical = movementParameters != null ? movementParameters.Vertical : null;
 
-            var speedMax = _carSelectionParameters != null ? _carSelectionParameters.GetSpeedMaxKmh() : 0f;
-            var backSpeedMax = _carSelectionParameters != null ? _carSelectionParameters.GetBackSpeedMaxKmh() : 0f;
-            var gearCount = _carSelectionParameters != null ? _carSelectionParameters.GetGearCount() : 0;
+            var speedsPreset = opponentCarEntry.SpeedsPresetParameters;
+            var speedMax = _carSelectionParameters != null ? _carSelectionParameters.GetSpeedMaxKmh(speedsPreset) : 0f;
+            var backSpeedMax = _carSelectionParameters != null ? _carSelectionParameters.GetBackSpeedMaxKmh(speedsPreset) : 0f;
+            var gearCount = _carSelectionParameters != null ? _carSelectionParameters.GetGearCount(speedsPreset) : 0;
 
             var steeringAngleMax = horizontal?.SteeringAngleMax ?? 0f;
             var steeringSpeed = horizontal?.SteeringSpeed ?? 0f;
@@ -211,6 +210,39 @@ namespace Systems.Spawn
 
             entity.SetComponent(new VerticalInputComponent { Value = 0 });
             entity.SetComponent(new HorizontalInputComponent { Value = 0 });
+        }
+
+        public void Dispose()
+        {
+            _spawnDisposable?.Dispose();
+        }
+
+        private bool TryGetOpponentCarEntry(out CarCatalogEntry carEntry)
+        {
+            carEntry = default;
+
+            if (_opponentCatalogParameters == null || _carCatalogParameters == null)
+                return false;
+
+            var opponents = _opponentCatalogParameters.Opponents;
+            if (opponents == null || opponents.Count == 0)
+                return false;
+
+            var opponentIndex = _gameSelectionParameters != null ? _gameSelectionParameters.SelectedOpponentIndex : -1;
+            if (opponentIndex < 0 || opponentIndex >= opponents.Count)
+                opponentIndex = 0;
+
+            var opponentEntry = opponents[opponentIndex];
+            var cars = _carCatalogParameters.Cars;
+            if (cars == null || cars.Count == 0)
+                return false;
+
+            var carIndex = opponentEntry.CarIndex;
+            if (carIndex < 0 || carIndex >= cars.Count)
+                carIndex = 0;
+
+            carEntry = cars[carIndex];
+            return carEntry.Preset != null && carEntry.Preset.Car != null;
         }
 
         private void AddMainCarComponents(Entity entity, ICarView carView)
@@ -291,24 +323,6 @@ namespace Systems.Spawn
             entity.SetComponent(new BackStiffnessSidewaysComponent { Value = backSidewaysFriction.Stiffness });
         }
 
-        private bool TryResolveSpline()
-        {
-            if (_splineContainer != null)
-                return true;
-
-            var runtimeSpline = _gameSelectionParameters != null ? _gameSelectionParameters.RuntimeSpline : null;
-            if (runtimeSpline == null)
-                return false;
-
-            _splineContainer = runtimeSpline;
-            return true;
-        }
-
         public void OnUpdate(float deltaTime) { }
-
-        public void Dispose()
-        {
-            _spawnDisposable?.Dispose();
-        }
     }
 }
