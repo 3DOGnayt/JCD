@@ -1,5 +1,6 @@
 using Configs.Impl;
 using Data.Enums;
+using Helpers;
 using Scellecs.Morpeh;
 using Services;
 using System;
@@ -66,6 +67,13 @@ namespace Systems.Spawn
                 return;
 
             var instance = _container.InstantiatePrefab(prefab, Vector3.zero, Quaternion.identity, _mapRoot);
+            var splineProvider = instance.GetComponent<MapSplineProvider>();
+            if (splineProvider == null)
+                splineProvider = instance.GetComponentInChildren<MapSplineProvider>();
+
+            var runtimeSpline = splineProvider != null ? splineProvider.Spline : null;
+            _mapSelectionParameters?.SetRuntimeSpline(runtimeSpline);
+
             _gameSessionService?.RegisterRuntimeRoot(instance);
         }
 

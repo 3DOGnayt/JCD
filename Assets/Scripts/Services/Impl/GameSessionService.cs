@@ -113,6 +113,7 @@ namespace Services.Impl
             }
 
             _runtimeInstances.Clear();
+            _selectionParameters?.MapSelectionParameters?.SetRuntimeSpline(null);
 
             _eventService?.ResetEvents();
             _raceTimerService?.ResetRace();

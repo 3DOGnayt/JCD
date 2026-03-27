@@ -19,9 +19,11 @@ namespace Installers
             Container.Bind<ISystem>().To<CameraSpawnSystem>().AsSingle();
             Container.Bind<ISystem>().To<MapSpawnSystem>().AsSingle();
             Container.Bind<ISystem>().To<PlayerSpawnSystem>().AsSingle();
+            Container.Bind<ISystem>().To<OpponentSpawnSystem>().AsSingle();
             Container.Bind<ISystem>().To<RaceLapSystem>().AsSingle();
             
             Container.Bind<ISystem>().To<InputSystem>().AsSingle();
+            Container.Bind<ISystem>().To<OpponentAISystem>().AsSingle();
             Container.Bind<ISystem>().To<MinimapSpawnSystem>().AsSingle();
             Container.Bind<ISystem>().To<MinimapFollowSystem>().AsSingle();
             

@@ -38,6 +38,7 @@ namespace Systems.Car
         public void OnAwake()
         {
             _cars = World.Filter
+                .With<PlayerTagComponent>()
                 .With<EngineAudioComponent>()
                 .With<SpeedComponent>()
                 .With<SpeedMaxComponent>()

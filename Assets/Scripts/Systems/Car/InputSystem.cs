@@ -21,6 +21,7 @@ namespace Systems.Car
             _cars = World.Filter.Extend<CarSetupAspect>().Build();
             
             _cars = World.Filter
+                .With<PlayerTagComponent>()
                 .With<WheelInfoComponent>()
                 .With<VerticalInputComponent>()
                 .With<HorizontalInputComponent>()

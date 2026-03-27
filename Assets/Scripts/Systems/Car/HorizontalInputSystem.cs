@@ -27,6 +27,7 @@ namespace Systems.Car
         private Stash<SteeringSpeedComponent> _steeringSpeedStash;
         private Stash<SteeringAngleComponent> _steeringAngleStash;
         private Stash<SpeedMaxComponent> _speedMaxStash;
+        private Stash<PlayerTagComponent> _playerTagStash;
 
         private MovementCache _movementCache;
         private bool _hasCache;
@@ -76,6 +77,7 @@ namespace Systems.Car
             _steeringSpeedStash = World.GetStash<SteeringSpeedComponent>();
             _steeringAngleStash = World.GetStash<SteeringAngleComponent>();
             _speedMaxStash = World.GetStash<SpeedMaxComponent>();
+            _playerTagStash = World.GetStash<PlayerTagComponent>();
 
             TryCacheMovementParameters();
             _inputEnabledSubscription = _eventService.InputEnabledStream.Subscribe(SetInputEnabled);
@@ -120,7 +122,8 @@ namespace Systems.Car
                     _inputService.ApplyHorizontalMove(targetAngle, dynamicSteeringSpeed, wheelInfo.WheelInfo);
                 }
                 
-                _eventService.PublishCarSetupChanged(carSetupAspect);  //TODO: replace
+                if (_playerTagStash.Has(car))
+                    _eventService.PublishCarSetupChanged(carSetupAspect);  //TODO: replace
             }
         }
 

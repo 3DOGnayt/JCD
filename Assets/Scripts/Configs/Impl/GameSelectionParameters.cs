@@ -1,5 +1,6 @@
 using Data.Enums;
 using UnityEngine;
+using UnityEngine.Splines;
 
 namespace Configs.Impl
 {
@@ -16,6 +17,8 @@ namespace Configs.Impl
 
         public int SelectedMapIndex => _mapSelectionParameters != null ? _mapSelectionParameters.SelectedMapIndex : 0;
         public EMap SelectedMap => _mapSelectionParameters != null ? _mapSelectionParameters.SelectedMap : EMap.None;
+        public MapSelectionParameters MapSelectionParameters => _mapSelectionParameters;
+        public SplineContainer RuntimeSpline => _mapSelectionParameters != null ? _mapSelectionParameters.RuntimeSpline : null;
 
         public EGameMod GameMod => _gameModeSelectionParameters != null ? _gameModeSelectionParameters.GameMod : EGameMod.None;
 
@@ -37,6 +40,5 @@ namespace Configs.Impl
             _opponentSelectionParameters = opponentSelectionParameters;
             _audioSelectionParameters = audioSelectionParameters;
         }
-
     }
 }
