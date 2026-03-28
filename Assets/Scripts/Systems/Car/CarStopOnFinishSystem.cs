@@ -3,97 +3,104 @@ using Components;
 using Scellecs.Morpeh;
 using Services;
 using UniRx;
-using UnityEngine;
 using Zenject;
 
 namespace Systems.Car
 {
-    public sealed class CarStopOnFinishSystem : IFixedSystem
+    public sealed class CarStopOnFinishSystem : StopOnFinishBaseSystem
     {
-        [Inject] public World World { get; set; }
-        [Inject] private IRaceTimerService _raceTimerService;
+        [Inject] private IUnitRaceTimerService _unitRaceTimerService;
         [Inject] private IEventService _eventService;
 
-        private const float StopDurationSeconds = 1f;
-
-        private Filter _cars;
+        private Filter _playerCars;
+        private Filter _opponentCars;
         private Stash<RigidbodyComponent> _rigidbodyStash;
+        private Stash<PlayerTagComponent> _playerTagStash;
+        private Stash<OpponentTagComponent> _opponentTagStash;
 
-        private bool _isStopping;
-        private float _stopStartTime;
-        private Rigidbody _targetRigidbody;
-        private Vector3 _startLinearVelocity;
-        private Vector3 _startAngularVelocity;
-
-        private IDisposable _raceFinishedSubscription;
         private IDisposable _startRaceSubscription;
+        private IDisposable _opponentFinishedSubscription;
 
-        public void OnAwake()
+        private StopState _playerStopState;
+        private StopState _opponentStopState;
+
+        public override void OnAwake()
         {
-            _cars = World.Filter
+            _playerCars = World.Filter
                 .With<RigidbodyComponent>()
                 .With<PlayerTagComponent>()
                 .Build();
 
+            _opponentCars = World.Filter
+                .With<RigidbodyComponent>()
+                .With<OpponentTagComponent>()
+                .Build();
+
             _rigidbodyStash = World.GetStash<RigidbodyComponent>();
+            _playerTagStash = World.GetStash<PlayerTagComponent>();
+            _opponentTagStash = World.GetStash<OpponentTagComponent>();
 
-            _raceFinishedSubscription = _raceTimerService.RaceFinishedStream.Subscribe(_ => BeginStop());
-            _startRaceSubscription = _eventService.StartRaceStream.Subscribe(_ => ResetStopState());
+            _opponentFinishedSubscription = _unitRaceTimerService.RaceFinishedEntityStream.Subscribe(OnUnitFinished);
+            _startRaceSubscription = _eventService.StartRaceStream.Subscribe(_ => ResetStopStates());
         }
 
-        public void OnUpdate(float deltaTime)
+        public override void OnUpdate(float deltaTime)
         {
-            if (!_isStopping)
-                return;
-
-            var elapsed = Time.time - _stopStartTime;
-            var time = Mathf.Clamp01(elapsed / StopDurationSeconds);
-
-            if (_targetRigidbody == null)
-                return;
-
-            _targetRigidbody.velocity = Vector3.Lerp(_startLinearVelocity, Vector3.zero, time);
-            _targetRigidbody.angularVelocity = Vector3.Lerp(_startAngularVelocity, Vector3.zero, time);
-
-            if (time >= 1f)
-            {
-                _targetRigidbody.velocity = Vector3.zero;
-                _targetRigidbody.angularVelocity = Vector3.zero;
-                _targetRigidbody.Sleep();
-                _isStopping = false;
-            }
+            UpdateStop(ref _playerStopState);
+            UpdateStop(ref _opponentStopState);
         }
 
-        private void BeginStop()
+        private void BeginPlayerStop()
         {
-            _isStopping = true;
-            _stopStartTime = Time.time;
-            _targetRigidbody = null;
+            _playerStopState.TargetRigidbody = null;
 
-            foreach (var car in _cars)
+            foreach (var car in _playerCars)
             {
                 var rigidbody = _rigidbodyStash.Get(car).Value;
                 if (rigidbody == null)
                     continue;
 
-                _targetRigidbody = rigidbody;
-                _startLinearVelocity = rigidbody.velocity;
-                _startAngularVelocity = rigidbody.angularVelocity;
+                BeginStop(ref _playerStopState, rigidbody);
                 break;
             }
         }
 
-        private void ResetStopState()
+        private void BeginOpponentStop()
         {
-            _isStopping = false;
-            _targetRigidbody = null;
-            _startLinearVelocity = Vector3.zero;
-            _startAngularVelocity = Vector3.zero;
+            _opponentStopState.TargetRigidbody = null;
+
+            foreach (var car in _opponentCars)
+            {
+                var rigidbody = _rigidbodyStash.Get(car).Value;
+                if (rigidbody == null)
+                    continue;
+
+                BeginStop(ref _opponentStopState, rigidbody);
+                break;
+            }
         }
 
-        public void Dispose()
+        private void OnUnitFinished(Entity entity)
         {
-            _raceFinishedSubscription?.Dispose();
+            if (_playerTagStash.Has(entity))
+            {
+                BeginPlayerStop();
+                return;
+            }
+
+            if (_opponentTagStash.Has(entity))
+                BeginOpponentStop();
+        }
+
+        private void ResetStopStates()
+        {
+            ResetStopState(ref _playerStopState);
+            ResetStopState(ref _opponentStopState);
+        }
+
+        public override void Dispose()
+        {
+            _opponentFinishedSubscription?.Dispose();
             _startRaceSubscription?.Dispose();
         }
     }

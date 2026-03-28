@@ -1,5 +1,6 @@
 using Components;
 using Configs.Impl;
+using Services;
 using Scellecs.Morpeh;
 using Unity.Mathematics;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace Systems.Car
     {
         [Inject] public World World { get; set; }
         [Inject] private GameSelectionParameters _gameSelectionParameters;
+        [Inject] private IUnitRaceTimerService _unitRaceTimerService;
 
         private Filter _opponents;
         private Stash<TransformComponent> _transformStash;
@@ -57,6 +59,9 @@ namespace Systems.Car
 
             foreach (var opponent in _opponents)
             {
+                if (_unitRaceTimerService != null && _unitRaceTimerService.IsFinished(opponent))
+                    continue;
+
                 var tr = _transformStash.Get(opponent).Value;
                 if (tr == null)
                     continue;

@@ -215,6 +215,7 @@ namespace Systems.Spawn
 
             entity.SetComponent(new VerticalInputComponent { Value = 0 });
             entity.SetComponent(new HorizontalInputComponent { Value = 0 });
+            entity.SetComponent(new RaceLapStateComponent());
         }
 
         public void Dispose()

@@ -20,5 +20,6 @@ namespace Components
     public struct RaceLapTriggerEventComponent : IComponent
     {
         public int CheckpointIndex;
+        public Entity CarEntity;
     }
 }

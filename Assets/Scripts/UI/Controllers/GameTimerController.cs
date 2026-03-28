@@ -110,7 +110,7 @@ namespace UI.Controllers
         {
             text = null;
 
-            if (!_raceTimerService.IsRunning || _raceTimerService.IsFinished)
+            if (!_raceTimerService.IsRunning || _raceTimerService.RaceIsFinished)
                 return false;
 
             var index = _raceTimerService.Laps.Count;

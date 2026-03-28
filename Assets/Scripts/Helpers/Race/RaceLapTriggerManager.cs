@@ -71,14 +71,17 @@ namespace Helpers.Race
 
         private void ResetProgress()
         {
-            if (!_hasEntity || _stateStash == null)
+            if (_stateStash == null || !_hasEntity)
                 return;
 
-            ref var state = ref _stateStash.Get(_raceLapEntity);
-            state.NextCheckpointIndex = 0;
-            state.CurrentSelection = 0;
-            state.CurrentLap = 0;
-            state.IsLoopStarted = false;
+            foreach (var entity in _world.Filter.With<RaceLapStateComponent>().Build())
+            {
+                ref var state = ref _stateStash.Get(entity);
+                state.NextCheckpointIndex = 0;
+                state.CurrentSelection = 0;
+                state.CurrentLap = 0;
+                state.IsLoopStarted = false;
+            }
         }
 
         private RaceLapConfigComponent BuildConfig()

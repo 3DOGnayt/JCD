@@ -44,7 +44,7 @@ namespace UI.Controllers
         {
             _eventService?.PublishInputEnabled(false);
             
-            if (_raceTimerService.IsFinished)
+            if (_raceTimerService.RaceIsFinished)
             {
                 ShowResult();
                 return;

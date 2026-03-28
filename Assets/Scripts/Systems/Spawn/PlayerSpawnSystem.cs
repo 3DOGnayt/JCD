@@ -19,6 +19,7 @@ namespace Systems.Spawn
         private IEventService _eventService;
         private IGameSessionService _gameSessionService;
         private CarSelectionParameters _carSelectionParameters;
+        private IUnitRaceTimerService _unitRaceTimerService;
 
         private Transform _playerGroup;
         private IDisposable _spawnDisposable;
@@ -29,12 +30,14 @@ namespace Systems.Spawn
         public void Construct(
             IEventService eventService,
             IGameSessionService gameSessionService,
-            CarSelectionParameters carSelectionParameters
+            CarSelectionParameters carSelectionParameters,
+            IUnitRaceTimerService unitRaceTimerService
         )
         {
             _eventService = eventService;
             _gameSessionService = gameSessionService;
             _carSelectionParameters = carSelectionParameters;
+            _unitRaceTimerService = unitRaceTimerService;
         }
         
         public void OnAwake()
@@ -83,6 +86,7 @@ namespace Systems.Spawn
             
             _gameSessionService?.RegisterRuntimeEntity(entity);
             _eventService.PublishPlayerSpawned(instance);
+            _unitRaceTimerService?.SetPlayerEntity(entity);
             
             _gameSessionService?.RegisterRuntimeRoot(instance.CarTransform.gameObject);
         }
@@ -175,6 +179,7 @@ namespace Systems.Spawn
             
             entity.SetComponent(new VerticalInputComponent {Value = 0 });
             entity.SetComponent(new HorizontalInputComponent {Value = 0 });
+            entity.SetComponent(new RaceLapStateComponent());
         }
 
         private void AddMainCarComponents(Entity entity, ICarView carView)

@@ -10,18 +10,20 @@ namespace Systems.Race
     {
         [Inject] public World World { get; set; }
 
-        private IRaceTimerService _raceTimerService;
+        private IUnitRaceTimerService _unitRaceTimerService;
         private Filter _configFilter;
         private Filter _eventFilter;
 
         private Stash<RaceLapConfigComponent> _configStash;
         private Stash<RaceLapStateComponent> _stateStash;
         private Stash<RaceLapTriggerEventComponent> _eventStash;
+        private Stash<PlayerTagComponent> _playerTagStash;
+        private Stash<OpponentTagComponent> _opponentTagStash;
 
         [Inject]
-        public void Construct(IRaceTimerService raceTimerService)
+        public void Construct(IUnitRaceTimerService unitRaceTimerService)
         {
-            _raceTimerService = raceTimerService;
+            _unitRaceTimerService = unitRaceTimerService;
         }
 
         public void OnAwake()
@@ -38,6 +40,8 @@ namespace Systems.Race
             _configStash = World.GetStash<RaceLapConfigComponent>();
             _stateStash = World.GetStash<RaceLapStateComponent>();
             _eventStash = World.GetStash<RaceLapTriggerEventComponent>();
+            _playerTagStash = World.GetStash<PlayerTagComponent>();
+            _opponentTagStash = World.GetStash<OpponentTagComponent>();
         }
 
         public void OnUpdate(float deltaTime)
@@ -79,13 +83,12 @@ namespace Systems.Race
 
         private bool IsRaceActive()
         {
-            return _raceTimerService != null && _raceTimerService.IsRunning && !_raceTimerService.IsFinished;
+            return _unitRaceTimerService != null && _unitRaceTimerService.IsRaceActive;
         }
 
         private void ProcessEvents(Entity configEntity)
         {
             ref var config = ref _configStash.Get(configEntity);
-            ref var state = ref _stateStash.Get(configEntity);
 
             var totalSelections = Mathf.Max(1, config.SelectionCount);
             var totalLaps = Mathf.Max(1, config.LapCount);
@@ -94,14 +97,40 @@ namespace Systems.Race
             foreach (var eventEntity in _eventFilter)
             {
                 var evt = _eventStash.Get(eventEntity);
+                var carEntity = evt.CarEntity;
+                if (!World.Has(carEntity))
+                {
+                    World.RemoveEntity(eventEntity);
+                    continue;
+                }
+
+                if (!_stateStash.Has(carEntity))
+                    _stateStash.Set(carEntity, new RaceLapStateComponent());
+
+                ref var state = ref _stateStash.Get(carEntity);
+                var isPlayer = _playerTagStash.Has(carEntity);
+                var isOpponent = _opponentTagStash.Has(carEntity);
+                if (!isPlayer && !isOpponent)
+                {
+                    World.RemoveEntity(eventEntity);
+                    continue;
+                }
+
+                if (isPlayer)
+                    _unitRaceTimerService.SetPlayerEntity(carEntity);
+
                 if (isLoopMap)
-                    ProcessLoopEvent(ref state, totalLaps, eventEntity);
+                    ProcessLoopEvent(ref state, totalLaps, carEntity, eventEntity);
                 else
-                    ProcessCheckpointEvent(evt, ref state, totalSelections, eventEntity);
+                    ProcessCheckpointEvent(evt, ref state, totalSelections, carEntity, eventEntity);
             }
         }
 
-        private void ProcessLoopEvent(ref RaceLapStateComponent state, int totalLaps, Entity eventEntity)
+        private void ProcessLoopEvent(
+            ref RaceLapStateComponent state,
+            int totalLaps,
+            Entity carEntity,
+            Entity eventEntity)
         {
             if (!state.IsLoopStarted)
             {
@@ -112,9 +141,8 @@ namespace Systems.Race
 
             state.CurrentLap++;
             var isFinish = state.CurrentLap >= totalLaps;
-            var isLoopRegistered = _raceTimerService.RegisterLap(state.CurrentLap, isFinish);
-
-            if (isFinish && isLoopRegistered)
+            var isLoopRegistered = _unitRaceTimerService.RegisterLap(carEntity, state.CurrentLap, isFinish);
+            if (isFinish && isLoopRegistered && _playerTagStash.Has(carEntity))
                 Debug.Log("Race finished");
 
             World.RemoveEntity(eventEntity);
@@ -124,6 +152,7 @@ namespace Systems.Race
             RaceLapTriggerEventComponent evt,
             ref RaceLapStateComponent state,
             int totalSelections,
+            Entity carEntity,
             Entity eventEntity)
         {
             if (evt.CheckpointIndex != state.NextCheckpointIndex)
@@ -136,9 +165,8 @@ namespace Systems.Race
             state.CurrentSelection++;
 
             var isSegmentFinish = state.CurrentSelection >= totalSelections;
-            var isRegistered = _raceTimerService.RegisterLap(state.CurrentSelection, isSegmentFinish);
-
-            if (isSegmentFinish && isRegistered)
+            var isRegistered = _unitRaceTimerService.RegisterLap(carEntity, state.CurrentSelection, isSegmentFinish);
+            if (isSegmentFinish && isRegistered && _playerTagStash.Has(carEntity))
                 Debug.Log("Race finished");
 
             World.RemoveEntity(eventEntity);

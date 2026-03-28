@@ -11,13 +11,11 @@ namespace Services
         IObservable<Unit> RaceFinishedStream { get; }
         IReadOnlyList<RaceLapRecord> Laps { get; }
         bool IsRunning { get; }
-        bool IsFinished { get; }
+        bool RaceIsFinished { get; }
         float CurrentRaceTime { get; }
         float CurrentLapTime { get; }
         float TotalRaceTime { get; }
 
-        void StartRace();
-        bool RegisterLap(int lapIndex, bool isFinish);
-        void ResetRace();
+       void ResetRace();
     }
 }
