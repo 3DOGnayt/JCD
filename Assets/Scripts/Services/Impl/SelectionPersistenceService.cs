@@ -137,7 +137,7 @@ namespace Services.Impl
                 return;
 
             var entry = opponents[saved.OpponentIndex];
-            _opponentSelectionParameters.SetSelectedOpponent(entry.DisplayName, entry.Difficulty, saved.OpponentIndex);
+            _opponentSelectionParameters.SetSelectedOpponent(entry.Base.DisplayName, entry.Base.Difficulty, saved.OpponentIndex);
         }
 
         private void ApplyGameModeSelection(GameSelectionSaveData saved)

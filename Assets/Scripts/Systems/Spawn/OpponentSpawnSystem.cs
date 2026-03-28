@@ -96,7 +96,7 @@ namespace Systems.Spawn
 
         private void SpawnOpponent()
         {
-            if (!TryGetOpponentCarEntry(out var opponentCarEntry))
+            if (!TryGetOpponentCarEntry(out var opponentEntry, out var opponentCarEntry))
                 return;
 
             var opponentPrefab = opponentCarEntry.Preset != null ? opponentCarEntry.Preset.Car : null;
@@ -112,20 +112,25 @@ namespace Systems.Spawn
             var entity = World.CreateEntity();
             AddGameComponents(entity, instance, opponentCarEntry);
             AddInternalComponents(entity, instance);
-            AddOpponentComponents(entity);
+            AddOpponentComponents(entity, opponentEntry);
 
             _gameSessionService?.RegisterRuntimeEntity(entity);
             _gameSessionService?.RegisterRuntimeRoot(instance.CarTransform.gameObject);
         }
 
-        private void AddOpponentComponents(Entity entity)
+        private void AddOpponentComponents(Entity entity, OpponentCatalogEntry opponentEntry)
         {
+            var behavior = opponentEntry.Behavior;
+            var targetSpeed = behavior.TargetSpeedKmh > 0f ? behavior.TargetSpeedKmh : 35f;
+            var lookAhead = behavior.LookAheadMeters > 0f ? behavior.LookAheadMeters : 8f;
+            var maxSteerAngle = behavior.MaxSteerAngleDeg > 0f ? behavior.MaxSteerAngleDeg : 45f;
+
             entity.SetComponent(new OpponentSplineFollowComponent
             {
                 ProgressT = 0f,
-                LookAheadMeters = 8f,
-                TargetSpeedKmh = 35f,
-                MaxSteerAngleDeg = 45f
+                LookAheadMeters = lookAhead,
+                TargetSpeedKmh = targetSpeed,
+                MaxSteerAngleDeg = maxSteerAngle
             });
         }
 
@@ -217,8 +222,9 @@ namespace Systems.Spawn
             _spawnDisposable?.Dispose();
         }
 
-        private bool TryGetOpponentCarEntry(out CarCatalogEntry carEntry)
+        private bool TryGetOpponentCarEntry(out OpponentCatalogEntry opponentEntry, out CarCatalogEntry carEntry)
         {
+            opponentEntry = default;
             carEntry = default;
 
             if (_opponentCatalogParameters == null || _carCatalogParameters == null)
@@ -232,7 +238,7 @@ namespace Systems.Spawn
             if (opponentIndex < 0 || opponentIndex >= opponents.Count)
                 opponentIndex = 0;
 
-            var opponentEntry = opponents[opponentIndex];
+            opponentEntry = opponents[opponentIndex];
             var cars = _carCatalogParameters.Cars;
             if (cars == null || cars.Count == 0)
                 return false;

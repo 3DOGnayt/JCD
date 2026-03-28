@@ -81,7 +81,7 @@ namespace UI.Controllers
             for (var index = 0; index < View.OpponentButtons.Count && index < opponentCount; index++)
             {
                 var label = View.OpponentButtonsText[index];
-                label.text = _opponentCatalogParameters.Opponents[index].DisplayName;
+                label.text = _opponentCatalogParameters.Opponents[index].Base.DisplayName;
             }
         }
 
@@ -91,7 +91,7 @@ namespace UI.Controllers
                 return;
 
             var entry = _opponentCatalogParameters.Opponents[0];
-            _opponentSelectionParameters.SetSelectedOpponent(entry.DisplayName, entry.Difficulty, 0);
+            _opponentSelectionParameters.SetSelectedOpponent(entry.Base.DisplayName, entry.Base.Difficulty, 0);
         }
 
         private void PreparePendingOpponentSelection()
@@ -137,9 +137,9 @@ namespace UI.Controllers
         {
             var entry = _opponentCatalogParameters.Opponents[index];
             _pendingOpponentIndex = index;
-            _pendingOpponentName = entry.DisplayName;
-            _pendingOpponentPreview = entry.Preview;
-            _pendingOpponentDifficulty = entry.Difficulty;
+            _pendingOpponentName = entry.Base.DisplayName;
+            _pendingOpponentPreview = entry.Base.Preview;
+            _pendingOpponentDifficulty = entry.Base.Difficulty;
             UpdateOpponentPresentation();
         }
 
