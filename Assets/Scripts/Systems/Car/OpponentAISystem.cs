@@ -60,7 +60,12 @@ namespace Systems.Car
             foreach (var opponent in _opponents)
             {
                 if (_unitRaceTimerService != null && _unitRaceTimerService.IsFinished(opponent))
+                {
+                    _verticalStash.Get(opponent).Value = 0f;
+                    _horizontalStash.Get(opponent).Value = 0f;
+                    _handbrakeStash.Get(opponent).Value = true;
                     continue;
+                }
 
                 var tr = _transformStash.Get(opponent).Value;
                 if (tr == null)
