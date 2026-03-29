@@ -16,6 +16,14 @@ namespace Components
     public struct HandbrakeInputComponent : IComponent { public bool  Value; }
     public struct DriftMultiplierComponent : IComponent { public float Value; }
     public struct ArcadeAssistSpeedComponent : IComponent { public float Value; }
+    public struct SplineProgressComponent : IComponent
+    {
+        public float PrevT;
+        public int Laps;
+        public float Distance;
+        public bool HasPrev;
+    }
+    public struct SplineDeltaComponent : IComponent { public float Value; }
     
     public struct SpeedMaxComponent : IComponent { public float Value; }
     public struct BackSpeedMaxComponent : IComponent { public float Value; }

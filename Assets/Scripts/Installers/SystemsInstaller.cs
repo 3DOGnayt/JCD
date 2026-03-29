@@ -21,6 +21,7 @@ namespace Installers
             Container.Bind<ISystem>().To<PlayerSpawnSystem>().AsSingle();
             Container.Bind<ISystem>().To<OpponentSpawnSystem>().AsSingle();
             Container.Bind<ISystem>().To<RaceLapSystem>().AsSingle();
+            Container.Bind<ISystem>().To<SplineProgressSystem>().AsSingle();
             
             Container.Bind<ISystem>().To<InputSystem>().AsSingle();
             Container.Bind<ISystem>().To<OpponentAISystem>().AsSingle();
