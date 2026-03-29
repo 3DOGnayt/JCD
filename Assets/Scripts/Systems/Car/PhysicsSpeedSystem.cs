@@ -22,8 +22,8 @@ namespace Systems.Car
         private Stash<TransformComponent> _transformStash;
         private Stash<VerticalInputComponent> _vertStash;
         private Stash<HandbrakeInputComponent> _handbrakeStash;
-
-        private float _assistForwardSpeedMps;
+        private Stash<ArcadeAssistSpeedComponent> _assistSpeedStash;
+        
         private bool _inputEnabled = true;
         private IDisposable _inputEnabledSubscription;
 
@@ -41,6 +41,7 @@ namespace Systems.Car
             _transformStash = World.GetStash<TransformComponent>();
             _vertStash = World.GetStash<VerticalInputComponent>();
             _handbrakeStash = World.GetStash<HandbrakeInputComponent>();
+            _assistSpeedStash = World.GetStash<ArcadeAssistSpeedComponent>();
 
             if (_eventService != null)
                 _inputEnabledSubscription = _eventService.InputEnabledStream.Subscribe(isEnabled => _inputEnabled = isEnabled);
@@ -71,10 +72,11 @@ namespace Systems.Car
                 var forward = trComp.Value.forward;
                 var input = vert.Value;
                 var handbrake = hb.Value;
+                ref var assistSpeed = ref _assistSpeedStash.Get(car).Value;
 
                 var velocity = rb.velocity;
 
-                velocity = ApplyArcadeAssist(velocity, input, forward, deltaTime, movementParameters);
+                velocity = ApplyArcadeAssist(velocity, input, forward, deltaTime, movementParameters, ref assistSpeed);
                 
                 rb.velocity = velocity;
 
@@ -103,13 +105,14 @@ namespace Systems.Car
             float verticalInput,
             Vector3 forward,
             float deltaTime,
-            ICarMovementParameters movementParameters
+            ICarMovementParameters movementParameters,
+            ref float assistForwardSpeedMps
         )
         {
             var arcadeAssist = movementParameters.ArcadeAssist;
             if (!arcadeAssist.UseArcadeAssist)
             {
-                _assistForwardSpeedMps = Vector3.Dot(velocity, forward);
+                assistForwardSpeedMps = Vector3.Dot(velocity, forward);
                 return velocity;
             }
 
@@ -124,25 +127,25 @@ namespace Systems.Car
 
             if (isDrifting && !arcadeAssist.UseArcadeAssistInDrift)
             {
-                _assistForwardSpeedMps = forwardSpeed;
+                assistForwardSpeedMps = forwardSpeed;
                 return velocity;
             }
 
             if (!wantForward || !movingForward || absForward < minSpeedMps)
             {
-                _assistForwardSpeedMps = forwardSpeed;
+                assistForwardSpeedMps = forwardSpeed;
                 return velocity;
             }
 
-            if (Mathf.Abs(_assistForwardSpeedMps) <= 0.01f)
-                _assistForwardSpeedMps = forwardSpeed;
+            if (Mathf.Abs(assistForwardSpeedMps) <= 0.01f)
+                assistForwardSpeedMps = forwardSpeed;
 
-            if (forwardSpeed < _assistForwardSpeedMps)
+            if (forwardSpeed < assistForwardSpeedMps)
             {
                 var time = 1f - Mathf.Exp(-arcadeAssist.ArcadeAssistLerpSpeed * deltaTime);
                 var targetForward = Mathf.Lerp(
                     forwardSpeed,
-                    _assistForwardSpeedMps * (isDrifting ? driftAssistMultiplier : 1f),
+                    assistForwardSpeedMps * (isDrifting ? driftAssistMultiplier : 1f),
                     time);
 
                 var forwardComponent = forward * forwardSpeed;
@@ -153,7 +156,7 @@ namespace Systems.Car
             }
             else
             {
-                _assistForwardSpeedMps = forwardSpeed;
+                assistForwardSpeedMps = forwardSpeed;
             }
 
             return velocity;

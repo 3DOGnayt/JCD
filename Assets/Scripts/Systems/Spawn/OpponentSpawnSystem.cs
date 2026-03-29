@@ -158,6 +158,7 @@ namespace Systems.Spawn
             entity.SetComponent(new BrakeInputComponent { Value = false });
             entity.SetComponent(new HandbrakeInputComponent { Value = false });
             entity.SetComponent(new DriftMultiplierComponent { Value = 0f });
+            entity.SetComponent(new ArcadeAssistSpeedComponent { Value = 0f });
 
             var maxSpeedComponent = new SpeedMaxComponent { Value = speedMax };
             var maxRpmComponent = new EngineRpmMaxComponent { Value = engineRpmMax };
