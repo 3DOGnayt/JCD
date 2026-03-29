@@ -116,6 +116,7 @@ namespace Systems.Spawn
 
             _gameSessionService?.RegisterRuntimeEntity(entity);
             _gameSessionService?.RegisterRuntimeRoot(instance.CarTransform.gameObject);
+            _eventService?.PublishOpponentSpawned(instance);
         }
 
         private void AddOpponentComponents(Entity entity, OpponentCatalogEntry opponentEntry)

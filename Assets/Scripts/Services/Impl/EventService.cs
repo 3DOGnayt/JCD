@@ -16,6 +16,7 @@ namespace Services.Impl
         private readonly Subject<Unit> _startRaceSubject = new();
         private readonly Subject<Unit> _countdownBeforeStartFinishedSubject = new();
         private readonly Subject<ICarView> _playerSpawnedSubject = new();
+        private readonly Subject<ICarView> _opponentSpawnedSubject = new();
         private readonly Subject<MinimapCameraHolder> _minimapSpawnedSubject = new();
         private readonly Subject<CarSetupAspect> _carSetupChangedSubject = new();
         private readonly Subject<Unit> _carSelectionChangedSubject = new();
@@ -31,6 +32,7 @@ namespace Services.Impl
         public IObservable<Unit> StartRaceStream => _startRaceSubject;
         public IObservable<Unit> CountdownFinishedStream => _countdownBeforeStartFinishedSubject;
         public IObservable<ICarView> PlayerSpawnedStream => _playerSpawnedSubject;
+        public IObservable<ICarView> OpponentSpawnedStream => _opponentSpawnedSubject;
         public IObservable<MinimapCameraHolder> MinimapSpawnedStream => _minimapSpawnedSubject;
         public IObservable<CarSetupAspect> CarSetupChangedStream => _carSetupChangedSubject;
         public IObservable<Unit> CarSelectionChangedStream => _carSelectionChangedSubject;
@@ -41,6 +43,7 @@ namespace Services.Impl
         public void PublishCountdownFinished() => _countdownBeforeStartFinishedSubject.OnNext(Unit.Default);
 
         public void PublishPlayerSpawned(ICarView carView) => _playerSpawnedSubject.OnNext(carView);
+        public void PublishOpponentSpawned(ICarView carView) => _opponentSpawnedSubject.OnNext(carView);
         public void PublishMinimapSpawned(MinimapCameraHolder minimapCamera) => _minimapSpawnedSubject.OnNext(minimapCamera);
 
         public void PublishCarSetupChanged(CarSetupAspect carSetupAspect) => _carSetupChangedSubject.OnNext(carSetupAspect);
@@ -61,6 +64,7 @@ namespace Services.Impl
             _startRaceSubject?.OnCompleted();
             _countdownBeforeStartFinishedSubject?.OnCompleted();
             _playerSpawnedSubject?.OnCompleted();
+            _opponentSpawnedSubject?.OnCompleted();
             _minimapSpawnedSubject?.OnCompleted();
             _carSetupChangedSubject?.OnCompleted();
             _carSelectionChangedSubject?.OnCompleted();
@@ -69,6 +73,7 @@ namespace Services.Impl
             _startRaceSubject?.Dispose();
             _countdownBeforeStartFinishedSubject?.Dispose();
             _playerSpawnedSubject?.Dispose();
+            _opponentSpawnedSubject?.Dispose();
             _minimapSpawnedSubject?.Dispose();
             _carSetupChangedSubject?.Dispose();
             _carSelectionChangedSubject?.Dispose();

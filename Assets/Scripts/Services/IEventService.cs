@@ -17,6 +17,7 @@ namespace Services
         IObservable<Unit> StartRaceStream { get; }
         IObservable<Unit> CountdownFinishedStream { get; }
         IObservable<ICarView> PlayerSpawnedStream { get; }
+        IObservable<ICarView> OpponentSpawnedStream { get; }
         IObservable<MinimapCameraHolder> MinimapSpawnedStream { get; }
         IObservable<CarSetupAspect> CarSetupChangedStream { get; }
         IObservable<Unit> CarSelectionChangedStream { get; }
@@ -26,6 +27,7 @@ namespace Services
         void PublishStartRace();
         void PublishCountdownFinished();
         void PublishPlayerSpawned(ICarView carView);
+        void PublishOpponentSpawned(ICarView carView);
         void PublishMinimapSpawned(MinimapCameraHolder minimapCamera);
         void PublishCarSetupChanged(CarSetupAspect carSetupAspect);
         void PublishCarSelectionChanged();
