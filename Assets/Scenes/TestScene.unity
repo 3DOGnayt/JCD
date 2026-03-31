@@ -255,6 +255,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
         type: 3}
+      propertyPath: _opponentRaceParameters
+      value: 
+      objectReference: {fileID: 11400000, guid: fa2e28417102b2c4688e3e59b376a34c,
+        type: 2}
+    - target: {fileID: 7000140884856235716, guid: f75ea5e5a3aab134184c4fbe7349d11d,
+        type: 3}
       propertyPath: _carEngineAudioParameters
       value: 
       objectReference: {fileID: 11400000, guid: c8a6ed2d59d7e614980025be19b254d9,

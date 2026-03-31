@@ -2,14 +2,13 @@ using Components;
 using Configs.Impl;
 using Services;
 using Scellecs.Morpeh;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Splines;
 using Zenject;
 
 namespace Systems.Car
 {
-    public sealed class OpponentAISystem : ISystem
+    public sealed partial class OpponentAISystem : ISystem
     {
         [Inject] public World World { get; set; }
         [Inject] private GameSelectionParameters _gameSelectionParameters;
@@ -25,6 +24,10 @@ namespace Systems.Car
 
         private SplineContainer _splineContainer;
         private Spline _spline;
+        private SplineContainer _splineContainerInner;
+        private Spline _splineInner;
+        private SplineContainer _splineContainerOuter;
+        private Spline _splineOuter;
         private bool _needsSpline = true;
 
         public void OnAwake()
@@ -49,7 +52,7 @@ namespace Systems.Car
 
         public void OnUpdate(float deltaTime)
         {
-            if (_needsSpline || _splineContainer == null)
+            if (_needsSpline || (_splineContainer == null && _splineContainerInner == null && _splineContainerOuter == null))
             {
                 if (!TryResolveSpline())
                     return;
@@ -73,37 +76,17 @@ namespace Systems.Car
 
                 ref var follow = ref _followStash.Get(opponent);
 
-                var localPos = _splineContainer.transform.InverseTransformPoint(tr.position);
-                SplineUtility.GetNearestPoint(_spline, (float3)localPos, out _, out var t);
-                follow.ProgressT = t;
-
-                var targetLocal = _spline.GetPointAtLinearDistance(t, follow.LookAheadMeters, out _);
-                var targetWorld = _splineContainer.transform.TransformPoint((Vector3)targetLocal);
-
-                var toTarget = targetWorld - tr.position;
-                var planarTarget = Vector3.ProjectOnPlane(toTarget, Vector3.up);
-                var planarForward = Vector3.ProjectOnPlane(tr.forward, Vector3.up);
-
-                if (planarTarget.sqrMagnitude < 0.001f || planarForward.sqrMagnitude < 0.001f)
-                {
-                    _horizontalStash.Get(opponent).Value = 0f;
-                }
-                else
-                {
-                    planarTarget.Normalize();
-                    planarForward.Normalize();
-
-                    var angle = Vector3.SignedAngle(planarForward, planarTarget, Vector3.up);
-                    var maxAngle = Mathf.Max(1f, follow.MaxSteerAngleDeg);
-
-                    _horizontalStash.Get(opponent).Value = Mathf.Clamp(angle / maxAngle, -1f, 1f);
-                }
-
                 var speedKmh = _speedStash.Get(opponent).Value;
-                var targetSpeed = Mathf.Max(0f, follow.TargetSpeedKmh);
-                var speedDelta = targetSpeed - speedKmh;
+                var trajectoryBlend = ResolveTrajectoryBlend(speedKmh, ref follow);
+                if (!TryGetSplineTargets(tr, trajectoryBlend, ref follow, out var targetWorld, out var brakeTargetWorld, out var planarForward))
+                    continue;
 
-                _verticalStash.Get(opponent).Value = Mathf.Clamp(speedDelta / 10f, 0f, 1f);
+                var desiredSteer = ResolveSteering(tr.position, targetWorld, planarForward, ref follow, out _);
+                desiredSteer = ApplySteeringDelay(desiredSteer, ref follow, deltaTime);
+                _horizontalStash.Get(opponent).Value = desiredSteer;
+
+                var verticalInput = ResolveSpeedInput(speedKmh, tr.position, brakeTargetWorld, planarForward, ref follow);
+                _verticalStash.Get(opponent).Value = verticalInput;
                 _handbrakeStash.Get(opponent).Value = false;
             }
         }
@@ -114,11 +97,19 @@ namespace Systems.Car
                 return true;
 
             var runtimeSpline = _gameSelectionParameters != null ? _gameSelectionParameters.RuntimeSpline : null;
+            var runtimeSplineInner = _gameSelectionParameters != null ? _gameSelectionParameters.RuntimeSplineInner : null;
+            var runtimeSplineOuter = _gameSelectionParameters != null ? _gameSelectionParameters.RuntimeSplineOuter : null;
+
             if (runtimeSpline == null)
                 return false;
 
             _splineContainer = runtimeSpline;
-            _spline = _splineContainer.Spline;
+            _spline = _splineContainer != null ? _splineContainer.Spline : null;
+            _splineContainerInner = runtimeSplineInner;
+            _splineInner = _splineContainerInner != null ? _splineContainerInner.Spline : null;
+            _splineContainerOuter = runtimeSplineOuter;
+            _splineOuter = _splineContainerOuter != null ? _splineContainerOuter.Spline : null;
+
             return _spline != null;
         }
 

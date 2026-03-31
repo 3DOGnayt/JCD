@@ -14,6 +14,8 @@ namespace Configs.Impl
         [SerializeField] private EMap _selectedMap;
 
         private SplineContainer _runtimeSpline;
+        private SplineContainer _runtimeSplineInner;
+        private SplineContainer _runtimeSplineOuter;
 
         public GameObject SelectedMapPrefab => _selectedMapPrefab;
         public int SelectedMapIndex => _selectedMapIndex;
@@ -21,6 +23,8 @@ namespace Configs.Impl
         public int SelectedMapLapCount => _selectedMapLapCount;
         public EMap SelectedMap => _selectedMap;
         public SplineContainer RuntimeSpline => _runtimeSpline;
+        public SplineContainer RuntimeSplineInner => _runtimeSplineInner;
+        public SplineContainer RuntimeSplineOuter => _runtimeSplineOuter;
 
         public void SetSelectedMap(GameObject mapPrefab, int index, EMap map, int selectionCount, int lapCount)
         {
@@ -30,11 +34,19 @@ namespace Configs.Impl
             _selectedMapLapCount = lapCount;
             _selectedMap = map;
             _runtimeSpline = null;
+            _runtimeSplineInner = null;
+            _runtimeSplineOuter = null;
         }
 
         public void SetRuntimeSpline(SplineContainer spline)
         {
             _runtimeSpline = spline;
+        }
+
+        public void SetRuntimeSplines(SplineContainer innerSpline, SplineContainer outerSpline)
+        {
+            _runtimeSplineInner = innerSpline;
+            _runtimeSplineOuter = outerSpline;
         }
     }
 }

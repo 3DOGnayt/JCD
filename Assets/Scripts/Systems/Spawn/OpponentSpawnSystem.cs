@@ -24,6 +24,7 @@ namespace Systems.Spawn
         private GameSelectionParameters _gameSelectionParameters;
         private GameModeSelectionParameters _gameModeSelectionParameters;
         private OpponentCatalogParameters _opponentCatalogParameters;
+        private OpponentRaceParameters _opponentRaceParameters;
         private CarCatalogParameters _carCatalogParameters;
 
         private Transform _opponentGroup;
@@ -42,6 +43,7 @@ namespace Systems.Spawn
             GameSelectionParameters gameSelectionParameters,
             GameModeSelectionParameters gameModeSelectionParameters,
             OpponentCatalogParameters opponentCatalogParameters,
+            OpponentRaceParameters opponentRaceParameters,
             CarCatalogParameters carCatalogParameters)
         {
             _eventService = eventService;
@@ -50,6 +52,7 @@ namespace Systems.Spawn
             _gameSelectionParameters = gameSelectionParameters;
             _gameModeSelectionParameters = gameModeSelectionParameters;
             _opponentCatalogParameters = opponentCatalogParameters;
+            _opponentRaceParameters = opponentRaceParameters;
             _carCatalogParameters = carCatalogParameters;
         }
 
@@ -96,7 +99,7 @@ namespace Systems.Spawn
 
         private void SpawnOpponent()
         {
-            if (!TryGetOpponentCarEntry(out var opponentEntry, out var opponentCarEntry))
+            if (!TryGetOpponentCarEntry(out var opponentEntry, out var opponentCarEntry, out var opponentIndex))
                 return;
 
             var opponentPrefab = opponentCarEntry.Preset != null ? opponentCarEntry.Preset.Car : null;
@@ -112,26 +115,36 @@ namespace Systems.Spawn
             var entity = World.CreateEntity();
             AddGameComponents(entity, instance, opponentCarEntry);
             AddInternalComponents(entity, instance);
-            AddOpponentComponents(entity, opponentEntry);
+            AddOpponentComponents(entity, opponentIndex);
 
             _gameSessionService?.RegisterRuntimeEntity(entity);
             _gameSessionService?.RegisterRuntimeRoot(instance.CarTransform.gameObject);
             _eventService?.PublishOpponentSpawned(instance);
         }
 
-        private void AddOpponentComponents(Entity entity, OpponentCatalogEntry opponentEntry)
+        private void AddOpponentComponents(Entity entity, int opponentIndex)
         {
-            var behavior = opponentEntry.Behavior;
+            var behavior = ResolveOpponentBehavior(opponentIndex);
             var targetSpeed = behavior.TargetSpeedKmh > 0f ? behavior.TargetSpeedKmh : 35f;
             var lookAhead = behavior.LookAheadMeters > 0f ? behavior.LookAheadMeters : 8f;
             var maxSteerAngle = behavior.MaxSteerAngleDeg > 0f ? behavior.MaxSteerAngleDeg : 45f;
+            var brakeLookAhead = behavior.BrakeLookAheadMeters > 0f ? behavior.BrakeLookAheadMeters : lookAhead;
+            var brakeStrength = behavior.BrakeStrength > 0f ? behavior.BrakeStrength : 0f;
+            var steerError = behavior.SteerErrorDegrees > 0f ? behavior.SteerErrorDegrees : 0f;
+            var reactionDelay = behavior.ReactionDelay > 0f ? behavior.ReactionDelay : 0f;
 
             entity.SetComponent(new OpponentSplineFollowComponent
             {
                 ProgressT = 0f,
                 LookAheadMeters = lookAhead,
                 TargetSpeedKmh = targetSpeed,
-                MaxSteerAngleDeg = maxSteerAngle
+                MaxSteerAngleDeg = maxSteerAngle,
+                BrakeLookAheadMeters = brakeLookAhead,
+                BrakeStrength = brakeStrength,
+                SteerErrorDegrees = steerError,
+                ReactionDelay = reactionDelay,
+                SteeringDelayTimer = 0f,
+                SteeringDelaySign = 0f
             });
         }
 
@@ -226,10 +239,11 @@ namespace Systems.Spawn
             _spawnDisposable?.Dispose();
         }
 
-        private bool TryGetOpponentCarEntry(out OpponentCatalogEntry opponentEntry, out CarCatalogEntry carEntry)
+        private bool TryGetOpponentCarEntry(out OpponentCatalogEntry opponentEntry, out CarCatalogEntry carEntry, out int opponentIndex)
         {
             opponentEntry = default;
             carEntry = default;
+            opponentIndex = -1;
 
             if (_opponentCatalogParameters == null || _carCatalogParameters == null)
                 return false;
@@ -238,7 +252,7 @@ namespace Systems.Spawn
             if (opponents == null || opponents.Count == 0)
                 return false;
 
-            var opponentIndex = _gameSelectionParameters != null ? _gameSelectionParameters.SelectedOpponentIndex : -1;
+            opponentIndex = _gameSelectionParameters != null ? _gameSelectionParameters.SelectedOpponentIndex : -1;
             if (opponentIndex < 0 || opponentIndex >= opponents.Count)
                 opponentIndex = 0;
 
@@ -253,6 +267,21 @@ namespace Systems.Spawn
 
             carEntry = cars[carIndex];
             return carEntry.Preset != null && carEntry.Preset.Car != null;
+        }
+
+        private OpponentBehaviorEntry ResolveOpponentBehavior(int opponentIndex)
+        {
+            if (_opponentRaceParameters == null)
+                return default;
+
+            var behaviors = _opponentRaceParameters.Behaviors;
+            if (behaviors == null || behaviors.Count == 0)
+                return default;
+
+            if (opponentIndex < 0 || opponentIndex >= behaviors.Count)
+                opponentIndex = 0;
+
+            return behaviors[opponentIndex];
         }
 
         private void AddMainCarComponents(Entity entity, ICarView carView)

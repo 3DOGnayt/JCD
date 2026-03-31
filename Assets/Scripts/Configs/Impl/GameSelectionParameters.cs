@@ -19,6 +19,8 @@ namespace Configs.Impl
         public EMap SelectedMap => _mapSelectionParameters != null ? _mapSelectionParameters.SelectedMap : EMap.None;
         public MapSelectionParameters MapSelectionParameters => _mapSelectionParameters;
         public SplineContainer RuntimeSpline => _mapSelectionParameters != null ? _mapSelectionParameters.RuntimeSpline : null;
+        public SplineContainer RuntimeSplineInner => _mapSelectionParameters != null ? _mapSelectionParameters.RuntimeSplineInner : null;
+        public SplineContainer RuntimeSplineOuter => _mapSelectionParameters != null ? _mapSelectionParameters.RuntimeSplineOuter : null;
 
         public EGameMod GameMod => _gameModeSelectionParameters != null ? _gameModeSelectionParameters.GameMod : EGameMod.None;
 

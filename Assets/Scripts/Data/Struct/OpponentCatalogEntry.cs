@@ -7,6 +7,5 @@ namespace Data.Struct
     {
         public int CarIndex;
         public OpponentBaseEntry Base;
-        public OpponentBehaviorEntry Behavior;
     }
 }

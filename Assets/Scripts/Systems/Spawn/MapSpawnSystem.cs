@@ -71,8 +71,14 @@ namespace Systems.Spawn
             if (splineProvider == null)
                 splineProvider = instance.GetComponentInChildren<MapSplineProvider>();
 
+            var innerSpline = splineProvider != null ? splineProvider.InnerSpline : null;
+            var outerSpline = splineProvider != null ? splineProvider.OuterSpline : null;
             var runtimeSpline = splineProvider != null ? splineProvider.Spline : null;
+            if (runtimeSpline == null)
+                runtimeSpline = innerSpline != null ? innerSpline : outerSpline;
+
             _mapSelectionParameters?.SetRuntimeSpline(runtimeSpline);
+            _mapSelectionParameters?.SetRuntimeSplines(innerSpline, outerSpline);
 
             _gameSessionService?.RegisterRuntimeRoot(instance);
         }

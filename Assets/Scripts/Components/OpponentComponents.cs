@@ -8,5 +8,11 @@ namespace Components
         public float LookAheadMeters;
         public float TargetSpeedKmh;
         public float MaxSteerAngleDeg;
+        public float BrakeLookAheadMeters;
+        public float BrakeStrength;
+        public float SteerErrorDegrees;
+        public float ReactionDelay;
+        public float SteeringDelayTimer;
+        public float SteeringDelaySign;
     }
 }

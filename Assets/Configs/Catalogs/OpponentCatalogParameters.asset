@@ -19,13 +19,13 @@ MonoBehaviour:
       Preview: {fileID: 1508578071, guid: e9c34c65f2510924f8523ca2369dabd6, type: 3}
       Difficulty: 0.1
     Behavior:
-      TargetSpeedKmh: 80
-      LookAheadMeters: 6
+      TargetSpeedKmh: 120
+      LookAheadMeters: 10
       MaxSteerAngleDeg: 30
-      BrakeLookAheadMeters: 10
-      BrakeStrength: 0.6
+      BrakeLookAheadMeters: 20
+      BrakeStrength: 0.2
       SteerErrorDegrees: 6
-      ReactionDelay: 0.25
+      ReactionDelay: 0.2
   - CarIndex: 1
     Base:
       DisplayName: nuDavay
