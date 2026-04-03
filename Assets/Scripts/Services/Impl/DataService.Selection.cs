@@ -49,6 +49,7 @@ namespace Services.Impl
 
         public void ClearSavedGameModeSelection()
         {
+            DeleteGameMode();
             UpdateSelectionData(data =>
             {
                 data.GameMode = EGameMod.None;

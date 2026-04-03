@@ -6,6 +6,7 @@ using Helpers.Car;
 using Scellecs.Morpeh;
 using Services;
 using System;
+using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -31,6 +32,7 @@ namespace Systems.Spawn
         private IDisposable _spawnDisposable;
         private const float SpawnProgressThreshold = 0.2f;
         private const float OpponentSideOffset = 5f;
+        private const string GhostLayerName = "GhostOpponent";
         private bool _hasSpawnedThisLoad;
 
         private SplineContainer _splineContainer;
@@ -116,6 +118,7 @@ namespace Systems.Spawn
             AddGameComponents(entity, instance, opponentCarEntry);
             AddInternalComponents(entity, instance);
             AddOpponentComponents(entity, opponentIndex);
+            TryApplyGhostSettings(entity, instance);
 
             _gameSessionService?.RegisterRuntimeEntity(entity);
             _gameSessionService?.RegisterRuntimeRoot(instance.CarTransform.gameObject);
@@ -232,6 +235,45 @@ namespace Systems.Spawn
             entity.SetComponent(new VerticalInputComponent { Value = 0 });
             entity.SetComponent(new HorizontalInputComponent { Value = 0 });
             entity.SetComponent(new RaceLapStateComponent());
+        }
+
+        private void TryApplyGhostSettings(Entity entity, ICarView carView)
+        {
+            if (!ShouldUseGhostOpponent())
+                return;
+
+            var root = carView != null ? carView.CarTransform : null;
+            if (root == null)
+                return;
+
+            var ghostLayer = LayerMask.NameToLayer(GhostLayerName);
+            if (ghostLayer < 0)
+                return;
+
+            ApplyLayerRecursively(root, ghostLayer);
+
+            var ghostTag = World.GetStash<OpponentGhostTagComponent>();
+            ghostTag.Set(entity, new OpponentGhostTagComponent());
+        }
+
+        private bool ShouldUseGhostOpponent()
+        {
+            return _gameModeSelectionParameters != null && _gameModeSelectionParameters.GameMod == EGameMod.Story;
+        }
+
+        private static void ApplyLayerRecursively(Transform root, int layer)
+        {
+            var stack = new Stack<Transform>();
+            stack.Push(root);
+
+            while (stack.Count > 0)
+            {
+                var current = stack.Pop();
+                current.gameObject.layer = layer;
+
+                for (var i = 0; i < current.childCount; i++)
+                    stack.Push(current.GetChild(i));
+            }
         }
 
         public void Dispose()

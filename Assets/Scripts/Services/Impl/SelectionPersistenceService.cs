@@ -52,13 +52,17 @@ namespace Services.Impl
         {
             var saved = _dataService.LoadGameSelection();
             if (saved == null || !saved.HasData)
+            {
+                ApplyGameModePreference(null);
                 return;
+            }
 
             ApplyCarSelection(saved);
             ApplyMapSelection(saved);
             ApplyOpponentSelection(saved);
             ApplyGameModeSelection(saved);
             ApplyMusicSelection(saved);
+            ApplyGameModePreference(saved);
         }
 
         private void ApplyCarSelection(GameSelectionSaveData saved)
@@ -146,6 +150,21 @@ namespace Services.Impl
                 return;
 
             _gameModeSelectionParameters.SetSelectedGameMode(saved.GameMode);
+        }
+
+        private void ApplyGameModePreference(GameSelectionSaveData saved)
+        {
+            if (_gameModeSelectionParameters == null || _dataService == null)
+                return;
+
+            if (saved != null && saved.GameMode != EGameMod.None)
+                return;
+
+            var preferred = _dataService.LoadGameMode(EGameMod.Training);
+            if (preferred == EGameMod.None)
+                preferred = EGameMod.Training;
+
+            _gameModeSelectionParameters.SetSelectedGameMode(preferred);
         }
 
         private void ApplyMusicSelection(GameSelectionSaveData saved)

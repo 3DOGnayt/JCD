@@ -22,6 +22,7 @@ namespace UI.Controllers
         private readonly ILocalWindowsService _localWindowsService;
         private readonly IGameSessionService _gameSessionService;
         private readonly IAudioService _audioService;
+        private readonly IDataService _dataService;
         
         private GameModeSelectionParameters _gameModeSelectionParameters;
         
@@ -38,12 +39,14 @@ namespace UI.Controllers
         public GameModController(
             ILocalWindowsService localWindowsService,
             IGameSessionService gameSessionService,
-            IAudioService audioService
+            IAudioService audioService,
+            IDataService dataService
         )
         {
             _localWindowsService = localWindowsService;
             _gameSessionService = gameSessionService;
             _audioService = audioService;
+            _dataService = dataService;
         }
 
         public override void Initialize()
@@ -59,6 +62,9 @@ namespace UI.Controllers
         
         private void ApplySavedSelection()
         {
+            if (_gameModeSelectionParameters != null && _gameModeSelectionParameters.GameMod == EGameMod.None)
+                RestoreSavedGameMode();
+
             switch (_gameModeSelectionParameters.GameMod)
             {
                 case EGameMod.Story:
@@ -71,6 +77,7 @@ namespace UI.Controllers
                 default:
                     SetInteractableButtons(false);
                     _gameModeSelectionParameters.SetSelectedGameMode(EGameMod.Training);
+                    SaveGameModeSelection(EGameMod.Training);
                     break;
             }
         }
@@ -90,6 +97,7 @@ namespace UI.Controllers
             
             SetInteractableButtons(false);
             _gameModeSelectionParameters.SetSelectedGameMode(EGameMod.Training);
+            SaveGameModeSelection(EGameMod.Training);
         }
 
         private void OnStoryButtonClick()
@@ -98,6 +106,7 @@ namespace UI.Controllers
             
             SetInteractableButtons(true);
             _gameModeSelectionParameters.SetSelectedGameMode(EGameMod.Story);
+            SaveGameModeSelection(EGameMod.Story);
         }
 
         private void SetInteractableButtons(bool isActive)
@@ -111,6 +120,26 @@ namespace UI.Controllers
             View.ConfirmButton.gameObject.SetActive(isActive);
             View.BackButton.gameObject.SetActive(isActive);
             View.GameModPresentation.gameObject.SetActive(isActive);
+        }
+
+        private void SaveGameModeSelection(EGameMod gameMod)
+        {
+            if (_dataService == null)
+                return;
+
+            _dataService.SaveGameMode(gameMod);
+        }
+
+        private void RestoreSavedGameMode()
+        {
+            if (_dataService == null || _gameModeSelectionParameters == null)
+                return;
+
+            var saved = _dataService.LoadGameMode(EGameMod.Training);
+            if (saved == EGameMod.None)
+                saved = EGameMod.Training;
+
+            _gameModeSelectionParameters.SetSelectedGameMode(saved);
         }
 
         private void OnConfirmButtonClick()

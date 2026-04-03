@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2969689229506938326}
   - component: {fileID: 3147902332485698192}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FR_Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 1733735504394075538}
   - component: {fileID: 8952081040631416923}
   - component: {fileID: 6381201611822082848}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BackLeftPointLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -264,7 +264,7 @@ GameObject:
   m_Component:
   - component: {fileID: 922557332400268394}
   - component: {fileID: 8217919515254978958}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: FL_Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -334,7 +334,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1120039646849561476}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Skidmarks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -370,7 +370,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4395212463304202845}
   - component: {fileID: 2629409141995426167}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: FR_Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -442,7 +442,7 @@ GameObject:
   - component: {fileID: 8012219190105755196}
   - component: {fileID: 1558398499060874687}
   - component: {fileID: 8982304242634497048}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BackRightPointLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -558,7 +558,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1273375172442346320}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -594,7 +594,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4965548429468693752}
   - component: {fileID: 2572246819347039823}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FL_Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -730,7 +730,7 @@ GameObject:
   m_Component:
   - component: {fileID: 171736894523002667}
   - component: {fileID: 9068770974772093301}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: BR_Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -802,7 +802,7 @@ GameObject:
   - component: {fileID: 1301908605584258987}
   - component: {fileID: 183804365764927456}
   - component: {fileID: 8153292558595316877}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ForwardLeftSpotLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -918,7 +918,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8832792756162859878}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WheelsColliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -954,7 +954,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1148727463355365397}
   - component: {fileID: 7310827381163398353}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BR_Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1089,7 +1089,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3170614539616669327}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Effects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1123,7 +1123,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4026360510200715315}
   - component: {fileID: 7117407044553954795}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BL_Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1260,7 +1260,7 @@ GameObject:
   - component: {fileID: 2562814886282404385}
   - component: {fileID: 4452060834712598571}
   - component: {fileID: 2295042785786620849}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ForwardRightSpotLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1377,7 +1377,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3476747594851989930}
   - component: {fileID: 2008216944493213516}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: BL_Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1452,7 +1452,7 @@ GameObject:
   - component: {fileID: 780397458678767915}
   - component: {fileID: 1550213845451149244}
   - component: {fileID: 1704317199373089031}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: P_Mustang
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1519,16 +1519,6 @@ MonoBehaviour:
   _carPresetParameters: {fileID: 11400000, guid: 5c594316e21a99541926ca2e21cac6b9,
     type: 2}
   _carRigidbody: {fileID: 3165186140599483120}
-  _carSetup:
-    SpeedMax: 200
-    BackSpeedMax: 60
-    GearCount: 5
-    EngineRpmMax: 11000
-    SteeringAngleMax: 35
-    SteeringSpeed: 100
-    BrakeInput: 0
-    HandbrakeInput: 0
-    DriftMultiplier: 0
   _carEffectsSetup:
     TracesWheels:
     - {fileID: 2572246819347039823}
@@ -1672,6 +1662,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wheel_FL
       objectReference: {fileID: 0}
+    - target: {fileID: -7911634843621008586, guid: bb21a5376b2c34241ba3e440783114b1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: -4676454256860750475, guid: bb21a5376b2c34241ba3e440783114b1,
         type: 3}
       propertyPath: m_Layer
@@ -1682,20 +1677,40 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wheel_BR
       objectReference: {fileID: 0}
+    - target: {fileID: -3456470101857480907, guid: bb21a5376b2c34241ba3e440783114b1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: bb21a5376b2c34241ba3e440783114b1,
         type: 3}
       propertyPath: m_Name
       value: M_Mustang
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: bb21a5376b2c34241ba3e440783114b1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3488773301934274651, guid: bb21a5376b2c34241ba3e440783114b1,
         type: 3}
       propertyPath: m_Name
       value: Wheel_FR
       objectReference: {fileID: 0}
+    - target: {fileID: 3488773301934274651, guid: bb21a5376b2c34241ba3e440783114b1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 8946412789517512894, guid: bb21a5376b2c34241ba3e440783114b1,
         type: 3}
       propertyPath: m_Name
       value: Wheel_BL
+      objectReference: {fileID: 0}
+    - target: {fileID: 8946412789517512894, guid: bb21a5376b2c34241ba3e440783114b1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
