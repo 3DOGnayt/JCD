@@ -14,5 +14,7 @@ namespace Components
         public float ReactionDelay;
         public float SteeringDelayTimer;
         public float SteeringDelaySign;
+        public float CurrentSpeedKmh;
+        public bool RailInitialized;
     }
 }

@@ -24,7 +24,8 @@ namespace Installers
             Container.Bind<ISystem>().To<SplineProgressSystem>().AsSingle();
             
             Container.Bind<ISystem>().To<InputSystem>().AsSingle();
-            Container.Bind<ISystem>().To<OpponentAISystem>().AsSingle();
+            // Container.Bind<ISystem>().To<OpponentAISystem>().AsSingle(); // TODO: plan B
+            Container.Bind<IFixedSystem>().To<OpponentRailSystem>().AsSingle();
             Container.Bind<ISystem>().To<MinimapSpawnSystem>().AsSingle();
             Container.Bind<ISystem>().To<MinimapFollowSystem>().AsSingle();
             

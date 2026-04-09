@@ -21,6 +21,7 @@ namespace Configs.Impl
         public SplineContainer RuntimeSpline => _mapSelectionParameters != null ? _mapSelectionParameters.RuntimeSpline : null;
         public SplineContainer RuntimeSplineInner => _mapSelectionParameters != null ? _mapSelectionParameters.RuntimeSplineInner : null;
         public SplineContainer RuntimeSplineOuter => _mapSelectionParameters != null ? _mapSelectionParameters.RuntimeSplineOuter : null;
+        public Helpers.MapSplineProvider.OpponentSplineEntry[] RuntimeOpponentSplines => _mapSelectionParameters != null ? _mapSelectionParameters.RuntimeOpponentSplines : null;
 
         public EGameMod GameMod => _gameModeSelectionParameters != null ? _gameModeSelectionParameters.GameMod : EGameMod.None;
 

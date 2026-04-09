@@ -30,9 +30,11 @@ namespace Systems.Spawn
 
         private Transform _opponentGroup;
         private IDisposable _spawnDisposable;
+        
         private const float SpawnProgressThreshold = 0.2f;
         private const float OpponentSideOffset = 5f;
         private const string GhostLayerName = "GhostOpponent";
+        
         private bool _hasSpawnedThisLoad;
 
         private SplineContainer _splineContainer;
@@ -147,7 +149,9 @@ namespace Systems.Spawn
                 SteerErrorDegrees = steerError,
                 ReactionDelay = reactionDelay,
                 SteeringDelayTimer = 0f,
-                SteeringDelaySign = 0f
+                SteeringDelaySign = 0f,
+                CurrentSpeedKmh = 0f,
+                RailInitialized = false
             });
         }
 

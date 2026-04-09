@@ -16,6 +16,7 @@ namespace Configs.Impl
         private SplineContainer _runtimeSpline;
         private SplineContainer _runtimeSplineInner;
         private SplineContainer _runtimeSplineOuter;
+        private Helpers.MapSplineProvider.OpponentSplineEntry[] _runtimeOpponentSplines;
 
         public GameObject SelectedMapPrefab => _selectedMapPrefab;
         public int SelectedMapIndex => _selectedMapIndex;
@@ -25,6 +26,7 @@ namespace Configs.Impl
         public SplineContainer RuntimeSpline => _runtimeSpline;
         public SplineContainer RuntimeSplineInner => _runtimeSplineInner;
         public SplineContainer RuntimeSplineOuter => _runtimeSplineOuter;
+        public Helpers.MapSplineProvider.OpponentSplineEntry[] RuntimeOpponentSplines => _runtimeOpponentSplines;
 
         public void SetSelectedMap(GameObject mapPrefab, int index, EMap map, int selectionCount, int lapCount)
         {
@@ -36,6 +38,7 @@ namespace Configs.Impl
             _runtimeSpline = null;
             _runtimeSplineInner = null;
             _runtimeSplineOuter = null;
+            _runtimeOpponentSplines = null;
         }
 
         public void SetRuntimeSpline(SplineContainer spline)
@@ -47,6 +50,11 @@ namespace Configs.Impl
         {
             _runtimeSplineInner = innerSpline;
             _runtimeSplineOuter = outerSpline;
+        }
+
+        public void SetRuntimeOpponentSplines(Helpers.MapSplineProvider.OpponentSplineEntry[] opponentSplines)
+        {
+            _runtimeOpponentSplines = opponentSplines;
         }
     }
 }
