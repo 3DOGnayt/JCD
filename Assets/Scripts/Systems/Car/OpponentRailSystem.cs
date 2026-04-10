@@ -24,6 +24,8 @@ namespace Systems.Car
         private Stash<HandbrakeInputComponent> _handbrakeStash;
         private bool _raceStarted;
         private IDisposable _startRaceSubscription;
+        private IDisposable _countdownFinishedSubscription;
+        private IDisposable _gameStartedSubscription;
 
         public void OnAwake()
         {
@@ -47,12 +49,24 @@ namespace Systems.Car
 
             _raceStarted = false;
             if (_eventService != null)
-                _startRaceSubscription = _eventService.CountdownFinishedStream.Subscribe(_ => _raceStarted = true);
+            {
+                _gameStartedSubscription = _eventService.IsGameStarted.Subscribe(OnGameStartedChanged);
+                _startRaceSubscription = _eventService.StartRaceStream.Subscribe(_ => _raceStarted = false);
+                _countdownFinishedSubscription = _eventService.CountdownFinishedStream.Subscribe(_ => _raceStarted = true);
+            }
         }
 
         public void Dispose()
         {
             _startRaceSubscription?.Dispose();
+            _countdownFinishedSubscription?.Dispose();
+            _gameStartedSubscription?.Dispose();
+        }
+
+        private void OnGameStartedChanged(bool isStarted)
+        {
+            if (!isStarted)
+                _raceStarted = false;
         }
     }
 }
