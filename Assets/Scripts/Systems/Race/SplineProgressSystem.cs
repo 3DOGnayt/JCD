@@ -2,7 +2,6 @@ using Components;
 using Configs.Impl;
 using Scellecs.Morpeh;
 using Unity.Mathematics;
-using UnityEngine;
 using UnityEngine.Splines;
 using Zenject;
 

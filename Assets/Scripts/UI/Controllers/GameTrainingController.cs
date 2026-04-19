@@ -134,34 +134,34 @@ namespace UI.Controllers
             View.BestTimeText.text = FormatTime(bestTime);
         }
 
-        private void OnSegmentCompleted(RaceLapRecord record)
+        private void OnSegmentCompleted(RaceLapRecordEntry recordEntry)
         {
             if (View.DifferenceTextList == null)
                 return;
 
-            var index = record.LapIndex - 1;
+            var index = recordEntry.LapIndex - 1;
             if (index < 0 || index >= _segmentCount || index >= View.DifferenceTextList.Count)
                 return;
 
-            _currentSegmentTimes[index] = record.LapTime;
+            _currentSegmentTimes[index] = recordEntry.LapTime;
             var targetText = View.DifferenceTextList[index];
             if (targetText == null)
                 return;
 
             if (_currentSetup == null || _currentSetup.BestSegmentTimes.Count <= index)
             {
-                targetText.text = FormatTime(record.LapTime);
+                targetText.text = FormatTime(recordEntry.LapTime);
                 return;
             }
 
             var bestSegmentTime = _currentSetup.BestSegmentTimes[index];
             if (bestSegmentTime <= 0f)
             {
-                targetText.text = FormatTime(record.LapTime);
+                targetText.text = FormatTime(recordEntry.LapTime);
                 return;
             }
 
-            var diff = record.LapTime - bestSegmentTime;
+            var diff = recordEntry.LapTime - bestSegmentTime;
             targetText.text = FormatDifference(diff);
         }
 

@@ -10,7 +10,7 @@ namespace Services.Impl
     public class RaceTimerService : IRaceTimerService, IUnitRaceTimerService, IDisposable
     {
         private readonly IEventService _eventService;
-        private readonly Subject<RaceLapRecord> _lapCompletedSubject = new();
+        private readonly Subject<RaceLapRecordEntry> _lapCompletedSubject = new();
         private readonly Subject<Unit> _raceFinishedSubject = new();
         private readonly Subject<Entity> _unitRaceFinishedSubject = new();
         private readonly Dictionary<Entity, RaceState> _states = new();
@@ -23,7 +23,7 @@ namespace Services.Impl
 
         private sealed class RaceState
         {
-            public readonly List<RaceLapRecord> Laps = new();
+            public readonly List<RaceLapRecordEntry> Laps = new();
             public float RaceStartTime;
             public float LastLapStartTime;
             public float TotalRaceTime;
@@ -39,9 +39,9 @@ namespace Services.Impl
                 _startRaceDisposable = _eventService.CountdownFinishedStream.Subscribe(_ => StartRace());
         }
 
-        public IObservable<RaceLapRecord> LapCompletedStream => _lapCompletedSubject;
+        public IObservable<RaceLapRecordEntry> LapCompletedStream => _lapCompletedSubject;
         public IObservable<Unit> RaceFinishedStream => _raceFinishedSubject;
-        public IReadOnlyList<RaceLapRecord> Laps => TryGetPlayerState(out var state) ? state.Laps : Array.Empty<RaceLapRecord>();
+        public IReadOnlyList<RaceLapRecordEntry> Laps => TryGetPlayerState(out var state) ? state.Laps : Array.Empty<RaceLapRecordEntry>();
         public bool IsRunning => TryGetPlayerState(out var state) && state.IsRunning;
         public bool RaceIsFinished => TryGetPlayerState(out var state) && state.IsFinished;
         public float CurrentRaceTime => TryGetPlayerState(out var state) && state.IsRunning ? Time.time - state.RaceStartTime : TryGetPlayerTotalTime();
@@ -88,7 +88,7 @@ namespace Services.Impl
             var now = Time.time;
             var lapTime = now - state.LastLapStartTime;
             var total = now - state.RaceStartTime;
-            var record = new RaceLapRecord(lapIndex, lapTime, total);
+            var record = new RaceLapRecordEntry(lapIndex, lapTime, total);
             
             state.Laps.Add(record);
             

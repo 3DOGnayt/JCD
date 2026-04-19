@@ -3,10 +3,10 @@ using Components;
 using Configs.Impl;
 using Scellecs.Morpeh;
 using Services;
-using Zenject;
 using UniRx;
+using Zenject;
 
-namespace Systems.Car
+namespace Systems.Car.Opponents.Rail
 {
     public sealed partial class OpponentRailSystem : IFixedSystem
     {

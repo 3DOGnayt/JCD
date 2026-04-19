@@ -1,11 +1,11 @@
 using Components;
 using Configs.Impl;
-using Services;
 using Scellecs.Morpeh;
+using Services;
 using UnityEngine.Splines;
 using Zenject;
 
-namespace Systems.Car
+namespace Systems.Car.Opponents.AI
 {
     public sealed partial class OpponentAISystem : ISystem
     {

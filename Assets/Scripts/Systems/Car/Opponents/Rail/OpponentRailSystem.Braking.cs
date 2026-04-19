@@ -2,7 +2,7 @@ using Components;
 using UnityEngine;
 using UnityEngine.Splines;
 
-namespace Systems.Car
+namespace Systems.Car.Opponents.Rail
 {
     public sealed partial class OpponentRailSystem
     {

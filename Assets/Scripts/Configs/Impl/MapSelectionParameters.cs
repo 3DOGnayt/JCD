@@ -1,4 +1,5 @@
 using Data.Enums;
+using Helpers.Race;
 using UnityEngine;
 using UnityEngine.Splines;
 
@@ -16,7 +17,7 @@ namespace Configs.Impl
         private SplineContainer _runtimeSpline;
         private SplineContainer _runtimeSplineInner;
         private SplineContainer _runtimeSplineOuter;
-        private Helpers.MapSplineProvider.OpponentSplineEntry[] _runtimeOpponentSplines;
+        private MapSplineProvider.OpponentSplineEntry[] _runtimeOpponentSplines;
 
         public GameObject SelectedMapPrefab => _selectedMapPrefab;
         public int SelectedMapIndex => _selectedMapIndex;
@@ -26,7 +27,7 @@ namespace Configs.Impl
         public SplineContainer RuntimeSpline => _runtimeSpline;
         public SplineContainer RuntimeSplineInner => _runtimeSplineInner;
         public SplineContainer RuntimeSplineOuter => _runtimeSplineOuter;
-        public Helpers.MapSplineProvider.OpponentSplineEntry[] RuntimeOpponentSplines => _runtimeOpponentSplines;
+        public MapSplineProvider.OpponentSplineEntry[] RuntimeOpponentSplines => _runtimeOpponentSplines;
 
         public void SetSelectedMap(GameObject mapPrefab, int index, EMap map, int selectionCount, int lapCount)
         {
@@ -52,7 +53,7 @@ namespace Configs.Impl
             _runtimeSplineOuter = outerSpline;
         }
 
-        public void SetRuntimeOpponentSplines(Helpers.MapSplineProvider.OpponentSplineEntry[] opponentSplines)
+        public void SetRuntimeOpponentSplines(MapSplineProvider.OpponentSplineEntry[] opponentSplines)
         {
             _runtimeOpponentSplines = opponentSplines;
         }

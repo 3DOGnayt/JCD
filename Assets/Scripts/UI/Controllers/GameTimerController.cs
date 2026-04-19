@@ -121,12 +121,12 @@ namespace UI.Controllers
             return text != null && text.gameObject.activeSelf;
         }
 
-        private void UpdateLapTime(RaceLapRecord record)
+        private void UpdateLapTime(RaceLapRecordEntry recordEntry)
         {
             if (View.SelectionTimeTextList == null)
                 return;
 
-            var index = record.LapIndex - 1;
+            var index = recordEntry.LapIndex - 1;
             if (index < 0 || index >= View.SelectionTimeTextList.Count)
                 return;
 
@@ -134,7 +134,7 @@ namespace UI.Controllers
             if (text == null)
                 return;
 
-            text.text = FormatTime(record.LapTime);
+            text.text = FormatTime(recordEntry.LapTime);
         }
 
         private string FormatTime(float seconds)

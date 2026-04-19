@@ -1,7 +1,7 @@
 using Components;
 using UnityEngine;
 
-namespace Systems.Car
+namespace Systems.Car.Opponents.AI
 {
     public sealed partial class OpponentAISystem
     {
