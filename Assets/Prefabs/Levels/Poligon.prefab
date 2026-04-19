@@ -52,6 +52,10 @@ MonoBehaviour:
   _opponentSplines:
   - OpponentIndex: 0
     Spline: {fileID: 7983713980385880649}
+  - OpponentIndex: 1
+    Spline: {fileID: 7983713980385880649}
+  - OpponentIndex: 2
+    Spline: {fileID: 7983713980385880649}
 --- !u!1 &2641537559791079371
 GameObject:
   m_ObjectHideFlags: 0

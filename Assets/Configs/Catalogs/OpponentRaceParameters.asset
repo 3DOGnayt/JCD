@@ -13,6 +13,20 @@ MonoBehaviour:
   m_Name: OpponentRaceParameters
   m_EditorClassIdentifier: 
   _behaviors:
+  - TargetSpeedKmh: 120
+    LookAheadMeters: 10
+    BrakeLookAheadMeters: 30
+    MaxSteerAngleDeg: 35
+    SteerErrorDegrees: 2
+    BrakeStrength: 0.2
+    ReactionDelay: 0.2
+  - TargetSpeedKmh: 130
+    LookAheadMeters: 10
+    BrakeLookAheadMeters: 30
+    MaxSteerAngleDeg: 35
+    SteerErrorDegrees: 2
+    BrakeStrength: 0.2
+    ReactionDelay: 0.2
   - TargetSpeedKmh: 140
     LookAheadMeters: 10
     BrakeLookAheadMeters: 30

@@ -8,6 +8,7 @@ namespace Services.Impl
     public class SelectionPersistenceService : IInitializable
     {
         private readonly IDataService _dataService;
+        private readonly IEventService _eventService;
         private readonly CarSelectionParameters _carSelectionParameters;
         private readonly MapSelectionParameters _mapSelectionParameters;
         private readonly GameModeSelectionParameters _gameModeSelectionParameters;
@@ -20,6 +21,7 @@ namespace Services.Impl
 
         public SelectionPersistenceService(
             IDataService dataService,
+            IEventService eventService,
             CarSelectionParameters carSelectionParameters,
             MapSelectionParameters mapSelectionParameters,
             GameModeSelectionParameters gameModeSelectionParameters,
@@ -31,6 +33,7 @@ namespace Services.Impl
             TrainingTimeScoreParameters trainingTimeScoreParameters)
         {
             _dataService = dataService;
+            _eventService = eventService;
             _carSelectionParameters = carSelectionParameters;
             _mapSelectionParameters = mapSelectionParameters;
             _gameModeSelectionParameters = gameModeSelectionParameters;
@@ -53,6 +56,7 @@ namespace Services.Impl
             var saved = _dataService.LoadGameSelection();
             if (saved == null || !saved.HasData)
             {
+                EnsureDefaultCarSelection();
                 ApplyGameModePreference(null);
                 return;
             }
@@ -70,16 +74,38 @@ namespace Services.Impl
             if (_carSelectionParameters == null || _carCatalogParameters == null)
                 return;
 
-            var cars = _carCatalogParameters.Cars;
-            if (saved.CarIndex < 0 || saved.CarIndex >= cars.Count)
+            if (TryApplyCarSelection(saved.CarIndex))
                 return;
 
-            var entry = cars[saved.CarIndex];
+            EnsureDefaultCarSelection();
+        }
+
+        private void EnsureDefaultCarSelection()
+        {
+            if (_carSelectionParameters == null)
+                return;
+
+            if (_carSelectionParameters.SelectedCar != null)
+                return;
+
+            _ = TryApplyCarSelection(0);
+        }
+
+        private bool TryApplyCarSelection(int index)
+        {
+            if (_carSelectionParameters == null || _carCatalogParameters == null)
+                return false;
+
+            var cars = _carCatalogParameters.Cars;
+            if (index < 0 || index >= cars.Count)
+                return false;
+
+            var entry = cars[index];
             if (entry.Preset == null ||
                 entry.MovementParameters == null ||
                 entry.SpeedsPresetParameters == null ||
                 entry.SlipParameters == null)
-                return;
+                return false;
 
             _carSelectionParameters.SetSelectedCar(
                 entry.Preset,
@@ -87,7 +113,10 @@ namespace Services.Impl
                 entry.SpeedsPresetParameters,
                 entry.SlipParameters,
                 entry.EngineAudioParameters,
-                saved.CarIndex);
+                index);
+
+            _eventService?.PublishCarSelectionChanged();
+            return true;
         }
 
         private void ApplyMapSelection(GameSelectionSaveData saved)
