@@ -27,12 +27,13 @@ namespace Systems.Spawn
         private OpponentCatalogParameters _opponentCatalogParameters;
         private OpponentRaceParameters _opponentRaceParameters;
         private CarCatalogParameters _carCatalogParameters;
+        private MapCatalogParameters _mapCatalogParameters;
 
         private Transform _opponentGroup;
         private IDisposable _spawnDisposable;
         
         private const float SpawnProgressThreshold = 0.2f;
-        private const float OpponentSideOffset = 5f;
+        private const float DefaultOpponentSideOffset = 5f;
         private const string GhostLayerName = "GhostOpponent";
         
         private bool _hasSpawnedThisLoad;
@@ -48,7 +49,8 @@ namespace Systems.Spawn
             GameModeSelectionParameters gameModeSelectionParameters,
             OpponentCatalogParameters opponentCatalogParameters,
             OpponentRaceParameters opponentRaceParameters,
-            CarCatalogParameters carCatalogParameters)
+            CarCatalogParameters carCatalogParameters,
+            MapCatalogParameters mapCatalogParameters)
         {
             _eventService = eventService;
             _gameSessionService = gameSessionService;
@@ -58,6 +60,7 @@ namespace Systems.Spawn
             _opponentCatalogParameters = opponentCatalogParameters;
             _opponentRaceParameters = opponentRaceParameters;
             _carCatalogParameters = carCatalogParameters;
+            _mapCatalogParameters = mapCatalogParameters;
         }
 
         public void OnAwake()
@@ -111,7 +114,7 @@ namespace Systems.Spawn
                 return;
 
             var spawnRotation = Quaternion.identity;
-            var spawnPosition = Vector3.right * OpponentSideOffset;
+            var spawnPosition = Vector3.right * ResolveOpponentSpawnSideOffset();
 
             var instance = _container.InstantiatePrefabForComponent<ICarView>(
                 opponentPrefab, spawnPosition, spawnRotation, _opponentGroup);
@@ -125,6 +128,20 @@ namespace Systems.Spawn
             _gameSessionService?.RegisterRuntimeEntity(entity);
             _gameSessionService?.RegisterRuntimeRoot(instance.CarTransform.gameObject);
             _eventService?.PublishOpponentSpawned(instance);
+        }
+
+        private float ResolveOpponentSpawnSideOffset()
+        {
+            if (_mapCatalogParameters == null || _gameSelectionParameters == null)
+                return DefaultOpponentSideOffset;
+
+            var maps = _mapCatalogParameters.Maps;
+            var selectedMapIndex = _gameSelectionParameters.SelectedMapIndex;
+            if (selectedMapIndex < 0 || selectedMapIndex >= maps.Count)
+                return DefaultOpponentSideOffset;
+
+            var offset = maps[selectedMapIndex].OpponentSpawnSideOffset;
+            return Mathf.Approximately(offset, 0f) ? DefaultOpponentSideOffset : offset;
         }
 
         private void AddOpponentComponents(Entity entity, int opponentIndex)

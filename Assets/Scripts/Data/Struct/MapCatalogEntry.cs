@@ -12,5 +12,6 @@ namespace Data.Struct
         public Sprite Preview;
         public int SelectionCount;
         public int LapCount;
+        public float OpponentSpawnSideOffset;
     }
 }
