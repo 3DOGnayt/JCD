@@ -1,0 +1,249 @@
+HelpStartHere = "Maak je klaar ..."
+LoadingMap = "Bezig met laden ..."
+AutoResumeMsg = "Gepauzeerd"
+
+MapHelpMsg = "Kies een stad of verander niveau"
+
+TripHelpMsg = "Selecteer een reisbestemming"
+
+PlayHelpMsg = "Kies uw route naar de bestemming"
+
+NewLevel = "Nieuw niveau beschikbaar"
+
+EnergyTooLow = "Energie te laag"
+SpeedTooHigh = "Te snel"
+NotAboard = "Niet aan boord"
+NoFootpath = "Geen Voetpad"
+
+MoreVialsNeeded = "+% d → Aangepaste kaart"
+
+# Menu - gebruik korte zinnen om op de knoppen te passen ###############################
+
+MenuResume = "Hervatten"
+MenuMission = "Missie"
+MenuControls = "Bedieningen"
+MenuCredits = "Tegoeden"
+MenuChangeCity = "Wijzig stad"
+MenuGraphics = "Grafische"
+MenuAvatar="Avatar"
+MenuExit = "Afsluiten"
+MenuReset = "Reset"
+
+Opt_Cancel = "Annuleren"
+Opt_Confirm = "Bevestigen"
+
+# Browser / aangepaste kaart ############################################# ########
+
+BrowserLoading = "Browser wordt geladen ..."
+
+BrowseHelpMsg = "Gebruik de muis of gamepad om een ​​op maat gemaakte kaart voor dit niveau te selecteren.
+Probeer shift-drag-muis voor snelle selectie. Zoom in totdat het omtrekkader groen wordt.
+Druk op [Spatie], [Start] of klik op de groene knop in de browser om te bouwen "
+
+UnknownCity = "Onbekende stad"
+UnknownSuburb = "Ergens in"
+CustomCity = "Aangepaste stad"
+
+# Afwerking ################################################ ################
+
+LevelCompleteText = "Niveau voltooid"
+
+CompleteHelpMsg = "Missie voltooid"
+
+GameOver = "Game Over"
+
+ResetMessage = "Waarschuwing! Reset verwijdert alle opgeslagen scores en verlaat het spel"
+
+# Foutmeldingen ############################################### ############
+
+NoMapServer = "Geen kaartserver beschikbaar"
+
+CustomBuildFailedText = "Aangepaste kaart kon niet worden gemaakt"
+
+BuildError1 = "Aantal busjebestemminggen% d, vereist% d of meer"
+BuildError2 = "Aantal wandelbestemmingen% d, vereist% d of meer"
+BuildError3 = "Aantal straatbestemmingen% d, vereist% d of meer"
+BuildError4 = "Aantal lage bruggen% d, vereist% d of minder"
+BuildError5 = "Steile wegentelling% d, vereist% d of minder"
+
+CustomBuildFailedTryAgain = "Probeer het opnieuw met een ander gebied"
+
+AlreadyBuiltMap = "Fout: Aangepaste kaart al gebouwd
+- Geen kaartbestand gevonden "
+
+# Labels voor controller / toetsenbord #########################################
+
+KeysMoveMapCentre = "Verplaats kaartcentrum"
+KeysOptions = "Opties"
+KeysSelectCity = "Selecteer stad"
+KeysStart = "Begin"
+KeysVolume = "Volume"
+KeysZoom = "Zoom"
+
+KeysAbandon = "Verlaat Busje / Bus"
+KeysCamera = "Camera"
+KeysMap = "Kaart"
+KeysMute = "Dempen"
+KeysPause = "Pauze"
+KeysRouteView = "Routeweergave"
+KeysPlayerView = "Spelerweergave"
+KeysRoute = "Route"
+KeysRouteAdvance = "Geavanceerd"
+KeysRouteAhead = "Vooruit"
+KeysRouteLeft = "Links"
+KeysRouteRight = "Rechts"
+KeysRouteUndo = "Ongedaan maken"
+KeysRouteUTurn = "U-bocht"
+KeysRouteVan = "Route Busje"
+KeysRunRed = "Spring rood licht"
+KeysPlayer = "Speler"
+KeysSpin = "Draaien"
+KeysTripSelect = "Selecteer reis"
+KeysTripMore = "Krijg er nog 3"
+
+KeysFaster = "Sneller"
+KeysSlower = "Langzamer"
+KeysNudgeLeft = "Nudge naar links"
+KeysNudgeRight = "Nudge Rechts"
+
+# Missie ############################################### ###################
+
+HelpMission = "In de nabije toekomst is het jouw taak om naar steden over de hele wereld te gaan en medische benodigdheden te bezorgen. In deze toekomst is de valuta voor alles elektrische energie, je wordt voor elke levering betaald met een power-up in kiloJoules (kJ ).
+
+Je kunt door de stad wandelen of rennen, of een busje of een bus nemen. Een bus is goedkoop om te rijden, maar je moet gaan waar hij gaat. Een privébusje kost meer, maar u kunt de route bepalen.
+
+Kies om te beginnen een stad uit de vier op het eerste niveau. Zodra de kaart is geladen, ziet u een buurt van de door u gekozen stad.
+
+Kies vervolgens een bezorglocatie in die buurt. U krijgt drie locaties aangeboden: een korte afstand, een middellange en een langere afstand. De vergoeding die je krijgt voor de levering stijgt met de afstand. Zodra u de drop-off bereikt, krijgt u nog drie locaties aangeboden.
+
+Met een goede planning bereik je een speciale locatie waar je een klein flesje kunt verzamelen, een flesje met blauwe dop. De locaties worden op de kaart weergegeven. Elke injectieflacon bevat een component voor een nieuw medicijn dat de wereld zal beschermen tegen de volgende ziektedreiging.
+
+Wanneer je begint, heb je toegang tot één niveau en naarmate je meer energie krijgt, zullen er meer niveaus openen. Er zijn acht niveaus en vier steden op elk niveau. Vanaf niveau drie kun je ook je eigen aangepaste buurt bouwen, op de locatie van je keuze. Elke aangepaste buurt zal ook één flacon bevatten.
+
+Jouw missie is om 36 flesjes te vinden en de mensheid te redden.
+
+Tips:
+- pas op voor mensen die viruspositief zijn als u zich door de stad verplaatst: wees extra voorzichtig in drukte en in bussen
+- als je de aangeboden inleverlocaties niet leuk vindt, kun je betalen om nog een set van drie te krijgen, de prijs wordt weergegeven onder de opties
+- als je niet bij de stoplichten wilt wachten, kun je door rood springen, maar als er een camera is, betaal je een boete, of erger
+- je kunt [Advance] gebruiken om een ​​route vooruit te kiezen: de route kan rechtstreeks naar je drop-off gaan, of via bonusbatterijen om extra kJ te scoren
+- je mag alleen op een busje instappen op een aangewezen buszone: deze worden weergegeven met een busje-symbool op het wegdek
+- je kunt alleen op een bus stappen bij een bushalte: sommige bushaltes worden door meer dan één busroute gebruikt
+- wanneer u in een busje zit, kunt u de knop [Route Busje] gebruiken om de bestemmingszone van het busje te wijzigen waar u uitstapt
+- als je bij een bushalte staat te wachten, als er meer dan één busroute is, kun je kiezen welke route je neemt
+- als je in een bus zit, kun je de halte kiezen waar je uitstapt
+- als je in een busje of een bus zit, kun je op de knop Verlaten drukken om uit te stappen als deze is gestopt, maar je betaalt een boete "
+
+# Credits ################################################ ###################
+  
+MapCredits = "Kaarten:
+
+Gegevens (C) OpenStreetMap-bijdragers - https://www.openstreetmap.org
+Kaarten (C) Thunderforest - https://www.thunderforest.com
+Terreingegevens (C) Mapbox - https://www.mapbox.com/about/maps/
+
+"
+
+PhotoCreditIntro = "Locatie Foto's:
+
+"
+PhotoCredits = "New York: Brandon Jacoby (https://unsplash.com/photos/Ab-W3gen18Q)
+    Londen: Peter Laskowski (https://www.pexels.com/photo/3458997)
+    Hongkong: Florian Wehde (https://unsplash.com/photos/8bjnP3yhNTg)
+    Sydney: Mudassir Ali (https://www.pexels.com/photo/1619854)
+    Vancouver: Adi Kavazovic (https://www.pexels.com/photo/2382868)
+    Barcelona: Aleksandar Pasaric (https://www.pexels.com/photo/1388030)
+    New Delhi: Jeswin Thomas (https://www.pexels.com/photo/1007426)
+    Singapore: Kin Pastor (https://www.pexels.com/photo/777059)
+    Santiago: Juan Pablo Ahumada (https://unsplash.com/photos/Y9Wp5keJsn8)
+    Bergen: Pixabay (https://www.pexels.com/photo/327391)
+    Busan: Keiteu Ko (https://unsplash.com/photos/KHUmv9Z1Rho)
+    Nairobi: Amani Nation (https://unsplash.com/photos/LTh5pGyvKAM)
+    Chicago: Bhargava Marripati (https://www.pexels.com/photo/2314361)
+    Istanboel: Osman Koycu (https://unsplash.com/photos/c6qF_lYvu2I)
+    Chongqing: Jerry Wang (https://unsplash.com/photos/Hqf58s2C1lg)
+    Kaapstad: Pixelperfektion (https://unsplash.com/photos/frHqpHZUa2g)
+    Toronto: Maarten Van Den Heuvel (https://www.pexels.com/photo/4490703)
+    Milaan: Francesco Ungaro (https://www.pexels.com/photo/409127)
+    Mumbai: Hardik Joshi (https://unsplash.com/photos/niUei6OnuiA)
+    Rio de Janeiro: Mike Swigunski (https://unsplash.com/photos/tYGZvg_Ozh4)
+    Amsterdam: Kata Pal (https://www.pexels.com/photo/1258865)
+    Moskou: Алексей Васильев (https://www.pexels.com/photo/2816184)
+    Taipei: Timo Volz (https://www.pexels.com/photo/5127661)
+    Dubai: Asifgrafie (https://www.pexels.com/photo/4348305)
+    Mexico-Stad: Oscar Reygo (https://unsplash.com/photos/HPrWl25FYcw)
+    Frankfurt: Igor Flek (https://unsplash.com/photos/q18A6PEaQ6U)
+    Tokio: Louie Martinez (https://unsplash.com/photos/IocJwyqRv3M)
+    Jakarta: Tom Fisk (https://www.pexels.com/photo/2126395)
+    Panama: Felix Tchverkin (https://unsplash.com/photos/N8EzubdXV0M)
+    Parijs: Luca Micheli (https://unsplash.com/photos/Q7htkhMW66Y)
+    Shanghai: Denys Nevozhai (https://unsplash.com/photos/D8iZPlX-2fs)
+    Caïro: Sean Wang (https://unsplash.com/photos/0wMkml3PwUE)
+
+"
+
+MusicCredit = "Muziek / Geluidseffecten:
+  
+DL-Sounds - https://www.dl-sounds.com
+ZapSplat - https://www.zapsplat.com
+    GameBurp - http://www.gameburp.com
+
+"
+
+PluginCredit = "Unity-plug-ins:
+
+Geanimeerde karakters - https://www.polyperfect.com
+Geïntegreerde webbrowser - https://zenfulcrum.com
+Planeet Aarde - https://assetstore.unity.com/packages/3d/environments/sci-fi/planet-earth-free-23399 "
+
+
+HelpMissionShort = "Collect 36 flacons: één van elke stad
+
+Grab batterijen boost energie
+
+Vermijd virusdragers"
+
+HelpStory = "In de nabije toekomst is het jouw taak is om naar steden over de hele wereld en leveren van medische benodigdheden.
+
+Bij één levering locatie in elke stad krijgt u een speciale blauwe-top flacon met een geneesmiddel component. Jouw missie is om te verzamelen 36 van deze flesjes, zodat de componenten kunnen worden gecombineerd om een ​​remedie die de mensheid zal redden van een nieuw virus te maken.
+
+U kunt lopen of rennen rond de stad, of neem een ​​busje of een bus. Een openbare bus is goedkoop te rijden, maar je moet gaan waar het gaat. Een prive-busje kost meer, maar u kunt de route controleren.
+
+In deze toekomst, de valuta voor alles is energie. U wordt betaald voor elke aflevering met een power-up in kJ (kilojoule). Alles wat u gebruik doen up kJ, zelfs stil. U betaalt voor een busje rit of een busrit in kJ, hoe verder je gaat, hoe meer je betaalt.
+
+Vanaf level 2 kunt u uw eigen buurt, waar ook ter wereld, door direct het bouwen van OpenStreetMap."
+
+HelpTipsTrip = "Als je niet net als de levering locaties aangeboden, kunt u op de getoonde prijs te betalen om meer te halen 3.
+
+Je bent meer kans om te bieden de flacon locatie als u begint met een verre rand locatie.
+
+De randplaatsen worden aangegeven middels → |"
+
+HelpTipsPlay = "Collect batterijen om meer energie te krijgen: je moet 2000 kJ om toegang te krijgen niveau 2, 3000 voor niveau 3, enz.
+
+Kies richting bij de volgende kruising op kleur.
+
+Gebruik [Geavanceerd] om een ​​route van te voren op te bouwen: directe levering locatie of via batterijen kJ krijgen.
+
+Gebruik snelheidscontroles te versnellen, vertragen of te draaien tijdens het lopen.
+
+Als u onderweg bent, kijk uit voor virus-positieve mensen: wees voorzichtig in menigten en op bussen.
+
+Als u niet wilt wachten, kunt u een rood licht te springen, maar als er een camera, krijgt u een boete betalen.
+
+Aan boord van een busje op een aangewezen zone: een blauwe pictogram en een busje symbool op de weg.
+
+Bij het rijden in een busje, gebruik [Route Busje] om de van bestemming te wijzigen, waar je uit.
+
+Boord van een bus bij een bushalte, sommige worden gebruikt door meer dan één bus route.
+
+Tijdens het wachten bij een bushalte, kunt u kiezen welke route u zal nemen als er 2 of meer.
+
+Bij het rijden in een bus, dan kunt u de halte waar u stapt uit te kiezen.
+
+Bij het rijden in een busje of een bus, kunt u op [Verlaat] om eruit te komen, maar je zult een boete te betalen."
+
+MenuTips = "Tips"
+MenuStory = "Verhaal"
+
+UseMouseText="Of gebruik de muis om op de knoppen op het scherm te klikken"

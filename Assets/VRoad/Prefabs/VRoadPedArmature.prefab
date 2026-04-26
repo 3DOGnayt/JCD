@@ -534,7 +534,6 @@ GameObject:
   - component: {fileID: 2934944356343200065}
   - component: {fileID: 9104915615136768827}
   - component: {fileID: 2589803960406631409}
-  - component: {fileID: 2870192237117871519}
   m_Layer: 8
   m_Name: VRoadPedArmature
   m_TagString: Player
@@ -596,18 +595,6 @@ CharacterController:
   m_SkinWidth: 0.02
   m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0.93, z: 0}
---- !u!114 &2870192237117871519
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2589803960406631419}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2d1b06b93cd4175b3752fa385d66def, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2613013473340072326
 GameObject:
   m_ObjectHideFlags: 0

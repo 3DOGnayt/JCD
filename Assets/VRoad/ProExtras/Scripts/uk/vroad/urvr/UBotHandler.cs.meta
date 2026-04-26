@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 620443d58e2ec8f4b902ea2dcd7cc80a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - newPedestrianPrefab: {fileID: 1943792556333460, guid: d2bd89ccdcc11344991057824a0b6043,
+      type: 3}
+  - newVehiclePrefab: {fileID: 3943866860954481605, guid: 02fa02a35edf9024393fd319f5dc3410,
+      type: 3}
+  - playerMaterial: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

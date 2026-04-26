@@ -1,0 +1,255 @@
+HelpStartHere="Mach dich bereit ..."
+LoadingMap="Wird geladen..."
+AutoResumeMsg="Pausiert"
+
+MapHelpMsg="Wählen Sie eine Stadt oder ändern Sie die Ebene"
+
+TripHelpMsg="Wählen Sie ein Ausflugsziel"
+
+PlayHelpMsg="Wählen Sie Ihre Route zum Ziel"
+
+NewLevel="Neues Level verfügbar"
+
+EnergyTooLow="Energie zu niedrig"
+SpeedTooHigh="Zu schnell"
+NotAboard="Nicht an Bord"
+NoFootpath="Kein Fußweg"
+
+MoreVialsNeeded="+%d → Benutzerdefinierte Karte"
+
+# Menu ### Diese werden für Menütasten verwendet, also halte sie kurz  #####
+
+MenuResume="Fortsetzen"
+MenuMission="Mission"
+MenuControls="Kontrollen"
+MenuCredits="Credits"
+MenuChangeCity="Stadt ändern"
+MenuGraphics="Grafik"
+MenuAvatar="Benutzerbild"
+MenuExit="Beenden"
+MenuReset="Zurücksetzen"
+
+Opt_Cancel = "Abbrechen"
+Opt_Confirm = "Bestätigen" 
+
+# Browser / Custom Map #####################################################
+
+BrowserLoading="Browser lädt ..."
+
+BrowseHelpMsg="Verwenden Sie die Maus oder das Gamepad, um eine benutzerdefinierte Karte für dieses Level auszuwählen.
+Probieren Sie die Umschalt- und Ziehen-Maus für eine schnelle Auswahl aus Zoomen Sie hinein, bis das Umrissfeld grün wird.
+Drücken Sie [Leertaste], [Start] oder klicken Sie auf die grüne Schaltfläche im Browser, um zu bauen."
+
+UnknownCity="Unbekannte Stadt"
+UnknownSuburb ="Irgendwo in"
+CustomCity= "Benutzerdefinierte Stadt"
+
+# Finishing ################################################################
+
+LevelCompleteText="Level Abgeschlossen"
+
+CompleteHelpMsg="Mission Abgeschlossen"
+
+GameOver="Spiel Vorbei"
+
+ResetMessage="Warnung! Reset entfernt alle gespeicherten Spielstände und beendet das Spiel"
+
+# Error Messages ###########################################################
+
+NoMapServer="Kein Kartenserver verfügbar"
+
+CustomBuildFailedText="Benutzerdefinierte Karte fehlgeschlagen"
+
+BuildError1="Wagen-Zielanzahl %d, erfordert %d oder mehr"
+BuildError2="Gehzielanzahl %d, erfordern %d oder mehr"
+BuildError3="Straßenzielanzahl %d, erfordern %d oder mehr"
+BuildError4="Niedrige Brückenanzahl %d, erfordert %d oder weniger"
+BuildError5="Anzahl steiler Straßen %d, %d oder weniger erforderlich"
+   
+CustomBuildFailedTryAgain="Versuchen Sie es erneut mit einem anderen Bereich"
+
+AlreadyBuiltMap="Fehler: Benutzerdefinierte Karte bereits erstellt
+- Keine Kartendatei gefunden"
+
+# Labels for Controller / Keyboard #########################################
+
+KeysMoveMapCentre="Kartenzentrum verschieben"
+KeysOptions="Optionen"
+KeysSelectCity="Stadt auswählen"
+KeysStart="Start"
+KeysVolume="Volumen"
+KeysZoom="Zoom"
+
+KeysAbandon="Wagen/Bus verlassen"
+KeysCamera="Kamera"
+KeysMap="Karte"
+KeysMute="Stumm"
+KeysPause="Pause"
+KeysRouteView="Routenansicht"
+KeysPlayerView="Spieleransicht"
+KeysRoute="Route"
+KeysRouteAdvance="Voranbringen"
+KeysRouteAhead="Voraus"
+KeysRouteLeft="Links"
+KeysRouteRight="Rechts"
+KeysRouteUndo="Rückgängig"
+KeysRouteUTurn="Wenden"
+KeysRouteVan="Wagen Route"
+KeysRunRed="Rotes Licht springen"
+KeysPlayer="Spieler"
+KeysSpin="Drehen"
+KeysTripSelect="Reise auswählen"
+KeysTripMore="Erhalte 3 weitere"
+
+KeysFaster="Schneller"
+KeysSlower="Langsamer"
+KeysNudgeLeft="Links Schieben"
+KeysNudgeRight="Rechts Schieben"
+
+# Mission ##################################################################
+
+HelpMission="In naher Zukunft ist es Ihre Aufgabe, in Städte auf der ganzen Welt zu fahren und medizinische Versorgung zu liefern. In dieser Zukunft ist die Währung für alles elektrische Energie, Sie werden für jede Lieferung mit einem Power-Up in Kilojoule (kJ ).
+
+Sie können durch die Stadt laufen oder laufen oder einen Wagen oder einen Bus nehmen. Ein Bus ist billig zu fahren, aber man muss dorthin gehen, wo er hingeht. Ein privater Wagen kostet mehr, aber Sie können seine Route steuern.
+
+Wählen Sie zu Beginn eine der vier Städte auf der ersten Ebene aus. Sobald die Karte geladen ist, sehen Sie ein Viertel der von Ihnen gewählten Stadt.
+
+Wählen Sie als Nächstes einen Lieferort in dieser Nachbarschaft aus. Ihnen werden drei Standorte angeboten: eine kurze Distanz, eine mittlere und eine längere. Die Zahlung, die Sie für die Lieferung erhalten, steigt mit der Entfernung. Sobald Sie den Drop-off erreichen, werden Ihnen weitere drei Standorte angeboten.
+
+Mit guter Planung erreichen Sie einen besonderen Ort, an dem Sie eine kleine Flasche, ein blaues Fläschchen, abholen können. Seine Standorte werden auf der Karte angezeigt. Jedes Fläschchen enthält eine Komponente für ein neues Medikament, das die Welt vor der nächsten Krankheitsbedrohung schützen wird.
+
+Wenn du anfängst, hast du Zugang zu einer Ebene, und wenn du mehr Energie gewinnst, werden sich weitere Ebenen öffnen. Es gibt acht Ebenen und vier Städte auf jeder Ebene. Ab Level drei kannst du auch deine eigene benutzerdefinierte Nachbarschaft an einem Ort deiner Wahl bauen. Jede benutzerdefinierte Nachbarschaft enthält außerdem ein Fläschchen.
+
+Ihre Mission ist es, 36 Fläschchen zu finden und die Menschheit zu retten.
+
+Tipps:
+- Achten Sie bei Ihrer Bewegung in der Stadt auf Menschen, die viruspositiv sind: Seien Sie in Menschenmengen und in Bussen besonders vorsichtig
+- Wenn Ihnen die angebotenen Abgabestellen nicht gefallen, können Sie einen weiteren Satz von drei bezahlen. Der Preis wird unter den Optionen angezeigt
+- Wenn Sie nicht an der Ampel warten möchten, können Sie die rote Ampel überspringen, aber wenn eine Kamera vorhanden ist, zahlen Sie eine Geldstrafe oder Schlimmeres
+- Sie können [Voranbringen] verwenden, um eine Route im Voraus zu wählen: Die Route kann direkt zu Ihrem Drop-off führen oder über Bonusbatterien, um zusätzliche kJ zu erhalten
+- Sie können nur an einer ausgewiesenen Wagen-Zone in einen Wagen einsteigen: Diese werden mit einem Wagen-Symbol auf der Fahrbahn angezeigt
+- Sie können nur an einer Bushaltestelle in einen Bus einsteigen: Einige Bushaltestellen werden von mehr als einer Buslinie genutzt
+- Wenn Sie sich in einem Wagen befinden, können Sie die [Wagen-Route] Taste verwenden, um die Zielzone des Wagens zu ändern, in der Sie aussteigen
+- Wenn Sie an einer Bushaltestelle warten, können Sie bei mehreren Buslinien wählen, welche Route Sie nehmen möchten
+- Wenn Sie in einem Bus sitzen, können Sie die Haltestelle auswählen, an der Sie aussteigen möchten
+- Wenn Sie in einem Wagen oder Bus sitzen, können Sie die Abandon-Taste drücken, um auszusteigen, wenn er angehalten wird, aber Sie zahlen eine Geldstrafe."
+
+# Credits-Zuordnungen ######################################################
+
+MapCredits="Karten:
+
+Daten (C) OpenStreetMap-Mitwirkende - https://www.openstreetmap.org
+Karten (C) Thunderforest - https://www.thunderforest.com
+Geländedaten (C) Mapbox - https://www.mapbox.com/about/maps/
+
+"
+
+PhotoCreditIntro="Standortfotos:
+
+"
+PhotoCredits=" New York: Brandon Jacoby ( https://unsplash.com/photos/Ab-W3gen18Q )
+    London: Peter Laskowski (https://www.pexels.com/photo/3458997)
+    Hongkong: Florian Wehde ( https://unsplash.com/photos/8bjnP3yhNTg )
+    Sydney: Mudassir Ali ( https://www.pexels.com/photo/1619854 )
+    Vancouver: Adi Kavazovic ( https://www.pexels.com/photo/2382868 )
+    Barcelona: Aleksandar Pasaric ( https://www.pexels.com/photo/1388030 )
+    Neu-Delhi: Jeswin Thomas ( https://www.pexels.com/photo/1007426 )
+    Singapur: Kin Pastor ( https://www.pexels.com/photo/777059 )
+    Santiago: Juan Pablo Ahumada ( https://unsplash.com/photos/Y9Wp5keJsn8 )
+    Bergen: Pixabay (https://www.pexels.com/photo/327391)
+    Busan: Keiteu Ko ( https://unsplash.com/photos/KHUmv9Z1Rho )
+    Nairobi: Amani-Nation ( https://unsplash.com/photos/LTh5pGyvKAM )
+    Chicago: Bhargava Marripati ( https://www.pexels.com/photo/2314361 )
+    Istanbul: Osman Koycu ( https://unsplash.com/photos/c6qF_lYvu2I )
+    Chongqing: Jerry Wang ( https://unsplash.com/photos/Hqf58s2C1lg )
+    Kapstadt: Pixelperfektion ( https://unsplash.com/photos/frHqpHZUa2g )
+    Toronto: Maarten Van Den Heuvel (https://www.pexels.com/photo/4490703)
+    Mailand: Francesco Ungaro ( https://www.pexels.com/photo/409127 )
+    Mumbai: Hardik Joshi ( https://unsplash.com/photos/niUei6OnuiA )
+    Rio de Janeiro: Mike Swigunski ( https://unsplash.com/photos/tYGZvg_Ozh4 )
+    Amsterdam: Kata Pal ( https://www.pexels.com/photo/1258865 )
+    Moskau: Алексей Васильев ( https://www.pexels.com/photo/2816184 )
+    Taipeh: Timo Volz ( https://www.pexels.com/photo/5127661 )
+    Dubai: Asifgraphie ( https://www.pexels.com/photo/4348305 )
+    Mexiko-Stadt: Oscar Reygo ( https://unsplash.com/photos/HPrWl25FYcw )
+    Frankfurt: Igor Flek ( https://unsplash.com/photos/q18A6PEaQ6U )
+    Tokio: Louie Martinez ( https://unsplash.com/photos/IocJwyqRv3M )
+    Jakarta: Tom Fisk (https://www.pexels.com/photo/2126395)
+    Panama: Felix Tchverkin ( https://unsplash.com/photos/N8EzubdXV0M )
+    Paris: Luca Micheli ( https://unsplash.com/photos/Q7htkhMW66Y )
+    Shanghai: Denys Nevozhai ( https://unsplash.com/photos/D8iZPlX-2fs )
+    Kairo: Sean Wang ( https://unsplash.com/photos/0wMkml3PwUE )
+
+"
+
+MusicCredit="Musik / Soundeffekte:
+  
+DL-Sounds - https://www.dl-sounds.com
+ZapSplat - https://www.zapsplat.com
+    Spiel Burp - http://www.gameburp.com
+
+"
+
+PluginCredit="Unity-Plug-Ins:
+
+Animierte Charaktere - https://www.polyperfect.com
+Eingebetteter Webbrowser - https://zenfulcrum.com
+Planet Erde - https://assetstore.unity.com/packages/3d/environments/sci-fi/planet-earth-free-23399"
+
+
+
+HelpMissionShort = "Sammeln Sie 36 Fläschchen: einer aus jeder Stadt
+
+Schnappen Sie sich Batterien, um Energie zu steigern
+
+Vermeiden Sie Virus-Träger "
+
+
+HelpStory = "In naher Zukunft ist Ihre Aufgabe, in Städte auf der ganzen Welt zu gehen und medizinische Vorräte zu liefern.
+
+An einem Lieferort in jeder Stadt erhalten Sie ein spezielles Blau-Top-Fläschchen, das eine Wirkstoffkomponente enthält. Ihre Mission ist es, 36 dieser Fläschchen zu sammeln, so dass die Komponenten kombiniert werden können, um ein Heilmittel zu ermöglichen, das die Menschheit von einem neuen Virus retten wird.
+
+Sie können gehen oder um die Stadt herumlaufen oder einen Lieferwagen oder einen Bus nehmen. Ein öffentlicher Bus ist billig zu fahren, aber Sie müssen dorthin gehen, wo es geht. Ein privater Van kostet mehr, aber Sie können seine Route kontrollieren.
+
+In dieser Zukunft ist die Währung für alles Energie. Sie werden für jede Lieferung mit einem Power-up in KJ (Kilojoules) bezahlt. Alles, was Sie tun, nutzt KJ, sogar noch stehend. Sie bezahlen für eine Van-Fahrt oder eine Busfahrt in KJ, je weiter Sie gehen, desto mehr zahlen Sie.
+
+Von Stufe 2 können Sie Ihre eigene Nachbarschaft, überall auf der Welt, mit dem Aufbau direkt von OpenStreetMap wählen. "
+
+
+HelpTipsTrip = "Wenn Sie die angebotenen Lieferstellen nicht mögen, können Sie bezahlen, um 3 weitere zu erhalten, zu dem angegebenen Preis.
+
+Sie werden eher den Fläschchenstandort angeboten, wenn Sie von einem entfernten Randort beginnen.
+
+Die Randorte werden mit → | angezeigt. "
+
+
+
+HelpTipsPlay = "Sammeln Sie Batterien, um mehr Energie zu gewinnen: Sie benötigen 2000 KJ auf den Zugriff auf Ebene 2, 3000 für Stufe 3 usw.
+
+Wählen Sie an der nächsten Kreuzung Richtung Richtung.
+
+Verwenden Sie [Advance], um eine Route zu erstellen: Direkt bis zum Lieferort oder über Batterien, um KJ zu gewinnen.
+
+Verwenden Sie Drehzahlsteuerungen, um sich zu beschleunigen, zu verlangsamen, zu verlangsamen oder beim Gehen umzudrehen.
+
+Wenn Sie sich bewegen, achten Sie auf viren-positiven Personen auf: Seien Sie vorsichtig in Massen und in Bussen.
+
+Wenn Sie nicht warten möchten, können Sie ein rotes Licht springen, aber wenn es eine Kamera gibt, zahlen Sie eine Geldstrafe.
+
+Board einen Lieferwagen in einer bestimmten Zone: ein blaues Symbol und ein Van-Symbol auf der Straße.
+
+Verwenden Sie beim Fahren in einem Lieferwagen [Van Route], um das Van-Ziel zu ändern, an dem Sie herauskommen.
+
+Board einen Bus an einer Bushaltestelle, einige werden von mehr als einer Buslinie genutzt.
+
+Wenn Sie an einer Bushaltestelle warten, können Sie auswählen, welche Route Sie annehmen, wenn es 2 oder mehr gibt.
+
+Wenn Sie in einem Bus fahren, können Sie den Anschlag auswählen, an dem Sie aussteigen möchten.
+
+Beim Reiten in einem Lieferwagen oder einem Bus können Sie [aufgeben] drücken, um herauszukommen, aber Sie werden eine Geldstrafe zahlen. "
+
+
+MenuTips = "Tipps"
+MenuStory = "Geschichte"
+
+UseMouseText="Oder klicken Sie mit der Maus auf die Schaltflächen auf dem Bildschirm"

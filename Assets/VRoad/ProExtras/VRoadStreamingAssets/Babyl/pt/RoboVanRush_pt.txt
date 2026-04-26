@@ -1,0 +1,249 @@
+HelpStartHere = "Prepare-se ..."
+LoadingMap = "Carregando ..."
+AutoResumeMsg = "Pausado"
+
+MapHelpMsg = "Escolha uma cidade ou mude de nível"
+
+TripHelpMsg = "Selecione um destino de viagem"
+
+PlayHelpMsg = "Escolha sua rota até o destino"
+
+NewLevel = "Novo nível disponível"
+
+EnergyTooLow = "Energia muito baixa"
+SpeedTooHigh = "Muito rápido"
+NotAboard = "Não Aboard"
+NoFootpath = "Sem trilha"
+
+MoreVialsNeeded = "+% d → Mapa personalizado"
+
+# Menu - use frases curtas para caber nos botões #####################################
+
+MenuResume = "Retomar"
+MenuMission = "Missão"
+MenuControls = "Controles"
+MenuCredits = "Créditos"
+MenuChangeCity = "Mudar cidade"
+MenuGraphics = "Gráficos"
+MenuAvatar="Avatar"
+MenuExit = "Sair"
+MenuReset = "Reiniciar"
+
+Opt_Cancel = "Cancelar"
+Opt_Confirm = "Confirmar"
+
+# Navegador / Mapa personalizado ###################################################### #########
+
+BrowserLoading = "Carregando navegador ..."
+
+BrowseHelpMsg = "Use o mouse ou o game pad para selecionar um mapa personalizado para este nível.
+Experimente deslocar e arrastar o mouse para uma seleção rápida. Aumente o zoom até que a caixa de contorno fique verde.
+Pressione [Espaço], [Iniciar] ou clique no botão verde no navegador para construir "
+
+UnknownCity = "Cidade Desconhecida"
+UnknownSuburb = "Em algum lugar em"
+CustomCity = "Cidade Personalizada"
+
+# Finishing ########################################################### ####################
+
+LevelCompleteText = "Nível concluído"
+
+CompleteHelpMsg = "Missão concluída"
+
+GameOver = "Fim de jogo"
+
+ResetMessage = "Aviso! O reset irá remover todas as pontuações salvas e sair do jogo"
+
+# Mensagens de erro ############################################### ###############
+
+NoMapServer = "Nenhum servidor de mapa disponível"
+
+CustomBuildFailedText = "Mapa personalizado falhou ao construir"
+
+BuildError1 = "Contagem de destino da van% d, requer% d ou mais"
+BuildError2 = "Contagem de destino de caminhada% d, requer% d ou mais"
+BuildError3 = "Contagem de destino de rua% d, requer% d ou mais"
+BuildError4 = "Contagem de ponte de baixa folga% d, requer% d ou menos"
+BuildError5 = "Contagem de estradas íngremes% d, requer% d ou menos"
+
+CustomBuildFailedTryAgain = "Tente novamente usando uma área diferente"
+
+AlreadyBuiltMap = "Erro: mapa personalizado já construído
+- Nenhum arquivo de mapa encontrado "
+
+# Etiquetas para controlador / teclado ##################################################
+
+KeysMoveMapCentre = "Mover Centro do Mapa"
+KeysOptions = "Opções"
+KeysSelectCity = "Selecione a cidade"
+KeysStart = "Iniciar"
+KeysVolume = "Volume"
+KeysZoom = "Zoom"
+
+KeysAbandon = "Abandonar Van / Ônibus"
+KeysCamera = "Câmera"
+KeysMap = "Mapa"
+KeysMute = "Mudo"
+KeysPause = "Pausa"
+KeysRouteView = "Visualização da rota"
+KeysPlayerView = "Visualização do jogador"
+KeysRoute = "Rota"
+KeysRouteAdvance = "Avançar"
+KeysRouteAhead = "Adiante"
+KeysRouteLeft = "Esquerda"
+KeysRouteRight = "Certo"
+KeysRouteUndo = "Desfazer"
+KeysRouteUTurn = "Meia-volta"
+KeysRouteVan = "Rota Van"
+KeysRunRed = "Executar sinal vermelho"
+KeysPlayer = "Jogador"
+KeysSpin = "Girar"
+KeysTripSelect = "Selecionar viagem"
+KeysTripMore = "Obtenha mais 3"
+
+KeysFaster = "mais rápido"
+KeysSlower = "Mais lento"
+KeysNudgeLeft = "Deslocar para a esquerda"
+KeysNudgeRight = "Deslocar para a direita"
+
+# Missão ################################################ ######################
+
+HelpMission = "Em um futuro próximo, sua função é ir a cidades ao redor do mundo e entregar suprimentos médicos. Nesse futuro, a moeda de tudo é a energia elétrica, você é pago por cada entrega com um power-up em kiloJoules (kJ )
+
+Você pode caminhar ou correr pela cidade, ou pegar uma van ou um ônibus. Um ônibus é barato, mas você tem que ir aonde ele vai. Uma van privada custa mais, mas você pode controlar sua rota.
+
+Para começar, escolha uma das quatro cidades do primeiro nível. Assim que o mapa carregar, você verá um bairro da cidade escolhida.
+
+Em seguida, escolha um local de entrega de entrega nessa vizinhança. Serão oferecidos três locais: um de curta distância, um de média distância e um de longa distância. O pagamento que você recebe pela entrega aumenta com a distância. Assim que chegar ao local de entrega, serão oferecidos outros três locais.
+
+Com um bom planejamento, você chegará a um local especial onde poderá coletar uma pequena garrafa, um frasco com tampa azul. Sua localização é mostrada no mapa. Cada frasco contém um componente para um novo medicamento que protegerá o mundo contra a próxima ameaça de doença.
+
+Quando você começa, tem acesso a um nível e, à medida que ganha mais energia, mais níveis se abrem. Existem oito níveis e quatro cidades em cada nível. A partir do nível três, você também pode construir sua própria vizinhança personalizada, no local de sua escolha. Cada vizinhança personalizada também conterá um frasco.
+
+Sua missão é encontrar 36 frascos e salvar a humanidade.
+
+Pontas:
+- conforme você se desloca pela cidade, preste atenção às pessoas que são infectadas pelo vírus: seja extremamente cuidadoso em meio a multidões e nos ônibus
+- se não gostar dos locais de entrega oferecidos, você pode pagar para obter outro conjunto de três, o preço é mostrado abaixo das opções
+- se você não quiser esperar no semáforo, você pode pular o sinal vermelho, mas se houver uma câmera, você vai pagar uma multa, ou pior
+- você pode usar [Avançar] para escolher uma rota à frente: a rota pode ir direto para o seu local de entrega ou por meio de baterias extras para ganhar kJ extras
+- você pode embarcar em uma van apenas em uma área designada para van: eles são mostrados com um símbolo de van na superfície da estrada
+- você só pode embarcar em um ponto de ônibus: alguns pontos de ônibus são usados ​​por mais de uma rota de ônibus
+- quando você estiver em uma van, você pode usar o botão [Rota Van] para alterar a zona da van de destino de onde você sairá
+- quando você está esperando em um ponto de ônibus, se houver mais de uma rota de ônibus, você pode escolher qual rota você vai tomar
+- quando você estiver em um ônibus, você pode escolher a parada de onde irá descer
+- quando você estiver em uma van ou ônibus, você pode pressionar o botão Abandonar para sair se estiver parado, mas você pagará uma multa "
+
+# Créditos ########################################################## ######################
+  
+MapCredits = "Mapas:
+
+    Contribuidores do OpenStreetMap de dados (C) - https://www.openstreetmap.org
+    Maps (C) Thunderforest - https://www.thunderforest.com
+    Dados do terreno (C) Mapbox - https://www.mapbox.com/about/maps/
+
+"
+
+PhotoCreditIntro = "Fotos do local:
+
+"
+PhotoCredits = "Nova York: Brandon Jacoby (https://unsplash.com/photos/Ab-W3gen18Q)
+    Londres: Peter Laskowski (https://www.pexels.com/photo/3458997)
+    Hong Kong: Florian Wehde (https://unsplash.com/photos/8bjnP3yhNTg)
+    Sydney: Mudassir Ali (https://www.pexels.com/photo/1619854)
+    Vancouver: Adi Kavazovic (https://www.pexels.com/photo/2382868)
+    Barcelona: Aleksandar Pasaric (https://www.pexels.com/photo/1388030)
+    Nova Delhi: Jeswin Thomas (https://www.pexels.com/photo/1007426)
+    Singapura: Kin Pastor (https://www.pexels.com/photo/777059)
+    Santiago: Juan Pablo Ahumada (https://unsplash.com/photos/Y9Wp5keJsn8)
+    Bergen: Pixabay (https://www.pexels.com/photo/327391)
+    Busan: Keiteu Ko (https://unsplash.com/photos/KHUmv9Z1Rho)
+    Nairobi: Amani Nation (https://unsplash.com/photos/LTh5pGyvKAM)
+    Chicago: Bhargava Marripati (https://www.pexels.com/photo/2314361)
+    Istambul: Osman Koycu (https://unsplash.com/photos/c6qF_lYvu2I)
+    Chongqing: Jerry Wang (https://unsplash.com/photos/Hqf58s2C1lg)
+    Cidade do Cabo: Pixelperfektion (https://unsplash.com/photos/frHqpHZUa2g)
+    Toronto: Maarten Van Den Heuvel (https://www.pexels.com/photo/4490703)
+    Milão: Francesco Ungaro (https://www.pexels.com/photo/409127)
+    Mumbai: Hardik Joshi (https://unsplash.com/photos/niUei6OnuiA)
+    Rio de Janeiro: Mike Swigunski (https://unsplash.com/photos/tYGZvg_Ozh4)
+    Amsterdã: Kata Pal (https://www.pexels.com/photo/1258865)
+    Moscou: Алексей Васильев (https://www.pexels.com/photo/2816184)
+    Taipei: Timo Volz (https://www.pexels.com/photo/5127661)
+    Dubai: Asifgraphy (https://www.pexels.com/photo/4348305)
+    Cidade do México: Oscar Reygo (https://unsplash.com/photos/HPrWl25FYcw)
+    Frankfurt: Igor Flek (https://unsplash.com/photos/q18A6PEaQ6U)
+    Tóquio: Louie Martinez (https://unsplash.com/photos/IocJwyqRv3M)
+    Jacarta: Tom Fisk (https://www.pexels.com/photo/2126395)
+    Panamá: Felix Tchverkin (https://unsplash.com/photos/N8EzubdXV0M)
+    Paris: Luca Micheli (https://unsplash.com/photos/Q7htkhMW66Y)
+    Xangai: Denys Nevozhai (https://unsplash.com/photos/D8iZPlX-2fs)
+    Cairo: Sean Wang (https://unsplash.com/photos/0wMkml3PwUE)
+
+"
+
+MusicCredit = "Música / Efeitos Sonoros:
+  
+	DL-Sounds - https://www.dl-sounds.com
+	ZapSplat - https://www.zapsplat.com
+    GameBurp - http://www.gameburp.com
+
+"
+
+PluginCredit = "Plug-ins do Unity:
+
+	Personagens animados - https://www.polyperfect.com
+	Navegador da Web incorporado - https://zenfulcrum.com
+	Planeta Terra - https://assetstore.unity.com/packages/3d/environments/sci-fi/planet-earth-free-23399 "
+
+
+HelpMissionShort = "Colete 36 frascos: um de cada cidade
+
+Pegue as baterias para aumentar a energia
+
+Evite portadores de vírus "
+
+HelpStory = "No futuro próximo, seu trabalho é ir às cidades ao redor do mundo e entregar suprimentos médicos.
+
+Em um local de entrega em cada cidade, você receberá um frasco especial de blue-top contendo um componente de drogas. Sua missão é coletar 36 desses frascos, para que os componentes possam ser combinados para fazer uma cura que economizará a humanidade de um novo vírus.
+
+Você pode andar ou correr pela cidade, ou pegar uma van ou um ônibus. Um ônibus público é barato para andar, mas você tem que ir onde vai. Uma van privada custa mais, mas você pode controlar sua rota.
+
+Neste futuro, a moeda para tudo é energia. Você é pago por cada entrega com um power-up em KJ (Kilojoules). Tudo o que você faz usa KJ, mesmo parado. Você paga por um passeio de van ou um passeio de ônibus em KJ, mais você vai, quanto mais você paga.
+
+Do nível 2, você pode escolher seu próprio bairro, em qualquer lugar do mundo, construindo diretamente do OpenStreetMap. "
+
+HelpTipsTrip = "Se você não gosta dos locais de entrega oferecidos, você pode pagar para obter mais 3, ao preço mostrado.
+
+É mais provável que você seja oferecido a localização do frasco se você começar a partir de um local de borda distante.
+
+Os locais da borda são indicados usando → | "
+
+HelpTipsPlay = "Colete baterias para ganhar mais energia: você precisa de 2000 kJ para acessar o nível 2, 3000 para o nível 3, etc.
+
+Escolha a direção na próxima junção por cor.
+
+Use [Avanço] Para construir uma rota em frente: direto para local de entrega, ou via baterias para ganhar KJ.
+
+Use controles de velocidade para acelerar, desacelerar ou virar enquanto caminhava.
+
+À medida que você se movimenta, atente para pessoas positivas de vírus: tenha cuidado em multidões e em ônibus.
+
+Se você não quer esperar, você pode pular uma luz vermelha, mas se houver uma câmera, você vai pagar uma multa.
+
+Conselho uma van em uma zona designada: um ícone azul e um símbolo van na estrada.
+
+Ao andar em uma van, use [Rota Van] para mudar o destino da van onde você sai.
+
+Conselho um ônibus em um ponto de ônibus, alguns são usados ​​por mais de uma rota de ônibus.
+
+Ao esperar em um ponto de ônibus, você pode escolher qual rota você tomará se houver 2 ou mais.
+
+Ao andar em um ônibus, você pode escolher a parada onde você vai sair.
+
+Ao andar em uma van ou ônibus, você pode pressionar [Abandonar] para sair, mas você vai pagar uma multa. "
+
+MenuTips = "Dicas"
+MenuStory = "História"
+
+UseMouseText="Ou use o mouse para clicar nos botões da tela"

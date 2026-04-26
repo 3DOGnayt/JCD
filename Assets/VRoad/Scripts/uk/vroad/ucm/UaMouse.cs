@@ -37,15 +37,11 @@ namespace uk.vroad.ucm
             }
         }
 
-        protected virtual ButtonControl RotateButton(Mouse mouse)
-        {
-            return mouse.rightButton;
-        }
         protected virtual void HandleMouse(Mouse mouse, Keyboard kb)
         {
             AppInputHandler aih = App().Aih();
 
-            ButtonControl mouseButtonRotate = RotateButton(mouse);
+            ButtonControl mouseButtonRotate = mouse.rightButton;
             
             if (mouseButtonRotate.wasPressedThisFrame)
             {
@@ -64,10 +60,10 @@ namespace uk.vroad.ucm
             
             else if (wasDraggingMouse)
             {
-                bool alt = kb != null && kb.altKey.isPressed;
-                if (!alt) aih.FireAnalogEvent(AppAnalogFn.Rotate, 0);
-                if (!alt) aih.FireAnalogEvent(AppAnalogFn.Zoom, 0);
-                // hold alt down and release mouse while still moving to 'throw'
+                bool shift = kb != null && kb.shiftKey.isPressed;
+                if (!shift) aih.FireAnalogEvent(AppAnalogFn.Rotate, 0);
+                if (!shift) aih.FireAnalogEvent(AppAnalogFn.Zoom, 0);
+                // hold shift down and release mouse while still moving to 'throw'
                 // i.e. keep tilting (or rotating) at constant rate after mouse is released
 
                 wasDraggingMouse = false;

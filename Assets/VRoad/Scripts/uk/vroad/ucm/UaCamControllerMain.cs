@@ -5,41 +5,29 @@ using uk.vroad.api.geom;
 using uk.vroad.api.input;
 
 using UnityEngine;
-using UnityEngine.UI;
 
 
 namespace uk.vroad.ucm
 {
-    /// <summary> an abstract base class for an example camera controller, containing utilities
-    /// such as placing the camera over the  centre of the map, and causing the camera to track
-    /// a moving object, such as a vehicle or a pedestrian. </summary>
     public abstract class UaCamControllerMain : MonoBehaviour, LAppState, LAppInput
     {
         public static UaCamControllerMain MostRecentInstance { get; private set;  }
 
-        
+       
         protected const float MIN_CAMERA_HEIGHT = 2f;
-        private const float INIT_CAMERA_HEIGHT = 500;    
-        
+        private const float INIT_CAMERA_HEIGHT = 500;
         private const float halfCameraFieldOfViewRadians =  Mathf.Deg2Rad * 30f;
         
         protected float cameraHeightSeeWholeModel = INIT_CAMERA_HEIGHT;
         protected float cameraHeight = INIT_CAMERA_HEIGHT;
-        protected float modelHalfVerticalSize = INIT_CAMERA_HEIGHT;
         protected Vector3 mapCentre = Vector3.zero;
         protected Vector3 cameraFocus = Vector3.zero;
-        protected bool rotateMap90 = false;
-        
+
         protected bool mapLoaded;
-        protected bool goToMapCentre;
+        private bool goToMapCentre;
        
         protected float zoom;
-       
-        public bool autoTrack;
-        protected GameObject trackingGO;
-        private bool isTracking;
-        public float moveToCentreOver = 0.95f;
-
+        
         protected abstract App App();
         protected virtual void Awake()
         {
@@ -57,43 +45,29 @@ namespace uk.vroad.ucm
         {
             if (!mapLoaded) return;
             
-            
-            
             if (goToMapCentre)
             {
                 goToMapCentre = false;
                 cameraHeight = cameraHeightSeeWholeModel;
                 cameraFocus = mapCentre;
                 Vector3 cameraUp = new Vector3(0, cameraHeightSeeWholeModel, 0);
-                Vector3 worldUp = new Vector3(0, 0, 1);
-                transform.position = cameraFocus + cameraUp;
-                transform.LookAt(cameraFocus, worldUp);
-               
-            }
 
+                transform.position = mapCentre + cameraUp;
+                transform.LookAt(cameraFocus);
+            }
         }
 
-       
-        public virtual bool IsTracking() { return isTracking;  }
-       
-        public virtual void TrackThis(GameObject go)
+        private GameObject trackingGO;
+        
+        public void TrackThis(GameObject go)
         {
             trackingGO = go;
-            isTracking = go != null;
-        }
             
-        public virtual void UnTrackThis(GameObject go)
-        {
-            if (trackingGO == go)
-            {
-                trackingGO = null;
-                isTracking = false;
-            }
         }
 
         protected virtual void LateUpdate()
         {
-            if (isTracking)
+            if (trackingGO != null)
             {
                 Transform gotr = trackingGO.transform;
                 cameraFocus = gotr.position;
@@ -121,11 +95,6 @@ namespace uk.vroad.ucm
             }
         }
 
-        public float CameraHeightMoveToCentre()
-        {
-            return cameraHeightSeeWholeModel * moveToCentreOver;
-        }
-       
         public void AppStateChanged(AppStateTransition ast)
         {
             if (ast.after == AppState.ReadyToSimulate)
@@ -153,16 +122,13 @@ namespace uk.vroad.ucm
 
             //The field of view axis seems to be always vertical, there is a dropdown to change this in Editor, but no API access?
 
-            float modelDX = (float) map.GetWidth();
-            float modelDY = (float) map.GetHeight(); // (float) (ne.Y() - sw.Y());
+            //float modelDiagonal = (float) sw.Distance(ne);
 
-            rotateMap90 = (modelDY > modelDX);
+            float modelDY = (float) (ne.Y() - sw.Y());
+            float modelHalfVerticalSize = (0.5f * modelDY) + border;
 
-            modelHalfVerticalSize = 0.5f * (rotateMap90 ? modelDX : modelDY); //(0.5f * modelDY) + border;
+            cameraHeightSeeWholeModel = modelHalfVerticalSize / Mathf.Tan(halfCameraFieldOfViewRadians);
 
-            float mult = 1.0f / Mathf.Tan(halfCameraFieldOfViewRadians); // == 1.73... == sqrt(3)
-            
-            cameraHeightSeeWholeModel = modelHalfVerticalSize * mult;
         }
 
         public abstract bool AppInputAnalogEvent(AppAnalogFn afn, double value);
@@ -172,21 +138,6 @@ namespace uk.vroad.ucm
 
         public virtual void PlayerPosition(Vector3 pos, Angle bearing, double speed, bool aboard) {}
         public virtual void PlayerArrived()  {}
-
-        public float GetCameraHeight()
-        {
-            return cameraHeight;
-        }
-
-        /// <summary> Used to track a random vehicle through the model, as in WebGL demo  </summary>
-        public virtual bool IsAutoTracking() { return autoTrack; }
-        public virtual void GoToMapCentre() { }
-        public virtual bool ReadyToTrack() { return true; }
-        
-        public void SetFocus(float ew, float sn)
-        {
-            float height = cameraFocus.y;
-            cameraFocus = new Vector3(ew, height, sn);
-        }
+      
     }
 }

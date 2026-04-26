@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 17c87b3c3ca69cf4b99f6d823bce1df8
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - utripCandidatePrefab: {fileID: 1430366421368878, guid: 4de6ddf1c4bb1054a80e6b02de765d27,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

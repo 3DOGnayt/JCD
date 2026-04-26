@@ -1,6 +1,5 @@
 ﻿using System;
 using uk.vroad.api;
-using uk.vroad.api.etc;
 using uk.vroad.api.events;
 using uk.vroad.api.input;
 using UnityEditor;
@@ -11,20 +10,15 @@ namespace uk.vroad.ucm
     public abstract class UaPlaySim : MonoBehaviour, LAppState, LSimTimeSec
     {
         protected abstract App App();
-        public abstract bool IsFFwd();
-
+        protected abstract bool IsFFwd();
+        
+        
         private const int TARGET_FPS = 80; // DON'T CHANGE THIS WITHOUT A LOT OF THOUGHT
         private const float TARGET_UNITY_TIME_PER_FRAME = 1.0f / TARGET_FPS;
-        
-        // This was const, but variable from V2.4. Name is unchanged so that existing code upgrading to V2.4 does not break.
-        /// <summary> A multiplier defining the target speed for the simulator relative to real time </summary>
-        /// Sometimes you want the simulator to run at real-time speed, but at other times you may want to be able to
-        /// speed up the simulation, to "fast-forward" the action
-        public static int STD_RT = 4;
-
-        /// <summary> A maximum value for the speed-up relative to real time. </summary>
+        private const int STD_RT = 4;
         private const int FF_RT = 10;
-        
+        private const int FF_RT_SLOW =  6;
+        private const int FF_RT_FAST =  20;
         private const float LAG_INC = 1.0f;
         private const float LAG_DEC = -1.0f;
         private const float LAG_MAX = 9.99f;
@@ -33,32 +27,13 @@ namespace uk.vroad.ucm
         private float mostRecentFrameUnityTime ;
         private int fixedUpdateCountdown;
         
-        [ReadOnly]
-        [Tooltip("This specifies the target simulation speed as a multiplier of real-time")]
-        public float unity_xRT = STD_RT;
-        [ReadOnly]
-        [Tooltip("Time-Steps Per Second in the simulator. " +
-                 "This controls the size of the steps made by each vehicle or pedestrian. " +
-                 "A higher number produces smoother motion, but requires more compute power.")]
-        public int unity_TSPS;
-        
+        protected float unity_xRT = STD_RT;
         protected float sim_xRT = FF_RT;
         protected float lagMeasure;
-        protected float rtRatio;
-        protected float lapTime;
-
         protected bool paused;
 
         protected ISim sim;
 
-        public void SetTargetRealTimeMultiplier(int xrt)
-        {
-            if (xrt >= 1 && xrt <= FF_RT)
-            {
-                STD_RT = xrt; 
-                if (! AsFastAsPossible()) unity_xRT = STD_RT;
-            }
-        }
         
         protected virtual void Awake()
         {
@@ -67,23 +42,19 @@ namespace uk.vroad.ucm
 #if UNITY_EDITOR
             EditorApplication.pauseStateChanged += HandlePauseState;
 #endif
+
         }
+        
         
         public bool DeregisterFireMapChange() { return false; }  // could set sim = null here
 
         protected virtual void Update()
         {
-            if (paused)
-            {
-                EnforceSingleStepMode();
-                return;
-            }
+            if (paused) return;
 
             mostRecentFrameUnityTime = Time.unscaledTime;
             if (sim == null) return;
 
-            unity_TSPS = sim.TimeStepsPerSecond();
-            
             if (IsFFwd() && !AsFastAsPossible())
             {
                 EnforceContinuousMode(); // => AsFastAsPossible()
@@ -99,9 +70,12 @@ namespace uk.vroad.ucm
             }
             else if (AsFastAsPossible())
             {
-                rtRatio = sim_xRT / unity_xRT;
-                
-                // if (dbg_rtAdjust) if (rtRatio < 0.8 || rtRatio > 1.2) unity_xRT = sim_xRT;
+                if (sim_xRT < FF_RT_SLOW) IncreaseSimTimeStep();
+                else if (sim_xRT > FF_RT_FAST) DecreaseSimTimeStep();
+
+                float rtRatio = sim_xRT / unity_xRT;
+
+                if (rtRatio < 0.8 || rtRatio > 1.2) unity_xRT = sim_xRT;
 
                 sim.PlayRetainState(); // Sometimes sim is still doing last step when FF is requested
             }
@@ -112,15 +86,15 @@ namespace uk.vroad.ucm
 
                 EnforceSingleStepMode();
             }
-           
+
             if (Math.Abs(unity_xRT - Time.timeScale) > 0.001f)
             {
                 Time.timeScale = unity_xRT;
                 Time.fixedDeltaTime = TARGET_UNITY_TIME_PER_FRAME * unity_xRT;
             }
         }
+ 
 
-        // public bool dbg_rtAdjust;
         
         protected virtual void FixedUpdate()
         {
@@ -133,7 +107,7 @@ namespace uk.vroad.ucm
             if (paused) return;
             
             if (!App().Asm().InFixedUpdateCountdownState()) return;
-            
+
             if (sim == null) return;
             if (sim.RunInterval() == 0) return;
 
@@ -155,6 +129,8 @@ namespace uk.vroad.ucm
                     fixedUpdateCountdown = fixedUpdatesPerTimeStep;
 
                     if (lagMeasure > 0) lagMeasure += LAG_DEC; else lagMeasure = 0;
+
+                    if (lagMeasure == 0) DecreaseSimTimeStep();
                 }
                 else
                 {
@@ -162,6 +138,8 @@ namespace uk.vroad.ucm
                     // work by the time of the next fixed update
                     fixedUpdateCountdown = 1;
                     lagMeasure += LAG_INC;
+
+                    if (lagMeasure > LAG_MAX && IncreaseSimTimeStep()) lagMeasure = 0;
                 }
             }
             
@@ -199,6 +177,21 @@ namespace uk.vroad.ucm
             else App().Aih().FireDigitalEvent(AppDigitalFn.MenuResume, true);
         }
         
+        private bool IncreaseSimTimeStep()
+        {
+            int tsps = sim.TimeStepsPerSecond();
+            if (tsps == 5) { sim.SetTimeStepsPerSecond(2); return true; }
+
+            return false;
+        }
+        private bool DecreaseSimTimeStep()
+        {
+            int tsps = sim.TimeStepsPerSecond();
+            //if (tsps == 1) { sim.TimeStepsPerSecond(2); return true; }
+            if (tsps == 2) { sim.SetTimeStepsPerSecond(5);return true; }
+            return false;
+        }
+
         public virtual void AppStateChanged(AppStateTransition ast)
         {
             if (ast.after == AppState.ReadyToSimulate)  // finishBuilding OR finishLoading
@@ -233,16 +226,18 @@ namespace uk.vroad.ucm
        
         public void TimeSec()
         {
-            // elapsed Unity unscaled time
-            lapTime = mostRecentFrameUnityTime - prevSimSecondUnityTime;
-            if (lapTime < 0.01f) lapTime = 0.01f;
+            float elapsedUnityUnscaledTime = mostRecentFrameUnityTime - prevSimSecondUnityTime;
+            if (elapsedUnityUnscaledTime < 0.01f) elapsedUnityUnscaledTime = 0.01f;
             prevSimSecondUnityTime = mostRecentFrameUnityTime;
            
-            sim_xRT = 1.0f / lapTime;
+            sim_xRT = 1.0f / elapsedUnityUnscaledTime;
+            
+            
         }
 
-        
         private static bool runAFAP ;
+
+        // This is static so that it can be called without an object reference
         public static bool AsFastAsPossible() { return runAFAP; }
         // This is not static so that it can be overridden to catch when the state is changed
         protected virtual void AsFastAsPossible(bool v) { runAFAP  = v; }
@@ -266,7 +261,6 @@ namespace uk.vroad.ucm
             }
         }
 #endif
-
-       
+        
     }
 }

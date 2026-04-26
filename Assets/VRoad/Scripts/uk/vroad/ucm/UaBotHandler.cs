@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using uk.vroad.api;
 using uk.vroad.api.enums;
 using uk.vroad.api.etc;
@@ -14,19 +14,12 @@ using uk.vroad.apk;
 using uk.vroad.pac;
 using UnityEngine;
 using UnityEngine.Serialization;
-using UnityEngine.UI;
 
 namespace uk.vroad.ucm
 {
-    /// <summary> An abstract base class containing utilities to handle the bots (pedestrians, cars, trucks, etc)
-    /// in the traffic simulation </summary>
     public abstract class UaBotHandler : MonoBehaviour, LAppState, LBotDepart, LBotArrive
     {
-        [Tooltip("An array of all pedestrian models to use. If you want to replace the " +
-                 "Unity standard robot with your own pedestrian models, drag their prefabs here")]
         public GameObject[] prefabPeds;
-        [Tooltip("An array of car models to use for the traffic. Our basic example models " +
-                 "should not be released with your application - replace them by dragging your own prefabs here")]
         public GameObject[] prefabCars;
         public GameObject[] prefabTaxis;
         public GameObject[] prefabBuses;
@@ -35,18 +28,13 @@ namespace uk.vroad.ucm
         public GameObject[] prefabTractorTrucks;
         public GameObject[] prefabTrailers;
 
-        public float animationMultiplier = 1.2f;
-        
-        private IVkl trackingVkl;
-        private string trackingMsg;
-        
         protected abstract AppStateTransition StartSimTransition();
         
         public static UaBotHandler Instance { get; private set; }
         private static readonly int IS_IDLE_ACTIVE = Animator.StringToHash(SA.Anim_isIdleActive);
         protected static readonly int IS_WALKING = Animator.StringToHash(SA.Anim_isWalking);
 
-        protected static readonly Vector3 PED_LIFT_ABOARD_TAXI = new Vector3(0, 0.25f, 0);
+        private static readonly Vector3 PED_LIFT_ABOARD_TAXI = new Vector3(0, 0.25f, 0);
         private static readonly Vector3 PED_LIFT_ABOARD_BUS = new Vector3(0, 0.40f, 0);
         
         protected GameObject uPedsTop;
@@ -55,68 +43,61 @@ namespace uk.vroad.ucm
         private GameObject uTrucksTop;
         private GameObject uTaxisTop;
         private GameObject uBusesTop;
-       
         
         protected SimBrake simBrake;
 
         protected bool destroyAllUBotsOnUpdate;
         readonly List<IBot> justDeparted = new List<IBot>();
-        readonly KHashSet<IBit> justFinished = new KHashSet<IBit>();
+        readonly List<IBot> justArrived = new List<IBot>();
         
-        readonly KHash<IBit, GameObject> activeBitToGO = new KHash<IBit, GameObject>();
-        readonly KHash<GameObject, IBit> activeGoToBit = new KHash<GameObject, IBit>();
+        readonly KHash<IBit, GameObject> activeBotToUBot = new KHash<IBit, GameObject>();
+        readonly KHash<GameObject, IBit> activeUBotToBot = new KHash<GameObject, IBit>();
         readonly KHashSet<IPed> walkingPeds = new KHashSet<IPed>();
 
         private const int probabilityOfIdleAction = 50;
 
-        protected KHash<IType, GameObject> typeToPrefab = new KHash<IType, GameObject>();
-        private IType ghostType;
+        private bool foundParentGameObjects;
+
+        private KHash<IType, GameObject> typeToPrefab = new KHash<IType, GameObject>();
         
         protected abstract App App();
-
-        protected GameObject GetChild(string name)
-        {
-            for (int ci = 0; ci < transform.childCount; ci++)
-            {
-                GameObject cgoi = transform.GetChild(ci).gameObject;
-                if (cgoi.name.Equals(name)) return cgoi;
-            }
-
-            GameObject newChild = new GameObject(name);
-            newChild.transform.parent = transform;
-            return newChild;
-        }
-
+        
         protected virtual void Awake()
         {
             Instance = this;
             App().AddEventConsumer(this);
 
-            uPedsTop = GetChild(SA.VTOP_PEDS);
-            uCarsTop = GetChild(SA.VTOP_CARS);
-            uCoachesTop = GetChild(SA.VTOP_COACHES);
-            uTrucksTop = GetChild(SA.VTOP_TRUCKS);
-            uTaxisTop = GetChild(SA.VTOP_TAXIS);
-            uBusesTop = GetChild(SA.VTOP_BUSES);
+            if (transform.childCount >= 6)
+            {
+                uPedsTop = transform.GetChild(0).gameObject;
+                uCarsTop = transform.GetChild(1).gameObject;
+                uCoachesTop = transform.GetChild(2).gameObject;
+                uTrucksTop = transform.GetChild(3).gameObject;
+                uTaxisTop = transform.GetChild(4).gameObject;
+                uBusesTop = transform.GetChild(5).gameObject;
+                
+                foundParentGameObjects = true;
+            }
+            else Debug.Log(SA.NO_BOT_PARENTS);
 
             CreateDrvTypesRigid(prefabCars, Purpose.Car);
             CreateDrvTypesRigid(prefabTaxis, Purpose.Taxi);
             CreateDrvTypesRigid(prefabRigidTrucks, Purpose.Truck);
             CreateDrvTypesRigid(prefabCoaches, Purpose.Coach);
-
-            IType[] trailers = CreateDrvTypesTrailer(prefabTrailers, Purpose.Truck);
-
-            CreateDrvTypesTractor(prefabTractorTrucks, Purpose.Truck, trailers);
-
-            CreateBusTypes(prefabBuses);
             
+            IType[] trailers = CreateDrvTypesTrailer(prefabTrailers, Purpose.Truck);
+            
+            CreateDrvTypesTractor(prefabTractorTrucks, Purpose.Truck, trailers);
+            
+            CreateBusTypes(prefabBuses);
+
         }
 
         protected virtual void FixedUpdate()
         {
             UpdateDisplay();
-        }
 
+        }
         public bool DeregisterFireMapChange()
         {
             return true;
@@ -139,12 +120,12 @@ namespace uk.vroad.ucm
         public IBit LookupBit(GameObject go)
         {
             if (go == null) return null;
-            return activeGoToBit[go];
+            return activeUBotToBot[go];
         }
         public GameObject LookupUBod(IBit bit)
         {
             if (bit == null) return null;
-            return activeBitToGO[bit];
+            return activeBotToUBot[bit];
         }
 
         private bool finished;
@@ -154,17 +135,17 @@ namespace uk.vroad.ucm
             if (destroyAllUBotsOnUpdate)
             {
                 destroyAllUBotsOnUpdate = false;
-                GameObject[] keys = activeGoToBit.KeysAsArray();
+                GameObject[] keys = activeUBotToBot.KeysAsArray();
                 foreach (GameObject vgo in keys)
                 {
                     Destroy(vgo);
                 }
 
-                activeGoToBit.Clear();
-                activeBitToGO.Clear();
+                activeUBotToBot.Clear();
+                activeBotToUBot.Clear();
                 
                 justDeparted.Clear();
-                justFinished.Clear();
+                justArrived.Clear();
 
                 finished = true;
             }
@@ -187,36 +168,33 @@ namespace uk.vroad.ucm
 
         private void CreateMoveDestroyUBots()
         {
-            UaCamControllerMain cam = UaCamControllerMain.MostRecentInstance;
-            trackingMsg = cam.autoTrack? "[ Locating vehicle, please wait... ]": "[ Car Cam is off ]";
-            IBot[] jda;
-            IBit[] jfa;
+            if (!foundParentGameObjects) return;
             
+            IBot[] jda;
+            IBot[] jaa;
+
             lock (this)
             {
                 jda = justDeparted.ToArray();
                 justDeparted.Clear();
 
-                jfa = justFinished.ToArray();
-                justFinished.Clear();
+                jaa = justArrived.ToArray();
+                justArrived.Clear();
             }
+
 
             // CREATE NEW
             foreach (IBot bot in jda)
             {
-                if (activeBitToGO.ContainsKey(bot))  //.TryGetValue(bot, out GameObject _))
+                if (activeBotToUBot.TryGetValue(bot, out GameObject _))
                 {
-                    continue;  // a taxi being re-used for another trip
-                }
-
-                ITrip trip = bot.GetTrip();
-                if (trip == null)
-                {
-                    Debug.LogWarning("No trip for bot " + bot );
+                    // probably a vehicle being re-used for another trip
                     continue;
                 }
 
-              
+                ITrip trip = bot.GetTrip();
+                if (trip == null) continue;
+                
                 string tripName = trip.ToString();
                 switch (bot)
                 {
@@ -225,28 +203,30 @@ namespace uk.vroad.ucm
                         int pi = RandomAvatarIndex(ped); 
 
                         GameObject ubod = CreateNewUBod(bot, prefabPeds[pi], tripName);
-
+                        
+                        
+                        walkingPeds.Add(ped);
                         ped.AvatarType(1+pi);
 
                         ConfigureNewPed(trip, ped, ubod);
-                      
-                        Animator animator = ubod.GetComponent<Animator>();
-                        if (animator != null) animator.SetBool(IS_WALKING, false);
                         
                         break;
                     }
                     case IVkl vkl:
                     {
+                        //IVkl vkl = vkl1;
                         IType type = vkl.GetBitType();
-                        
-                        if ( ! typeToPrefab.ContainsKey(type))
-                        {
-                            // DrivingExample uses "SkyCar" type as GhostVkl
-                            if (! (vkl is IGhostVkl)) Debug.LogWarning("No prefab for type " + type);
-                            continue;
-                        }
-                        GameObject prefab = typeToPrefab.Get(type);
 
+                        bool addPassengers = type.IsBus();
+
+                        if (type.IsBus() && !(vkl is IBus))
+                        {
+                            Reporter.Sink(vkl);
+                        }
+                        
+                        GameObject prefab = typeToPrefab.Get(type);
+                        if (prefab == null) break;
+                        
                         GameObject uVkl = CreateNewUBod(bot, prefab, tripName);
 
                         IBit puller = bot;
@@ -265,7 +245,7 @@ namespace uk.vroad.ucm
                             trailerIndex++;
                         }
 
-                        if (type.IsBus())
+                        if (addPassengers)
                         {
                             IBus bus = (IBus)vkl;
                             int[] seatNos = bus.BallastRiderSeatNos();
@@ -287,82 +267,69 @@ namespace uk.vroad.ucm
                                 // so it does not need to be moved by our code when the bus moves,
                                 // that will happen automatically
                                
-                                CreateNewBallastPassenger(bus, seatNo, prefabPeds[pi], uVkl, PED_LIFT_ABOARD_BUS);
+                                CreateNewBallastPassenger(bus, seatNo, prefabPeds[pi], uVkl);
                             }
-                        }
-                        else if (App().IsPlayerVkl(vkl))
-                        {
-                            CreatePlayerBallast(vkl, uVkl);
-                        }
-                        
-                        // Track a random vehicle, as in WebGL demo
-                        if (cam.IsAutoTracking() && !cam.IsTracking() && cam.ReadyToTrack() && type.IsCar())
-                        {
-                            cam.TrackThis(uVkl);
-                            trackingVkl = vkl;
                         }
 
                         break; // end case
                     }
                 }
             }
-            
-            foreach (IBit bit in jfa)   // Destroy Finished Bots
+
+            // DESTROY ARRIVED
+            foreach (IBot bot in jaa)
             {
-                /*
-                if (bit is ITaxi taxi)  // when a Taxi arrives at a parking zone, do not destroy it
+                if (bot is ITaxi taxi)
                 {
-                    IRoad road = taxi.GetRoad();
-                    if (road.ExitsXU() > 0) // ... unless the road is a dead-end
+                    // when a Taxi arrives at a parking zone, do not destroy it
+                    if (taxi.GetDestination() is ITaxiZone) continue;
+
+                    if (taxi.GetRoad().GetZone() is ITaxiZone)
                     {
-                        if (road.GetZone() is ITaxiZone) continue;
-                        if (taxi.GetDestination() is ITaxiZone) continue;
+                        continue;
                     }
                 }
-                //*/
-               
-                if (bit is IPed ped) walkingPeds.Remove(ped);
 
-                if (activeBitToGO.TryGetValue(bit, out GameObject ubitGO))
+                if (bot is IPed ped) 
+                    walkingPeds.Remove(ped);
+
+                if (activeBotToUBot.TryGetValue(bot, out GameObject ubot))
                 {
-                    if (cam.IsTracking()) { cam.UnTrackThis(ubitGO); }
-
-                    activeBitToGO.Remove(bit);
-                    activeGoToBit.Remove(ubitGO);
-                    Destroy(ubitGO);
+                    activeBotToUBot.Remove(bot);
+                    activeUBotToBot.Remove(ubot);
+                    Destroy(ubot);
                 }
 
-                IBit rearmost = bit;
+                IBit rearmost = bot;
                 while (rearmost.GetAttachment() != null)
                 {
                     IBit trailer = rearmost.GetAttachment();
 
-                    if (activeBitToGO.TryGetValue(trailer, out GameObject uTrailer))
+                    if (activeBotToUBot.TryGetValue(trailer, out GameObject uTrailer))
                     {
-                        activeBitToGO.Remove(trailer);
-                        activeGoToBit.Remove(uTrailer);
+                        activeBotToUBot.Remove(trailer);
+                        activeUBotToBot.Remove(uTrailer);
                         Destroy(uTrailer);
                     }
                     rearmost = trailer;
                 }
             }
 
-            foreach (IBit bit in activeBitToGO.Keys)
+            foreach (IBit bit in activeBotToUBot.Keys)
             {
-                if (bit.Finished())
+                if (bit is IBot bot)
                 {
-                    justFinished.Add(bit); // this will destroy the GameObject
-                    continue;
+                    if (bot.Finished())
+                    {
+                        justArrived.Add(bot); // this will destroy the u
+                        continue;
+                    }
                 }
 
-                GameObject ubot = activeBitToGO[bit];
+                GameObject ubot = activeBotToUBot[bit];
 
-                if (ubot == null) continue;
+                if (ubot == null || !ubot.activeSelf) continue;
 
-                bool painted = IsPainted(bit);
-                
-                if (painted != ubot.activeSelf) ubot.SetActive(painted);
-            
                 Vector3 position;
                 Quaternion rotation;
                 
@@ -371,28 +338,19 @@ namespace uk.vroad.ucm
                     position = ped.Centre().ToVector3(); 
                     rotation = Quaternion.LookRotation(ped.Forward().ToVector3());
 
-                    bool isPlayer = App().IsPlayer(ped);
-
                     if (ped.IsAboard())
                     {
-                        IBus bus = ped.GetBus();
-                        ITaxi taxi = ped.GetTaxi();
-
-                        if (bus != null) position += PED_LIFT_ABOARD_BUS;
-                        else if (taxi != null) position += PED_LIFT_ABOARD_TAXI;
-
-                        else if (isPlayer) // Do not show player inside car (not in a bus or a taxi)
-                        {
-                            ubot.SetActive(false);
-                            continue;
-                        }
+                        if (ped.GetBus() != null) position += PED_LIFT_ABOARD_BUS;
+                        else position += PED_LIFT_ABOARD_TAXI;
+                        
+                        // Could change animation to be seated here
                     }
 
-                    if (isPlayer) 
+                    if (App().IsPlayer(ped)) 
                     {
                         rotation = RotatePlayer(ped, rotation);
 
-                        CameraFollowsPed(cam, ped, position);
+                        CameraFollowsPed(ped, position);
                     }
                     
                     // Animation setting for peds 
@@ -422,9 +380,6 @@ namespace uk.vroad.ucm
                             if (isWalking)
                             {
                                 animator.SetBool(IS_IDLE_ACTIVE, false);
-
-                                animator.speed = (float) ped.Speed() / animationMultiplier;
-
                             }
                             else
                             {
@@ -458,62 +413,34 @@ namespace uk.vroad.ucm
                             }
                             //*/
                         }
-                        
-                        if (isWalking && animationMultiplier > 0.1) animator.speed = (float) ped.Speed() / animationMultiplier;
                     }
                 }
-                else
-                
+                else // Vkl
                 {
                     position = bit.Centre().ToVector3(); // + halfHeight;
                     rotation = Quaternion.LookRotation(bit.ForwardGrad().ToVector3());
-                    
-                    if (bit == trackingVkl)  trackingMsg = "Driving on "+trackingVkl.GetRoad().Description();
-                    
-                    else if (bit is IGhostVkl gv && gv.IsPrimary()) { CameraFollowsVkl(cam, gv, position); }
-
                 }
+
+                
                 ubot.transform.position = position;
                 ubot.transform.rotation = rotation;
+              
             }
         }
 
-        private bool IsPainted(IBit bit)
-        {
-            if (bit is IGhostPed) return true;
-            if (bit is IGhostVkl) return true;
-            
-            if (bit is IPed ped) return IsShowing(ped.GetWalkway());
-           
-            if (bit is IVkl vkl) return IsShowing(vkl.GetRoad());
-            
-            return false;
-        }
-        public string GetTrackingMsg() { return trackingMsg; }
-
-        private void CameraFollowsPed(UaCamControllerMain cam, IPed ped, Vector3 position)
+        private void CameraFollowsPed(IPed ped, Vector3 position)
         {
             // Gather position, bearing and speed for use by camera
             Angle bearing = ped.Forward().AsBearing();
             IVkl vkl = ped.GetVkl();
             double speed = vkl != null ? vkl.Speed():ped.Speed();
            
-            cam.PlayerPosition(position, bearing, speed, ped.IsAboard());
+            UaCamControllerMain.MostRecentInstance.PlayerPosition(position, bearing, speed, ped.IsAboard());
+
         }
         
-        private void CameraFollowsVkl(UaCamControllerMain cam, IVkl vkl, Vector3 position)
-        {
-            // Gather position, bearing and speed for use by camera
-            Angle bearing = vkl.Forward().AsBearing();
-            double speed = vkl.Speed();
-           
-            cam.PlayerPosition(position, bearing, speed, true);
-        }
-
         protected virtual Quaternion RotatePlayer(IPed ped, Quaternion rotation)  { return rotation; }
-
-        protected virtual void CreatePlayerBallast(IVkl vkl, GameObject uVkl) { }
-
+       
         public void Depart(IBot bot)
         {
             lock (this)
@@ -524,15 +451,27 @@ namespace uk.vroad.ucm
 
         public void Arrive(IBot bot, IZone z)
         {
-            if (bot is IPed ped && App().IsPlayer(ped)) UaCamControllerMain.MostRecentInstance.PlayerArrived();
+            lock (this)
+            {
+                if (bot is ITaxi && z is ITaxiZone) return;
+                
+                justArrived.Add(bot);
+
+                if (bot is IPed && App().IsPlayer((IPed)bot)) UaCamControllerMain.MostRecentInstance.PlayerArrived();
+            }
         }
 
-        protected virtual Transform GetParentTransform(IBit bit)
+        protected virtual Transform parentTransform(IPed ped)
+        {
+            return uPedsTop.transform;
+        }
+        
+        protected virtual GameObject CreateNewUBod(IBit bit, GameObject prefab, string bitName)
         {
             Transform parent;
             switch (bit)
             {
-                case IPed _: parent = uPedsTop.transform; break;
+                case IPed ped: parent = parentTransform(ped); break;
                 case ITaxi _:   parent = uTaxisTop.transform;  break;
                 case IBus _:   parent = uBusesTop.transform; break;
                 case IDrv drv:
@@ -542,23 +481,16 @@ namespace uk.vroad.ucm
                     else parent = uCarsTop.transform;
                     break;
                 }
-                default: // trailers will be here
-                    parent = uTrucksTop.transform; 
-                    break; 
+                default: parent = uTrucksTop.transform; break; // trailers will be here
             }
 
-            return parent;
-        }
-        protected virtual GameObject CreateNewUBod(IBit bit, GameObject prefab, string bitName)
-        {
-            Transform parent = GetParentTransform(bit);
-            
             Vector3 startPosition = bit.Centre().ToVector3();
             Quaternion rotation = Quaternion.LookRotation(bit.Forward().ToVector3());
             GameObject uBit = Instantiate(prefab, startPosition, rotation, parent);
-            
+
+            SetLayerRecursive(uBit, UaMapMesh.LAYER_SIM_MAP);
             uBit.name = bitName;
-            FireNewUBit(uBit);
+            
             
             if (bit is IPed)
             {
@@ -573,38 +505,30 @@ namespace uk.vroad.ucm
                 uBit.transform.localScale = scaleVec;
             }
 
-            else
-            {
-                uBit.transform.GetChild(0).gameObject.AddComponent<BoxCollider>();
-            }
-            activeBitToGO.Add(bit, uBit);
-            activeGoToBit.Add(uBit, bit);
+            activeBotToUBot.Add(bit, uBit);
+            activeUBotToBot.Add(uBit, bit);
 
             return uBit;
         }
 
-        protected virtual void FireNewUBit(GameObject uBit) { }
-        
-
         // The ballast passenger GO will be created as a child of the bus GO (transform), so its relative position
         // needs to be set only once, and it will then move with the bus.
-        protected void CreateNewBallastPassenger(IVkl vkl, int seatNo, GameObject prefab, GameObject uBus, Vector3 lift)
+        private void CreateNewBallastPassenger(IBus bus, int seatNo, GameObject prefab, GameObject uBus)
         {
-            Xyz offsetAbs = vkl is IBus bus? bus.PositionInBus(seatNo): Xyz.ALLZERO;
-            Vector3 startPositionAbs = vkl.Centre().Plus(offsetAbs).ToVector3();
-            startPositionAbs += lift;
-            Quaternion rotationAbs = Quaternion.Euler(0, (float) vkl.Forward().AsBearing().Degrees(), 0);
+            Xyz offsetAbs = bus.PositionInBus(seatNo);
+            Vector3 startPositionAbs = bus.Centre().Plus(offsetAbs).ToVector3();
+            startPositionAbs += PED_LIFT_ABOARD_BUS;
+            Quaternion rotationAbs = Quaternion.Euler(0, (float) bus.Forward().AsBearing().Degrees(), 0);
             GameObject uBallastPed = Instantiate(prefab, startPositionAbs, rotationAbs, uBus.transform);
             
             Animator animator = uBallastPed.GetComponent<Animator>();
             if (animator != null) animator.SetBool(IS_WALKING, false);
         }
 
-        protected virtual int RandomAvatarIndex(IPed ped) { return 0; }
-        
-        
-        protected virtual int PlayerAvatarIndex() { return 0; }
-
+        protected virtual int RandomAvatarIndex(IPed ped)
+        {
+            return 0;
+        }
         private static readonly Vector3 UNIT_SIZE = new Vector3(1, 1, 1);
 
         private Vector3 BodBounds(GameObject prefab)
@@ -630,6 +554,17 @@ namespace uk.vroad.ucm
             }
 
             return bounds;
+        }
+
+        
+        private void SetLayerRecursive(GameObject go, int layer)
+        {
+            go.layer = layer;
+            for (int ci = 0; ci < go.transform.childCount; ci++)
+            {
+                GameObject goChild = go.transform.GetChild(ci).gameObject;
+                SetLayerRecursive(goChild, layer);
+            }
         }
 
         /// <summary> Calculate and return the size of the (vehicle) prefab, x = width, y = height, z = length </summary>
@@ -745,11 +680,6 @@ namespace uk.vroad.ucm
             }
         }
 
-        
-        protected virtual bool IsShowing(IRoad road) { return true; }
-        protected virtual bool IsShowing(IWalkway walk) { return true; }
-        
-        public void SetGhostType(IType gt) { ghostType = gt; }
         /// ///////////////////////////////////////////////////////////////////////////////////
         
         
@@ -764,16 +694,14 @@ namespace uk.vroad.ucm
 
         protected class SimBrake : LSimTimeStep
         {
-            private readonly object lockObject;
+            private readonly object simMaster;
             private bool stepResultsWaiting;
 
             public SimBrake(App app)
             {
                 app.AddEventConsumer(this);
 
-                
-                lockObject = this;
-                lockObject = app.Sim().MasterThread();
+                simMaster = app.Sim().MasterThread();
             }
 
             public bool DeregisterFireMapChange() { return true; }
@@ -782,9 +710,9 @@ namespace uk.vroad.ucm
             {
                 stepResultsWaiting = true;
 
-                lock (lockObject)
+                lock (simMaster)
                 {
-                    KMonitor.Wait(lockObject);
+                    KMonitor.Wait(simMaster);
                 }
             }
 
@@ -797,13 +725,12 @@ namespace uk.vroad.ucm
             {
                 stepResultsWaiting = false;
 
-                lock (lockObject)
+                lock (simMaster)
                 {
-                    KMonitor.Pulse(lockObject);
+                    KMonitor.Pulse(simMaster);
                 }
 
             }
-
         }
         
     }

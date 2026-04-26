@@ -2,7 +2,6 @@
 using uk.vroad.api.etc;
 using uk.vroad.api.events;
 using uk.vroad.apk;
-using UnityEditor;
 using UnityEngine;
 
 namespace uk.vroad.ucm
@@ -25,8 +24,7 @@ namespace uk.vroad.ucm
         public bool DeregisterFireMapChange() { return true; }
 
         protected bool simReady;
-        protected bool meshCreationStarted ;
-        protected bool meshCreationFinished;
+        private bool meshCreationStarted ;
         
         protected virtual void Awake()
         {
@@ -36,8 +34,8 @@ namespace uk.vroad.ucm
             AddListener(this);
             
             App().AddEventConsumer(this);
-
-            if (HasMapAlreadyLoaded(App().GetAppStateMachine().CurrentState())) simReady = true;
+            
+            simReady = HasMapAlreadyLoaded(App().GetAppStateMachine().CurrentState());
 
             
 #if UNITY_EDITOR // This is here because UExitHandler does not have an App() reference
@@ -50,19 +48,11 @@ namespace uk.vroad.ucm
             if (currentState == AppState.ReadyToSimulate) return true;
             return false;
         }
-
-        public void SetMeshCreationFinished() { meshCreationFinished = true; }
-
         protected virtual void Update()
         {
             // The signal to create meshes is not handled using LUAppState listeners, because this object
             // can be created so late, it may have already missed that transition
-            if (simReady && !meshCreationStarted)
-            {
-                meshCreationStarted = true;
-                meshCreationFinished = false;
-                mapMesh.MeshesCreate();
-            }
+            if (simReady && !meshCreationStarted) { meshCreationStarted = true; mapMesh.MeshesCreate();  }
 
             AppStateTransition[] asta;
             LUAppState[] luasa = {};

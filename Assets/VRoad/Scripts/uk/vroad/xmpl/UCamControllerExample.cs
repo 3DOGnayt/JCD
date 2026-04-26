@@ -5,12 +5,11 @@ using uk.vroad.api.input;
 using uk.vroad.api.xmpl;
 using uk.vroad.ucm;
 using UnityEngine;
-
+using UnityEngine.Serialization;
 
 namespace uk.vroad.xmpl
 {
-    /// <summary> A simple concrete example of a camera Controller </summary>
-    /// A more complex example is included in the Pro Variant, see uk.vroad.urvr.UCamControllerMainRvr
+   
     public class UCamControllerExample : UaCamControllerMain
     {
         private double panMultiplier = 0.012;
@@ -26,7 +25,6 @@ namespace uk.vroad.xmpl
         private double panY;
         private Angle cameraRotation = Angle.A180;
         private double tilt = TILT_MIN;
-        private bool zoomToPlayerCar;
         
         protected override void Awake()
         {
@@ -45,13 +43,6 @@ namespace uk.vroad.xmpl
             cameraFocus = mapCentre;
         }
 
-        public override void TrackThis(GameObject go)
-        {
-            if (go != null && trackingGO == null) zoomToPlayerCar = true;
-            
-            base.TrackThis(go);
-        }
-        
         public override bool AppInputAnalogEvent(AppAnalogFn afn, double value)
         {
             if (afn == AppAnalogFn.PanX)
@@ -105,7 +96,7 @@ namespace uk.vroad.xmpl
         private float maxSwingS = 0.1f;
         public float swingL = 1;
         public float maxSwingL = 45;
-
+        
         protected override void SetRotation(Angle fwd)
         {
             Angle diff = fwd.Minus(cameraRotation).RangeN180();
@@ -121,7 +112,7 @@ namespace uk.vroad.xmpl
             float clampedHeight = Math.Max(2, Math.Min(cameraHeight, 20));
             tilt = (clampedHeight * trackTiltMult) + trackTiltShift;
         }
-        
+
         protected override void LateUpdate()
         {
             if (!mapLoaded) return;
@@ -135,6 +126,8 @@ namespace uk.vroad.xmpl
             
             SetCameraHeight();
             
+            // App().Aih().SetCameraHeight(cameraHeight);
+
             Xyz cameraRopeH = cameraRotation.UnitVectorXY().MultipliedBy(tilt);
             
             Vector3 cameraOffset = cameraRopeH.ToVector3(cameraHeight);
@@ -144,18 +137,6 @@ namespace uk.vroad.xmpl
             transform.LookAt(cameraFocus);
 
         }
-
-        protected override void SetCameraHeight()
-        {
-            base.SetCameraHeight();
-
-            if (zoomToPlayerCar)
-            {
-                if (zoom > 0.1 || zoom < -0.1 || cameraHeight < 5.0) zoomToPlayerCar = false;
-                else cameraHeight *= 0.96f; 
-            }
-        }
-
         private void Pan(double dx, double dy)
         {
             if (dx == 0 && dy == 0) return;
@@ -180,16 +161,5 @@ namespace uk.vroad.xmpl
             cameraFocus = new Vector3((float) rfnx, 0, (float) rfnz);
         }
 
-        
-        public override void GoToMapCentre()
-        {
-            goToMapCentre = true;
-            cameraRotation = Angle.A180;
-            tilt = TILT_MIN;
-            
-            base.GoToMapCentre();
-        }
-
-       
     }
 }

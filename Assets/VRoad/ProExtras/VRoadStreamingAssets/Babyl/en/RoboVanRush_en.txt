@@ -1,0 +1,236 @@
+HelpStartHere="Get Ready ... "
+LoadingMap="Loading..."
+AutoResumeMsg="Paused"
+
+MapHelpMsg="Phase 1: Choose a city or change level"
+
+TripHelpMsg="Phase 2: Choose a delivery destination"
+
+PlayHelpMsg="Phase 3: Choose your route to the destination"
+
+NewLevel="New Level Available"
+
+EnergyTooLow="Energy Too Low"
+SpeedTooHigh="Too Fast"
+NotAboard="Not Aboard"
+NoFootpath="No Footpath"
+
+MoreVialsNeeded="+%d  →  Custom Map"
+
+# Menu - use short phrases to fit on buttons ###############################
+
+MenuResume="Resume"
+MenuMission="Mission"
+MenuControls="Controls"
+MenuCredits="Credits"
+MenuChangeCity="Change City"
+MenuGraphics="Graphics"
+MenuAvatar="Avatar"
+MenuExit="Exit"
+MenuReset="Reset"
+# New Menu items at end
+
+Opt_Cancel = "Cancel"
+Opt_Confirm = "Confirm"
+
+# Browser / Custom Map #####################################################
+
+BrowserLoading="Browser Loading ..."
+
+BrowseHelpMsg="Use mouse or game pad to select a custom-build map for this level.
+Try shift-drag mouse for quick selection. Zoom in until the outline box turns green.
+Press [Space], [Start] or click green button in browser to build"
+
+UnknownCity="Unknown City" 
+UnknownSuburb="Somewhere In"
+CustomCity="Custom City"
+
+# Finishing ################################################################
+
+LevelCompleteText="Level Complete"
+
+CompleteHelpMsg="Congratulations - Mission Complete"
+
+GameOver="Game Over"
+
+ResetMessage="Warning!  Reset will remove all saved scores and exit game"
+
+# Error Messages ###########################################################
+
+NoMapServer="No map server available"
+
+CustomBuildFailedText="Custom map failed to build"
+
+BuildError1="Van destination count %d, require %d or more"
+BuildError2="Walk destination count %d, require %d or more" 
+BuildError3="Street destination count %d, require %d or more" 
+BuildError4="Low clearance bridge count %d, require %d or fewer"
+BuildError5="Steep road count %d, require %d or fewer"
+
+CustomBuildFailedTryAgain="Try again using a different area"
+
+AlreadyBuiltMap="Error: Custom map already built
+- No map file found"
+
+# Labels for Controller / Keyboard #########################################
+
+KeysMoveMapCentre="Move Map Centre"
+KeysOptions="Options"
+KeysSelectCity="Select City"
+KeysStart="Start"
+KeysVolume="Volume"
+KeysZoom="Zoom"
+
+KeysAbandon="Abandon Van/Bus"
+KeysCamera="Camera"
+KeysMap="Map"
+KeysMute="Mute"
+KeysPause="Pause"
+KeysRouteView="Route View"
+KeysPlayerView="Player View"
+KeysRoute="Route"
+KeysRouteAdvance="Advance"
+KeysRouteAhead="Ahead"
+KeysRouteLeft="Left"
+KeysRouteRight="Right"
+KeysRouteUndo="Undo"
+KeysRouteUTurn="U-Turn"
+KeysRouteVan="Van Route"
+KeysRunRed="Run Red Signal"
+KeysPlayer="Player"
+KeysSpin="Spin"
+KeysTripSelect="Select Destination"
+KeysTripMore="Get 3 More"
+
+KeysFaster="Faster"
+KeysSlower="Slower"
+KeysNudgeLeft="Nudge Left"
+KeysNudgeRight="Nudge Right"
+
+# Credits ##################################################################
+  
+MapCredits="Maps:
+
+	Data (C) OpenStreetMap contributors - https://www.openstreetmap.org
+	Maps (C) Thunderforest - https://www.thunderforest.com
+	Terrain Data (C) Mapbox - https://www.mapbox.com/about/maps/
+
+"
+
+PhotoCreditIntro="Location Photos:
+
+"
+PhotoCredits="    New York: Brandon Jacoby ( https://unsplash.com/photos/Ab-W3gen18Q )
+    London: Peter Laskowski ( https://www.pexels.com/photo/3458997 )
+    Hong Kong: Florian Wehde ( https://unsplash.com/photos/8bjnP3yhNTg )
+    Sydney: Mudassir Ali ( https://www.pexels.com/photo/1619854 )
+    Vancouver: Adi Kavazovic ( https://www.pexels.com/photo/2382868 )
+    Barcelona: Aleksandar Pasaric ( https://www.pexels.com/photo/1388030 )
+    New Delhi: Jeswin Thomas ( https://www.pexels.com/photo/1007426 )
+    Singapore: Kin Pastor ( https://www.pexels.com/photo/777059 )
+    Santiago: Juan Pablo Ahumada ( https://unsplash.com/photos/Y9Wp5keJsn8 )
+    Bergen: Pixabay ( https://www.pexels.com/photo/327391 )
+    Busan: Keiteu Ko ( https://unsplash.com/photos/KHUmv9Z1Rho )
+    Nairobi: Amani Nation ( https://unsplash.com/photos/LTh5pGyvKAM )
+    Chicago: Bhargava Marripati ( https://www.pexels.com/photo/2314361 )
+    Istanbul: Osman Koycu ( https://unsplash.com/photos/c6qF_lYvu2I )
+    Chongqing: Jerry Wang ( https://unsplash.com/photos/Hqf58s2C1lg )
+    Cape Town: Pixelperfektion ( https://unsplash.com/photos/frHqpHZUa2g )
+    Toronto: Maarten Van Den Heuvel ( https://www.pexels.com/photo/4490703 )
+    Milan: Francesco Ungaro ( https://www.pexels.com/photo/409127 )
+    Mumbai: Hardik Joshi ( https://unsplash.com/photos/niUei6OnuiA )
+    Rio de Janeiro: Mike Swigunski ( https://unsplash.com/photos/tYGZvg_Ozh4 )
+    Amsterdam: Kata Pal ( https://www.pexels.com/photo/1258865 )
+    Moscow: Алексей Васильев ( https://www.pexels.com/photo/2816184 )
+    Taipei: Timo Volz ( https://www.pexels.com/photo/5127661 )
+    Dubai: Asifgraphy ( https://www.pexels.com/photo/4348305 )
+    Mexico City: Oscar Reygo ( https://unsplash.com/photos/HPrWl25FYcw )
+    Frankfurt: Igor Flek ( https://unsplash.com/photos/q18A6PEaQ6U )
+    Tokyo: Louie Martinez ( https://unsplash.com/photos/IocJwyqRv3M )
+    Jakarta: Tom Fisk ( https://www.pexels.com/photo/2126395 )
+    Panama: Felix Tchverkin ( https://unsplash.com/photos/N8EzubdXV0M )
+    Paris: Luca Micheli ( https://unsplash.com/photos/Q7htkhMW66Y )
+    Shanghai: Denys Nevozhai ( https://unsplash.com/photos/D8iZPlX-2fs )
+    Cairo: Sean Wang ( https://unsplash.com/photos/0wMkml3PwUE )
+
+"
+
+MusicCredit="Music / Sound Effects:
+  
+	DL-Sounds  - https://www.dl-sounds.com
+	ZapSplat   - https://www.zapsplat.com
+    GameBurp   - http://www.gameburp.com
+
+"
+
+PluginCredit="Unity Plug-Ins:
+
+	Animated Characters - https://www.polyperfect.com
+	Vehicles - nnextt12 / https://turbosquid.com
+	Embedded Web Browser - https://zenfulcrum.com
+	Planet Earth - https://assetstore.unity.com/packages/3d/environments/sci-fi/planet-earth-free-23399"
+
+# Mission ##################################################################
+
+HelpMissionShort="Mission
+
+Collect 36 vials, 1 from each city
+
+Grab batteries to boost energy"
+
+# Story ##################################################################
+
+HelpStory="In the near future, your job is to go to cities around the world and deliver medical supplies. 
+
+At one delivery location in each city you will be given a special blue-top vial containing a drug component. Your mission is to collect 36 of these vials, so that the components can be combined to make a cure that will save humanity from a new virus.
+
+You can walk or run around the city, or take a van or a bus. A public bus is cheap to ride, but you have to go where it goes. A private van costs more, but you can control its route.
+
+In this future, the currency for everything is energy. You are paid for each delivery with a power-up in kJ (kilojoules). Everything you do uses up kJ, even standing still. You pay for a van ride or a bus ride in kJ, the further you go, the more you pay.
+
+From level 2 you can choose your own neighbourhood, anywhere in the world, by building direct from OpenStreetMap."
+
+# Tips: Trip  ##################################################################
+
+HelpTipsTrip="Choose a delivery destination from short, medium and long distance options.
+
+The longer the distance, the higher the reward.
+
+If you don't like the delivery locations offered, you can pay to get 3 more, at the price shown.
+
+You are more likely to be offered the vial destination if you start from an edge location.
+
+The edge locations are indicated with →|"
+
+# Tips: Play  ##################################################################
+
+HelpTipsPlay="Collect batteries to gain more energy: you need 2000 kJ to access level 2, 3000 for level 3, etc.
+
+Choose direction at next junction by colour.
+
+Use [Advance] to build a route ahead: direct to delivery location, or via batteries to gain kJ.
+
+Use speed controls to speed up, slow down or turn around while walking.
+
+As you move around, watch out for virus-positive people: be careful in crowds and on buses.
+
+If you don't want to wait, you can jump a red light, but if there is a camera, you will pay a fine.
+
+Board a van at a designated zone: a blue icon and a van symbol on the road.
+
+When riding in a van, use [Van Route] to change the van destination where you get out.
+
+Board a bus at a bus stop, some are used by more than one bus route.
+
+When waiting at a bus stop, you can choose which route you will take if there are 2 or more.
+
+When riding in a bus, you can choose the stop where you will get off.
+
+When riding in a van or a bus, you can press [Abandon] to get out, but you will pay a fine."
+
+# New Menu Items ##########################################
+
+MenuTips="Tips"
+MenuStory="Story"
+
+UseMouseText="Or use the mouse to click the on-screen buttons"

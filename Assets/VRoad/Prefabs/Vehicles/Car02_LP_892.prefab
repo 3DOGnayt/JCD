@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e31eb89bb544a9985561c41601acbec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abundance: 75
+  abundance: 25
   wheelBaseMetres: 2.8
   engineType: 1
 --- !u!1 &4127139517307698561

@@ -1,0 +1,250 @@
+HelpStartHere="Préparez-vous... "
+LoadingMap="Chargement..."
+AutoResumeMsg="En pause"
+
+MapHelpMsg="Choisissez une ville ou changez de niveau"
+
+TripHelpMsg="Sélectionnez une destination de voyage"
+
+PlayHelpMsg="Choisissez votre itinéraire vers la destination"
+
+NewLevel="Nouveau niveau disponible"
+
+EnergyTooLow="Énergie trop faible"
+SpeedTooHigh="Trop rapide"
+NotAboard="Pas à bord"
+NoFootpath="Pas de sentier"
+
+MoreVialsNeeded="+%d → Carte personnalisée"
+
+# Menu - Ce sous-ensemble est utilisé pour les boutons de menu, alors gardez-les courts
+
+MenuResume="Reprendre"
+MenuMission="Mission"
+MenuControls="Contrôles"
+MenuCredits="Crédits"
+MenuChangeCity="Changer de ville"
+MenuGraphics="Graphiques"
+MenuAvatar="Avatar"
+MenuExit="Sortie"
+MenuReset="Réinitialiser"
+
+Opt_Cancel = "Annuler"
+Opt_Confirm = "Confirmer"
+
+# Browser / Custom Map #####################################################
+
+BrowserLoading="Chargement du navigateur..."
+BrowseHelpMsg="Utilisez la souris ou la manette de jeu pour sélectionner une carte personnalisée pour ce niveau. 
+Essayez la souris en faisant glisser la souris pour une sélection rapide.
+Effectuez un zoom avant jusqu'à ce que la zone de contour devienne verte. 
+Appuyez sur [Espace], [Démarrer] ou cliquez sur le bouton vert dans le navigateur pour créer"
+
+UnknownCity="Ville inconnue"
+UnknownSuburb ="Quelque part dans"
+CustomCity= "Ville personnalisée"
+
+# Finishing ################################################################
+
+LevelCompleteText="Niveau terminé"
+
+CompleteHelpMsg="Mission terminée"
+
+GameOver="Partie Terminé"
+
+ResetMessage="Avertissement ! La réinitialisation supprimera tous les scores enregistrés et quittera le jeu"
+
+# Error Messages ###########################################################
+
+NoMapServer="Aucun serveur de carte disponible"
+
+CustomBuildFailedText="La carte personnalisée n'a pas pu être construite"
+
+BuildError1="Compte de destination du fourgon %d, requiert %d ou plus"
+BuildError2="Nombre de destinations de marche %d, requiert %d ou plus"
+BuildError3="Le nombre de destinations de rue %d, requiert %d ou plus"
+BuildError4="Nombre de ponts à faible dégagement %d, nécessite %d ou moins"
+BuildError5="Compte de routes pentues %d, requiert %d ou moins"
+   
+CustomBuildFailedTryAgain="Réessayez en utilisant une autre zone"
+
+AlreadyBuiltMap="Erreur : carte personnalisée déjà créée
+- Aucun fichier de carte trouvé"
+
+# Labels for Controller / Keyboard #########################################
+
+KeysMoveMapCentre="Déplacer le centre de la carte"
+KeysOptions="Options"
+KeysSelectCity="Sélectionner la ville"
+KeysStart="Démarrer"
+KeysVolume="Volume"
+KeysZoom="Zoom"
+
+KeysAbandon="Abandonner Van/Bus"
+KeysCamera="Caméra"
+KeysMap="Carte"
+KeysMute="Muet"
+KeysPause="Pause"
+KeysRouteView="Vue de l'itinéraire"
+KeysPlayerView="Vue du joueur"
+KeysRoute="Itinéraire"
+KeysRouteAdvance="Avancer"
+KeysRouteAhead="Avant"
+KeysRouteLeft="Gauche"
+KeysRouteRight="Droite"
+KeysRouteUndo="Annuler"
+KeysRouteUTurn="Demi-tour"
+KeysRouteVan="Route Fourgon"
+KeysRunRed="Exécuter le signal rouge"
+KeysPlayer="Joueur"
+KeysSpin="Tourner"
+KeysTripSelect="Sélectionner le trajet"
+KeysTripMore="Obtenir 3 de plus"
+
+KeysFaster="Plus rapide"
+KeysSlower="Plus lent"
+KeysNudgeLeft="Déplacer vers la gauche"
+KeysNudgeRight="Déplacer vers la droite"
+
+# Mission ##################################################################
+
+HelpMission="Dans un futur proche, votre travail consiste à vous rendre dans les villes du monde entier et à livrer des fournitures médicales. Dans ce futur, la monnaie pour tout est l'énergie électrique, vous êtes payé pour chaque livraison avec un power-up en kiloJoules (kJ ).
+
+Vous pouvez marcher ou courir dans la ville, ou prendre une camionnette ou un bus. Un bus ne coûte pas cher, mais il faut aller là où il va. Une camionnette privée coûte plus cher, mais vous pouvez contrôler son itinéraire.
+
+Pour commencer, choisissez une ville parmi les quatre du premier niveau. Une fois la carte chargée, vous verrez un quartier de la ville que vous avez choisie.
+
+Ensuite, choisissez un point de dépôt de livraison dans ce quartier. Trois emplacements vous seront proposés : une courte distance, une moyenne et une longue distance. Le paiement que vous obtenez pour la livraison augmente avec la distance. Une fois que vous atteignez le dépôt, il vous sera proposé trois autres emplacements.
+
+Avec une bonne planification, vous arriverez à un endroit spécial où vous pourrez récupérer une petite bouteille, une fiole à bouchon bleu. Ses emplacements sont indiqués sur la carte. Chaque flacon contient un composant pour un nouveau médicament qui protégera le monde contre la prochaine menace de maladie.
+
+Lorsque vous commencez, vous avez accès à un niveau, et au fur et à mesure que vous gagnez de l'énergie, plus de niveaux s'ouvrent. Il y a huit niveaux et quatre villes à chaque niveau. À partir du niveau trois, vous pouvez également créer votre propre quartier personnalisé, à l'emplacement de votre choix. Chaque quartier personnalisé contiendra également un flacon.
+
+Votre mission est de trouver 36 fioles et de sauver l'humanité.
+
+Des astuces:
+- lorsque vous vous déplacez dans la ville, faites attention aux personnes séropositives : soyez très prudent dans la foule et dans les bus
+- si vous n'aimez pas les points de dépôt qui vous sont proposés, vous pouvez payer pour obtenir un autre ensemble de trois, le prix est indiqué sous les options
+- si tu ne veux pas attendre aux feux tricolores, tu peux sauter le feu rouge, mais s'il y a une caméra, tu paieras une amende, ou pire
+- vous pouvez utiliser [Avancer] pour choisir un itinéraire à venir : l'itinéraire peut aller directement à votre dépôt, ou via des batteries bonus pour marquer des kJ supplémentaires
+- vous ne pouvez monter à bord d'un fourgon que dans une zone de fourgon désignée : ceux-ci sont indiqués par un symbole de fourgon sur la surface de la route
+- vous ne pouvez monter à bord d'un bus qu'à un arrêt de bus : certains arrêts de bus sont utilisés par plusieurs lignes de bus
+- lorsque vous êtes dans un van, vous pouvez utiliser le bouton [Route Fourgon] pour changer la zone de destination du van où vous descendrez
+- lorsque vous attendez à un arrêt de bus, s'il y a plusieurs lignes de bus, vous pouvez choisir la route que vous emprunterez
+- lorsque vous êtes dans un bus, vous pouvez choisir l'arrêt où vous descendrez
+- lorsque vous êtes dans un van ou un bus, vous pouvez appuyer sur le bouton Abandon pour sortir s'il est à l'arrêt, mais vous paierez une amende"
+
+# Credits ##################################################################
+
+MapCredits="Cartes :
+
+Contributeurs de données (C) OpenStreetMap - https://www.openstreetmap.org
+Cartes (C) Thunderforest - https://www.thunderforest.com
+Données de terrain (C) Mapbox - https://www.mapbox.com/about/maps/
+
+"
+
+PhotoCreditIntro="Photos de l'emplacement :
+
+"
+PhotoCredits=" New York : Brandon Jacoby (https://unsplash.com/photos/Ab-W3gen18Q)
+    Londres : Peter Laskowski ( https://www.pexels.com/photo/3458997 )
+    Hong Kong : Florian Wehde ( https://unsplash.com/photos/8bjnP3yhNTg )
+    Sydney : Mudassir Ali (https://www.pexels.com/photo/1619854)
+    Vancouver : Adi Kavazovic ( https://www.pexels.com/photo/2382868 )
+    Barcelone : Aleksandar Pasaric ( https://www.pexels.com/photo/1388030 )
+    New Delhi : Jeswin Thomas (https://www.pexels.com/photo/1007426)
+    Singapour : Kin Pastor ( https://www.pexels.com/photo/777059 )
+    Santiago : Juan Pablo Ahumada ( https://unsplash.com/photos/Y9Wp5keJsn8 )
+    Bergen : Pixabay (https://www.pexels.com/photo/327391)
+    Pusan : Keiteu Ko (https://unsplash.com/photos/KHUmv9Z1Rho)
+    Nairobi : Nation Amani ( https://unsplash.com/photos/LTh5pGyvKAM )
+    Chicago : Bhargava Marripati ( https://www.pexels.com/photo/2314361 )
+    Istanbul : Osman Koycu (https://unsplash.com/photos/c6qF_lYvu2I)
+    Chongqing : Jerry Wang (https://unsplash.com/photos/Hqf58s2C1lg)
+    Le Cap : Pixelperfektion ( https://unsplash.com/photos/frHqpHZUa2g )
+    Toronto : Maarten Van Den Heuvel ( https://www.pexels.com/photo/4490703 )
+    Milan : Francesco Ungaro ( https://www.pexels.com/photo/409127 )
+    Bombay : Hardik Joshi (https://unsplash.com/photos/niUei6OnuiA)
+    Rio de Janeiro : Mike Swigunski ( https://unsplash.com/photos/tYGZvg_Ozh4 )
+    Amsterdam : Kata Pal ( https://www.pexels.com/photo/1258865 )
+    Moscou : Алексей Васильев ( https://www.pexels.com/photo/2816184 )
+    Taipei : Timo Volz ( https://www.pexels.com/photo/5127661 )
+    Dubaï : Asifgraphy ( https://www.pexels.com/photo/4348305 )
+    Mexico : Oscar Reygo (https://unsplash.com/photos/HPrWl25FYcw)
+    Francfort : Igor Flek ( https://unsplash.com/photos/q18A6PEaQ6U )
+    Tokyo : Louie Martinez (https://unsplash.com/photos/IocJwyqRv3M)
+    Jakarta : Tom Fisk (https://www.pexels.com/photo/2126395)
+    Panama : Félix Tchverkin ( https://unsplash.com/photos/N8EzubdXV0M )
+    Paris : Luca Micheli ( https://unsplash.com/photos/Q7htkhMW66Y )
+    Shanghai : Denys Nevozhai (https://unsplash.com/photos/D8iZPlX-2fs)
+    Le Caire : Sean Wang ( https://unsplash.com/photos/0wMkml3PwUE )
+
+"
+
+MusicCredit="Musique / Effets sonores :
+  
+DL Sounds - https://www.dl-sounds.com
+ZapSplat - https://www.zapsplat.com
+    Jeu Burp - http://www.gameburp.com
+
+"
+
+PluginCredit="Plugins Unity :
+
+Personnages animés - https://www.polyperfect.com
+Navigateur Web intégré - https://zenfulcrum.com
+Planète Terre - https://assetstore.unity.com/packages/3d/environments/sci-fi/planet-earth-free-23399"
+
+
+HelpMissionShort = "Récupérer 36 flacons: un de chaque ville
+
+Prenez des piles pour augmenter l'énergie
+
+Évitez les porteurs de virus"
+
+HelpStory = "Dans un avenir proche, votre travail est d'aller vers les villes à travers le monde et livrer des fournitures médicales.
+
+A un emplacement de livraison dans chaque ville, vous recevrez un bleu-dessus spéciale flacon contenant un composant de médicament. Votre mission est de collecter 36 de ces flacons, de sorte que les composants peuvent être combinés pour faire une cure qui sauvera l'humanité d'un nouveau virus.
+
+Vous pouvez marcher ou courir autour de la ville, ou prendre une camionnette ou un bus. Un bus ne coûte pas cher à monter, mais vous devez aller là où il va. Un frais van privé plus, mais vous pouvez contrôler son itinéraire.
+
+Dans cet avenir, la monnaie de tout est l'énergie. Vous êtes payé pour chaque livraison avec en kJ (kilojoules) Les sous tension. Tout ce que vous faites utilise jusqu'à kJ, même encore debout. Vous payez pour un trajet en camionnette ou en bus en kJ, plus vous allez, plus vous payez.
+
+A partir du niveau 2, vous pouvez choisir votre propre quartier, partout dans le monde, en construisant directement de OpenStreetMap"
+
+HelpTipsTrip = "Si vous n'êtes pas comme les lieux de livraison offerts, vous pouvez payer pour obtenir 3 plus, au prix indiqué.
+
+Vous êtes plus susceptibles d'offrir l'emplacement flacon si vous commencez à partir d'un emplacement de bord distant.
+
+Les emplacements de bord sont indiquées à l'aide →|"
+
+
+HelpTipsPlay = "Recueillir des piles pour gagner plus d'énergie: vous avez besoin de 2000 KJ pour accéder au niveau 2, 3000 pour le niveau 3, etc.
+
+Choisissez la direction à la sortie suivante en couleur.
+
+Utilisez [Avancer] pour construire un itinéraire à l'avance: direct vers le lieu de livraison, ou par batteries pour obtenir kJ.
+
+contrôles de vitesse utilisation pour accélérer, ralentir ou tournent autour tout en marchant.
+
+Lorsque vous vous déplacez, attention pour les personnes positifs pour le virus: être prudent dans la foule et sur les bus.
+
+Si vous ne voulez pas attendre, vous pouvez sauter un feu rouge, mais s'il y a une caméra, vous devrez payer une amende.
+
+Bord d'une camionnette dans une zone désignée: une icône bleue et un symbole de van sur la route.
+
+Quand vous roulez dans une camionnette, utilisez [Route Fourgon] pour changer la destination van où vous sortez.
+
+À bord d'un bus à un arrêt de bus, certains sont utilisés par plus d'une ligne de bus.
+
+Lorsque vous attendez à un arrêt de bus, vous pouvez choisir la route que vous prendrez s'il y a 2 ou plus.
+
+Quand vous roulez dans un bus, vous pouvez choisir l'arrêt où vous descendez.
+
+Quand vous roulez dans une camionnette ou un bus, vous pouvez appuyer sur [Abandon] pour sortir, mais vous devrez payer une amende "
+
+MenuTips = "Conseils"
+MenuStory = "Histoire"
+
+UseMouseText="Ou utilisez la souris pour cliquer sur les boutons à l'écran"

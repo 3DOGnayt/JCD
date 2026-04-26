@@ -1,0 +1,250 @@
+HelpStartHere="준비하세요 ... "
+LoadingMap="로드 중..."
+AutoResumeMsg="일시중지"
+
+MapHelpMsg="1단계: 도시 선택 또는 레벨 변경"
+
+TripHelpMsg="2단계: 배송 목적지 선택"
+
+PlayHelpMsg="3단계: 목적지까지의 경로 선택"
+
+NewLevel="사용 가능한 새 레벨"
+
+EnergyTooLow="에너지가 너무 낮음"
+SpeedTooHigh="너무 빠름"
+NotAboard="탑승하지 않음"
+NoFootpath="보행로 없음"
+
+MoreVialsNeeded="+%d → 사용자 지정 지도"
+
+# 메뉴 - 버튼에 맞게 짧은 문구를 사용합니다. ##############################
+
+MenuResume="재개"
+MenuMission="미션"
+MenuControls="컨트롤"
+MenuCredits="크레딧"
+MenuChangeCity="도시 변경"
+MenuGraphics="그래픽"
+MenuAvatar="화신"
+MenuExit="종료"
+MenuReset="재설정"
+
+Opt_Cancel = "취소"
+Opt_Confirm = "확인"
+
+# 브라우저 / 사용자 정의 맵 ############################################### ########
+
+BrowserLoading="브라우저 로드 중..."
+
+BrowseHelpMsg="마우스나 게임 패드를 사용하여 이 레벨에 대한 맞춤형 지도를 선택하십시오.
+빠른 선택을 위해 shift-drag 마우스를 사용해 보십시오. 윤곽선 상자가 녹색이 될 때까지 확대합니다.
+[Space], [Start]를 누르거나 브라우저에서 녹색 버튼을 클릭하여 빌드"
+
+UnknownCity="알 수 없는 도시"
+UnknownSuburb="어딘가"
+CustomCity="사용자 지정 도시"
+
+# 마무리 ################################################ ################
+
+LevelCompleteText="레벨 완료"
+
+CompleteHelpMsg="미션 완료"
+
+GameOver="게임 오버"
+
+ResetMessage="경고! 재설정하면 저장된 모든 점수가 제거되고 게임이 종료됩니다."
+
+# 오류 메시지 ################################################ #############
+
+NoMapServer="사용 가능한 지도 서버가 없습니다"
+
+CustomBuildFailedText="사용자 지정 지도를 빌드하지 못했습니다."
+
+BuildError1="밴 대상 수 %d, %d 이상이 필요합니다."
+BuildError2="보행 목적지 수 %d, %d 이상이 필요함"
+BuildError3="거리 목적지 수 %d, %d 이상이 필요합니다"
+BuildError4="낮은 정리 브리지 수 %d, %d 이하 필요"
+BuildError5="가파른 도로 수 %d, %d 이하 필요"
+
+CustomBuildFailedTryAgain="다른 영역을 사용하여 다시 시도"
+
+AlreadyBuiltMap="오류: 사용자 정의 지도가 이미 구축되었습니다.
+- 지도 파일을 찾을 수 없습니다"
+
+# 컨트롤러/키보드용 레이블 ###########################################
+
+KeysMoveMapCentre="지도 센터 이동"
+KeysOptions="옵션"
+KeysSelectCity="도시 선택"
+KeysStart="시작"
+KeysVolume="볼륨"
+KeysZoom="확대"
+
+KeysAbandon="밴/버스 포기"
+KeysCamera="카메라"
+KeysMap="지도"
+KeysMute="음소거"
+KeysPause="일시 중지"
+KeysRouteView="경로 보기"
+KeysPlayerView="플레이어 보기"
+KeysRoute="경로"
+KeysRouteAdvance="어드밴스"
+KeysRouteAhead="앞으로"
+KeysRouteDestination="시작"
+KeysRouteLeft="왼쪽"
+KeysRouteRight="오른쪽"
+KeysRouteUndo="실행 취소"
+KeysRouteUTurn="유턴"
+KeysRouteVan="밴 루트"
+KeysRunRed="빨간 신호 실행"
+KeysPlayer="플레이어"
+KeysSpin="회전"
+KeysTripSelect="여행 선택"
+KeysTripMore="3개 더 가져오기"
+
+KeysFaster="더 빠르게"
+KeysSlower="느리게"
+KeysNudgeLeft="왼쪽으로 이동"
+KeysNudgeRight="오른쪽으로 조금 이동"
+
+# 미션 ################################################## ###################
+
+HelpMission="가까운 미래에 귀하의 임무는 전 세계 도시로 이동하여 의료 용품을 배달하는 것입니다. 이 미래에 모든 통화는 전기 에너지이며 킬로줄(kJ ).
+
+도시를 걷거나 뛰거나 밴이나 버스를 탈 수 있습니다. 버스는 저렴하지만 목적지까지 가야 합니다. 개인 밴은 비용이 더 많이 들지만 경로를 제어할 수 있습니다.
+
+시작하려면 첫 번째 수준에 있는 4개 도시 중 하나를 선택합니다. 지도가 로드되면 선택한 도시의 이웃이 표시됩니다.
+
+다음으로 해당 지역의 배달 장소를 선택합니다. 단거리, 중거리 및 장거리의 세 위치가 제공됩니다. 배달에 대한 지불은 거리에 따라 증가합니다. 하차 지점에 도달하면 다른 세 곳이 제공됩니다.
+
+계획을 잘 세우면 파란색 뚜껑이 있는 작은 병인 작은 병을 모을 수 있는 특별한 위치에 도달할 수 있습니다. 그 위치는 지도에 표시됩니다. 각 바이알에는 다음 질병 위협으로부터 세계를 보호할 신약용 성분이 들어 있습니다.
+
+시작하면 한 레벨에 액세스할 수 있으며 더 많은 에너지를 얻으면 더 많은 레벨이 열립니다. 8개의 레벨이 있으며 각 레벨에는 4개의 도시가 있습니다. 레벨 3부터 원하는 위치에 나만의 맞춤형 이웃을 건설할 수도 있습니다. 각 사용자 지정 지역에는 하나의 유리병도 포함됩니다.
+
+당신의 임무는 36개의 약병을 찾아 인류를 구하는 것입니다.
+
+팁:
+- 도시를 이동할 때 바이러스 양성 반응을 보이는 사람을 조심하세요. 군중과 버스 안에서는 각별히 주의하세요.
+- 제공되는 하차 장소가 마음에 들지 않으면 비용을 지불하여 3개 세트를 추가로 받을 수 있습니다. 가격은 옵션 아래에 표시됩니다.
+- 신호등에서 기다리기 싫으면 빨간불로 점프해도 되지만 카메라가 있으면 벌금이나 그 이상을 내야함
+- [고급]을 사용하여 미리 경로를 선택할 수 있습니다. 경로는 하차 지점으로 직접 이동하거나 보너스 배터리를 통해 추가 kJ를 획득할 수 있습니다.
+- 지정된 밴 구역에서만 밴에 탑승할 수 있습니다. 도로 표면에 밴 기호로 표시되어 있습니다.
+- 버스 정류장에서만 버스에 탑승할 수 있습니다. 일부 버스 정류장은 두 개 이상의 버스 노선에서 사용됩니다.
+- 밴 탑승 시 밴 루트 버튼을 사용하여 하차할 목적지 밴 존을 변경할 수 있습니다.
+- 버스 정류장에서 대기할 때 버스 노선이 2개 이상인 경우 어떤 노선을 이용할지 선택할 수 있습니다.
+- 버스를 탈 때 내릴 정류장을 선택할 수 있습니다.
+- 밴이나 버스 안에 있을 때 멈춘 경우 Abandon 버튼을 눌러 내릴 수 있지만 벌금을 물게 됩니다."
+
+# 크레딧 ################################################# ###################
+  
+MapCredits="지도:
+
+데이터(C) OpenStreetMap 기고자 - https://www.openstreetmap.org
+지도(C) Thunderforest - https://www.thunderforest.com
+지형 데이터(C) Mapbox - https://www.mapbox.com/about/maps/
+
+"
+
+PhotoCreditIntro="위치 사진:
+
+"
+PhotoCredits="뉴욕: Brandon Jacoby ( https://unsplash.com/photos/Ab-W3gen18Q )
+    런던: Peter Laskowski( https://www.pexels.com/photo/3458997 )
+    홍콩: Florian Wehde ( https://unsplash.com/photos/8bjnP3yhNTg )
+    시드니: 무다시르 알리( https://www.pexels.com/photo/1619854 )
+    밴쿠버: 아디 카바조비치 ( https://www.pexels.com/photo/2382868 )
+    바르셀로나: Aleksandar Pasaric ( https://www.pexels.com/photo/1388030 )
+    뉴델리: Jeswin Thomas ( https://www.pexels.com/photo/1007426 )
+    싱가포르: Kin Pastor ( https://www.pexels.com/photo/777059 )
+    산티아고: 후안 파블로 아후마다 ( https://unsplash.com/photos/Y9Wp5keJsn8 )
+    베르겐: Pixabay( https://www.pexels.com/photo/327391 )
+    부산: 고케이트 ( https://unsplash.com/photos/KHUmv9Z1Rho )
+    나이로비: 아마니 네이션 ( https://unsplash.com/photos/LTh5pGyvKAM )
+    시카고: Bhargava Marripati( https://www.pexels.com/photo/2314361 )
+    이스탄불: Osman Koycu ( https://unsplash.com/photos/c6qF_lYvu2I )
+    충칭: 제리 왕 ( https://unsplash.com/photos/Hqf58s2C1lg )
+    케이프 타운: Pixelperfektion( https://unsplash.com/photos/frHqpHZUa2g )
+    토론토: Maarten Van Den Heuvel ( https://www.pexels.com/photo/4490703 )
+    밀라노: Francesco Ungaro ( https://www.pexels.com/photo/409127 )
+    뭄바이: Hardik Joshi ( https://unsplash.com/photos/niUei6OnuiA )
+    리우데자네이루: Mike Swigunski ( https://unsplash.com/photos/tYGZvg_Ozh4 )
+    암스테르담: Kata Pal ( https://www.pexels.com/photo/1258865 )
+    모스크바: Алексей Васильев ( https://www.pexels.com/photo/2816184 )
+    타이페이: 티모 볼츠 ( https://www.pexels.com/photo/5127661 )
+    두바이: Asifgraphy ( https://www.pexels.com/photo/4348305 )
+    멕시코시티: 오스카 레이고 ( https://unsplash.com/photos/HPrWl25FYcw )
+    프랑크푸르트: Igor Flek ( https://unsplash.com/photos/q18A6PEaQ6U )
+    도쿄: 루이 마르티네즈 ( https://unsplash.com/photos/IocJwyqRv3M )
+    자카르타: 톰 피스크( https://www.pexels.com/photo/2126395 )
+    파나마: Felix Tchverkin ( https://unsplash.com/photos/N8EzubdXV0M )
+    파리: 루카 미첼리 ( https://unsplash.com/photos/Q7htkhMW66Y )
+    상하이: Denys Nevozhai ( https://unsplash.com/photos/D8iZPlX-2fs )
+    카이로: Sean Wang ( https://unsplash.com/photos/0wMkml3PwUE )
+
+"
+
+MusicCredit="음악/음향 효과:
+  
+DL-사운드 - https://www.dl-sounds.com
+잽스플랫 - https://www.zapsplat.com
+    게임버프 - http://www.gameburp.com
+
+"
+
+PluginCredit="Unity 플러그인:
+
+애니메이션 캐릭터 - https://www.polyperfect.com
+내장 웹 브라우저 - https://zenfulcrum.com
+행성 지구 - https://assetstore.unity.com/packages/3d/environments/sci-fi/planet-earth-free-23399"
+
+
+HelpMissionShort = "36 개의 바이알을 모으십시오 : 각 도시에서 하나
+
+배터리를 잡아서 에너지를 높입니다
+
+바이러스 캐리어를 피하십시오 "
+
+HelpStory = "가까운 장래에는 전 세계의 도시에 가서 의료 용품을 제공하는 것입니다.
+
+각 도시의 한 배달 위치에서 약물 구성 요소가 들어있는 특수 청색 바이알이 주어집니다. 귀하의 임무는 이러한 바이알을 36 개 수집하여 구성 요소를 결합하여 인류를 새로운 바이러스로부터 절약 할 수있는 치료법을 만들 수 있습니다.
+
+당신은 도시를 걸거나 달리거나 밴이나 버스를 타는 것입니다. 공공 버스는 저렴하게 타고 있지만, 당신은 어디로 가야합니다. 개인 밴 비용은 더 많지만 그 경로를 제어 할 수 있습니다.
+
+이 장래에는 모든 것에 대한 통화가 에너지입니다. KJ (Kilojoules)에서 파워 업으로 각 배송에 대해 지불합니다. 당신이하는 모든 것은 KJ를 사용하고 심지어 서있는 것입니다. 당신은 밴 타기 또는 KJ에서 버스 타기를 지불 할수록 당신이 더 많이 지불할수록 당신이 더 많이 지불합니다.
+
+레벨 2에서 OpenStreetMap에서 직접 구축하여 세계 어디에서나 자신의 이웃을 선택할 수 있습니다. "
+
+HelpTipsTrip = "제공되는 배달 위치를 좋아하지 않으면 표시된 가격에 3 개를 더 많이 얻으려면 지불 할 수 있습니다.
+
+먼 모서리 위치에서 시작하면 바이알 위치가 제공 될 가능성이 더 큽니다.
+
+가장자리 위치는 →| 를 사용하여 표시됩니다."
+
+HelpTipsPlay = "더 많은 에너지를 얻으려면 배터리를 수집하십시오 : 레벨 2, 3000에 액세스 할 수있는 2000 KJ가 필요합니다.
+
+다음 접합에서 색상으로 방향을 선택하십시오.
+
+[사전]을 사용하여 경로를 앞두고 배달 위치를 직접 또는 배터리를 통해 KJ를 얻습니다.
+
+속도 조절 장치를 사용하여 걷는 동안 속도를 높이거나 천천히 또는 회전하십시오.
+
+당신이 돌아 다니면 바이러스 긍정적 인 사람들을 조심하십시오. 군중과 버스에서 조심하십시오.
+
+당신이 기다리고 싶지 않다면, 당신은 빨간 빛을 뛰어 넘을 수 있지만, 카메라가있는 경우, 당신은 벌금을 지불하게됩니다.
+
+보드 지정 영역에서 밴을 보드 : 푸른 아이콘 및 도로에 밴 기호입니다.
+
+밴을 타면 [반 노선]을 사용하여 출발하는 밴 목적지를 변경하십시오.
+
+버스 정류장에서 버스를 보드로, 일부는 두 개 이상의 버스 경로에서 사용됩니다.
+
+버스 정류장에서 기다릴 때 2 개 이상의 경로를 선택할 수 있습니다.
+
+버스에 타면, 당신이 내릴 수있는 곳을 선택할 수 있습니다.
+
+밴이나 버스에 타면 [포기]를 눌러 나올 수는 있지만 괜찮을 것입니다. "
+
+MenuTips = "팁"
+MenuStory = "이야기"
+
+UseMouseText="또는 마우스를 사용하여 화면 버튼을 클릭합니다."

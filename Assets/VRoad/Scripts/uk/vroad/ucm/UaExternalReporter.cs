@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace uk.vroad.ucm
 {
-    /// <summary> A class to capture messages from the simulation engine and display them in the Console </summary>
     public abstract class UaExternalReporter : MonoBehaviour, Reporter.IExternalReporter
     {
         public abstract App App();
@@ -35,8 +34,7 @@ namespace uk.vroad.ucm
             msg = DecoratedMsg(msg);
 
             // stdout goes to C:\Users\(user)\AppData\Local\Unity\Editor\Editor.log
-
-            // System.Console.Error.WriteLine(msg); // uncomment this to send messages to the log file
+            // System.Console.Error.WriteLine(s);
 #if UNITY_EDITOR
             Debug.Log(msg);
 #endif

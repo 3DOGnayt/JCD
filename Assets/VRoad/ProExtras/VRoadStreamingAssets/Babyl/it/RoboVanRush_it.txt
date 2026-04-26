@@ -1,0 +1,249 @@
+HelpStartHere="Preparati ... "
+LoadingMap="Caricamento..."
+AutoResumeMsg="In pausa"
+
+MapHelpMsg="Scegli una città o cambia livello"
+
+TripHelpMsg="Seleziona una destinazione di viaggio"
+
+PlayHelpMsg="Scegli il tuo percorso verso la destinazione"
+
+NewLevel="Nuovo livello disponibile"
+
+EnergyTooLow="Energia troppo bassa"
+SpeedTooHigh="Troppo veloce"
+NotAboard="Non a bordo"
+NoFootpath="Nessun sentiero"
+
+MoreVialsNeeded="+%d → Mappa personalizzata"
+
+# Menu: usa frasi brevi per adattarle ai pulsanti ###############################
+
+MenuResume="Riprendi"
+MenuMission="Missione"
+MenuControls="Controlli"
+MenuCredits="Crediti"
+MenuChangeCity="Cambia città"
+MenuGraphics="Grafica"
+MenuAvatar="Avatar"
+MenuExit="Esci"
+MenuReset="Ripristina"
+
+Opt_Cancel = "Annulla"
+Opt_Confirm = "Conferma"
+
+# Browser/Mappa personalizzata ############################################ ########
+
+BrowserLoading="Caricamento browser ..."
+
+BrowseHelpMsg="Usa il mouse o il game pad per selezionare una mappa personalizzata per questo livello.
+Prova a trascinare il mouse tenendo premuto il tasto Maiusc per una selezione rapida. Ingrandisci finché la casella del contorno non diventa verde.
+Premi [Spazio], [Start] o fai clic sul pulsante verde nel browser per creare"
+
+UnknownCity="Città sconosciuta"
+UnknownSuburb="Da qualche parte dentro"
+CustomCity="Città personalizzata"
+
+# Finitura ############################################### ################
+
+LevelCompleteText="Livello completato"
+
+CompleteHelpMsg="Missione completata"
+
+GameOver="Game Over"
+
+ResetMessage="Attenzione! Reset rimuoverà tutti i punteggi salvati e uscirà dal gioco"
+
+# Messaggio di errore ############################################### ############
+
+NoMapServer="Nessun server di mappe disponibile"
+
+CustomBuildFailedText="Impossibile creare la mappa personalizzata"
+
+BuildError1="Conta destinazione furgone %d, richiedono %d o più"
+BuildError2="Conteggio destinazione a piedi %d, richiedi %d o più"
+BuildError3="Conteggio strada destinazione %d, richiede %d o più"
+BuildError4="Conteggio ponti a distanza ridotta %d, richiedono %d o meno"
+BuildError5="Conteggio strade ripide %d, richiedono %d o meno"
+
+CustomBuildFailedTryAgain="Riprova utilizzando un'area diversa"
+
+AlreadyBuiltMap="Errore: mappa personalizzata già costruita
+- Nessun file mappa trovato"
+
+# Etichette per controller/tastiera ########################################
+
+KeysMoveMapCentre="Sposta centro mappa"
+KeysOptions="Opzioni"
+KeysSelectCity="Seleziona città"
+KeysStart="Inizio"
+KeysVolume="Volume"
+KeysZoom="Ingrandisci"
+
+KeysAbandon="Abbandona furgone/autobus"
+KeysCamera="Fotocamera"
+KeysMap="Mappa"
+KeysMute="Muto"
+KeysPause="Pausa"
+KeysRouteView="Vista percorso"
+KeysPlayerView="Vista giocatore"
+KeysRoute="Rotta"
+KeysRouteAdvance="Avanzare"
+KeysRouteAhead="Avanti"
+KeysRouteLeft="Sinistra"
+KeysRouteRight="Destra"
+KeysRouteUndo="Annulla"
+KeysRouteUTurn="Inversione a U"
+KeysRouteVan="Rotta Furgone"
+KeysRunRed = "Esegui segnale rosso"
+KeysPlayer="Giocatore"
+KeysSpin = "Gira"
+KeysTripSelect="Seleziona viaggio"
+KeysTripMore = "Ottieni altri 3"
+
+KeysFaster="Più veloce"
+KeysSlower="Più lento"
+KeysNudgeLeft="Sposta a sinistra"
+KeysNudgeRight="Sposta a destra"
+
+# Missione ############################################### ##################
+
+HelpMission="Nel prossimo futuro, il tuo lavoro è andare nelle città di tutto il mondo e consegnare forniture mediche. In questo futuro, la valuta per tutto è l'energia elettrica, verrai pagato per ogni consegna con un potenziamento in kiloJoule (kJ ).
+
+Puoi camminare o correre per la città, oppure prendere un furgone o un autobus. Un autobus è economico da guidare, ma devi andare dove va. Un furgone privato costa di più, ma puoi controllarne il percorso.
+
+Per iniziare, scegli una città tra le quattro al primo livello. Una volta caricata la mappa, vedrai un quartiere della città prescelta.
+
+Quindi, scegli un luogo di consegna della consegna in quel quartiere. Ti verranno offerte tre località: una a breve distanza, una a media e una a lunga distanza. Il pagamento che ottieni per la consegna aumenta con la distanza. Una volta raggiunto il drop-off, ti verranno offerte altre tre posizioni.
+
+Con una buona pianificazione, raggiungerai un luogo speciale dove potrai raccogliere una piccola bottiglia, una fiala blu-top. Le sue posizioni sono mostrate sulla mappa. Ogni fiala contiene un componente per un nuovo farmaco che proteggerà il mondo dalla prossima minaccia di malattia.
+
+Quando inizi hai accesso a un livello e man mano che guadagni più energia, si apriranno più livelli. Ci sono otto livelli e quattro città per ogni livello. Dal terzo livello puoi anche costruire il tuo quartiere personalizzato, nella posizione che preferisci. Ogni quartiere personalizzato conterrà anche una fiala.
+
+La tua missione è trovare 36 fiale e salvare l'umanità.
+
+Suggerimenti:
+- mentre ti muovi per la città, fai attenzione alle persone che sono positive al virus: fai molta attenzione nella folla e sugli autobus
+- se non ti piacciono i luoghi di consegna che ti vengono offerti, puoi pagare per ottenere un altro set di tre, il prezzo è mostrato sotto le opzioni
+- se non vuoi aspettare al semaforo puoi saltare il semaforo rosso, ma se c'è una telecamera pagherai una multa, o peggio
+- puoi usare [Avanzare] per scegliere un percorso da percorrere: il percorso può andare direttamente al tuo drop-off, o tramite batterie bonus per guadagnare kJ extra
+- è possibile salire a bordo di un furgone solo in una zona dedicata ai furgoni: questi sono indicati con un simbolo di furgone sul manto stradale
+- puoi salire a bordo di un autobus solo a una fermata dell'autobus: alcune fermate sono utilizzate da più di una linea di autobus
+- quando sei in un furgone, puoi utilizzare il pulsante [Rotta Furgone] per cambiare la zona del furgone di destinazione da cui uscirai
+- quando stai aspettando alla fermata dell'autobus, se c'è più di una linea di autobus, puoi scegliere quale percorso prendere
+- quando sei in autobus, puoi scegliere la fermata dove scendere
+- quando sei in un furgone o in un autobus puoi premere il pulsante Abbandona per uscire se è fermo, ma pagherai una multa"
+
+# Titoli di coda ################################################ ##################
+  
+MapCredits="Mappe:
+
+Dati (C) Collaboratori di OpenStreetMap - https://www.openstreetmap.org
+Mappe (C) Thunderforest - https://www.thunderforest.com
+Dati del terreno (C) Mapbox - https://www.mapbox.com/about/maps/
+
+"
+
+PhotoCreditIntro="Foto della posizione:
+
+"
+PhotoCredits=" New York: Brandon Jacoby ( https://unsplash.com/photos/Ab-W3gen18Q )
+    Londra: Peter Laskowski ( https://www.pexels.com/photo/3458997 )
+    Hong Kong: Florian Wehde ( https://unsplash.com/photos/8bjnP3yhNTg )
+    Sydney: Mudassir Ali ( https://www.pexels.com/photo/1619854 )
+    Vancouver: Adi Kavazovic ( https://www.pexels.com/photo/2382868 )
+    Barcellona: Aleksandar Pasaric ( https://www.pexels.com/photo/1388030 )
+    Nuova Delhi: Jeswin Thomas ( https://www.pexels.com/photo/1007426 )
+    Singapore: Kin Pastor ( https://www.pexels.com/photo/777059 )
+    Santiago: Juan Pablo Ahumada ( https://unsplash.com/photos/Y9Wp5keJsn8 )
+    Bergen: Pixabay ( https://www.pexels.com/photo/327391 )
+    Busan: Keiteu Ko ( https://unsplash.com/photos/KHUmv9Z1Rho )
+    Nairobi: Nazione Amani ( https://unsplash.com/photos/LTh5pGyvKAM )
+    Chicago: Bhargava Marripati ( https://www.pexels.com/photo/2314361 )
+    Istanbul: Osman Koycu ( https://unsplash.com/photos/c6qF_lYvu2I )
+    Chongqing: Jerry Wang ( https://unsplash.com/photos/Hqf58s2C1lg )
+    Città del Capo: Pixelperfektion ( https://unsplash.com/photos/frHqpHZUa2g )
+    Toronto: Maarten Van Den Heuvel ( https://www.pexels.com/photo/4490703 )
+    Milano: Francesco Ungaro ( https://www.pexels.com/photo/409127 )
+    Mumbai: Hardik Joshi ( https://unsplash.com/photos/niUei6OnuiA )
+    Rio de Janeiro: Mike Swigunski ( https://unsplash.com/photos/tYGZvg_Ozh4 )
+    Amsterdam: Kata Pal ( https://www.pexels.com/photo/1258865)
+    Mosca: Алексей Васильев ( https://www.pexels.com/photo/2816184 )
+    Taipei: Timo Volz ( https://www.pexels.com/photo/5127661 )
+    Dubai: Asifgrafia ( https://www.pexels.com/photo/4348305 )
+    Città del Messico: Oscar Reygo ( https://unsplash.com/photos/HPrWl25FYcw )
+    Francoforte: Igor Flek ( https://unsplash.com/photos/q18A6PEaQ6U )
+    Tokyo: Louie Martinez ( https://unsplash.com/photos/IocJwyqRv3M )
+    Giacarta: Tom Fisk ( https://www.pexels.com/photo/2126395 )
+    Panama: Felix Tchverkin ( https://unsplash.com/photos/N8EzubdXV0M )
+    Parigi: Luca Micheli ( https://unsplash.com/photos/Q7htkhMW66Y )
+    Shanghai: Denys Nevozhai ( https://unsplash.com/photos/D8iZPlX-2fs )
+    Cairo: Sean Wang ( https://unsplash.com/photos/0wMkml3PwUE )
+
+"
+
+MusicCredit="Musica/Effetti sonori:
+  
+Suoni DL - https://www.dl-sounds.com
+ZapSplat - https://www.zapsplat.com
+    GameBurp - http://www.gameburp.com
+
+"
+
+PluginCredit="Unità plug-in:
+
+Personaggi animati - https://www.polyperfect.com
+Browser Web integrato - https://zenfulcrum.com
+Pianeta Terra - https://assetstore.unity.com/packages/3d/environments/sci-fi/planet-earth-free-23399"
+
+
+HelpMissionShort = "Raccogli 36 fiale: una da ogni città
+
+Afferrare le batterie per aumentare l'energia
+
+Evita i vettori di virus "
+
+HelpStory = "Nel prossimo futuro, il tuo compito è andare alle città in tutto il mondo e fornire forniture mediche.
+
+In una posizione di consegna in ogni città ti verrà assegnato uno speciale flaconcino blu contenente un componente farmacologico. La tua missione è quella di raccogliere 36 di queste fiale, in modo che i componenti possano essere combinati per creare una cura che salverà l'umanità da un nuovo virus.
+
+Puoi camminare o correre in città, o prendere un furgone o un autobus. Un autobus pubblico è economico da guidare, ma devi andare dove va. Un furgone privato costa di più, ma puoi controllare il suo percorso.
+
+In questo futuro, la valuta per tutto è energia. Sei pagato per ogni consegna con un accertamento in KJ (kilojoules). Tutto ciò che fai usa KJ, ancora in piedi. Paghi per un giro di van o una corsa in autobus in KJ, oltre ad andare, più paghi.
+
+Dal livello 2 puoi scegliere il tuo quartiere, ovunque nel mondo, costruendo direttamente da OpenStreetMap. "
+
+HelpTipsTrip = "Se non ti piacciono le posizioni di consegna offerte, puoi pagare per ottenere altri 3, al prezzo mostrato.
+
+È più probabile che tu possa offrire la posizione della fiala se si parte da una posizione di bordo lontana.
+
+Le posizioni del bordo sono indicate usando → | "
+
+HelpTipsPlay = "Raccogli le batterie per ottenere più energia: hai bisogno di 2000 kJ per accedere a livello 2, 3000 per il livello 3, ecc.
+
+Scegli la direzione al prossimo incrocio per colore.
+
+Usa [Avanzare] per costruire un percorso avanti: diretto alla posizione di consegna o tramite batterie per ottenere KJ.
+
+Usa i controlli della velocità per accelerare, rallentare o girare mentre si cammina.
+
+Mentre ti muovi, fai attenzione alle persone virale-positive: fai attenzione alle folle e sugli autobus.
+
+Se non vuoi aspettare, puoi saltare una luce rossa, ma se c'è una macchina fotografica, pagherai una multa.
+
+Consiglio un furgone in una zona designata: un'icona blu e un simbolo furgone sulla strada.
+
+Quando si guida in un furgone, utilizzare [Rotta Furgone] per cambiare la destinazione VAN dove esci.
+
+Scheda un autobus in una fermata dell'autobus, alcuni sono utilizzati da più di una linea di autobus.
+
+Quando aspetti in una fermata dell'autobus, puoi scegliere quale rotta prenderai se ci sono 2 o più.
+
+Quando si guida su un autobus, puoi scegliere la fermata dove scenderai.
+
+Quando si guida in un furgone o un autobus, puoi premere [Abbandon] per uscire, ma pagherai una multa. "
+
+MenuTips = "Suggerimenti"
+MenuStory = "Storia"
+
+UseMouseText="Oppure usa il mouse per fare clic sui pulsanti sullo schermo"

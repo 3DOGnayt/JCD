@@ -5,8 +5,6 @@ namespace uk.vroad.ucm
 
     public class SubMesh
     {
-        public static readonly SubMesh EMPTY_SUBMESH = new SubMesh();
-        
         public Vector3[] Vertices { get; private set;  }
         public int[] Triangles { get; private set; }
         public Vector3[] Normals { get; private set; }
@@ -24,12 +22,5 @@ namespace uk.vroad.ucm
             MaterialIndex = mati;
         }
 
-        protected SubMesh()
-        {
-            Vertices = new Vector3[0];
-            Triangles = new int[0];
-            Normals = new Vector3[0];
-            TexUV = new Vector2[0];
-        }
     }
 }

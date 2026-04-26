@@ -19,13 +19,8 @@ namespace uk.vroad.xmpl
         }
         protected override App App() { return app; }
 
-        public float mouseMinY = 0;
-        
         protected override void HandleMouse(Mouse mouse, Keyboard kb)
         {
-            Vector2 mousePos = mouse.position.ReadValue();
-            if (mousePos.y < mouseMinY) return;
-            
             base.HandleMouse(mouse, kb);
             
             AppInputHandler aih = App().Aih();
@@ -35,15 +30,15 @@ namespace uk.vroad.xmpl
 
             if (mouseButtonPan.wasPressedThisFrame)
             {
-                prevPosMouse = mousePos;
+                prevPosMouse = mouse.position.ReadValue();
             }
             else if (mouseButtonTilt.wasPressedThisFrame)
             {
-                prevPosMouse = mousePos;
+                prevPosMouse = mouse.position.ReadValue();
             }
             else if (mouseButtonPan.isPressed)
             {
-                Vector2 currentPos =  mousePos;
+                Vector2 currentPos =  mouse.position.ReadValue();
                 float panX = SCALE_MOUSE_DRAG * (currentPos.x - prevPosMouse.x);
                 float panY = -SCALE_MOUSE_DRAG * (currentPos.y - prevPosMouse.y);
                 
@@ -55,7 +50,7 @@ namespace uk.vroad.xmpl
             }
             else if (mouseButtonTilt.isPressed)
             {
-                Vector2 currentPos =  mousePos;
+                Vector2 currentPos =  mouse.position.ReadValue();
                 float tiltY = -SCALE_MOUSE_DRAG * (currentPos.y - prevPosMouse.y);
                 aih.FireAnalogEvent(AppAnalogFn.Tilt, tiltY);
 

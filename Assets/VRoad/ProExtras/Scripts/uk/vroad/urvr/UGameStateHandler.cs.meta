@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 97ca30aaf9623ba4390b508ef027ee78
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - playUI: {instanceID: 0}
+  - playButtonGO: {instanceID: 0}
+  - exitButtonGO: {instanceID: 0}
+  - gameOverTextGO: {instanceID: 0}
+  - debug_convertButtonGO: {instanceID: 0}
+  - browserGO: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

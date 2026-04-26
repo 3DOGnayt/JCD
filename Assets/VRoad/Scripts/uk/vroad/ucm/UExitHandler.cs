@@ -33,11 +33,6 @@ namespace uk.vroad.ucm
             }
         }
 
-        void OnApplicationQuit()
-        {
-            quitInitiated = true;
-        }
-        
         public static void AppExitStatic(App ap)
         {
             app = ap;

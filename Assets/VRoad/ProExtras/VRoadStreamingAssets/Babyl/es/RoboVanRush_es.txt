@@ -1,0 +1,249 @@
+HelpStartHere = "Prepárate ..."
+LoadingMap = "Cargando ..."
+AutoResumeMsg = "En pausa"
+
+MapHelpMsg = "Elige una ciudad o cambia de nivel"
+
+TripHelpMsg = "Seleccione un destino de viaje"
+
+PlayHelpMsg = "Elija su ruta hacia el destino"
+
+NewLevel = "Nuevo nivel disponible"
+
+EnergyTooLow = "Energía demasiado baja"
+SpeedTooHigh = "Demasiado rápido"
+NotAboard = "No a bordo"
+NoFootpath = "Sin sendero"
+
+MoreVialsNeeded = "+% d → Mapa personalizado"
+
+# Menú: use frases cortas para encajar en los botones #############################
+
+MenuResume = "Reanudar"
+MenuMission = "Misión"
+MenuControls = "Controles"
+MenuCredits = "Créditos"
+MenuChangeCity = "Cambiar ciudad"
+MenuGraphics = "Gráficos"
+MenuAvatar="Avatar"
+MenuExit = "Salir"
+MenuReset = "Reiniciar"
+
+Opt_Cancel = "Cancelar"
+Opt_Confirm = "Confirmar"
+
+# Navegador / Mapa personalizado ########################################### ########
+
+BrowserLoading = "Navegador cargando ..."
+
+BrowseHelpMsg = "Utilice el mouse o el panel de juegos para seleccionar un mapa personalizado para este nivel. 
+Pruebe la tecla Mayús y arrastre el mouse para una selección rápida. Amplíe hasta que el cuadro de contorno se vuelva verde.
+Presione [Espacio], [Inicio] o haga clic en el botón verde en el navegador para crear "
+
+UnknownCity = "Ciudad desconocida"
+UnknownSuburb = "En algún lugar de"
+CustomCity = "Ciudad personalizada"
+
+# Acabado ############################################## ################
+
+LevelCompleteText = "Nivel completo"
+
+CompleteHelpMsg = "Misión completada"
+
+GameOver = "Fin del juego"
+
+ResetMessage = "¡Advertencia! Reset eliminará todas las puntuaciones guardadas y saldrá del juego"
+
+# Error de mensajes ############################################### ############
+
+NoMapServer = "No hay servidor de mapas disponible"
+
+CustomBuildFailedText = "Error al crear el mapa personalizado"
+
+BuildError1 = "Recuento de destinos de la furgoneta% d, requiere% d o más"
+BuildError2 = "Recuento de destinos a pie% d, requiere% d o más"
+BuildError3 = "Recuento de destinos de la calle% d, requiere% d o más"
+BuildError4 = "Recuento de puentes con poco espacio libre% d, requiere% d o menos"
+BuildError5 = "Recuento de carreteras empinadas% d, requiere% d o menos"
+
+CustomBuildFailedTryAgain = "Vuelve a intentarlo usando un área diferente"
+
+AlreadyBuiltMap = "Error: mapa personalizado ya creado
+- No se ha encontrado ningún archivo de mapa "
+
+# Etiquetas para controlador / teclado #######################################
+
+KeysMoveMapCentre = "Mover centro de mapa"
+KeysOptions = "Opciones"
+KeysSelectCity = "Seleccionar ciudad"
+KeysStart = "Inicio"
+KeysVolume = "Volumen"
+KeysZoom = "Zoom"
+
+KeysAbandon = "Abandonar furgoneta / autobús"
+KeysCamera = "Cámara"
+KeysMap = "Mapa"
+KeysMute = "Silenciar"
+KeysPause = "Pausa"
+KeysRouteView = "Vista de ruta"
+KeysPlayerView = "Vista del jugador"
+KeysRoute = "Ruta"
+KeysRouteAdvance = "Avanzado"
+KeysRouteAhead = "Adelante"
+KeysRouteLeft = "Izquierda"
+KeysRouteRight = "Derecha"
+KeysRouteUndo = "Deshacer"
+KeysRouteUTurn = "Cambio de sentido"
+KeysRouteVan = "Ruta Furgoneta"
+KeysRunRed = "Ejecutar señal roja"
+KeysPlayer = "Jugador"
+KeysSpin = "Girar"
+KeysTripSelect = "Seleccionar viaje"
+KeysTripMore = "Consigue 3 más"
+
+KeysFaster = "Más rápido"
+KeysSlower = "Más lento"
+KeysNudgeLeft = "Empujar hacia la izquierda"
+KeysNudgeRight = "Empujar hacia la derecha"
+
+# Misión ############################################## ##################
+
+HelpMission = "En un futuro cercano, su trabajo es ir a ciudades de todo el mundo y entregar suministros médicos. En este futuro, la moneda para todo es la energía eléctrica, se le paga por cada entrega con un encendido en kiloJoules (kJ ).
+
+Puede caminar o correr por la ciudad, o tomar una camioneta o un autobús. Viajar en autobús es barato, pero tienes que ir a donde vaya. Una camioneta privada cuesta más, pero puedes controlar su ruta.
+
+Para comenzar, elija una ciudad de las cuatro del primer nivel. Una vez que se cargue el mapa, verá un vecindario de la ciudad elegida.
+
+A continuación, elija una ubicación de entrega de entrega en ese vecindario. Se le ofrecerán tres ubicaciones: una distancia corta, una distancia media y una distancia más larga. El pago que recibe por la entrega aumenta con la distancia. Una vez que llegue al lugar de entrega, se le ofrecerán otras tres ubicaciones.
+
+Con una buena planificación, llegará a un lugar especial donde podrá recoger una botella pequeña, un vial con tapa azul. Sus ubicaciones se muestran en el mapa. Cada vial contiene un componente de un nuevo medicamento que protegerá al mundo contra la próxima amenaza de enfermedad.
+
+Cuando comienzas, tienes acceso a un nivel y, a medida que ganes más energía, se abrirán más niveles. Hay ocho niveles y cuatro ciudades en cada nivel. Desde el nivel tres también puedes construir tu propio vecindario personalizado, en la ubicación que elijas. Cada vecindario personalizado también contendrá un vial.
+
+Tu misión es encontrar 36 viales y salvar a la humanidad.
+
+Consejos:
+- mientras te mueves por la ciudad, ten cuidado con las personas que son positivas al virus: ten mucho cuidado con las multitudes y en los autobuses
+- si no le gustan las ubicaciones de entrega que le ofrecen, puede pagar para obtener otro conjunto de tres, el precio se muestra debajo de las opciones
+- si no quiere esperar en el semáforo, puede saltar el semáforo en rojo, pero si hay una cámara, pagará una multa o algo peor
+- puede usar [Avanzado] para elegir una ruta más adelante: la ruta puede ir directamente a su lugar de destino, o mediante baterías de bonificación para obtener kJ adicionales
+- puede abordar una camioneta solo en una zona designada para camionetas: estos se muestran con un símbolo de camioneta en la superficie de la carretera
+- puede abordar un autobús solo en una parada de autobús: algunas paradas de autobús son utilizadas por más de una ruta de autobús
+- cuando está en una camioneta, puede usar el botón [Ruta Furgoneta] para cambiar la zona de la camioneta de destino donde saldrá
+- cuando está esperando en una parada de autobús, si hay más de una ruta de autobús, puede elegir qué ruta tomará
+- cuando está en un autobús, puede elegir la parada donde se bajará
+- cuando estás en una camioneta o un autobús, puedes presionar el botón Abandonar para salir si está detenido, pero pagarás una multa "
+
+# Créditos ############################################## ##################
+  
+MapCredits = "Mapas:
+
+Colaboradores de datos (C) OpenStreetMap - https://www.openstreetmap.org
+Mapas (C) Thunderforest - https://www.thunderforest.com
+Datos del terreno (C) Mapbox - https://www.mapbox.com/about/maps/
+
+"
+
+PhotoCreditIntro = "Fotos de la ubicación:
+
+"
+PhotoCredits = "Nueva York: Brandon Jacoby (https://unsplash.com/photos/Ab-W3gen18Q)
+    Londres: Peter Laskowski (https://www.pexels.com/photo/3458997)
+    Hong Kong: Florian Wehde (https://unsplash.com/photos/8bjnP3yhNTg)
+    Sídney: Mudassir Ali (https://www.pexels.com/photo/1619854)
+    Vancouver: Adi Kavazovic (https://www.pexels.com/photo/2382868)
+    Barcelona: Aleksandar Pasaric (https://www.pexels.com/photo/1388030)
+    Nueva Delhi: Jeswin Thomas (https://www.pexels.com/photo/1007426)
+    Singapur: Kin Pastor (https://www.pexels.com/photo/777059)
+    Santiago: Juan Pablo Ahumada (https://unsplash.com/photos/Y9Wp5keJsn8)
+    Bergen: Pixabay (https://www.pexels.com/photo/327391)
+    Busan: Keiteu Ko (https://unsplash.com/photos/KHUmv9Z1Rho)
+    Nairobi: Nación Amani (https://unsplash.com/photos/LTh5pGyvKAM)
+    Chicago: Bhargava Marripati (https://www.pexels.com/photo/2314361)
+    Estambul: Osman Koycu (https://unsplash.com/photos/c6qF_lYvu2I)
+    Chongqing: Jerry Wang (https://unsplash.com/photos/Hqf58s2C1lg)
+    Ciudad del Cabo: Pixelperfektion (https://unsplash.com/photos/frHqpHZUa2g)
+    Toronto: Maarten Van Den Heuvel (https://www.pexels.com/photo/4490703)
+    Milán: Francesco Ungaro (https://www.pexels.com/photo/409127)
+    Bombay: Hardik Joshi (https://unsplash.com/photos/niUei6OnuiA)
+    Río de Janeiro: Mike Swigunski (https://unsplash.com/photos/tYGZvg_Ozh4)
+    Ámsterdam: Kata Pal (https://www.pexels.com/photo/1258865)
+    Moscú: Алексей Васильев (https://www.pexels.com/photo/2816184)
+    Taipéi: Timo Volz (https://www.pexels.com/photo/5127661)
+    Dubái: Asifgraphy (https://www.pexels.com/photo/4348305)
+    Ciudad de México: Oscar Reygo (https://unsplash.com/photos/HPrWl25FYcw)
+    Fráncfort: Igor Flek (https://unsplash.com/photos/q18A6PEaQ6U)
+    Tokio: Louie Martinez (https://unsplash.com/photos/IocJwyqRv3M)
+    Yakarta: Tom Fisk (https://www.pexels.com/photo/2126395)
+    Panamá: Felix Tchverkin (https://unsplash.com/photos/N8EzubdXV0M)
+    París: Luca Micheli (https://unsplash.com/photos/Q7htkhMW66Y)
+    Shanghái: Denys Nevozhai (https://unsplash.com/photos/D8iZPlX-2fs)
+    El Cairo: Sean Wang (https://unsplash.com/photos/0wMkml3PwUE)
+
+"
+
+MusicCredit = "Música / Efectos de sonido:
+  
+	DL-Sounds - https://www.dl-sounds.com
+	ZapSplat - https://www.zapsplat.com
+    GameBurp - http://www.gameburp.com
+
+"
+
+PluginCredit = "Complementos de Unity:
+
+Personajes animados: https://www.polyperfect.com
+Navegador web integrado: https://zenfulcrum.com
+Planeta Tierra: https://assetstore.unity.com/packages/3d/environments/sci-fi/planet-earth-free-23399 "
+
+
+HelpMissionShort = "Recoger 36 viales: uno de cada ciudad
+
+Agarrar baterías para impulsar la energía.
+
+Evite los transportistas de virus"
+
+HelpStory = "En un futuro próximo, su trabajo es ir a ciudades en todo el mundo y entregar suministros médicos.
+
+En una ubicación de entrega en cada ciudad, se le dará un vial azul especial que contenía un componente de medicamentos. Su misión es recolectar 36 de estos viales, de modo que los componentes puedan combinarse para hacer una cura que salvará a la humanidad de un nuevo virus.
+
+Puedes caminar o correr por la ciudad, o tomar una camioneta o un autobús. Un autobús público es barato para montar, pero tienes que ir a donde va. Una camioneta privada cuesta más, pero puedes controlar su ruta.
+
+En este futuro, la moneda para todo es energía. Se le paga por cada entrega con un encendido en KJ (kilojoules). Todo lo que haces usa kj, incluso de pie todavía. Usted paga por una camioneta o un viaje en autobús en KJ, cuanto más vaya, más pagas.
+
+Desde el nivel 2, puede elegir su propio vecindario, en cualquier lugar del mundo, construyendo directamente desde OpenStreetMap"
+
+HelpTipsTrip = "Si no le gustan las ubicaciones de entrega ofrecidas, puede pagar para obtener 3 más, al precio que se muestra.
+
+Es más probable que se le ofrezca la ubicación del vial si comienza desde una ubicación de borde distante.
+
+Las ubicaciones de borde se indican usando → | "
+
+HelpTipsPlay = "Recoge baterías para obtener más energía: necesita 2000 kJ para acceder a Nivel 2, 3000 para el nivel 3, etc.
+
+Elija la dirección en el siguiente cruce por color.
+
+Use [Avance] para construir una ruta por delante: directamente a la ubicación de entrega, o a través de baterías para ganar kj.
+
+Use los controles de velocidad para acelerar, reducir la velocidad o girar mientras camina.
+
+A medida que avanza, tenga cuidado con las personas positivas de virus: tenga cuidado en las multitudes y en los autobuses.
+
+Si no quieres esperar, puedes saltar una luz roja, pero si hay una cámara, pagará una multa.
+
+Tobra una camioneta en una zona designada: un icono azul y un símbolo de van en la carretera.
+
+Cuando monta en una camioneta, use [Van Route] para cambiar el destino de Van donde salga.
+
+Tobra un autobús en una parada de autobús, algunos son utilizados por más de una ruta de autobús.
+
+Cuando espere en una parada de autobús, puede elegir qué ruta tomará si hay 2 o más.
+
+Cuando monta en un autobús, puede elegir la parada donde se bajará.
+
+Cuando monta en una camioneta o en un autobús, puede presionar [Abandonando] para salir, pero pagará una multa "
+
+MenuTips = "Consejos"
+MenuStory = "Historia"
+
+UseMouseText="O use el mouse para hacer clic en los botones en pantalla"

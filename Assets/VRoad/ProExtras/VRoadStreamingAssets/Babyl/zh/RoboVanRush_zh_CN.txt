@@ -1,0 +1,250 @@
+HelpStartHere="准备好......"
+LoadingMap="加载中..."
+AutoResumeMsg="暂停"
+
+MapHelpMsg="第 1 阶段：选择城市或更改级别"
+
+TripHelpMsg="第 2 阶段：选择送货目的地"
+
+PlayHelpMsg="第 3 阶段：选择前往目的地的路线"
+
+NewLevel="新级别可用"
+
+EnergyTooLow="能量太低"
+SpeedTooHigh="太快"
+NotAboard="不登机"
+NoFootpath="没有人行道"
+
+MoreVialsNeeded="+%d → 自定义地图"
+
+# 菜单 - 使用短语来适应按钮#############################
+
+MenuResume="简历"
+MenuMission="任务"
+MenuControls="控件"
+MenuCredits="信用"
+MenuChangeCity="更改城市"
+MenuGraphics="图形"
+MenuAvatar="头像"
+MenuExit="退出"
+MenuReset="重置"
+
+Opt_Cancel = "取消"
+Opt_Confirm = "确认"
+
+#浏览器/自定义地图########################################## #########
+
+BrowserLoading="浏览器加载中..."
+
+BrowseHelpMsg="使用鼠标或游戏手柄为该关卡选择自定义构建的地图。
+尝试按住 Shift 键并拖动鼠标进行快速选择。放大直到轮廓框变成绿色。
+按[Space]、[Start]或点击浏览器中的绿色按钮来构建"
+
+UnknownCity="未知城市"
+UnknownSuburb="某处"
+CustomCity="自定义城市"
+
+# 结束############################################# ################
+
+LevelCompleteText="关卡完成"
+
+CompleteHelpMsg="任务完成"
+
+GameOver="游戏结束"
+
+ResetMessage="警告！重置将删除所有保存的分数并退出游戏"
+
+# 错误信息############################################ #############
+
+NoMapServer="没有可用的地图服务器"
+
+CustomBuildFailedText="自定义地图构建失败"
+
+BuildError1="货车目的地计数 %d，需要 %d 或更多"
+BuildError2="步行目的地计数 %d，需要 %d 或更多"
+BuildError3="街道目的地计数 %d，需要 %d 或更多"
+BuildError4="低间隙桥数 %d，需要 %d 或更少"
+BuildError5="陡峭的道路数量 %d，需要 %d 或更少"
+
+CustomBuildFailedTryAgain="使用不同的区域再试一次"
+
+AlreadyBuiltMap="错误：自定义地图已经构建
+- 未找到地图文件"
+
+# 控制器/键盘标签######################################
+
+KeysMoveMapCentre="移动地图中心"
+KeysOptions="选项"
+KeysSelectCity="选择城市"
+KeysStart="开始"
+KeysVolume="音量"
+KeysZoom="缩放"
+
+KeysAbandon="放弃货车/巴士"
+KeysCamera="相机"
+KeysMap="地图"
+KeysMute="静音"
+KeysPause="暂停"
+KeysRouteView="路由视图"
+KeysPlayerView="玩家视图"
+KeysRoute="路由"
+KeysRouteAdvance="前进"
+KeysRouteAhead="向前"
+KeysRouteDestination="开始"
+KeysRouteLeft="左"
+KeysRouteRight="右"
+KeysRouteUndo="撤销"
+KeysRouteUTurn="掉头"
+KeysRouteVan="货车路线"
+KeysRunRed="运行红色信号"
+KeysPlayer="播放器"
+KeysSpin="旋转"
+KeysTripSelect="选择行程"
+KeysTripMore="再获得 3 个"
+
+KeysFaster="更快"
+KeysSlower="更慢"
+KeysNudgeLeft="左移"
+KeysNudgeRight="向右轻推"
+
+# 使命 ##################################################################
+
+HelpMission="在不久的将来，你的工作是去世界各地的城市运送医疗用品。在这个未来，一切的货币都是电能，每次交付你都会得到报酬，单位是千焦 (kJ) ）。
+
+您可以在城市中步行或跑步，或者乘坐面包车或公共汽车。乘坐公共汽车很便宜，但你必须去它去的地方。私人面包车成本更高，但您可以控制其路线。
+
+首先，从第一层的四个城市中选择一个城市。地图加载后，您将看到所选城市的一个街区。
+
+接下来，选择该社区的送货地点。您将获得三个地点：一个短距离、一个中距离和一个长距离。您获得的交货付款随着距离的增加而增加。到达下车点后，您将获得另外三个地点。
+
+通过良好的计划，您将到达一个特殊的位置，在那里您可以收集一个小瓶子，一个蓝顶小瓶。它的位置显示在地图上。每个小瓶都包含一种新药的成分，可以保护世界免受下一次疾病威胁。
+
+当你开始时，你可以进入一个级别，随着你获得更多的能量，更多的级别将会打开。有八个级别，每个级别有四个城市。从第三级开始，您还可以在您选择的位置建立自己的自定义社区。每个自定义社区也将包含一个小瓶。
+
+你的任务是找到 36 个小瓶，拯救人类。
+
+提示：
+- 在城市中四处走动时，请注意病毒呈阳性的人：在人群中和公交车上要格外小心
+- 如果您不喜欢所提供的下车地点，您可以付费购买另一套三个，价格显示在选项下方
+- 如果你不想在红绿灯等，你可以闯红灯，但如果有摄像头，你会被罚款，或者更糟
+- 您可以使用 [Advance] 选择前方的路线：该路线可以直接到达您的下车点，或者通过额外的电池获得额外的 kJ
+- 您只能在指定的面包车区域登上面包车：这些在路面上显示有面包车符号
+- 您只能在巴士站上车：有些巴士站有不止一条巴士路线使用
+- 当您在面包车中时，您可以使用面包车路线按钮更改您下车的目的地面包车区域
+- 在巴士站等车时，若有多条巴士路线，可选择搭乘哪条路线
+- 当您在公交车上时，您可以选择下车的站点
+- 当你在面包车或公共汽车上时，如果它停下来，你可以按下放弃按钮离开，但你会支付罚款"
+
+#学分############################################# ##################
+  
+MapCredits="地图：
+
+数据 (C) OpenStreetMap 贡献者 - https://www.openstreetmap.org
+地图 (C) Thunderforest - https://www.thunderforest.com
+地形数据 (C) Mapbox - https://www.mapbox.com/about/maps/
+
+"
+
+PhotoCreditIntro="位置照片：
+
+"
+PhotoCredits="纽约：布兰登雅各比 (https://unsplash.com/photos/Ab-W3gen18Q)
+    伦敦：Peter Laskowski (https://www.pexels.com/photo/3458997)
+    香港：Florian Wehde ( https://unsplash.com/photos/8bjnP3yhNTg )
+    悉尼：穆达西尔阿里 (https://www.pexels.com/photo/1619854)
+    温哥华：Adi Kavazovic (https://www.pexels.com/photo/2382868)
+    巴塞罗那：亚历山大·帕萨里奇 (https://www.pexels.com/photo/1388030)
+    新德里：Jeswin Thomas (https://www.pexels.com/photo/1007426)
+    新加坡：Kin Pastor (https://www.pexels.com/photo/777059)
+    圣地亚哥：Juan Pablo Ahumada (https://unsplash.com/photos/Y9Wp5keJsn8)
+    卑尔根：Pixabay（https://www.pexels.com/photo/327391）
+    釜山：Keiteu Ko ( https://unsplash.com/photos/KHUmv9Z1Rho )
+    内罗毕：阿曼尼国家 (https://unsplash.com/photos/LTh5pGyvKAM)
+    芝加哥：Bhargava Marripati (https://www.pexels.com/photo/2314361)
+    伊斯坦布尔：Osman Koycu（https://unsplash.com/photos/c6qF_lYvu2I）
+    重庆：Jerry Wang ( https://unsplash.com/photos/Hqf58s2C1lg )
+    开普敦：Pixelperfektion（https://unsplash.com/photos/frHqpHZUa2g）
+    多伦多：Maarten Van Den Heuvel (https://www.pexels.com/photo/4490703)
+    米兰：Francesco Ungaro (https://www.pexels.com/photo/409127)
+    孟买：Hardik Joshi ( https://unsplash.com/photos/niUei6OnuiA )
+    里约热内卢：Mike Swigunski (https://unsplash.com/photos/tYGZvg_Ozh4)
+    阿姆斯特丹：Kata Pal (https://www.pexels.com/photo/1258865)
+    莫斯科：Алексей Васильев ( https://www.pexels.com/photo/2816184 )
+    台北：Timo Volz ( https://www.pexels.com/photo/5127661 )
+    迪拜：Asifgraphy ( https://www.pexels.com/photo/4348305 )
+    墨西哥城：Oscar Reygo (https://unsplash.com/photos/HPrWl25FYcw)
+    法兰克福：伊戈尔弗莱克（https://unsplash.com/photos/q18A6PEaQ6U）
+    东京：路易马丁内斯 (https://unsplash.com/photos/IocJwyqRv3M)
+    雅加达：Tom Fisk (https://www.pexels.com/photo/2126395)
+    巴拿马：Felix Tchverkin ( https://unsplash.com/photos/N8EzubdXV0M )
+    巴黎：Luca Micheli ( https://unsplash.com/photos/Q7htkhMW66Y )
+    上海：Denys Nevozhai ( https://unsplash.com/photos/D8iZPlX-2fs )
+    开罗：Sean Wang (https://unsplash.com/photos/0wMkml3PwUE)
+
+"
+
+MusicCredit="音乐/音效：
+  
+DL-Sounds - https://www.dl-sounds.com
+ZapSplat - https://www.zapsplat.com
+    GameBurp - http://www.gameburp.com
+
+"
+
+PluginCredit="Unity 插件：
+
+动画角色 - https://www.polyperfect.com
+嵌入式 Web 浏览器 - https://zenfulcrum.com
+地球 - https://assetstore.unity.com/packages/3d/environments/sci-fi/planet-earth-free-23399"
+
+
+HelpMissionShort="收集36瓶：来自每个城市的一瓶
+
+抓取电池促进能量
+
+避免病毒载体"
+
+HelpStory ="在不久的将来，您的工作是前往世界各地的城市并提供医疗用品。
+
+在每个城市的一个送货位置，您将获得一个特殊的蓝色顶级小瓶，含有药物组件。您的使命是收集这些小瓶中的36瓶，以便组件可以组合以使其能够从新病毒中拯救人类的治疗方法。
+
+您可以在城市散步或跑步，或乘船或公共汽车。公共巴士乘坐便宜，但你必须去哪里。私人面包车花费更多，但你可以控制其路线。
+
+在这个未来，一切都是能源的货币。您将在KJ（千焦耳）中加电时为每次交付支付。你所做的一切都使用kj，甚至站在仍然存在。您为乘车或公共汽车骑在KJ中支付，进一步前进，您的支付越多。
+
+从2级，您可以通过直接从OpenStreetMap建立自己的邻居，在世界任何地方选择您自己的邻居。"
+
+HelpTipsTrip ="如果您不喜欢提供的送货地点，您可以支付3次以上的价格。
+
+如果您从遥远的边缘位置开始，您更有可能提供小瓶位置。
+
+边缘位置使用→|指示"
+
+HelpTipsPlay ="收集电池以获得更多能量：您需要2000 KJ以获得3级，3000级等级。
+
+选择下一个结的方向按颜色。
+
+使用[提前]建立前方的路线：直接到交货位置，或通过电池获取KJ。
+
+使用速度控制加速，慢向下或在行走时转动。
+
+当你四处走动时，注意病毒积极的人：小心在人群和公共汽车上。
+
+如果你不想等待，你可以跳过一个红灯，但如果有相机，你会付出罚款。
+
+在指定的区域登上一辆面包车：一个蓝色的图标和路上的van符号。
+
+在乘坐面包车时，请使用[VAN ROUTE]更改您退出的范目的地。
+
+在公共汽车站乘坐公共汽车，有些是由一个以上的公共汽车路线使用。
+
+在公共汽车站等待时，如果有2个或更多，您可以选择您将采取的路由。
+
+乘坐公共汽车时，您可以选择您将下车的停留。
+
+骑在一辆面包车或公共汽车时，你可以按[放弃]出来，但你会付出罚款。"
+
+MenuTips ="提示"
+MenuStory ="故事"
+
+UseMouseText="或使用鼠标单击屏幕上的按钮"
