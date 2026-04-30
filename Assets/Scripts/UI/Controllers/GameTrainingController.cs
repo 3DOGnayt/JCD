@@ -15,7 +15,9 @@ namespace UI.Controllers
     public class GameTrainingController : AUiController<GameTrainingView>
     {
         private readonly IRaceTimerService _raceTimerService;
-        private readonly ILoadingService _loadingService;
+        private readonly IEventService _eventService;
+        private readonly IDataService _dataService;
+        private readonly IAudioService _audioService;
         
         private readonly MapSelectionParameters _mapSelectionParameters;
         private readonly GameModeSelectionParameters _gameModeSelectionParameters;
@@ -30,14 +32,18 @@ namespace UI.Controllers
             MapSelectionParameters mapSelectionParameters,
             GameModeSelectionParameters gameModeSelectionParameters,
             TrainingTimeScoreParameters trainingTimeScoreParameters,
-            ILoadingService loadingService
+            IEventService eventService,
+            IDataService dataService,
+            IAudioService audioService
         )
         {
             _raceTimerService = raceTimerService;
             _mapSelectionParameters = mapSelectionParameters;
             _gameModeSelectionParameters = gameModeSelectionParameters;
             _trainingTimeScoreParameters = trainingTimeScoreParameters;
-            _loadingService = loadingService;
+            _eventService = eventService;
+            _dataService = dataService;
+            _audioService = audioService;
         }
 
         public override void Initialize()
@@ -54,7 +60,7 @@ namespace UI.Controllers
             if (_gameModeSelectionParameters.GameMod == EGameMod.Story) 
                 View.gameObject.SetActive(false);
 
-            if (_loadingService.IsTimersRefreshed.Value)
+            if (_eventService.IsTimersRefreshed.Value)
                 return;
 
             InitializeSegmentCount();
@@ -62,7 +68,7 @@ namespace UI.Controllers
             InitializeDifferenceTexts();
             RefreshBestTime();
             
-            _loadingService.PublishTimersRefreshed(true);
+            _eventService.PublishTimersRefreshed(true);
         }
 
         private void InitializeSegmentCount()
@@ -128,39 +134,42 @@ namespace UI.Controllers
             View.BestTimeText.text = FormatTime(bestTime);
         }
 
-        private void OnSegmentCompleted(RaceLapRecord record)
+        private void OnSegmentCompleted(RaceLapRecordEntry recordEntry)
         {
             if (View.DifferenceTextList == null)
                 return;
 
-            var index = record.LapIndex - 1;
+            var index = recordEntry.LapIndex - 1;
             if (index < 0 || index >= _segmentCount || index >= View.DifferenceTextList.Count)
                 return;
 
-            _currentSegmentTimes[index] = record.LapTime;
+            _currentSegmentTimes[index] = recordEntry.LapTime;
             var targetText = View.DifferenceTextList[index];
             if (targetText == null)
                 return;
 
             if (_currentSetup == null || _currentSetup.BestSegmentTimes.Count <= index)
             {
-                targetText.text = FormatTime(record.LapTime);
+                targetText.text = FormatTime(recordEntry.LapTime);
                 return;
             }
 
             var bestSegmentTime = _currentSetup.BestSegmentTimes[index];
             if (bestSegmentTime <= 0f)
             {
-                targetText.text = FormatTime(record.LapTime);
+                targetText.text = FormatTime(recordEntry.LapTime);
                 return;
             }
 
-            var diff = record.LapTime - bestSegmentTime;
+            var diff = recordEntry.LapTime - bestSegmentTime;
             targetText.text = FormatDifference(diff);
         }
 
         private void OnRaceFinished()
         {
+            _audioService?.StopMusic();
+            _audioService?.StopAllSfx();
+
             if (_raceTimerService == null || _trainingTimeScoreParameters == null)
                 return;
 
@@ -181,6 +190,7 @@ namespace UI.Controllers
                 _currentSetup.BestSegmentTimes.Add(_currentSegmentTimes[i]);
 
             RefreshBestTime();
+            _dataService?.SaveTrainingTimeScores(_trainingTimeScoreParameters.Entries);
         }
 
         private void EnsureSegmentTimeCache()

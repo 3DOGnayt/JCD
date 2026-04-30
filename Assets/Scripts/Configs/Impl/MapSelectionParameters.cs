@@ -1,5 +1,7 @@
 using Data.Enums;
+using Helpers.Race;
 using UnityEngine;
+using UnityEngine.Splines;
 
 namespace Configs.Impl
 {
@@ -12,11 +14,20 @@ namespace Configs.Impl
         [SerializeField] private int _selectedMapLapCount;
         [SerializeField] private EMap _selectedMap;
 
+        private SplineContainer _runtimeSpline;
+        private SplineContainer _runtimeSplineInner;
+        private SplineContainer _runtimeSplineOuter;
+        private MapSplineProvider.OpponentSplineEntry[] _runtimeOpponentSplines;
+
         public GameObject SelectedMapPrefab => _selectedMapPrefab;
         public int SelectedMapIndex => _selectedMapIndex;
         public int SelectedMapSelectionCount => _selectedMapSelectionCount;
         public int SelectedMapLapCount => _selectedMapLapCount;
         public EMap SelectedMap => _selectedMap;
+        public SplineContainer RuntimeSpline => _runtimeSpline;
+        public SplineContainer RuntimeSplineInner => _runtimeSplineInner;
+        public SplineContainer RuntimeSplineOuter => _runtimeSplineOuter;
+        public MapSplineProvider.OpponentSplineEntry[] RuntimeOpponentSplines => _runtimeOpponentSplines;
 
         public void SetSelectedMap(GameObject mapPrefab, int index, EMap map, int selectionCount, int lapCount)
         {
@@ -25,6 +36,26 @@ namespace Configs.Impl
             _selectedMapSelectionCount = selectionCount;
             _selectedMapLapCount = lapCount;
             _selectedMap = map;
+            _runtimeSpline = null;
+            _runtimeSplineInner = null;
+            _runtimeSplineOuter = null;
+            _runtimeOpponentSplines = null;
+        }
+
+        public void SetRuntimeSpline(SplineContainer spline)
+        {
+            _runtimeSpline = spline;
+        }
+
+        public void SetRuntimeSplines(SplineContainer innerSpline, SplineContainer outerSpline)
+        {
+            _runtimeSplineInner = innerSpline;
+            _runtimeSplineOuter = outerSpline;
+        }
+
+        public void SetRuntimeOpponentSplines(MapSplineProvider.OpponentSplineEntry[] opponentSplines)
+        {
+            _runtimeOpponentSplines = opponentSplines;
         }
     }
 }

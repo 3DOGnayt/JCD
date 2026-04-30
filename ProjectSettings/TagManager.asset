@@ -17,8 +17,8 @@ TagManager:
   - Obstacles
   - WheelCollider
   - Damagable
-  - 
-  - 
+  - MinimapIcon
+  - GhostOpponent
   - 
   - 
   - 

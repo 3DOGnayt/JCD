@@ -12,6 +12,11 @@ namespace Configs.Impl
 
         public IReadOnlyList<TrainingTimeScoreSetup> Entries => _entries;
 
+        public void ReplaceEntries(List<TrainingTimeScoreSetup> entries)
+        {
+            _entries = entries != null ? new List<TrainingTimeScoreSetup>(entries) : new List<TrainingTimeScoreSetup>();
+        }
+
         private TrainingTimeScoreSetup GetEntry(EMap map)
         {
             return _entries.Find(entry => entry.Map == map);

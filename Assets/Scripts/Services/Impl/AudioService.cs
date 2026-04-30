@@ -79,6 +79,52 @@ namespace Services.Impl
             StopAllSfx();
         }
 
+        public void PauseAudio(EAudioType type)
+        {
+            switch (type)
+            {
+                case EAudioType.Music:
+                    if (_musicSource.isPlaying)
+                        _musicSource.Pause();
+                    break;
+                case EAudioType.Sfx:
+                    PauseLoopSfx();
+                    break;
+                case EAudioType.Ui:
+                    if (_uiSource.isPlaying)
+                        _uiSource.Pause();
+                    break;
+                case EAudioType.Master:
+                    if (_musicSource.isPlaying)
+                        _musicSource.Pause();
+                    if (_uiSource.isPlaying)
+                        _uiSource.Pause();
+                    PauseLoopSfx();
+                    break;
+            }
+        }
+
+        public void ResumeAudio(EAudioType type)
+        {
+            switch (type)
+            {
+                case EAudioType.Music:
+                    _musicSource.UnPause();
+                    break;
+                case EAudioType.Sfx:
+                    ResumeLoopSfx();
+                    break;
+                case EAudioType.Ui:
+                    _uiSource.UnPause();
+                    break;
+                case EAudioType.Master:
+                    _musicSource.UnPause();
+                    _uiSource.UnPause();
+                    ResumeLoopSfx();
+                    break;
+            }
+        }
+
         public AudioSource PlayMusic(AudioClip clip, float volume = 1f, bool loop = true)
         {
             if (clip == null)
@@ -103,11 +149,12 @@ namespace Services.Impl
             _uiSource.PlayOneShot(clip, volume);
         }
 
-        public void PlaySfx2D(AudioClip clip, float volume = 1f, float pitch = 1f)
+        public AudioSource PlaySfx2D(AudioClip clip, float volume = 1f, float pitch = 1f, bool loop = false)
         {
             var pooled = GetPooled();
             pooled.transform.position = _audioRoot.position;
-            pooled.Play(clip, _sfxGroup, volume, pitch, 0f, false, ReleaseToPool);
+            pooled.Play(clip, _sfxGroup, volume, pitch, 0f, loop, ReleaseToPool);
+            return pooled.AudioSource;
         }
 
         public void PlaySfx3D(AudioClip clip, Vector3 position, float volume = 1f, float pitch = 1f)
@@ -237,6 +284,34 @@ namespace Services.Impl
 
             pooled.transform.position = _audioRoot.position;
             _availableSfx.Enqueue(pooled);
+        }
+
+        private void PauseLoopSfx()
+        {
+            for (var i = 0; i < _sfxPool.Count; i++)
+            {
+                var pooled = _sfxPool[i];
+                if (pooled == null || !pooled.gameObject.activeSelf)
+                    continue;
+
+                var source = pooled.AudioSource;
+                if (source != null && source.loop && source.isPlaying)
+                    source.Pause();
+            }
+        }
+
+        private void ResumeLoopSfx()
+        {
+            for (var i = 0; i < _sfxPool.Count; i++)
+            {
+                var pooled = _sfxPool[i];
+                if (pooled == null || !pooled.gameObject.activeSelf)
+                    continue;
+
+                var source = pooled.AudioSource;
+                if (source != null && source.loop)
+                    source.UnPause();
+            }
         }
 
         private static float SetValueVolume(float value)

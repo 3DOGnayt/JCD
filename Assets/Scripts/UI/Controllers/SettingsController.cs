@@ -3,9 +3,11 @@ using KoboldUi.Element.Controller;
 using KoboldUi.Services.WindowsService;
 using Services;
 using Configs.Impl;
-using UI.Views;
+using Tools;
 using UI.Window;
+using UI.Views;
 using UniRx;
+using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
@@ -15,13 +17,22 @@ namespace UI.Controllers
     {
         private readonly ILocalWindowsService _localWindowsService;
         private readonly IAudioService _audioService;
+        private readonly IDataService _dataService;
+        private readonly IGameSessionService _gameSessionService;
         
         [Inject] private AudioSelectionParameters _audioSelectionParameters;
 
-        public SettingsController(ILocalWindowsService localWindowsService, IAudioService audioService)
+        public SettingsController(
+            ILocalWindowsService localWindowsService,
+            IAudioService audioService,
+            IDataService dataService,
+            IGameSessionService gameSessionService
+        )
         {
             _localWindowsService = localWindowsService;
             _audioService = audioService;
+            _dataService = dataService;
+            _gameSessionService = gameSessionService;
         }
 
         public override void Initialize()
@@ -41,7 +52,7 @@ namespace UI.Controllers
                 return;
 
             slider.onValueChanged.AsObservable()
-                .Subscribe(value => _audioService.SetAudioVolume(type, value))
+                .Subscribe(value => OnVolumeChanged(type, value))
                 .AddTo(View);
 
             _audioService.SetAudioVolume(type, slider.value);
@@ -49,10 +60,9 @@ namespace UI.Controllers
 
         private void ApplySavedVolumes()
         {
-            if (_audioSelectionParameters == null || _audioSelectionParameters.VolumeSetup == null)
-                return;
+            var fallback = _audioSelectionParameters != null ? _audioSelectionParameters.VolumeSetup : null;
+            var settings = _dataService.LoadAudioVolumes(fallback);
 
-            var settings = _audioSelectionParameters.VolumeSetup;
             if (View.MasterVolume != null)
                 View.MasterVolume.SetValueWithoutNotify(settings.Master);
             if (View.SfxVolume != null)
@@ -61,13 +71,57 @@ namespace UI.Controllers
                 View.MusicVolume.SetValueWithoutNotify(settings.Music);
             if (View.UiVolume != null)
                 View.UiVolume.SetValueWithoutNotify(settings.Ui);
+
+            if (_audioSelectionParameters != null)
+            {
+                _audioSelectionParameters.SetMasterVolume(settings.Master);
+                _audioSelectionParameters.SetSfxVolume(settings.Sfx);
+                _audioSelectionParameters.SetMusicVolume(settings.Music);
+                _audioSelectionParameters.SetUiVolume(settings.Ui);
+            }
+        }
+
+        private void OnVolumeChanged(EAudioType type, float value)
+        {
+            _audioService.SetAudioVolume(type, value);
+            UpdateAudioSelection(type, value);
+            _dataService.SaveAudioVolume(type, value);
+        }
+
+        private void UpdateAudioSelection(EAudioType type, float value)
+        {
+            if (_audioSelectionParameters == null)
+                return;
+
+            switch (type)
+            {
+                case EAudioType.Master:
+                    _audioSelectionParameters.SetMasterVolume(value);
+                    break;
+                case EAudioType.Sfx:
+                    _audioSelectionParameters.SetSfxVolume(value);
+                    break;
+                case EAudioType.Music:
+                    _audioSelectionParameters.SetMusicVolume(value);
+                    break;
+                case EAudioType.Ui:
+                    _audioSelectionParameters.SetUiVolume(value);
+                    break;
+            }
         }
 
         private void OnCloseButtonClick()
         {
             _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonBack);
-            
-            _localWindowsService.OpenWindow<MainMenuWindow>();
+
+            if (_gameSessionService != null && _gameSessionService.Target == EGameSessionTarget.Game)
+            {
+                _localWindowsService.CloseWindow();
+                _localWindowsService.AnimateWindow<GamePauseWindow>(Vector2.zero);
+                return;
+            }
+
+            _localWindowsService.CloseWindow();
         }
     }
 }

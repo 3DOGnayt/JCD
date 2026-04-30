@@ -15,13 +15,31 @@ MonoBehaviour:
   _cars:
   - DisplayName: N34
     Preset: {fileID: 11400000, guid: 5c594316e21a99541926ca2e21cac6b9, type: 2}
-    Parameters: {fileID: 11400000, guid: 861d21277b11455459aba137c7957d16, type: 2}
+    MovementParameters: {fileID: 11400000, guid: b6083318e6e2a0a438308f15c9b526e2,
+      type: 2}
+    SpeedsPresetParameters: {fileID: 11400000, guid: d6bbedbc43db9dc4683bb90ea3859d07,
+      type: 2}
+    SlipParameters: {fileID: 11400000, guid: 799d25a2e2eb55f4e94fdba765562978, type: 2}
+    EngineAudioParameters: {fileID: 11400000, guid: c8a6ed2d59d7e614980025be19b254d9,
+      type: 2}
     Preview: {fileID: 21300000, guid: 63bdc25a69d52a44681a563fbf7310be, type: 3}
   - DisplayName: SC39
     Preset: {fileID: 11400000, guid: 314cb5b109249c24f9b0ab884476da62, type: 2}
-    Parameters: {fileID: 11400000, guid: f8480b7e0f4acd04e81c153a8015aa14, type: 2}
+    MovementParameters: {fileID: 11400000, guid: 1599003b0e78d114392f9a0851e4d374,
+      type: 2}
+    SpeedsPresetParameters: {fileID: 11400000, guid: 8f65303fd6b56f349be3c43550878802,
+      type: 2}
+    SlipParameters: {fileID: 11400000, guid: ec6a75aa69dd0d64287a94d442a0a255, type: 2}
+    EngineAudioParameters: {fileID: 11400000, guid: 06cd7b5215d1cab4185c5f329aab8b11,
+      type: 2}
     Preview: {fileID: 21300000, guid: 1e63b594891ad3647b87fdd536a935e0, type: 3}
-  - DisplayName: Aboba
-    Preset: {fileID: 11400000, guid: ebec29c619f1cba4f90bf5ff5a996e21, type: 2}
-    Parameters: {fileID: 11400000, guid: 447861bc52b683f4a9e72756e8fa1c3e, type: 2}
-    Preview: {fileID: 21300000, guid: 7cff4090d7d1da44c859d19e9240b40f, type: 3}
+  - DisplayName: Mustang
+    Preset: {fileID: 11400000, guid: 24e7060ee156d9446903d0d168ad946f, type: 2}
+    MovementParameters: {fileID: 11400000, guid: 376d46094d9cefd4d8bc195edef54083,
+      type: 2}
+    SpeedsPresetParameters: {fileID: 11400000, guid: dca30fff0bb50b644b3025f4fc91d4df,
+      type: 2}
+    SlipParameters: {fileID: 11400000, guid: b01beca9a21f7fe41b29a4c522552b90, type: 2}
+    EngineAudioParameters: {fileID: 11400000, guid: 4d7521bf59aae1842a53ca612038d137,
+      type: 2}
+    Preview: {fileID: 21300000, guid: 63a0215da5b615f4b9f7eb1d09301c52, type: 3}

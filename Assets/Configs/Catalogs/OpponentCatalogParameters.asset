@@ -13,15 +13,42 @@ MonoBehaviour:
   m_Name: OpponentCatalogParameters
   m_EditorClassIdentifier: 
   _opponents:
-  - DisplayName: izi
-    Preview: {fileID: 21300000, guid: 63bdc25a69d52a44681a563fbf7310be, type: 3}
-    Difficulty: 0.1
-  - DisplayName: hy tak
-    Preview: {fileID: 21300000, guid: 1e63b594891ad3647b87fdd536a935e0, type: 3}
-    Difficulty: 0.2
-  - DisplayName: mmmgmmm
-    Preview: {fileID: 21300000, guid: 789b892102b05534b825aab711d4c708, type: 3}
-    Difficulty: 0.3
-  - DisplayName: bliat
-    Preview: {fileID: 21300000, guid: 7cff4090d7d1da44c859d19e9240b40f, type: 3}
-    Difficulty: 0.4
+  - CarIndex: 0
+    Base:
+      DisplayName: ladno
+      Preview: {fileID: 1508578071, guid: e9c34c65f2510924f8523ca2369dabd6, type: 3}
+      Difficulty: 0.1
+    Behavior:
+      TargetSpeedKmh: 120
+      LookAheadMeters: 10
+      MaxSteerAngleDeg: 30
+      BrakeLookAheadMeters: 20
+      BrakeStrength: 0.2
+      SteerErrorDegrees: 6
+      ReactionDelay: 0.2
+  - CarIndex: 1
+    Base:
+      DisplayName: nuDavay
+      Preview: {fileID: -1992756542, guid: e9c34c65f2510924f8523ca2369dabd6, type: 3}
+      Difficulty: 0.2
+    Behavior:
+      TargetSpeedKmh: 120
+      LookAheadMeters: 8
+      MaxSteerAngleDeg: 33
+      BrakeLookAheadMeters: 14
+      BrakeStrength: 0.8
+      SteerErrorDegrees: 3
+      ReactionDelay: 0.12
+  - CarIndex: 2
+    Base:
+      DisplayName: daTIcho
+      Preview: {fileID: 727446189, guid: e9c34c65f2510924f8523ca2369dabd6, type: 3}
+      Difficulty: 0.3
+    Behavior:
+      TargetSpeedKmh: 160
+      LookAheadMeters: 10
+      MaxSteerAngleDeg: 35
+      BrakeLookAheadMeters: 18
+      BrakeStrength: 1
+      SteerErrorDegrees: 1
+      ReactionDelay: 0.05

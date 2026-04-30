@@ -29,6 +29,7 @@ namespace Services.Impl
         private float _musicCatalogVolume = 1f;
         private float _sfx2DVolume;
         private float _sfx2DPitch;
+        private bool _sfx2DLoop;
         private float _sfx3DVolume;
         private float _sfx3DPitch;
         private Vector3 _sfx3DPosition;
@@ -48,11 +49,12 @@ namespace Services.Impl
             PlayAudio(type, subType, PlayUiClip);
         }
 
-        public void PlaySfx2DAudio(EAudioType type, EAudioSubType subType, float volume = 1f, float pitch = 1f)
+        public AudioSource PlaySfx2DAudio(EAudioType type, EAudioSubType subType, float volume = 1f, float pitch = 1f, bool loop = false)
         {
             _sfx2DVolume = volume;
             _sfx2DPitch = pitch;
-            PlayAudio(type, subType, PlaySfx2DClip);
+            _sfx2DLoop = loop;
+            return PlayAudio(type, subType, PlaySfx2DClip);
         }
 
         public void PlaySfx3DAudio(EAudioType type, EAudioSubType subType, Vector3 position, float volume = 1f, float pitch = 1f)
@@ -63,19 +65,27 @@ namespace Services.Impl
             PlayAudio(type, subType, PlaySfx3DClip);
         }
 
-        private void PlayMusicClip(AudioClip clip) => PlayMusic(clip, _musicVolume, _musicLoop);
-        private void PlayUiClip(AudioClip clip) => PlayUi(clip, _uiVolume, _uiPitch);
-        private void PlaySfx2DClip(AudioClip clip) => PlaySfx2D(clip, _sfx2DVolume, _sfx2DPitch);
-        private void PlaySfx3DClip(AudioClip clip) => PlaySfx3D(clip, _sfx3DPosition, _sfx3DVolume, _sfx3DPitch);
+        private AudioSource PlayMusicClip(AudioClip clip) => PlayMusic(clip, _musicVolume, _musicLoop);
+        private AudioSource PlayUiClip(AudioClip clip)
+        {
+            PlayUi(clip, _uiVolume, _uiPitch);
+            return null;
+        }
+        private AudioSource PlaySfx2DClip(AudioClip clip) => PlaySfx2D(clip, _sfx2DVolume, _sfx2DPitch, _sfx2DLoop);
+        private AudioSource PlaySfx3DClip(AudioClip clip)
+        {
+            PlaySfx3D(clip, _sfx3DPosition, _sfx3DVolume, _sfx3DPitch);
+            return null;
+        }
 
-        private void PlayAudio(EAudioType audioType, EAudioSubType audioSubType, Action<AudioClip> play)
+        private AudioSource PlayAudio(EAudioType audioType, EAudioSubType audioSubType, Func<AudioClip, AudioSource> play)
         {
             if (_audioCatalogParameters == null)
-                return;
+                return null;
 
             var setups = _audioCatalogParameters.AudioSetups;
             if (setups == null)
-                return;
+                return null;
 
             for (var i = 0; i < setups.Count; i++)
             {
@@ -90,10 +100,11 @@ namespace Services.Impl
                         continue;
 
                     ApplyVolumeFromCatalog(audioType, settingsEntry.Volume);
-                    play(settingsEntry.AudioClip);
-                    return;
+                    return play(settingsEntry.AudioClip);
                 }
             }
+
+            return null;
         }
 
         private void ApplyVolumeFromCatalog(EAudioType audioType, float volume)
@@ -133,7 +144,7 @@ namespace Services.Impl
 
         private void UpdateMusicVolume()
         {
-            if (_musicSource == null || !_musicSource.isPlaying)
+            if (_musicSource == null)
                 return;
 
             _musicVolume = _musicBaseVolume * _musicCatalogVolume * GetUserVolume(EAudioType.Music);

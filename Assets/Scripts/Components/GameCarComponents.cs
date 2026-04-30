@@ -1,6 +1,7 @@
 using Data.Enums;
-using Helpers.CarView;
+using Helpers.Car;
 using Scellecs.Morpeh;
+using UnityEngine;
 
 namespace Components
 {
@@ -14,6 +15,15 @@ namespace Components
     public struct BrakeInputComponent : IComponent { public bool Value; }
     public struct HandbrakeInputComponent : IComponent { public bool  Value; }
     public struct DriftMultiplierComponent : IComponent { public float Value; }
+    public struct ArcadeAssistSpeedComponent : IComponent { public float Value; }
+    public struct SplineProgressComponent : IComponent
+    {
+        public float PrevT;
+        public int Laps;
+        public float Distance;
+        public bool HasPrev;
+    }
+    public struct SplineDeltaComponent : IComponent { public float Value; }
     
     public struct SpeedMaxComponent : IComponent { public float Value; }
     public struct BackSpeedMaxComponent : IComponent { public float Value; }
@@ -22,6 +32,16 @@ namespace Components
     
     public struct CarViewComponent : IComponent { public ICarView Value; }
     public struct SkidmarksComponent : IComponent { public bool Value; }
+    public struct SkidAudioComponent : IComponent { public AudioSource Source; public float CurrentVolume; }
+    public struct EngineAudioComponent : IComponent
+    {
+        public AudioSource LowSource;
+        public AudioSource MedSource;
+        public AudioSource HighSource;
+        public float LowVolume;
+        public float MedVolume;
+        public float HighVolume;
+    }
     public struct SkidSmokeHandleComponent : IComponent { public int Value; }
     public struct HeadlightsComponent : IComponent { public EHeadlightsMode Value; }
 }

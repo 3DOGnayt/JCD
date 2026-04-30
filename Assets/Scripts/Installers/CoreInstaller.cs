@@ -18,7 +18,13 @@ namespace Installers
 
         private void Main()
         {
-            Container.Bind<World>().FromMethod(_ => World.Create()).AsSingle();
+            var world = World.Create();
+            Container.Bind<World>().FromInstance(world).AsSingle();
+            
+            Container.BindInterfacesTo<WorldLifetimeService>()
+                .FromInstance(new WorldLifetimeService(world))
+                .AsSingle();
+            
             Container.Bind<ISystemService>().To<SystemService>().AsSingle();
             
             Container.Bind<Startup>().FromInstance(startup).AsSingle();

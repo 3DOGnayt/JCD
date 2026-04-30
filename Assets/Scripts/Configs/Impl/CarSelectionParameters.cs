@@ -3,20 +3,36 @@ using UnityEngine;
 namespace Configs.Impl
 {
     [CreateAssetMenu(menuName = "Game/SelectionParameters/" + nameof(CarSelectionParameters), fileName = nameof(CarSelectionParameters), order = 1)]
-    public class CarSelectionParameters : ScriptableObject
+    public partial class CarSelectionParameters : ScriptableObject
     {
         [SerializeField] private CarPresetParameters _selectedCar;
-        [SerializeField] private CarParameters _selectedCarParameters;
+        [SerializeField] private CarMovementParameters _selectedCarMovementParameters;
+        [SerializeField] private CarSpeedsPresetParameters _selectedCarSpeedsPresetParameters;
+        [SerializeField] private CarSlipParameters _selectedCarSlipParameters;
+        [SerializeField] private CarEngineAudioParameters _selectedCarEngineAudioParameters;
         [SerializeField] private int _selectedCarIndex;
 
         public CarPresetParameters SelectedCar => _selectedCar;
-        public CarParameters SelectedCarParameters => _selectedCarParameters;
+        public CarMovementParameters MovementParameters => _selectedCarMovementParameters;
+        public CarSpeedsPresetParameters CarSpeedsPresetParameters => _selectedCarSpeedsPresetParameters;
+        public CarSlipParameters SlipParameters => _selectedCarSlipParameters;
+        public CarEngineAudioParameters SelectedCarEngineAudioParameters => _selectedCarEngineAudioParameters;
         public int SelectedCarIndex => _selectedCarIndex;
 
-        public void SetSelectedCar(CarPresetParameters car, CarParameters parameters, int index)
+        public void SetSelectedCar(
+            CarPresetParameters car,
+            CarMovementParameters movementParameters,
+            CarSpeedsPresetParameters speedsPresetParameters,
+            CarSlipParameters slipParameters,
+            CarEngineAudioParameters engineAudioParameters,
+            int index
+        )
         {
             _selectedCar = car;
-            _selectedCarParameters = parameters;
+            _selectedCarMovementParameters = movementParameters;
+            _selectedCarSpeedsPresetParameters = speedsPresetParameters;
+            _selectedCarSlipParameters = slipParameters;
+            _selectedCarEngineAudioParameters = engineAudioParameters;
             _selectedCarIndex = index;
         }
     }

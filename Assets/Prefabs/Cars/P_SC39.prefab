@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4993136870728333733}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CarModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 7654482204603949238}
   - component: {fileID: 242493883788275705}
   - component: {fileID: 7806465045705503000}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sport Car_39 FR Tire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +125,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2969689229506938326}
   - component: {fileID: 3147902332485698192}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FR_Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -262,7 +262,7 @@ GameObject:
   - component: {fileID: 1733735504394075538}
   - component: {fileID: 8952081040631416923}
   - component: {fileID: 6381201611822082848}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BackLeftPointLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -379,7 +379,7 @@ GameObject:
   m_Component:
   - component: {fileID: 922557332400268394}
   - component: {fileID: 8217919515254978958}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: FL_Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -449,7 +449,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1120039646849561476}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Skidmarks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -485,7 +485,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4395212463304202845}
   - component: {fileID: 2629409141995426167}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: FR_Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -557,7 +557,7 @@ GameObject:
   - component: {fileID: 1990062382601182331}
   - component: {fileID: 2238587366857589763}
   - component: {fileID: 8516549651596049472}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sport Car_39 FL Tire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -640,7 +640,7 @@ GameObject:
   - component: {fileID: 8908577900159199070}
   - component: {fileID: 7030767360900302999}
   - component: {fileID: 4716358255018550090}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sport Car_39 BL Tire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -723,7 +723,7 @@ GameObject:
   - component: {fileID: 8012219190105755196}
   - component: {fileID: 1558398499060874687}
   - component: {fileID: 8982304242634497048}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BackRightPointLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -839,7 +839,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1273375172442346320}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -875,7 +875,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4965548429468693752}
   - component: {fileID: 2572246819347039823}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FL_Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1011,7 +1011,7 @@ GameObject:
   m_Component:
   - component: {fileID: 171736894523002667}
   - component: {fileID: 9068770974772093301}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: BR_Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1083,7 +1083,7 @@ GameObject:
   - component: {fileID: 1301908605584258987}
   - component: {fileID: 183804365764927456}
   - component: {fileID: 8153292558595316877}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ForwardLeftSpotLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1202,7 +1202,7 @@ GameObject:
   - component: {fileID: 8646453167414145181}
   - component: {fileID: 5772110666094969943}
   - component: {fileID: 4257682405173347952}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: P_SC39
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1312,7 +1312,7 @@ GameObject:
   - component: {fileID: 3355356347256499350}
   - component: {fileID: 6842255041216952451}
   - component: {fileID: 8913188257768179708}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sport Car_39 BR Tire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1393,7 +1393,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8832792756162859878}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WheelsColliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1429,7 +1429,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1148727463355365397}
   - component: {fileID: 7310827381163398353}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BR_Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1564,7 +1564,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3170614539616669327}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Effects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1598,7 +1598,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4026360510200715315}
   - component: {fileID: 7117407044553954795}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BL_Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1735,7 +1735,7 @@ GameObject:
   - component: {fileID: 2562814886282404385}
   - component: {fileID: 4452060834712598571}
   - component: {fileID: 2295042785786620849}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ForwardRightSpotLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1852,7 +1852,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3476747594851989930}
   - component: {fileID: 2008216944493213516}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: BL_Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1927,7 +1927,7 @@ GameObject:
   - component: {fileID: 780397458678767915}
   - component: {fileID: 1550213845451149244}
   - component: {fileID: 1704317199373089031}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: P_SC39
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1994,16 +1994,6 @@ MonoBehaviour:
   _carPresetParameters: {fileID: 11400000, guid: 314cb5b109249c24f9b0ab884476da62,
     type: 2}
   _carRigidbody: {fileID: 3165186140599483120}
-  _carSetup:
-    SpeedMax: 220
-    BackSpeedMax: 80
-    GearCount: 6
-    EngineRpmMax: 9000
-    SteeringAngleMax: 35
-    SteeringSpeed: 100
-    BrakeInput: 0
-    HandbrakeInput: 0
-    DriftMultiplier: 0
   _carEffectsSetup:
     TracesWheels:
     - {fileID: 2572246819347039823}

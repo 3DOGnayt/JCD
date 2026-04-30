@@ -14,6 +14,7 @@ namespace UI.Views
         public float CountdownHoldSecondsDefault = 0.6f;
         public float CountdownFadeInSeconds = 0.2f;
         public float CountdownFadeOutSeconds = 0.2f;
+        [Space]
         public float WinFadeInSeconds = 0.2f;
         public float ResultHoldSeconds = 1.2f;
         [Space]

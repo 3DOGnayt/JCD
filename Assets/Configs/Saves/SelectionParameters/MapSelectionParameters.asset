@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3219c6cdfb5fadd4086bb57ff75f295e, type: 3}
   m_Name: MapSelectionParameters
   m_EditorClassIdentifier: 
-  _selectedMapPrefab: {fileID: 966750755263835405, guid: 54b7aefa62b14644a8ba472887801c8a,
-    type: 3}
-  _selectedMapIndex: 0
+  _selectedMapPrefab: {fileID: 0}
+  _selectedMapIndex: -1
   _selectedMapSelectionCount: 0
   _selectedMapLapCount: 0
-  _selectedMap: 1
+  _selectedMap: 0

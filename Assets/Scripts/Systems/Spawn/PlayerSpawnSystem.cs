@@ -4,7 +4,7 @@ using Data.Enums;
 using Scellecs.Morpeh;
 using Services;
 using System;
-using Helpers.CarView;
+using Helpers.Car;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -16,30 +16,51 @@ namespace Systems.Spawn
         [Inject] public World World { get; set;}
         [Inject] private DiContainer _container;
 
-        private ILoadingService _loadingService;
+        private IEventService _eventService;
         private IGameSessionService _gameSessionService;
         private CarSelectionParameters _carSelectionParameters;
+        private IUnitRaceTimerService _unitRaceTimerService;
 
         private Transform _playerGroup;
-        private IDisposable _startRaceDisposable;
+        private IDisposable _spawnDisposable;
+        private const float SpawnProgressThreshold = 0.2f;
+        private bool _hasSpawnedThisLoad;
         
         [Inject]
         public void Construct(
-            ILoadingService loadingService,
+            IEventService eventService,
             IGameSessionService gameSessionService,
-            CarSelectionParameters carSelectionParameters
+            CarSelectionParameters carSelectionParameters,
+            IUnitRaceTimerService unitRaceTimerService
         )
         {
-            _loadingService = loadingService;
+            _eventService = eventService;
             _gameSessionService = gameSessionService;
             _carSelectionParameters = carSelectionParameters;
+            _unitRaceTimerService = unitRaceTimerService;
         }
         
         public void OnAwake()
         {
             SetSpawnRoot();
             
-            _startRaceDisposable = _loadingService.StartRaceStream.Subscribe(_ => OnStartRace());
+            if (_eventService != null) 
+                _spawnDisposable = _eventService.LoadingProgress.Subscribe(OnLoadingProgress);
+        }
+
+        private void OnLoadingProgress(float progress)
+        {
+            if (progress <= 0f)
+                _hasSpawnedThisLoad = false;
+
+            if (_gameSessionService != null && _gameSessionService.Target != EGameSessionTarget.Game)
+                return;
+
+            if (_hasSpawnedThisLoad || progress < SpawnProgressThreshold)
+                return;
+
+            _hasSpawnedThisLoad = true;
+            OnStartRace();
         }
 
         private void SetSpawnRoot() => _playerGroup = new GameObject("Player").transform;
@@ -51,11 +72,9 @@ namespace Systems.Spawn
 
         private void SpawnPlayer()
         {
-            var selectedPreset = _carSelectionParameters != null
-                ? _carSelectionParameters.SelectedCar
-                : null;
-
+            var selectedPreset = _carSelectionParameters != null ? _carSelectionParameters.SelectedCar : null;
             var player = selectedPreset != null ? selectedPreset.Car : null;
+            
             if (player == null)
                 return;
 
@@ -66,38 +85,51 @@ namespace Systems.Spawn
             AddInternalComponents(entity, instance);
             
             _gameSessionService?.RegisterRuntimeEntity(entity);
-            _loadingService.PublishPlayerSpawned(instance);
+            _eventService.PublishPlayerSpawned(instance);
+            _unitRaceTimerService?.SetPlayerEntity(entity);
             
             _gameSessionService?.RegisterRuntimeRoot(instance.CarTransform.gameObject);
         }
 
         private void AddGameComponents(Entity entity, ICarView carView)
         {
-            var carSetup = carView.CarPresetParameters.CarSetup;
+            var movementParameters = _carSelectionParameters != null ? _carSelectionParameters.MovementParameters : null;
+            var horizontal = movementParameters != null ? movementParameters.Horizontal : null;
+            var vertical = movementParameters != null ? movementParameters.Vertical : null;
+            
+            var speedMax = _carSelectionParameters != null ? _carSelectionParameters.GetSpeedMaxKmh() : 0f;
+            var backSpeedMax = _carSelectionParameters != null ? _carSelectionParameters.GetBackSpeedMaxKmh() : 0f;
+            var gearCount = _carSelectionParameters != null ? _carSelectionParameters.GetGearCount() : 0;
+
+            var steeringAngleMax = horizontal?.SteeringAngleMax ?? 0f;
+            var steeringSpeed = horizontal?.SteeringSpeed ?? 0f;
+            var engineRpmMax = vertical?.MaxRpm ?? 0f;
             
             entity.SetComponent(new SpeedComponent { Value = 0 });
             entity.SetComponent(new BackSpeedComponent { Value = 0 });
             entity.SetComponent(new GearComponent { Value = 0 });
             entity.SetComponent(new EngineRpmComponent { Value = 0 });
-            entity.SetComponent(new SteeringAngleComponent { Value = carSetup.SteeringAngleMax });
-            entity.SetComponent(new SteeringSpeedComponent { Value = carSetup.SteeringSpeed });
+            entity.SetComponent(new SteeringAngleComponent { Value = steeringAngleMax });
+            entity.SetComponent(new SteeringSpeedComponent { Value = steeringSpeed });
             entity.SetComponent(new BrakeInputComponent { Value = false });
             entity.SetComponent(new HandbrakeInputComponent { Value = false });
-            entity.SetComponent(new DriftMultiplierComponent { Value = carSetup.DriftMultiplier });
+            entity.SetComponent(new DriftMultiplierComponent { Value = 0f });
+            entity.SetComponent(new ArcadeAssistSpeedComponent { Value = 0f });
+            entity.SetComponent(new SplineProgressComponent());
+            entity.SetComponent(new SplineDeltaComponent { Value = float.NaN });
 
-            var maxSpeedComponent = new SpeedMaxComponent { Value = carSetup.SpeedMax };
-            var maxRpmComponent = new EngineRpmMaxComponent { Value = carSetup.EngineRpmMax };
+            var maxSpeedComponent = new SpeedMaxComponent { Value = speedMax };
+            var maxRpmComponent = new EngineRpmMaxComponent { Value = engineRpmMax };
 
             entity.SetComponent(maxSpeedComponent);
-            entity.SetComponent(new BackSpeedMaxComponent { Value = carSetup.BackSpeedMax });
-            entity.SetComponent(new GearCountComponent { Value = carSetup.GearCount });
+            entity.SetComponent(new BackSpeedMaxComponent { Value = backSpeedMax });
+            entity.SetComponent(new GearCountComponent { Value = gearCount });
             entity.SetComponent(maxRpmComponent);
             
             entity.SetComponent(new CarViewComponent{ Value = carView });
             entity.SetComponent(new SkidmarksComponent{ Value = false });
             entity.SetComponent(new SkidSmokeHandleComponent{ Value = -1 });
             entity.SetComponent(new HeadlightsComponent { Value = EHeadlightsMode.Off });
-            
         }
 
         private void AddInternalComponents(Entity entity, ICarView carView)
@@ -107,6 +139,32 @@ namespace Systems.Spawn
             AddWheelInfoComponents(entity, carView);
             AddFrontWheelComponents(entity, carView);
             AddBackWheelComponents(entity, carView);
+            AddSkidAudioComponent(entity, carView);
+            AddEngineAudioComponent(entity, carView);
+        }
+
+        private void AddSkidAudioComponent(Entity entity, ICarView carView)
+        {
+            if (carView == null)
+                return;
+
+            entity.SetComponent(new SkidAudioComponent { Source = null, CurrentVolume = 0f });
+        }
+
+        private void AddEngineAudioComponent(Entity entity, ICarView carView)
+        {
+            if (carView == null)
+                return;
+
+            entity.SetComponent(new EngineAudioComponent
+            {
+                LowSource = null,
+                MedSource = null,
+                HighSource = null,
+                LowVolume = 0f,
+                MedVolume = 0f,
+                HighVolume = 0f
+            });
         }
 
         private void AddCommonComponents(Entity entity, ICarView carView)
@@ -124,6 +182,7 @@ namespace Systems.Spawn
             
             entity.SetComponent(new VerticalInputComponent {Value = 0 });
             entity.SetComponent(new HorizontalInputComponent {Value = 0 });
+            entity.SetComponent(new RaceLapStateComponent());
         }
 
         private void AddMainCarComponents(Entity entity, ICarView carView)
@@ -207,7 +266,7 @@ namespace Systems.Spawn
         public void OnUpdate(float deltaTime) { }
         public void Dispose()
         {
-            _startRaceDisposable?.Dispose();
+            _spawnDisposable?.Dispose();
         }
     }
 }

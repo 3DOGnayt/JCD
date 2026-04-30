@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Configs.Impl;
 using Data.Enums;
 using DG.Tweening;
 using KoboldUi.Element.Controller;
@@ -6,52 +8,60 @@ using Services;
 using UI.Views;
 using UniRx;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Controllers
 {
     public class GameResultController : AUiController<GameResultView>, IDisposable
     {
-        private readonly ILoadingService _loadingService;
+        private readonly IEventService _eventService;
         private readonly IRaceTimerService _raceTimerService;
         private readonly IGameSessionService _gameSessionService;
         private readonly IAudioService _audioService;
+        private readonly GameModeSelectionParameters _gameModeSelectionParameters;
         
         private IDisposable _resultSubscription;
         private Sequence _winMoveSequence;
-        private Vector2 _winStartAnchoredPosition;
-        private bool _hasWinStartPosition;
+        private readonly Dictionary<Image, Vector2> _resultStartPositions = new();
 
         private bool _resultGame;
+        private Tween _background;
 
         public GameResultController(
-            ILoadingService loadingService,
+            IEventService eventService,
             IRaceTimerService raceTimerService,
             IGameSessionService gameSessionService,
-            IAudioService audioService
+            IAudioService audioService,
+            GameModeSelectionParameters gameModeSelectionParameters
         )
         {
-            _loadingService = loadingService;
+            _eventService = eventService;
             _raceTimerService = raceTimerService;
             _gameSessionService = gameSessionService;
             _audioService = audioService;
+            _gameModeSelectionParameters = gameModeSelectionParameters;
         }
 
         public override void Initialize()
         {
             View.Win.gameObject.SetActive(false);
             View.Lose.gameObject.SetActive(false);
+            View.Complite.gameObject.SetActive(false);
+            View.Background.gameObject.SetActive(false);
+            
             View.TimePanel.SetActive(false);
             View.ResultButtons.SetActive(false);
             
             View.Retry.OnClickAsObservable().Subscribe(_ => OnRetryClick()).AddTo(View);
             View.MainMenu.OnClickAsObservable().Subscribe(_ => OnMainMenuClick()).AddTo(View);
             
-            _resultSubscription = _loadingService.ResultSubject.Subscribe(SetResult);
+            _resultSubscription = _eventService.ResultSubject.Subscribe(SetResult);
         }
 
         protected override void OnOpen()
         {
-            _loadingService?.PublishInputEnabled(false);
+            _eventService?.PublishInputEnabled(false);
+            _background?.Kill();
             
             SetWinResult(_resultGame);
             View.TimePanel.SetActive(false);
@@ -69,30 +79,87 @@ namespace UI.Controllers
         {
             _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.Ui_Win);
             
+            ChangeBackgroundAlpha();
+
+            var gameMod = _gameModeSelectionParameters != null ? _gameModeSelectionParameters.GameMod : EGameMod.None;
+            if (gameMod == EGameMod.Training)
+            {
+                View.Complite.gameObject.SetActive(true);
+                View.Win.gameObject.SetActive(false);
+                View.Lose.gameObject.SetActive(false);
+                return;
+            }
+
+            View.Complite.gameObject.SetActive(false);
+
+            if (gameMod == EGameMod.Story)
+            {
+                View.Win.gameObject.SetActive(true);
+                View.Lose.gameObject.SetActive(false);
+                return;
+            }
+
             View.Win.gameObject.SetActive(resultGame);
             View.Lose.gameObject.SetActive(!resultGame);
+        }
+        
+        private void ChangeBackgroundAlpha()
+        {
+            View.Background.gameObject.SetActive(true);
+            
+            var color = View.Background.color;
+            color.a = 0;
+            View.Background.color = color;
+            
+            _background = View.Background.DOFade(1f, View.FadeInDelay);
         }
 
         private void PlayWinMoveSequence()
         {
-            var rect = View.Win.rectTransform;
-            if (!_hasWinStartPosition)
-            {
-                _winStartAnchoredPosition = rect.anchoredPosition;
-                _hasWinStartPosition = true;
-            }
+            var targetImage = GetResultImage();
+            if (targetImage == null)
+                return;
 
-            rect.anchoredPosition = _winStartAnchoredPosition;
+            var rect = targetImage.rectTransform;
+            var startPosition = GetStartPosition(targetImage);
+            rect.anchoredPosition = startPosition;
 
             _winMoveSequence?.Kill();
-            var target = _winStartAnchoredPosition + Vector2.up * View.WinMoveUpDistance;
+            var target = startPosition + Vector2.up * View.WinMoveUpDistance;
            
             _winMoveSequence = DOTween.Sequence()
-                .SetLink(View.Win.gameObject)
+                .SetLink(targetImage.gameObject)
                 .AppendInterval(View.DelayBeforeMoveResult)
                 .Append(rect.DOAnchorPos(target, View.WinMoveUpDuration).SetEase(View.MoveEase))
                 .AppendInterval(View.DelayBeforeShowResults)
                 .OnComplete(ShowResults);
+        }
+
+        private Image GetResultImage()
+        {
+            if (View.Complite.gameObject.activeSelf)
+                return View.Complite;
+
+            if (View.Win.gameObject.activeSelf)
+                return View.Win;
+
+            if (View.Lose.gameObject.activeSelf)
+                return View.Lose;
+
+            return null;
+        }
+
+        private Vector2 GetStartPosition(Image image)
+        {
+            if (image == null)
+                return Vector2.zero;
+
+            if (_resultStartPositions.TryGetValue(image, out var cached))
+                return cached;
+
+            var pos = image.rectTransform.anchoredPosition;
+            _resultStartPositions[image] = pos;
+            return pos;
         }
 
         private void ShowResults()

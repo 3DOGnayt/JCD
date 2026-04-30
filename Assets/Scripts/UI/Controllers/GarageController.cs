@@ -19,9 +19,13 @@ namespace UI.Controllers
         
         private CarCatalogParameters _carCatalogParameters;
         private CarSelectionParameters _carSelectionParameters;
+        private IEventService _eventService;
 
         private CarPresetParameters _pendingCarPreset;
-        private CarParameters _pendingCarParameters;
+        private CarMovementParameters _pendingMovementParameters;
+        private CarSpeedsPresetParameters _pendingSpeedsPresetParameters;
+        private CarSlipParameters _pendingSlipParameters;
+        private CarEngineAudioParameters _pendingCarEngineAudioParameters;
         
         private Sprite _pendingCarPreview;
         private int _pendingCarIndex = -1;
@@ -30,11 +34,13 @@ namespace UI.Controllers
         [Inject]
         public void Construct(
             CarCatalogParameters carCatalogParameters,
-            CarSelectionParameters carSelectionParameters
+            CarSelectionParameters carSelectionParameters,
+            IEventService eventService
         )
         {
             _carCatalogParameters = carCatalogParameters;
             _carSelectionParameters = carSelectionParameters;
+            _eventService = eventService;
         }
 
         public GarageController(
@@ -92,7 +98,13 @@ namespace UI.Controllers
                 return;
             
             var entry = _carCatalogParameters.Cars[0];
-            _carSelectionParameters.SetSelectedCar(entry.Preset, entry.Parameters, 0);
+            _carSelectionParameters.SetSelectedCar(
+                entry.Preset,
+                entry.MovementParameters,
+                entry.SpeedsPresetParameters,
+                entry.SlipParameters,
+                entry.EngineAudioParameters,
+                0);
         }
 
         private void PreparePendingCarSelection()
@@ -138,7 +150,10 @@ namespace UI.Controllers
             var entry = _carCatalogParameters.Cars[index];
             _pendingCarIndex = index;
             _pendingCarPreset = entry.Preset;
-            _pendingCarParameters = entry.Parameters;
+            _pendingMovementParameters = entry.MovementParameters;
+            _pendingSpeedsPresetParameters = entry.SpeedsPresetParameters;
+            _pendingSlipParameters = entry.SlipParameters;
+            _pendingCarEngineAudioParameters = entry.EngineAudioParameters;
             _pendingCarPreview = entry.Preview;
             UpdateCarPresentation();
         }
@@ -170,7 +185,14 @@ namespace UI.Controllers
 
             _audioService.PlayUiAudio(EAudioType.Ui, EAudioSubType.MenuButtonConfirm);
             
-            _carSelectionParameters.SetSelectedCar(_pendingCarPreset, _pendingCarParameters, _pendingCarIndex);
+            _carSelectionParameters.SetSelectedCar(
+                _pendingCarPreset,
+                _pendingMovementParameters,
+                _pendingSpeedsPresetParameters,
+                _pendingSlipParameters,
+                _pendingCarEngineAudioParameters,
+                _pendingCarIndex);
+            _eventService?.PublishCarSelectionChanged();
             RefreshCarButtons();
             _localWindowsService.OpenWindow<MainMenuWindow>();
         }

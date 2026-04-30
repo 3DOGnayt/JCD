@@ -11,6 +11,8 @@ namespace UI.Views
     {
         public Image Win;
         public Image Lose;
+        public Image Complite;
+        public Image Background;
         [Space] 
         public GameObject ResultButtons;
         public Button Retry;
@@ -24,6 +26,7 @@ namespace UI.Views
         public float WinMoveUpDuration = 0.35f;
         public float DelayBeforeMoveResult = 1f;
         public float DelayBeforeShowResults = 0.4f;
+        public float FadeInDelay = 0.4f;
         [Space]
         public Ease MoveEase;
     }

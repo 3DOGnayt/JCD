@@ -12,6 +12,7 @@ namespace UI.Window
         protected override void AddControllers()
         {
             AddController<MapController, MapView>(_mapView);
+            AddController<AudioMenuController, MapView>(_mapView);
         }
     }
 }

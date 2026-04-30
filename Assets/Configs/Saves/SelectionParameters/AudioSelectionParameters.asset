@@ -13,4 +13,9 @@ MonoBehaviour:
   m_Name: AudioSelectionParameters
   m_EditorClassIdentifier: 
   _selectedMusicSubType: 0
-  _selectedMusicIndex: 0
+  _selectedMusicIndex: -1
+  volumeSetup:
+    Master: 0.7
+    Music: 0.7
+    Sfx: 0.7
+    Ui: 0.7

@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14854d0c42fb4ed4986f7b313e35d0c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _audioCatalogParameters: {fileID: 11400000, guid: b49af3d5cb2455e46b61b215738c5c0a,
+  _audioCatalogParameters: {fileID: 11400000, guid: 95cc23c9a6244fa4ab22f27ef26c73a8,
     type: 2}
   _audioSelectionParameters: {fileID: 11400000, guid: 547e1ddb2b6995b4889d00c1f5717e57,
     type: 2}

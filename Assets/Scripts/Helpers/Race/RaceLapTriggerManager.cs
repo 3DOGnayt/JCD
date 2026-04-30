@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
+using Components;
 using Configs.Impl;
+using Scellecs.Morpeh;
 using Services;
 using UniRx;
 using UnityEngine;
@@ -11,26 +14,29 @@ namespace Helpers.Race
     {
         [SerializeField] private List<RaceLapTrigger> _checkpoints = new();
         
-        private IRaceTimerService _raceTimerService;
+        private World _world;
+        private IEventService _eventService;
         private MapSelectionParameters _mapSelectionParameters;
         
-        private int _selectionCount = 1;
-        private int _lapCount = 1;
+        private Stash<RaceLapStateComponent> _stateStash;
+        private IDisposable _startRaceDisposable;
         
-        private int _nextCheckpointIndex;
-        private int _currentSelection;
-        private int _currentLap;
-        private bool _isLoopStarted;
+        private Entity _raceLapEntity;
+        private bool _hasEntity;
 
         [Inject]
         public void Construct(
-            IRaceTimerService raceTimerService,
-            ILoadingService loadingService,
-            MapSelectionParameters mapSelectionParameters)
+            IEventService eventService,
+            MapSelectionParameters mapSelectionParameters,
+            World world
+        )
         {
-            _raceTimerService = raceTimerService;
+            _eventService = eventService;
             _mapSelectionParameters = mapSelectionParameters;
-            loadingService.StartRaceStream.Subscribe(_ => ResetProgress()).AddTo(this);
+            _world = world;
+            
+            if (_eventService != null)
+                _startRaceDisposable = _eventService.StartRaceStream.Subscribe(_ => ResetProgress());
         }
 
         private void Awake()
@@ -41,64 +47,70 @@ namespace Helpers.Race
                 if (checkpoint == null)
                     continue;
 
-                checkpoint.Configure(this, i);
+                checkpoint.Configure(i);
             }
 
-            if (_mapSelectionParameters != null)
-            {
-                if (_mapSelectionParameters.SelectedMapSelectionCount > 0)
-                    _selectionCount = _mapSelectionParameters.SelectedMapSelectionCount;
-                if (_mapSelectionParameters.SelectedMapLapCount > 0)
-                    _lapCount = _mapSelectionParameters.SelectedMapLapCount;
-            }
+            InitializeRaceLapEntity();
         }
 
-        public void RegisterCheckpoint(int checkpointIndex)
+        private void InitializeRaceLapEntity()
         {
-            if (_raceTimerService == null || !_raceTimerService.IsRunning || _raceTimerService.IsFinished)
+            if (_world == null)
                 return;
 
-            if (_checkpoints.Count == 0)
+            if (_hasEntity)
                 return;
 
-            var totalSelections = Mathf.Max(1, _selectionCount);
-            var totalLaps = Mathf.Max(1, _lapCount);
-            var isLoopMap = _checkpoints.Count <= 1;
+            _stateStash = _world.GetStash<RaceLapStateComponent>();
 
-            if (isLoopMap)
-            {
-                if (!_isLoopStarted)
-                {
-                    _isLoopStarted = true;
-                    return;
-                }
-
-                _currentLap++;
-                var isFinish = _currentLap >= totalLaps;
-                var isLoopRegistered = _raceTimerService.RegisterLap(_currentLap, isFinish);
-                if (isFinish && isLoopRegistered)
-                    Debug.Log("Race finished");
-                return;
-            }
-
-            if (checkpointIndex != _nextCheckpointIndex)
-                return;
-
-            _nextCheckpointIndex++;
-            _currentSelection++;
-
-            var isSegmentFinish = _currentSelection >= totalSelections;
-            var isRegistered = _raceTimerService.RegisterLap(_currentSelection, isSegmentFinish);
-            if (isSegmentFinish && isRegistered)
-                Debug.Log("Race finished");
+            _raceLapEntity = _world.CreateEntity();
+            _raceLapEntity.SetComponent(BuildConfig());
+            _raceLapEntity.SetComponent(new RaceLapStateComponent());
+            _hasEntity = true;
         }
 
         private void ResetProgress()
         {
-            _nextCheckpointIndex = 0;
-            _currentSelection = 0;
-            _currentLap = 0;
-            _isLoopStarted = false;
+            if (_stateStash == null || !_hasEntity)
+                return;
+
+            foreach (var entity in _world.Filter.With<RaceLapStateComponent>().Build())
+            {
+                ref var state = ref _stateStash.Get(entity);
+                state.NextCheckpointIndex = 0;
+                state.CurrentSelection = 0;
+                state.CurrentLap = 0;
+                state.IsLoopStarted = false;
+            }
+        }
+
+        private RaceLapConfigComponent BuildConfig()
+        {
+            var selectionCount = 1;
+            var lapCount = 1;
+
+            if (_mapSelectionParameters != null)
+            {
+                if (_mapSelectionParameters.SelectedMapSelectionCount > 0)
+                    selectionCount = _mapSelectionParameters.SelectedMapSelectionCount;
+                if (_mapSelectionParameters.SelectedMapLapCount > 0)
+                    lapCount = _mapSelectionParameters.SelectedMapLapCount;
+            }
+
+            return new RaceLapConfigComponent
+            {
+                SelectionCount = selectionCount,
+                LapCount = lapCount,
+                CheckpointsCount = _checkpoints.Count
+            };
+        }
+
+        private void OnDestroy()
+        {
+            _startRaceDisposable?.Dispose();
+            
+            if (_world != null && _hasEntity)
+                _world.RemoveEntity(_raceLapEntity);
         }
     }
 }

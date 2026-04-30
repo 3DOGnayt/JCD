@@ -1,4 +1,4 @@
-using Helpers.CarView;
+using Helpers.Car;
 using Services;
 using UniRx;
 using UnityEngine;
@@ -30,16 +30,27 @@ namespace Helpers
         private float _yaw;
         private float _pitch;
         private float _currentDistance;
+        private Vector3 _initialPosition;
+        private Quaternion _initialRotation;
 
         [Inject]
-        public void Construct(ILoadingService loadingService)
+        public void Construct(IEventService eventService)
         {
-            loadingService.PlayerSpawnedStream.Subscribe(OnPlayerSpawned).AddTo(this);
+            eventService.PlayerSpawnedStream.Subscribe(OnPlayerSpawned).AddTo(this);
+        }
+
+        private void Awake()
+        {
+            _initialPosition = transform.position;
+            _initialRotation = transform.rotation;
         }
 
         private void OnPlayerSpawned(ICarView carView)
         {
             _target = carView.CarTransform.gameObject;
+
+            transform.position = _initialPosition;
+            transform.rotation = _initialRotation;
 
             var targetPosition = _target.transform.position;
             var direction = transform.position - targetPosition;

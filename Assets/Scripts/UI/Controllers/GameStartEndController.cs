@@ -6,7 +6,6 @@ using DG.Tweening;
 using UI.Views;
 using UI.Window;
 using Services;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -15,7 +14,7 @@ namespace UI.Controllers
 {
     public class GameStartEndController : AUiController<GameStartEndView>
     {
-        private readonly ILoadingService _loadingService;
+        private readonly IEventService _eventService;
         private readonly IRaceTimerService _raceTimerService;
         private readonly ILocalWindowsService _localWindowsService;
         private readonly IAudioService _audioService;
@@ -27,13 +26,13 @@ namespace UI.Controllers
         [Inject] private AudioSelectionParameters _audioSelectionParameters;
         
         public GameStartEndController(
-            ILoadingService loadingService,
+            IEventService eventService,
             IRaceTimerService raceTimerService,
             ILocalWindowsService localWindowsService,
             IAudioService audioService
         )
         {
-            _loadingService = loadingService;
+            _eventService = eventService;
             _raceTimerService = raceTimerService;
             _localWindowsService = localWindowsService;
             _audioService = audioService;
@@ -43,9 +42,9 @@ namespace UI.Controllers
 
         protected override void OnOpen()
         {
-            _loadingService?.PublishInputEnabled(false);
+            _eventService?.PublishInputEnabled(false);
             
-            if (_raceTimerService.IsFinished)
+            if (_raceTimerService.RaceIsFinished)
             {
                 ShowResult();
                 return;
@@ -85,14 +84,14 @@ namespace UI.Controllers
 
             if (View.СountdownList == null || View.СountdownList.Count == 0)
             {
-                _countdownSequence.AppendCallback(PublishCountdownFinished);
+                FinishCountdown();
                 return;
             }
 
             var fadeIn = View.CountdownFadeInSeconds;
             var fadeOut = View.CountdownFadeOutSeconds;
 
-            _audioService.PlayMusicAudio(EAudioType.Music, _audioSelectionParameters.SelectedMusicSubType, 0.05f); // TODO: SOUND
+            _audioService.PlayMusicAudio(EAudioType.Music, _audioSelectionParameters.SelectedMusicSubType); // TODO: SOUND
             _audioService.PlaySfx2DAudio(EAudioType.Ui, EAudioSubType.Ui_3); // TODO: SOUND
             
             for (var i = 0; i < View.СountdownList.Count; i++)
@@ -124,8 +123,13 @@ namespace UI.Controllers
                     _countdownSequence.AppendCallback(() => { viewСountdown.gameObject.SetActive(false); });
             }
 
+            FinishCountdown();
+        }
+
+        private void FinishCountdown()
+        {
             _countdownSequence.AppendCallback(PublishCountdownFinished);
-            _countdownSequence.AppendCallback(() => _loadingService?.PublishInputEnabled(true));
+            _countdownSequence.AppendCallback(() => _eventService?.PublishInputEnabled(true));
             _countdownSequence.AppendCallback(() => _audioService.PlaySfx2DAudio(EAudioType.Ui, EAudioSubType.Ui_Start));
             _countdownSequence.AppendCallback(() => _localWindowsService.CloseWindow());
         }
@@ -151,8 +155,8 @@ namespace UI.Controllers
             View.Finish.gameObject.SetActive(true);
             ShowResultImage(View.Finish, View.WinFadeInSeconds);
             
-            _loadingService.PublishInputEnabled(false);
-            _loadingService.PublishWinResultChanged(true);
+            _eventService.PublishInputEnabled(false);
+            _eventService.PublishWinResultChanged(true);
             
             StartResultFlow();
         }
@@ -184,10 +188,10 @@ namespace UI.Controllers
 
         private void PublishCountdownFinished()
         {
-            if (_loadingService == null)
+            if (_eventService == null)
                 return;
 
-            _loadingService.PublishCountdownFinished();
+            _eventService.PublishCountdownFinished();
         }
 
         private void ShowResultImage(Image finish, float fadeInSeconds)

@@ -12,7 +12,7 @@ namespace UI.Controllers
 {
     public class GameSpeedometerController : AUiController<GameSpeedometerView>
     {
-        private readonly ILoadingService _loadingService;
+        private readonly IEventService _eventService;
         private readonly CarUISmoothingParameters _carUISmoothingParameters;
         private readonly CarSelectionParameters _carSelectionParameters;
         
@@ -24,21 +24,22 @@ namespace UI.Controllers
         private float _maxRpm;
 
         public GameSpeedometerController(
-            ILoadingService loadingService,
+            IEventService eventService,
             CarUISmoothingParameters carUISmoothingParameters,
             CarSelectionParameters carSelectionParameters)
         {
-            _loadingService = loadingService;
+            _eventService = eventService;
             _carUISmoothingParameters = carUISmoothingParameters;
             _carSelectionParameters = carSelectionParameters;
         }
 
         public override void Initialize()
         {
-            if (_loadingService == null)
+            if (_eventService == null)
                 return;
 
-            _loadingService.CarSetupChangedStream.Subscribe(OnCarSetupAspectChanged).AddTo(View);
+            _eventService.CarSetupChangedStream.Subscribe(OnCarSetupAspectChanged).AddTo(View);
+            _eventService.CarSelectionChangedStream.Subscribe(_ => OnCarSelectionChanged()).AddTo(View);
             CacheCarLimits();
         }
 
@@ -47,16 +48,22 @@ namespace UI.Controllers
             if (_carSelectionParameters == null)
                 return;
 
-            var selectedCar = _carSelectionParameters.SelectedCar;
-            if (selectedCar == null)
-                return;
+            if (_carSelectionParameters != null)
+                _maxSpeed = _carSelectionParameters.GetSpeedMaxKmh();
 
-            var carSetup = selectedCar.CarSetup;
-            if (carSetup == null)
-                return;
+            var movementParameters = _carSelectionParameters.MovementParameters;
+            if (movementParameters != null && movementParameters.Vertical != null)
+                _maxRpm = movementParameters.Vertical.MaxRpm;
+        }
 
-            _maxSpeed = carSetup.SpeedMax;
-            _maxRpm = carSetup.EngineRpmMax;
+        private void OnCarSelectionChanged()
+        {
+            CacheCarLimits();
+            _uiSpeed = 0f;
+            _uiBackSpeed = 0f;
+            _uiGear = 0f;
+            _uiRpm = 0f;
+            UpdateSpeedometer();
         }
 
         private void OnCarSetupAspectChanged(CarSetupAspect aspect)

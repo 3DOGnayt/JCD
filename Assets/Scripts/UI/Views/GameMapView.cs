@@ -1,4 +1,4 @@
-using Data.Struct;
+using Cameras;
 using KoboldUi.Element.View;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,97 +8,35 @@ namespace UI.Views
     public class GameMapView : AUiAnimatedView
     {
         [Header("References")]
-        [SerializeField]
-        private RawImage _mapImage;
+        [SerializeField] private RawImage _mapImage;
+        [SerializeField] private RectTransform _enemyDot;
 
-        [Header("Map Settings")]
-        [SerializeField]
-        private Vector2 _mapWorldSize = new(1000f, 1000f);
+        private MinimapCameraHolder _minimapCamera;
 
-        [SerializeField] private Vector2 _mapWorldCenter = Vector2.zero;
-        [SerializeField] private float _viewRadiusMeters = 100f;
-        [SerializeField] private bool _rotateWithPlayer = true;
-        [SerializeField] private bool _clampToMapBounds = true;
+        public RectTransform MapRect => _mapImage != null ? _mapImage.rectTransform : null;
 
-        private Transform _player;
-        private RectTransform _mapRectTransform;
-
-        public void SetPlayer(Transform player)
+        public void SetMinimapCamera(MinimapCameraHolder minimapCameraInstance)
         {
-            _player = player;
+            _minimapCamera = minimapCameraInstance;
+            
+            if (_mapImage != null && _minimapCamera != null && _minimapCamera.Camera != null)
+                _mapImage.texture = _minimapCamera.Camera.targetTexture;
         }
 
-        public void ApplySettings(MapMiniMapSettings settings)
+        public void SetEnemyPosition(Vector2 anchoredPosition)
         {
-            _mapWorldSize = settings.MapWorldSize;
-            _mapWorldCenter = settings.MapWorldCenter;
-            _viewRadiusMeters = settings.ViewRadiusMeters;
-            _rotateWithPlayer = settings.RotateWithPlayer;
-            _clampToMapBounds = settings.ClampToMapBounds;
-
-            if (_mapImage != null && settings.MiniMapTexture != null)
-                _mapImage.texture = settings.MiniMapTexture;
-        }
-
-        public void UpdateMap()
-        {
-            if (!isActiveAndEnabled)
+            if (_enemyDot == null)
                 return;
 
-            if (_player == null || _mapImage == null)
-                return;
-
-            EnsureMapRectTransform();
-
-            var uvSize = GetUvSize();
-            var uvCenter = WorldToMapUv(_player.position);
-
-            if (_clampToMapBounds)
-            {
-                uvCenter.x = Mathf.Clamp(uvCenter.x, uvSize.x * 0.5f, 1f - uvSize.x * 0.5f);
-                uvCenter.y = Mathf.Clamp(uvCenter.y, uvSize.y * 0.5f, 1f - uvSize.y * 0.5f);
-            }
-
-            var uvRect = _mapImage.uvRect;
-            uvRect.size = uvSize;
-            uvRect.position = uvCenter - uvSize * 0.5f;
-            _mapImage.uvRect = uvRect;
-
-            if (_mapRectTransform == null)
-                return;
-
-            if (_rotateWithPlayer)
-            {
-                var yaw = _player.eulerAngles.y;
-                _mapRectTransform.localRotation = Quaternion.Euler(0f, 0f, yaw);
-            }
-            else
-            {
-                _mapRectTransform.localRotation = Quaternion.identity;
-            }
+            _enemyDot.anchoredPosition = anchoredPosition;
         }
 
-        private void EnsureMapRectTransform()
+        public void SetEnemyVisible(bool isVisible)
         {
-            if (_mapRectTransform != null)
+            if (_enemyDot == null)
                 return;
 
-            _mapRectTransform = _mapImage != null ? _mapImage.rectTransform : null;
-        }
-
-        private Vector2 WorldToMapUv(Vector3 worldPos)
-        {
-            var local = new Vector2(worldPos.x - _mapWorldCenter.x, worldPos.z - _mapWorldCenter.y);
-            var u = local.x / Mathf.Max(_mapWorldSize.x, 0.001f) + 0.5f;
-            var v = local.y / Mathf.Max(_mapWorldSize.y, 0.001f) + 0.5f;
-            return new Vector2(u, v);
-        }
-
-        private Vector2 GetUvSize()
-        {
-            var width = _viewRadiusMeters * 2f / Mathf.Max(_mapWorldSize.x, 0.001f);
-            var height = _viewRadiusMeters * 2f / Mathf.Max(_mapWorldSize.y, 0.001f);
-            return new Vector2(width, height);
+            _enemyDot.gameObject.SetActive(isVisible);
         }
     }
 }

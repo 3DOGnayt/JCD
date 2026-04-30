@@ -1,5 +1,12 @@
 using Scellecs.Morpeh;
 using Systems.Car;
+using Systems.Car.Audio;
+using Systems.Car.Main;
+using Systems.Car.Opponents.Rail;
+using Systems.Car.Sub;
+using Systems.Car.SubMain;
+using Systems.MiniMapCamera;
+using Systems.Race;
 using Systems.Spawn;
 using Zenject;
 
@@ -17,22 +24,36 @@ namespace Installers
             Container.Bind<ISystem>().To<CameraSpawnSystem>().AsSingle();
             Container.Bind<ISystem>().To<MapSpawnSystem>().AsSingle();
             Container.Bind<ISystem>().To<PlayerSpawnSystem>().AsSingle();
+            Container.Bind<ISystem>().To<OpponentSpawnSystem>().AsSingle();
+            Container.Bind<ISystem>().To<RaceLapSystem>().AsSingle();
+            Container.Bind<ISystem>().To<SplineProgressSystem>().AsSingle();
             
             Container.Bind<ISystem>().To<InputSystem>().AsSingle();
-            Container.Bind<IFixedSystem>().To<HorizontalInputSystem>().AsSingle();
+            // Container.Bind<ISystem>().To<OpponentAISystem>().AsSingle(); // TODO: plan B
+            Container.Bind<IFixedSystem>().To<OpponentRailSystem>().AsSingle();
+            Container.Bind<ISystem>().To<MinimapSpawnSystem>().AsSingle();
+            Container.Bind<ISystem>().To<MinimapFollowSystem>().AsSingle();
             
+            Container.Bind<IFixedSystem>().To<HorizontalInputSystem>().AsSingle();
+
             // base
+            Container.Bind<IFixedSystem>().To<BrakeSystem>().AsSingle();
             Container.Bind<IFixedSystem>().To<WheelDriveSystem>().AsSingle();
             Container.Bind<IFixedSystem>().To<PhysicsSpeedSystem>().AsSingle();
+            Container.Bind<IFixedSystem>().To<CarAirControlSystem>().AsSingle();
             Container.Bind<IFixedSystem>().To<GearShiftSystem>().AsSingle();
             Container.Bind<IFixedSystem>().To<RPMSystem>().AsSingle();
             
             // feature
             Container.Bind<IFixedSystem>().To<SlipSystem>().AsSingle();
+            Container.Bind<IFixedSystem>().To<DriftCorrectionSystem>().AsSingle();
+            Container.Bind<IFixedSystem>().To<CarStopOnFinishSystem>().AsSingle();
             
             //Container.Bind<IFixedSystem>().To<EffectSystem>().AsSingle(); // TODO: plan B
             Container.Bind<IFixedSystem>().To<SkidmarksSystem>().AsSingle();
+            Container.Bind<IFixedSystem>().To<SkidAudioSystem>().AsSingle();
             Container.Bind<IFixedSystem>().To<SkidSmokeSystem>().AsSingle();
+            Container.Bind<IFixedSystem>().To<EngineAudioSystem>().AsSingle();
             
             Container.Bind<IFixedSystem>().To<CrashEffectSystem>().AsSingle();
             Container.Bind<IFixedSystem>().To<CarLightsSystem>().AsSingle();

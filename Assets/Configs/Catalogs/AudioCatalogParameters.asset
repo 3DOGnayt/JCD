@@ -13,23 +13,57 @@ MonoBehaviour:
   m_Name: AudioCatalogParameters
   m_EditorClassIdentifier: 
   _setups:
-  - AudioType: 2
-    AudioSettings:
-      AudioSubType: 1
-      AudioClip: {fileID: 8300000, guid: 25fb40b44558c404f95e9f88d507c45c, type: 3}
-      Volume: 0.3
   - AudioType: 4
-    AudioSettings:
-      AudioSubType: 2
-      AudioClip: {fileID: 8300000, guid: ce487ac226a40e34b856c336ae7643a0, type: 3}
-      Volume: 0.5
+    AudioSettingsEntry:
+    - AudioSubType: 2
+      AudioClip: {fileID: 8300000, guid: 3f043ec807aed8c498fc62147e1753b9, type: 3}
+      Volume: 1
+    - AudioSubType: 3
+      AudioClip: {fileID: 8300000, guid: 690df688be940ae4fb3c1ca65bc41dcb, type: 3}
+      Volume: 1
+    - AudioSubType: 4
+      AudioClip: {fileID: 8300000, guid: 2fd5fb1eb93184d4caad11d31cace163, type: 3}
+      Volume: 1
+    - AudioSubType: 100
+      AudioClip: {fileID: 8300000, guid: ae794726c9fe9c5468b5c2d203f0ec7e, type: 3}
+      Volume: 1
+    - AudioSubType: 103
+      AudioClip: {fileID: 0}
+      Volume: 1
+    - AudioSubType: 104
+      AudioClip: {fileID: 0}
+      Volume: 1
+    - AudioSubType: 105
+      AudioClip: {fileID: 8300000, guid: 4af535625065ff74b850b8d05c6a671b, type: 3}
+      Volume: 1
+    - AudioSubType: 106
+      AudioClip: {fileID: 8300000, guid: df6f6ebe6f52bf6469751de61990109f, type: 3}
+      Volume: 1
   - AudioType: 3
-    AudioSettings:
-      AudioSubType: 200
-      AudioClip: {fileID: 8300000, guid: 99b748decab928d458a93535459bc00c, type: 3}
-      Volume: 0.5
-  - AudioType: 3
-    AudioSettings:
-      AudioSubType: 201
-      AudioClip: {fileID: 8300000, guid: cca6d4f2c49d870439b3bc6925be47e0, type: 3}
-      Volume: 0.5
+    AudioSettingsEntry:
+    - AudioSubType: 200
+      AudioClip: {fileID: 8300000, guid: 9cffa87722b739342ab15969766b1005, type: 3}
+      Volume: 1
+    - AudioSubType: 203
+      AudioClip: {fileID: 8300000, guid: daad5dde195e69449a255c7672c2621c, type: 3}
+      Volume: 1
+    - AudioSubType: 204
+      AudioClip: {fileID: 8300000, guid: 7cc945fccaddf0c48a6fa20065d0d762, type: 3}
+      Volume: 1
+    - AudioSubType: 205
+      AudioClip: {fileID: 8300000, guid: 52ee6439e2a5bf749832ea3e0c42d1c7, type: 3}
+      Volume: 1
+    - AudioSubType: 206
+      AudioClip: {fileID: 8300000, guid: 0c62ed23f67dfb647a66e0b33f8083d3, type: 3}
+      Volume: 1
+  - AudioType: 2
+    AudioSettingsEntry:
+    - AudioSubType: 1
+      AudioClip: {fileID: 8300000, guid: 25fb40b44558c404f95e9f88d507c45c, type: 3}
+      Volume: 1
+    - AudioSubType: 300
+      AudioClip: {fileID: 8300000, guid: 1f7078c458570fd4db4d895857f57ea3, type: 3}
+      Volume: 1
+    - AudioSubType: 301
+      AudioClip: {fileID: 8300000, guid: f154b215c132c414992004fb8bbcb276, type: 3}
+      Volume: 1
