@@ -97,7 +97,14 @@ namespace UI.Controllers
                 return;
 
             var entry = _mapCatalogParameters.Maps[0];
-            _mapSelectionParameters.SetSelectedMap(entry.Prefab, 0, entry.EMap, entry.SelectionCount, entry.LapCount);
+            _mapSelectionParameters.SetSelectedMap(
+                entry.Prefab,
+                0,
+                entry.EMap,
+                entry.SelectionCount,
+                entry.LapCount,
+                entry.OpponentSpawnSideOffset,
+                entry.UnitSpawnEulerAngles);
         }
 
         private void PreparePendingMapSelection()
@@ -174,7 +181,13 @@ namespace UI.Controllers
             
             var entry = _mapCatalogParameters.Maps[_pendingMapIndex];
             _mapSelectionParameters.SetSelectedMap(
-                _pendingMapPrefab, _pendingMapIndex, entry.EMap, entry.SelectionCount, entry.LapCount);
+                _pendingMapPrefab,
+                _pendingMapIndex,
+                entry.EMap,
+                entry.SelectionCount,
+                entry.LapCount,
+                entry.OpponentSpawnSideOffset,
+                entry.UnitSpawnEulerAngles);
             
             RefreshMapButtons();
             

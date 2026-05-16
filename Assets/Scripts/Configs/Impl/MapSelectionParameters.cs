@@ -12,6 +12,8 @@ namespace Configs.Impl
         [SerializeField] private int _selectedMapIndex;
         [SerializeField] private int _selectedMapSelectionCount;
         [SerializeField] private int _selectedMapLapCount;
+        [SerializeField] private float _selectedOpponentSpawnSideOffset;
+        [SerializeField] private Vector3 _selectedUnitSpawnEulerAngles;
         [SerializeField] private EMap _selectedMap;
 
         private SplineContainer _runtimeSpline;
@@ -23,18 +25,29 @@ namespace Configs.Impl
         public int SelectedMapIndex => _selectedMapIndex;
         public int SelectedMapSelectionCount => _selectedMapSelectionCount;
         public int SelectedMapLapCount => _selectedMapLapCount;
+        public float SelectedOpponentSpawnSideOffset => _selectedOpponentSpawnSideOffset;
+        public Vector3 SelectedUnitSpawnEulerAngles => _selectedUnitSpawnEulerAngles;
         public EMap SelectedMap => _selectedMap;
         public SplineContainer RuntimeSpline => _runtimeSpline;
         public SplineContainer RuntimeSplineInner => _runtimeSplineInner;
         public SplineContainer RuntimeSplineOuter => _runtimeSplineOuter;
         public MapSplineProvider.OpponentSplineEntry[] RuntimeOpponentSplines => _runtimeOpponentSplines;
 
-        public void SetSelectedMap(GameObject mapPrefab, int index, EMap map, int selectionCount, int lapCount)
+        public void SetSelectedMap(
+            GameObject mapPrefab,
+            int index,
+            EMap map,
+            int selectionCount,
+            int lapCount,
+            float opponentSpawnSideOffset = 0f,
+            Vector3 unitSpawnEulerAngles = default)
         {
             _selectedMapPrefab = mapPrefab;
             _selectedMapIndex = index;
             _selectedMapSelectionCount = selectionCount;
             _selectedMapLapCount = lapCount;
+            _selectedOpponentSpawnSideOffset = opponentSpawnSideOffset;
+            _selectedUnitSpawnEulerAngles = unitSpawnEulerAngles;
             _selectedMap = map;
             _runtimeSpline = null;
             _runtimeSplineInner = null;

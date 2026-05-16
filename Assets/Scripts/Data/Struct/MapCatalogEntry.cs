@@ -13,5 +13,6 @@ namespace Data.Struct
         public int SelectionCount;
         public int LapCount;
         public float OpponentSpawnSideOffset;
+        public Vector3 UnitSpawnEulerAngles;
     }
 }

@@ -19,6 +19,7 @@ namespace Systems.Spawn
         private IEventService _eventService;
         private IGameSessionService _gameSessionService;
         private CarSelectionParameters _carSelectionParameters;
+        private GameSelectionParameters _gameSelectionParameters;
         private IUnitRaceTimerService _unitRaceTimerService;
 
         private Transform _playerGroup;
@@ -31,12 +32,14 @@ namespace Systems.Spawn
             IEventService eventService,
             IGameSessionService gameSessionService,
             CarSelectionParameters carSelectionParameters,
+            GameSelectionParameters gameSelectionParameters,
             IUnitRaceTimerService unitRaceTimerService
         )
         {
             _eventService = eventService;
             _gameSessionService = gameSessionService;
             _carSelectionParameters = carSelectionParameters;
+            _gameSelectionParameters = gameSelectionParameters;
             _unitRaceTimerService = unitRaceTimerService;
         }
         
@@ -78,7 +81,8 @@ namespace Systems.Spawn
             if (player == null)
                 return;
 
-            var instance = _container.InstantiatePrefabForComponent<ICarView>(player, Vector3.zero, Quaternion.identity, _playerGroup);
+            var spawnRotation = ResolvePlayerSpawnRotation();
+            var instance = _container.InstantiatePrefabForComponent<ICarView>(player, Vector3.zero, spawnRotation, _playerGroup);
             
             var entity = World.CreateEntity();
             AddGameComponents(entity, instance);
@@ -89,6 +93,13 @@ namespace Systems.Spawn
             _unitRaceTimerService?.SetPlayerEntity(entity);
             
             _gameSessionService?.RegisterRuntimeRoot(instance.CarTransform.gameObject);
+        }
+
+        private Quaternion ResolvePlayerSpawnRotation()
+        {
+            return _gameSelectionParameters != null
+                ? Quaternion.Euler(_gameSelectionParameters.SelectedUnitSpawnEulerAngles)
+                : Quaternion.identity;
         }
 
         private void AddGameComponents(Entity entity, ICarView carView)

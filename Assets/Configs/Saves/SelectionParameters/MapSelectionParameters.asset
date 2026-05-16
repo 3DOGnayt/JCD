@@ -16,4 +16,6 @@ MonoBehaviour:
   _selectedMapIndex: -1
   _selectedMapSelectionCount: 0
   _selectedMapLapCount: 0
+  _selectedOpponentSpawnSideOffset: 0
+  _selectedUnitSpawnEulerAngles: {x: 0, y: 0, z: 0}
   _selectedMap: 0

@@ -19,16 +19,19 @@ MonoBehaviour:
     SelectionCount: 1
     LapCount: 2
     OpponentSpawnSideOffset: 5
+    UnitSpawnEulerAngles: {x: 0, y: 0, z: 0}
   - EMap: 2
-    Prefab: {fileID: 1152416296702166899, guid: 94a1ee1fbdf00bc48ad16d755c5552e2,
+    Prefab: {fileID: 4083383217359839588, guid: 2768804f0594e654e9e5dca0c76e0584,
       type: 3}
     Preview: {fileID: 21300000, guid: edbaf6c42922cfd4b9a18ac1ea8d85c7, type: 3}
     SelectionCount: 4
     LapCount: 1
     OpponentSpawnSideOffset: 3.1
+    UnitSpawnEulerAngles: {x: 0, y: 12, z: 0}
   - EMap: 3
     Prefab: {fileID: 966750755263835405, guid: 7749a079e98a97740b392b8617a321d2, type: 3}
     Preview: {fileID: 21300000, guid: 3b8ee1ee740f3804897f556ebc633c05, type: 3}
     SelectionCount: 4
     LapCount: 1
     OpponentSpawnSideOffset: 3
+    UnitSpawnEulerAngles: {x: 0, y: 0, z: 0}

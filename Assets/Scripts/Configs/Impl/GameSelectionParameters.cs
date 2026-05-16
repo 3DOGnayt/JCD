@@ -18,6 +18,8 @@ namespace Configs.Impl
 
         public int SelectedMapIndex => _mapSelectionParameters != null ? _mapSelectionParameters.SelectedMapIndex : 0;
         public EMap SelectedMap => _mapSelectionParameters != null ? _mapSelectionParameters.SelectedMap : EMap.None;
+        public float SelectedOpponentSpawnSideOffset => _mapSelectionParameters != null ? _mapSelectionParameters.SelectedOpponentSpawnSideOffset : 0f;
+        public Vector3 SelectedUnitSpawnEulerAngles => _mapSelectionParameters != null ? _mapSelectionParameters.SelectedUnitSpawnEulerAngles : Vector3.zero;
         public MapSelectionParameters MapSelectionParameters => _mapSelectionParameters;
         public SplineContainer RuntimeSpline => _mapSelectionParameters != null ? _mapSelectionParameters.RuntimeSpline : null;
         public SplineContainer RuntimeSplineInner => _mapSelectionParameters != null ? _mapSelectionParameters.RuntimeSplineInner : null;

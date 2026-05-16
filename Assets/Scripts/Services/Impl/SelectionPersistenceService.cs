@@ -146,7 +146,9 @@ namespace Services.Impl
                 mapIndex,
                 entry.EMap,
                 entry.SelectionCount,
-                entry.LapCount);
+                entry.LapCount,
+                entry.OpponentSpawnSideOffset,
+                entry.UnitSpawnEulerAngles);
         }
 
         private int FindMapIndexById(EMap map)

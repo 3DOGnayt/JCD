@@ -27,7 +27,6 @@ namespace Systems.Spawn
         private OpponentCatalogParameters _opponentCatalogParameters;
         private OpponentRaceParameters _opponentRaceParameters;
         private CarCatalogParameters _carCatalogParameters;
-        private MapCatalogParameters _mapCatalogParameters;
 
         private Transform _opponentGroup;
         private IDisposable _spawnDisposable;
@@ -49,8 +48,7 @@ namespace Systems.Spawn
             GameModeSelectionParameters gameModeSelectionParameters,
             OpponentCatalogParameters opponentCatalogParameters,
             OpponentRaceParameters opponentRaceParameters,
-            CarCatalogParameters carCatalogParameters,
-            MapCatalogParameters mapCatalogParameters)
+            CarCatalogParameters carCatalogParameters)
         {
             _eventService = eventService;
             _gameSessionService = gameSessionService;
@@ -60,7 +58,6 @@ namespace Systems.Spawn
             _opponentCatalogParameters = opponentCatalogParameters;
             _opponentRaceParameters = opponentRaceParameters;
             _carCatalogParameters = carCatalogParameters;
-            _mapCatalogParameters = mapCatalogParameters;
         }
 
         public void OnAwake()
@@ -113,7 +110,7 @@ namespace Systems.Spawn
             if (opponentPrefab == null)
                 return;
 
-            var spawnRotation = Quaternion.identity;
+            var spawnRotation = ResolveUnitSpawnRotation();
             var spawnPosition = Vector3.right * ResolveOpponentSpawnSideOffset();
 
             var instance = _container.InstantiatePrefabForComponent<ICarView>(
@@ -132,16 +129,18 @@ namespace Systems.Spawn
 
         private float ResolveOpponentSpawnSideOffset()
         {
-            if (_mapCatalogParameters == null || _gameSelectionParameters == null)
+            if (_gameSelectionParameters == null)
                 return DefaultOpponentSideOffset;
 
-            var maps = _mapCatalogParameters.Maps;
-            var selectedMapIndex = _gameSelectionParameters.SelectedMapIndex;
-            if (selectedMapIndex < 0 || selectedMapIndex >= maps.Count)
-                return DefaultOpponentSideOffset;
-
-            var offset = maps[selectedMapIndex].OpponentSpawnSideOffset;
+            var offset = _gameSelectionParameters.SelectedOpponentSpawnSideOffset;
             return Mathf.Approximately(offset, 0f) ? DefaultOpponentSideOffset : offset;
+        }
+
+        private Quaternion ResolveUnitSpawnRotation()
+        {
+            return _gameSelectionParameters != null
+                ? Quaternion.Euler(_gameSelectionParameters.SelectedUnitSpawnEulerAngles)
+                : Quaternion.identity;
         }
 
         private void AddOpponentComponents(Entity entity, int opponentIndex)
