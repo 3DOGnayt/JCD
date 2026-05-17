@@ -26,7 +26,7 @@ MonoBehaviour:
     Preview: {fileID: 21300000, guid: edbaf6c42922cfd4b9a18ac1ea8d85c7, type: 3}
     SelectionCount: 4
     LapCount: 1
-    OpponentSpawnSideOffset: 3.1
+    OpponentSpawnSideOffset: -4
     UnitSpawnEulerAngles: {x: 0, y: 12, z: 0}
   - EMap: 3
     Prefab: {fileID: 966750755263835405, guid: 7749a079e98a97740b392b8617a321d2, type: 3}
