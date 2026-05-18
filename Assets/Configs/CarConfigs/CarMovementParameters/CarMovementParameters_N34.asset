@@ -33,6 +33,21 @@ MonoBehaviour:
     ArcadeAssistMinSpeedKmh: 0
     ArcadeAssistLerpSpeed: 1
     DriftAssistForwardSpeedMultiplier: 1.5
+  _touge:
+    UseTougeHybridControl: 1
+    DisableHandbrakeDrift: 1
+    UseAutomaticGearShift: 1
+    ManualGearOverrideSeconds: 0.75
+    ShiftUpKey: 101
+    ShiftDownKey: 113
+    MinDownshiftDriftSpeedKmh: 45
+    MinDownshiftDriftSteer: 0.25
+    RearGripOnDownshift: 0.72
+    FrontGripOnDownshift: 0.95
+    DriftSecondsOnDownshift: 0.35
+    DriftReturnSpeed: 1.8
+    YawKickOnDownshift: 0.2
+    DriftHoldFromThrottle: 0.3
   _helpersSetup:
     StopThresholdKmh: 0.5
     InputDeadZone: 0.05

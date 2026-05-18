@@ -21,6 +21,9 @@ namespace Systems.Car.Main
         private Stash<SkidmarksComponent> _skidmarksStash;
         private Stash<RigidbodyComponent> _rbStash;
         private Stash<TransformComponent> _transformStash;
+        private Stash<VerticalInputComponent> _verticalInputStash;
+        private Stash<HorizontalInputComponent> _horizontalInputStash;
+        private Stash<DownshiftDriftComponent> _downshiftDriftStash;
 
         private Dictionary<Entity, float> _frontDriftValues;
 
@@ -34,6 +37,9 @@ namespace Systems.Car.Main
                 .With<SkidmarksComponent>()
                 .With<RigidbodyComponent>()
                 .With<TransformComponent>()
+                .With<VerticalInputComponent>()
+                .With<HorizontalInputComponent>()
+                .With<DownshiftDriftComponent>()
                 .Build();
 
             _carAspectFactory = World.GetAspectFactory<CarSetupAspect>();
@@ -43,6 +49,9 @@ namespace Systems.Car.Main
             _skidmarksStash = World.GetStash<SkidmarksComponent>();
             _rbStash = World.GetStash<RigidbodyComponent>();
             _transformStash = World.GetStash<TransformComponent>();
+            _verticalInputStash = World.GetStash<VerticalInputComponent>();
+            _horizontalInputStash = World.GetStash<HorizontalInputComponent>();
+            _downshiftDriftStash = World.GetStash<DownshiftDriftComponent>();
 
             _frontDriftValues = new Dictionary<Entity, float>();
         }
@@ -66,6 +75,8 @@ namespace Systems.Car.Main
             var frontMultiplierTarget = slipParameters.HandbrakeSidewaysForwardMultiplier;
             var frontEnterSpeed = slipParameters.ForwardStiffnessEnterSpeed;
             var frontReturnSpeed = slipParameters.ForwardStiffnessReturnSpeed;
+            var touge = movementParameters.Touge;
+            var useTouge = touge != null && touge.UseTougeHybridControl;
 
             foreach (var car in _cars)
             {
@@ -77,6 +88,7 @@ namespace Systems.Car.Main
                 ref var backSpeedValue = ref aspect.BackSpeed.Value;
                 ref var brakeInput = ref aspect.BrakeInput.Value;
                 ref var skidFlag = ref _skidmarksStash.Get(car).Value;
+                ref var downshiftDrift = ref _downshiftDriftStash.Get(car);
                 var currentGear = aspect.Gear.Value;
 
                 if (!_frontDriftValues.TryGetValue(car, out var frontDrift))
@@ -104,6 +116,10 @@ namespace Systems.Car.Main
 
                 var helpersSetup = movementParameters.HelpersSetup;
                 var canDriftNow = handbrakePressed && scalarSpeedKmh > helpersSetup.MinDriftSpeedKmh;
+                var verticalInput = _verticalInputStash.Get(car).Value;
+                var horizontalInput = _horizontalInputStash.Get(car).Value;
+                var applyDownshift = UpdateDownshiftDrift(ref downshiftDrift, verticalInput, horizontalInput,
+                    useTouge ? touge : null, deltaTime);
 
                 bool applyBack;
                 backDrift = UpdateDriftValueForAxle(
@@ -116,10 +132,15 @@ namespace Systems.Car.Main
                     out applyBack);
 
                 backDrift = Mathf.Clamp01(backDrift);
+                applyBack |= applyDownshift;
 
                 if (applyBack)
                 {
-                    var backMultiplier = Mathf.Lerp(1f, backMultiplierTarget, backDrift);
+                    var effectiveBackDrift = Mathf.Max(backDrift, downshiftDrift.Value);
+                    var effectiveBackTarget = downshiftDrift.Value > backDrift
+                        ? downshiftDrift.RearGripMultiplier
+                        : backMultiplierTarget;
+                    var backMultiplier = Mathf.Lerp(1f, effectiveBackTarget, effectiveBackDrift);
                     ApplyAxleSlip(wheelInfoComponent, backBaseSidewaysStiffness, backMultiplier,
                         applyToSteeringWheels: false);
                 }
@@ -136,10 +157,15 @@ namespace Systems.Car.Main
 
                 frontDrift = Mathf.Clamp01(frontDrift);
                 _frontDriftValues[car] = frontDrift;
+                applyFront |= applyDownshift;
 
                 if (applyFront)
                 {
-                    var frontMultiplier = Mathf.Lerp(1f, frontMultiplierTarget, frontDrift);
+                    var effectiveFrontDrift = Mathf.Max(frontDrift, downshiftDrift.Value);
+                    var effectiveFrontTarget = downshiftDrift.Value > frontDrift
+                        ? downshiftDrift.FrontGripMultiplier
+                        : frontMultiplierTarget;
+                    var frontMultiplier = Mathf.Lerp(1f, effectiveFrontTarget, effectiveFrontDrift);
                     ApplyAxleSlip(wheelInfoComponent, frontBaseSidewaysStiffness, frontMultiplier,
                         applyToSteeringWheels: true);
                 }
@@ -171,9 +197,55 @@ namespace Systems.Car.Main
 
                 var checkDrift = backDrift > helpersSetup.DriftVisualThresh || frontDrift > helpersSetup.DriftVisualThresh;
                 var skidFromFriction = speedTotalKmh > helpersSetup.MinDriftSpeedKmh * 0.5f && checkDrift;
+                var skidFromDownshift = downshiftDrift.Value > helpersSetup.DriftVisualThresh;
 
-                skidFlag = skidFromBrake || skidFromSlipAngle || skidFromFriction;
+                skidFlag = skidFromBrake || skidFromSlipAngle || skidFromFriction || skidFromDownshift;
             }
+        }
+
+        private bool UpdateDownshiftDrift(
+            ref DownshiftDriftComponent downshiftDrift,
+            float verticalInput,
+            float horizontalInput,
+            Data.HelperClass.CarMovementTougeSetup touge,
+            float deltaTime
+        )
+        {
+            if (touge == null)
+            {
+                if (downshiftDrift.Value <= 0f)
+                    return false;
+
+                downshiftDrift.Value = 0f;
+                downshiftDrift.Timer = 0f;
+                downshiftDrift.RearGripMultiplier = 1f;
+                downshiftDrift.FrontGripMultiplier = 1f;
+                return true;
+            }
+
+            if (downshiftDrift.Timer > 0f)
+            {
+                downshiftDrift.Timer -= deltaTime;
+                downshiftDrift.Value = 1f;
+                return true;
+            }
+
+            var holdTarget = verticalInput > 0.01f && Mathf.Abs(horizontalInput) >= touge.MinDownshiftDriftSteer
+                ? touge.DriftHoldFromThrottle
+                : 0f;
+
+            var previousValue = downshiftDrift.Value;
+            downshiftDrift.Value = Mathf.MoveTowards(downshiftDrift.Value, holdTarget,
+                touge.DriftReturnSpeed * deltaTime);
+
+            if (downshiftDrift.Value <= 0.001f)
+            {
+                downshiftDrift.Value = 0f;
+                downshiftDrift.RearGripMultiplier = 1f;
+                downshiftDrift.FrontGripMultiplier = 1f;
+            }
+
+            return !Mathf.Approximately(previousValue, downshiftDrift.Value);
         }
 
         private float UpdateDriftValueForAxle(

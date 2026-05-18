@@ -23,8 +23,10 @@ namespace Systems.Car.Main
         private AspectFactory<CarSetupAspect> _carAspectFactory;
         private Stash<WheelInfoComponent> _wheelInfoStash;
         private Stash<VerticalInputComponent> _verticalInputStash;
+        private Stash<PlayerTagComponent> _playerTagStash;
 
         private Dictionary<int, float> _forwardGearTorque;
+        private Dictionary<int, float> _forwardGearSpeedLimit;
         private float _reverseGearTorque;
         private bool _inputEnabled = true;
 
@@ -54,6 +56,7 @@ namespace Systems.Car.Main
             _carAspectFactory = World.GetAspectFactory<CarSetupAspect>();
             _wheelInfoStash = World.GetStash<WheelInfoComponent>();
             _verticalInputStash = World.GetStash<VerticalInputComponent>();
+            _playerTagStash = World.GetStash<PlayerTagComponent>();
 
             var speedsPreset = _carSelectionParameters != null ? _carSelectionParameters.CarSpeedsPresetParameters : null;
             BuildGearTorqueFromPreset(speedsPreset);
@@ -65,6 +68,7 @@ namespace Systems.Car.Main
         private void BuildGearTorqueFromPreset(CarSpeedsPresetParameters speedsPreset)
         {
             _forwardGearTorque = new Dictionary<int, float>();
+            _forwardGearSpeedLimit = new Dictionary<int, float>();
             _reverseGearTorque = 0f;
 
             if (speedsPreset == null)
@@ -88,6 +92,7 @@ namespace Systems.Car.Main
                 if (gearValue > 0)
                 {
                     _forwardGearTorque[gearValue] = gearMotorTorque;
+                    _forwardGearSpeedLimit[gearValue] = Mathf.Max(0f, speedSetting.SpeedLimit);
                     hasForward = true;
                 }
                 else if (gearValue < 0)
@@ -141,11 +146,15 @@ namespace Systems.Car.Main
 
                 var verticalInput = Mathf.Clamp(_verticalInputStash.Get(car).Value, -1f, 1f);
                 var wheelInfoComponent = _wheelInfoStash.Get(car);
+                var useTougeManual = _playerTagStash.Has(car)
+                                     && movementParameters.Touge != null
+                                     && movementParameters.Touge.UseTougeHybridControl;
 
                 float maxMotorTorque;
                 float driveInput;
 
-                ResolveDrive(verticalInput, currentGear, brakeInputFlag, movementParameters, out maxMotorTorque, out driveInput);
+                ResolveDrive(verticalInput, currentGear, aspect.Speed.Value, brakeInputFlag, movementParameters,
+                    useTougeManual, out maxMotorTorque, out driveInput);
                 
                 _inputService.ApplyVerticalMove(maxMotorTorque, driveInput, wheelInfoComponent.WheelInfo);
             }
@@ -154,8 +163,10 @@ namespace Systems.Car.Main
         private void ResolveDrive(
             float verticalInput,
             int currentGear,
+            float forwardSpeedKmh,
             bool brakeInputPressed,
             ICarMovementParameters movementParameters,
+            bool useTougeManual,
             out float maxMotorTorque,
             out float driveInput
         )
@@ -180,6 +191,9 @@ namespace Systems.Car.Main
             {
                 if (currentGear > 0)
                 {
+                    if (useTougeManual && IsAtForwardGearLimit(currentGear, forwardSpeedKmh))
+                        return;
+
                     maxMotorTorque = GetForwardGearTorque(currentGear);
                     driveInput = verticalInput;
                 }
@@ -201,6 +215,14 @@ namespace Systems.Car.Main
 
             Debug.LogError($"WheelDriveSystem_A: no torque value for forward gear {gearValue} in SpeedsPreset.");
             return 0f;
+        }
+
+        private bool IsAtForwardGearLimit(int gearValue, float forwardSpeedKmh)
+        {
+            if (_forwardGearSpeedLimit == null || !_forwardGearSpeedLimit.TryGetValue(gearValue, out var speedLimit))
+                return false;
+
+            return speedLimit > 0f && forwardSpeedKmh >= speedLimit;
         }
 
         private void SetInputEnabled(bool isEnabled)

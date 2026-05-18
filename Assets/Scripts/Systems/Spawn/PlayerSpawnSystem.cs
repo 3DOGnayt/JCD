@@ -124,7 +124,17 @@ namespace Systems.Spawn
             entity.SetComponent(new SteeringSpeedComponent { Value = steeringSpeed });
             entity.SetComponent(new BrakeInputComponent { Value = false });
             entity.SetComponent(new HandbrakeInputComponent { Value = false });
+            entity.SetComponent(new ShiftUpInputComponent { Value = false });
+            entity.SetComponent(new ShiftDownInputComponent { Value = false });
+            entity.SetComponent(new ManualGearOverrideComponent { Timer = 0f });
             entity.SetComponent(new DriftMultiplierComponent { Value = 0f });
+            entity.SetComponent(new DownshiftDriftComponent
+            {
+                Value = 0f,
+                Timer = 0f,
+                RearGripMultiplier = 1f,
+                FrontGripMultiplier = 1f
+            });
             entity.SetComponent(new ArcadeAssistSpeedComponent { Value = 0f });
             entity.SetComponent(new SplineProgressComponent());
             entity.SetComponent(new SplineDeltaComponent { Value = float.NaN });

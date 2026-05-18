@@ -14,7 +14,17 @@ namespace Components
     public struct SteeringSpeedComponent : IComponent { public float Value; }
     public struct BrakeInputComponent : IComponent { public bool Value; }
     public struct HandbrakeInputComponent : IComponent { public bool  Value; }
+    public struct ShiftUpInputComponent : IComponent { public bool Value; }
+    public struct ShiftDownInputComponent : IComponent { public bool Value; }
+    public struct ManualGearOverrideComponent : IComponent { public float Timer; }
     public struct DriftMultiplierComponent : IComponent { public float Value; }
+    public struct DownshiftDriftComponent : IComponent
+    {
+        public float Value;
+        public float Timer;
+        public float RearGripMultiplier;
+        public float FrontGripMultiplier;
+    }
     public struct ArcadeAssistSpeedComponent : IComponent { public float Value; }
     public struct SplineProgressComponent : IComponent
     {

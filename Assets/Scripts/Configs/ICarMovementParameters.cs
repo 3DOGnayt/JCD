@@ -7,6 +7,7 @@ namespace Configs
         CarMovementHorizontalSetup Horizontal { get; }
         CarMovementVerticalSetup Vertical { get; }
         CarMovementArcadeAssistSetup ArcadeAssist { get; }
+        CarMovementTougeSetup Touge { get; }
         SystemHelpersSetup HelpersSetup { get; }
         CarMovementAirControlSetup AirControl { get; }
         CarMovementVelocityAlignSetup VelocityAlign { get; }
