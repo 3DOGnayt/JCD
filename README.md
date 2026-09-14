@@ -79,8 +79,8 @@ I was able to familiarize myself with and/or work with:
 
 <div align="center" valign="middle" style="page-break-after: always;">
 <br>
-    <img src="Assets/Documentation/MenuJCD.png" width="1000">
-    <img src="Assets/Documentation/jcd1.gif" width = "500" />
-    <img src="Assets/Documentation/jcd2.gif" width = "500" />
+    <img src="Assets/Documentation/MenuJCD.png" width="900">
+    <img src="Assets/Documentation/jcd1.gif" width = "900" />
+    <img src="Assets/Documentation/jcd2.gif" width = "900" />
 <br>
 </div>
